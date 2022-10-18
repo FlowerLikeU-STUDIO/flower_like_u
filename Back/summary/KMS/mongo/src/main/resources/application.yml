@@ -1,0 +1,22 @@
+server:
+  port: 8080
+  address: localhost
+  servlet:
+    context-path: /api
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+#      authentication-database: admin
+#      username: ssafy
+#      password: qwerty
+#      database: testdb
+#      port: 27017
+#      host: localhost
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql : false
