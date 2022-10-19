@@ -139,3 +139,152 @@ $ sudo rm -rf /var/lib/containerd
 
 
 참고: https://docs.docker.com/engine/install/ubuntu/
+
+
+
+## Jenkins
+
+### Jenkins 설치(Docker Container) 및 계정 생성
+
+#### docker-compose로 Jenkins Container 생성
+
+```bash
+$ vim docker-compose.yml
+```
+
+vim을 통해 `docker-compose.yml`파일을 생성
+
+
+
+**docker-compose.yml**
+
+```yml
+version: '3'
+
+services:
+    jenkins:
+        image: jenkins/jenkins:lts
+        container_name: jenkins
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /jenkins:/var/jenkins_home
+        ports:
+            - "9090:8080"
+        privileged: true
+        user: root
+```
+
+* servies: Container service
+* jenkins: Name of Service
+* image: 컨테이너 생성시 사용하는 Image
+  * jenkins/jenkins:lts 를 사용
+  * jenkins의 lts 버전을 의미
+* container_name: Name of Container
+* volumes:
+  * 이하 둘을 연결
+    * AWS의 /var/run/docker.sock
+    * 컨테이너 내부의 :/var/run/docker.sock
+  * 이하 둘을 연결
+    * /jenkins 폴더
+    * /var/jenkins_home 폴더
+* ports: 포트 매핑, AWS의 9090포트와 Container의 8080 포트를 연결
+* privileged: 컨테이너 시스템의 주요 자원에 연결 가능한 여부
+  * 기본값은 False
+* user: Jenkins에 접속할 유저의 계정
+  * root: 관리자
+
+
+
+**✔ Container 생성**
+
+```bash
+$ sudo docker-compose up -d
+```
+
+
+
+**✔ Contain 확인**
+
+```bash
+$ sudo docker ps
+```
+
+
+
+**🎈 젠킨스 계정 생성 및 플러그인 설치**
+
+참고
+
+
+
+### Jenkins Project 생성 WebHook 설정, 자동 빌드 테스트
+
+참고: https://zunoxi.tistory.com/106
+
+
+
+**✔ Git Repository 생성**
+
+* 구성
+
+**✔ Jenkins Project 생성**
+
+1. 새로운 Item
+2. Project 이름 => Freestyle project :ok:
+3. **소스 코드 관리** - Git - Repository URL 입력
+   1. Credentials - add => jenkins
+   2. Kind: Username with password
+      * Username
+      * Password
+      * ID: Credential을 구분한 텍스트로 임의로 지정
+      * **Add** 버튼
+   3. 만들어진 Credential 선택
+      * 이 때 오류메시지 사라진다.
+4. **빌드 유발**
+   1. Build when a change is pushed to GitLab webhook URL
+      1. Enable GitLab triggers
+         * 옵션 중 trigger의 기준이 되는 항목을 체크
+      2. 고급
+         1. Secret token => Generate
+         2. token 생성된다.
+         3. 이 toekn은 Git과 WebHook을 연결 시 사용되므로 저장해둔다.
+5. **Build**
+   1. Add build step => Execute Shell
+      * 필요한 명령어를 입력
+6. 저장
+
+
+
+**✔ 프로젝트 화면**
+
+* `지금 빌드` 버튼 클릭 => 수동 빌드 진행
+  * 초록 체크표시: 완료
+* Build History
+  * Console Output
+    * 빌드에 성공한 console 창을 확인할 수 있다.
+    * Execute Shell에 작성한 명령어의 작동여부도 확인 가능하다.
+
+
+
+**✔ Git WebHook 연결**
+
+배포할 프로젝트의 Git에서 `Setting` => `Webhooks`페이지로 이동
+
+* URL
+* Secret token
+* Trigger
+  * Push events: master
+
+`Add webhook`: webhook 생성
+
+
+
+✔ 생성 후 빌드 테스를 위해 생성된 WebHook에서 test를 누르고 Push event를 선택
+
+**Hook executed successfully: HTTP 200** : 결과 확인
+
+
+
+✔ Jenkins와 Git 연결완료
+
+**=> 연결된 Git의 master branch 이벤트 발생시 Jenkins에서 build 수행**
