@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collation = "ttt")
+@Document(collection = "name")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TestDocument {
+public class NameDocument {
     @Id
     private String id;
 

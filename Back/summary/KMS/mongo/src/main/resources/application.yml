@@ -10,7 +10,7 @@ spring:
 #      authentication-database: admin
 #      username: ssafy
 #      password: qwerty
-#      database: testdb
+      database: testdb
 #      port: 27017
 #      host: localhost
 #  jpa:
