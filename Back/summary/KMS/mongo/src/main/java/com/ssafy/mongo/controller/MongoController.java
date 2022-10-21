@@ -7,6 +7,7 @@ import com.ssafy.mongo.database.repository.NameRepository;
 import com.ssafy.mongo.request.FlowerReqDto;
 import com.ssafy.mongo.request.NameReqDto;
 import com.ssafy.mongo.response.NameResVo;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,9 @@ public class MongoController {
                 .lastName(params.getLastName())
                 .build();
 
-        nameRepository.insert(names);
+        //nameRepository.insert(names);
+        String mid = nameRepository.insert(names).getId();
+        System.out.println(mid);
 
         result.put("message", SUCCESS);
         return new ResponseEntity<>(result, HttpStatus.OK);
