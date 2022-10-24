@@ -5,6 +5,8 @@ const initialState = {
   isLogin: false,
   data: null,
   loading: false,
+  // *임시 : buyer - 소비자, seller - 판매자  (data로 받게 될 시 삭제)
+  role: "buyer",
 };
 
 const userSlice = createSlice({
