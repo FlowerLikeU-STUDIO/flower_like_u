@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+    <div>userType</div>
+    <input type="text" id = 'userType'>
+    <div>userId</div>
+    <input type="text" id = 'room'>
+    <button>간이 로그인</button>
+    <div id="isLogin" style="display : none">
+        <div>receiverId</div>
+        <input type="text" id = 'receiverId'>
+        <div>content</div>
+        <input type="text" id = 'chatting'>
+        <button>메세지 보내기</button>
+    </div>
+    <br>
+
+    <div id="chatList">
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function onMessageReceived(payload) {
+            let message = JSON.parse(payload.body);
+        }
+
+
+        document.querySelector('button').addEventListener('click',() => {
+            let socket = new SockJS('http://localhost:8080/ws');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, async function() {
+                await stompClient.subscribe('/topic/public/' + document.querySelector('#room').value, onMessageReceived);
+                stompClient.send("/app/chat.addUser",
+                    {},
+                    JSON.stringify({
+                        content: document.querySelector('#room').value,
+                        messageType: 'JOIN',
+                    })
+                )
+                axios.get('http://localhost:8080/api/chatting/room/' +
+                document.querySelector('#userType').value + '/' + document.querySelector('#room').value
+                ).then(res => {
+                    for (let i = 0; i < res.data.response.length; i++) {
+                        let ctnr = document.createElement("div");
+                        ctnr.setAttribute('style', 'display: inline-block')
+                        let roomName = document.createElement('p')
+                        roomName.innerText = "oppositeUserId : " + res.data.response[i].sellerId
+                        let chatArea = document.createElement('div')
+                        chatArea.setAttribute('style', "width : 300px; height : 300px; border : 1px solid black")
+                        let input = document.createElement('input')
+                        let button = document.createElement('button')
+                        button.innerText = '메세지 보내기'
+                        ctnr.appendChild(roomName)
+                        ctnr.appendChild(chatArea)
+                        ctnr.appendChild(input)
+                        ctnr.appendChild(button)
+                        document.querySelector('#chatList').appendChild(ctnr)
+                    }
+                })
+            })
+            document.querySelector('#isLogin').setAttribute('style','display : block')
+        })
+
+        document.querySelector('div > button').addEventListener('click',() => {
+            stompClient.send("/topic/public/" + document.querySelector('#receiverId').value,
+                 {},
+                 JSON.stringify({
+                    content : document.querySelector('#chatting').value,
+                    address : document.querySelector('#room').value
+                })
+            )
+        })
+    </script>
+</body>
+</html>
