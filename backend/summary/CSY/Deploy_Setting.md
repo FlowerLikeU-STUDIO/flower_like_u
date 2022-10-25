@@ -1,5 +1,27 @@
 # Deploy_Setting
 
+인증키(.pem)파일 보안설정
+
+**권한 설정**
+
+🐬 PEM파일 > 속성 > 보안 > 고급 > 상속 사용
+
+![image-20221025090650467](C:\Users\multicampus\Desktop\Git\S07P31B209\backend\summary\CSY\Deploy_Setting.assets\image-20221025090650467.png)
+
+✅ 이 개체에서 상속된 사용권한을 모두 제거합니다.
+
+![image-20221025090749196](C:\Users\multicampus\Desktop\Git\S07P31B209\backend\summary\CSY\Deploy_Setting.assets\image-20221025090749196.png)
+
+✅ 보안 주체 선택
+
+![image-20221025090817667](C:\Users\multicampus\Desktop\Git\S07P31B209\backend\summary\CSY\Deploy_Setting.assets\image-20221025090817667.png)
+
+✅ 입력 후 `이름 확인(C)` -> 입력 내용이 변경된다 -> 확인
+
+✅ 확인
+
+
+
 접속 방법: 제공된 인증키(.pem)를 사용하여 ubuntu 계정으로 SSH 접속
 
 **Windows**에서의 방법
@@ -52,6 +74,10 @@ sudo ufw allow ssh
 # 우분투 방화벽(UFW) 활성화
 sudo ufw enable
 ```
+
+`sudo ufw allow ssh`  와  `sudo ufw allow 22/tcp`는 동일
+
+
 
 **우분투 방화벽(UFW) 설정**
 
