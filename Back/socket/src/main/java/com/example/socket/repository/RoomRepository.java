@@ -13,4 +13,7 @@ import java.util.Optional;
 public interface RoomRepository extends MongoRepository<Room, ObjectId> {
     List<Room> findAllBySellerId(Long sellerId);
     List<Room> findAllByBuyerId(Long buyerId);
+
+    Optional<Room> findBySellerIdAndBuyerId(Long sellerId, Long buyerId);
+
 }

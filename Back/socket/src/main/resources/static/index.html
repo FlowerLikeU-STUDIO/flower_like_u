@@ -28,14 +28,117 @@
     <script>
         function onMessageReceived(payload) {
             let message = JSON.parse(payload.body);
+            if (message.messageType === 'START') {
+                let ctnr = document.createElement("div");
+                let latest = document.createElement("div")
+                latest.setAttribute('style','width : 270px; border : 1px solid black')
+                latest.setAttribute('id', "latest" + String(message.address.timestamp))
+                latest.innerText = message.content
+                let enterChat = document.createElement('button')
+                enterChat.innerText = '채팅방 입장'
+                enterChat.addEventListener('click',() => {
+                    document.querySelector('#area' + String(message.address.timestamp)).setAttribute('style','width : 300px; height : 300px; border : 1px solid black')
+                    document.querySelector('#area' + String(message.address.timestamp) + '+ div').setAttribute('style','display : block')
+                    axios.get('http://localhost:8080/api/chatting/' + message.sellerId + '/' + message.buyerId).then(r => {
+                        for (let j = 0; j < r.data.response.length; j++) {
+                            let divTmp = document.createElement('div')
+                            divTmp.innerText = r.data.response[j].content
+                            if (document.querySelector('#userType').value === r.data.response[j].direction) divTmp.setAttribute('style','text-align : end')
+                            document.querySelector('#area' + message.address.timestamp).appendChild(divTmp)
+                        }
+                    })
+
+                })
+                ctnr.setAttribute('style', 'display: inline-block')
+                let roomName = document.createElement('p')
+                roomName.innerText = "Address : " + message.address.timestamp + "(buyerId : " + message.buyerId + ", sellerId : " + message.sellerId + ")"
+                let chatArea = document.createElement('div')
+                chatArea.setAttribute('style', "display: none")
+                chatArea.setAttribute('id', 'area' + String(message.address.timestamp))
+                let input = document.createElement('input')
+                input.setAttribute('id', "id" + String(message.address.timestamp))
+                let button = document.createElement('button')
+                button.innerText = '메세지 보내기'
+                let inputWrpr = document.createElement('div')
+                inputWrpr.setAttribute('style','display : none')
+                let receiveId = message.buyerId
+                let receiveType = 'buyer'
+                if (document.querySelector('#userType').value === 'buyer') {
+                    receiveId = message.sellerId
+                    receiveType = 'seller'
+                }
+                let sendType = 'buyer'
+                let sendId = message.buyerId
+                if (receiveType === 'buyer') {
+                    sendType = 'seller'
+                    sendId = message.sellerId
+                }
+                button.addEventListener('click',() => {
+                    stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
+                         {},
+                         JSON.stringify({
+                            content : document.querySelector('#id' + String(message.address.timestamp)).value,
+                            address : message.address,
+                            messageType : 'RECEIVE'
+                        })
+                    )
+                    stompClient.send("/topic/public/" + sendType + '/' + sendId ,
+                         {},
+                         JSON.stringify({
+                            content : document.querySelector('#id' + String(message.address.timestamp)).value,
+                            address : message.address,
+                            messageType : 'SEND'
+                        })
+                    )
+                    axios.post('http://localhost:8080/api/chatting',{
+                        'content' : document.querySelector('#id' + String(message.address.timestamp)).value,
+                        'sellerId' : message.sellerId,
+                        'buyerId' : message.buyerId,
+                        'direction' : document.querySelector('#userType').value
+                    }).then(r => {
+                        axios.put('http://localhost:8080/api/chatting/room', {
+                            'id' : message.address,
+                            'sellerId' : message.sellerId,
+                            'buyerId' : message.buyerId,
+                            'latestMessage' : document.querySelector('#id' + String(message.address.timestamp)).value
+                        }).then(r => {
+                            document.querySelector('#latest' + String(message.address.timestamp)).innerText = document.querySelector('#id' + String(message.address.timestamp)).value
+                        })
+                    })
+                })
+                ctnr.appendChild(roomName)
+                ctnr.appendChild(latest)
+                ctnr.appendChild(enterChat)
+                ctnr.appendChild(chatArea)
+                inputWrpr.appendChild(input)
+                inputWrpr.appendChild(button)
+                ctnr.appendChild(inputWrpr)
+                document.querySelector('#chatList').appendChild(ctnr)
+                chatLst.push(message.address)
+            }
+            else if (message.messageType != 'JOIN' && message.messageType != 'LEAVE') {
+                let divTmp = document.createElement('div')
+                divTmp.innerText = message.content
+                if (message.messageType === 'SEND') divTmp.setAttribute('style','text-align : end')
+                document.querySelector('#area' + message.address.timestamp).appendChild(divTmp)
+                document.querySelector('#latest' + message.address.timestamp).innerText = message.content
+            }
         }
 
-
+        let chatLst = []
+        let stompClient = null
         document.querySelector('button').addEventListener('click',() => {
+            chatLst = []
+            document.querySelector('#chatList').remove()
+            let divTmp = document.createElement('div')
+            divTmp.setAttribute('id','chatList')
+            document.querySelector('body').append(divTmp)
+            if (stompClient != null) stompClient.disconnect()
             let socket = new SockJS('http://localhost:8080/ws');
             stompClient = Stomp.over(socket);
             stompClient.connect({}, async function() {
-                await stompClient.subscribe('/topic/public/' + document.querySelector('#room').value, onMessageReceived);
+                await stompClient.subscribe('/topic/public/' + document.querySelector('#userType').value +
+                '/' + document.querySelector('#room').value, onMessageReceived);
                 stompClient.send("/app/chat.addUser",
                     {},
                     JSON.stringify({
@@ -43,24 +146,101 @@
                         messageType: 'JOIN',
                     })
                 )
-                axios.get('http://localhost:8080/api/chatting/room/' +
+                axios.get('http://localhost:8080/api/chatting/room/list/' +
                 document.querySelector('#userType').value + '/' + document.querySelector('#room').value
                 ).then(res => {
                     for (let i = 0; i < res.data.response.length; i++) {
                         let ctnr = document.createElement("div");
+                        let latest = document.createElement("div")
+                        latest.setAttribute('style','width : 270px; border : 1px solid black')
+                        latest.setAttribute('id', "latest" + String(res.data.response[i].id.timestamp))
+                        latest.innerText = res.data.response[i].latestMessage
+                        let enterChat = document.createElement('button')
+                        enterChat.innerText = '채팅방 입장'
+                        enterChat.addEventListener('click',() => {
+                            document.querySelector('#area' + String(res.data.response[i].id.timestamp)).setAttribute('style','width : 300px; height : 300px; border : 1px solid black')
+                            document.querySelector('#area' + String(res.data.response[i].id.timestamp) + '+ div').setAttribute('style','display : block')
+                            axios.get('http://localhost:8080/api/chatting/' + res.data.response[i].sellerId + '/' + res.data.response[i].buyerId).then(r => {
+                                console.log(r.data.response)
+                                for (let j = 0; j < r.data.response.length; j++) {
+
+                                    let divTmp = document.createElement('div')
+                                    divTmp.innerText = r.data.response[j].content
+                                    if (document.querySelector('#userType').value === r.data.response[j].direction) divTmp.setAttribute('style','text-align : end')
+                                    document.querySelector('#area' + res.data.response[i].id.timestamp).appendChild(divTmp)
+                                }
+                            })
+
+                        })
                         ctnr.setAttribute('style', 'display: inline-block')
                         let roomName = document.createElement('p')
-                        roomName.innerText = "oppositeUserId : " + res.data.response[i].sellerId
+                        roomName.innerText = "Address : " + res.data.response[i].id.timestamp + "(buyerId : " + res.data.response[i].buyerId + ", sellerId : " + res.data.response[i].sellerId + ")"
                         let chatArea = document.createElement('div')
-                        chatArea.setAttribute('style', "width : 300px; height : 300px; border : 1px solid black")
+                        chatArea.setAttribute('style', "display: none")
+                        chatArea.setAttribute('id', 'area' + String(res.data.response[i].id.timestamp))
                         let input = document.createElement('input')
+                        input.setAttribute('id', "id" + String(res.data.response[i].id.timestamp))
                         let button = document.createElement('button')
                         button.innerText = '메세지 보내기'
+                        let inputWrpr = document.createElement('div')
+                        inputWrpr.setAttribute('style','display : none')
+                        let receiveId = res.data.response[i].buyerId
+                        let receiveType = 'buyer'
+                        if (document.querySelector('#userType').value === 'buyer') {
+                            receiveId = res.data.response[i].sellerId
+                            receiveType = 'seller'
+                        }
+                        let sendType = 'buyer'
+                        let sendId = res.data.response[i].buyerId
+                        if (receiveType === 'buyer') {
+                            sendType = 'seller'
+                            sendId = res.data.response[i].sellerId
+                        }
+                        button.addEventListener('click',() => {
+                            stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
+                                 {},
+                                 JSON.stringify({
+                                    content : document.querySelector('#id' + String(res.data.response[i].id.timestamp)).value,
+                                    address : res.data.response[i].id,
+                                    messageType : 'RECEIVE',
+                                    sellerId : res.data.response[i].sellerId,
+                                    buyerId : res.data.response[i].buyerId
+                                })
+                            )
+                            stompClient.send("/topic/public/" + sendType + '/' + sendId ,
+                                 {},
+                                 JSON.stringify({
+                                    content : document.querySelector('#id' + String(res.data.response[i].id.timestamp)).value,
+                                    address : res.data.response[i].id,
+                                    messageType : 'SEND'
+                                })
+                            )
+                            axios.post('http://localhost:8080/api/chatting',{
+                                'content' : document.querySelector('#id' + String(res.data.response[i].id.timestamp)).value,
+                                'sellerId' : res.data.response[i].sellerId,
+                                'buyerId' : res.data.response[i].buyerId,
+                                'direction' : document.querySelector('#userType').value
+                            }).then(r => {
+                                axios.put('http://localhost:8080/api/chatting/room', {
+                                    'id' : res.data.response[i].id,
+                                    'sellerId' : res.data.response[i].sellerId,
+                                    'buyerId' : res.data.response[i].buyerId,
+                                    'latestMessage' : document.querySelector('#id' + String(res.data.response[i].id.timestamp)).value
+                                }).then(r => {
+                                    document.querySelector('#latest' + String(res.data.response[i].id.timestamp)).innerText = document.querySelector('#id' + String(res.data.response[i].id.timestamp)).value
+                                    console.log(r.data)
+                                })
+                            })
+                        })
                         ctnr.appendChild(roomName)
+                        ctnr.appendChild(latest)
+                        ctnr.appendChild(enterChat)
                         ctnr.appendChild(chatArea)
-                        ctnr.appendChild(input)
-                        ctnr.appendChild(button)
+                        inputWrpr.appendChild(input)
+                        inputWrpr.appendChild(button)
+                        ctnr.appendChild(inputWrpr)
                         document.querySelector('#chatList').appendChild(ctnr)
+                        chatLst.push(res.data.response[i].id)
                     }
                 })
             })
@@ -68,13 +248,120 @@
         })
 
         document.querySelector('div > button').addEventListener('click',() => {
-            stompClient.send("/topic/public/" + document.querySelector('#receiverId').value,
-                 {},
-                 JSON.stringify({
-                    content : document.querySelector('#chatting').value,
-                    address : document.querySelector('#room').value
-                })
-            )
+            let oppositeType = "buyer"
+            let urlTmp = 'http://localhost:8080/api/chatting/room/' + document.querySelector('#room').value + '/' + document.querySelector('#receiverId').value
+            if (document.querySelector('#userType').value === "buyer") {
+                oppositeType = "seller"
+                urlTmp = 'http://localhost:8080/api/chatting/room/' + document.querySelector('#receiverId').value + '/' + document.querySelector('#room').value
+            }
+            axios.get(urlTmp).then(async res => {
+                console.log(res.data)
+                let isContains = false
+                function check() {
+                    for (let i = 0; i < chatLst.length; i++) {
+                        if (chatLst[i].timestamp === res.data.response.id.timestamp && chatLst[i].date === res.data.response.id.date)
+                            isContains = true
+                    }
+                }
+                await check()
+                if (!isContains) {
+                    let ctnr = document.createElement("div");
+                    let latest = document.createElement("div")
+                    latest.setAttribute('style','width : 270px; border : 1px solid black')
+                    latest.setAttribute('id', "latest" + String(res.data.response.id.timestamp))
+                    latest.innerText = res.data.response.latestMessage
+                    let enterChat = document.createElement('button')
+                    enterChat.innerText = '채팅방 입장'
+                    enterChat.addEventListener('click',() => {
+                        document.querySelector('#area' + String(res.data.response.id.timestamp)).setAttribute('style','width : 300px; height : 300px; border : 1px solid black')
+                        document.querySelector('#area' + String(res.data.response.id.timestamp) + '+ div').setAttribute('style','display : block')
+                        axios.get('http://localhost:8080/api/chatting/' + res.data.response.sellerId + '/' + res.data.response.buyerId).then(r => {
+                            for (let j = 0; j < r.data.response.length; j++) {
+                                let divTmp = document.createElement('div')
+                                divTmp.innerText = r.data.response[j].content
+                                if (document.querySelector('#userType').value === r.data.response[j].direction) divTmp.setAttribute('style','text-align : end')
+                                document.querySelector('#area' + res.data.response.id.timestamp).appendChild(divTmp)
+                            }
+                        })
+
+                    })
+                    ctnr.setAttribute('style', 'display: inline-block')
+                    let roomName = document.createElement('p')
+                    roomName.innerText = "Address : " + res.data.response.id.timestamp + "(buyerId : " + res.data.response.buyerId + ", sellerId : " + res.data.response.sellerId + ")"
+                    let chatArea = document.createElement('div')
+                    chatArea.setAttribute('style', "display: none")
+                    chatArea.setAttribute('id', 'area' + String(res.data.response.id.timestamp))
+                    let input = document.createElement('input')
+                    input.setAttribute('id', "id" + String(res.data.response.id.timestamp))
+                    let button = document.createElement('button')
+                    button.innerText = '메세지 보내기'
+                    let inputWrpr = document.createElement('div')
+                    inputWrpr.setAttribute('style','display : none')
+                    let receiveId = res.data.response.buyerId
+                    let receiveType = 'buyer'
+                    if (document.querySelector('#userType').value === 'buyer') {
+                        receiveId = res.data.response.sellerId
+                        receiveType = 'seller'
+                    }
+                    let sendType = 'buyer'
+                    let sendId = res.data.response.buyerId
+                    if (receiveType === 'buyer') {
+                        sendType = 'seller'
+                        sendId = res.data.response.sellerId
+                    }
+                    stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
+                         {},
+                         JSON.stringify({
+                            address : res.data.response.id,
+                            messageType : 'START',
+                            sellerId : res.data.response.sellerId,
+                            buyerId : res.data.response.buyerId
+                        })
+                    )
+                    button.addEventListener('click',() => {
+                        stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
+                             {},
+                             JSON.stringify({
+                                content : document.querySelector('#id' + String(res.data.response.id.timestamp)).value,
+                                address : res.data.response.id,
+                                messageType : 'RECEIVE'
+                            })
+                        )
+                        stompClient.send("/topic/public/" + sendType + '/' + sendId ,
+                             {},
+                             JSON.stringify({
+                                content : document.querySelector('#id' + String(res.data.response.id.timestamp)).value,
+                                address : res.data.response.id,
+                                messageType : 'SEND'
+                            })
+                        )
+                        axios.post('http://localhost:8080/api/chatting',{
+                            'content' : document.querySelector('#id' + String(res.data.response.id.timestamp)).value,
+                            'sellerId' : res.data.response.sellerId,
+                            'buyerId' : res.data.response.buyerId,
+                            'direction' : document.querySelector('#userType').value
+                        }).then(r => {
+                            axios.put('http://localhost:8080/api/chatting/room', {
+                                'id' : res.data.response.id,
+                                'sellerId' : res.data.response.sellerId,
+                                'buyerId' : res.data.response.buyerId,
+                                'latestMessage' : document.querySelector('#id' + String(res.data.response.id.timestamp)).value
+                            }).then(r => {
+                                document.querySelector('#latest' + String(res.data.response[i].id.timestamp)).innerText = document.querySelector('#id' + String(res.data.response[i].id.timestamp)).value
+                            })
+                        })
+                    })
+                    ctnr.appendChild(roomName)
+                    ctnr.appendChild(latest)
+                    ctnr.appendChild(enterChat)
+                    ctnr.appendChild(chatArea)
+                    inputWrpr.appendChild(input)
+                    inputWrpr.appendChild(button)
+                    ctnr.appendChild(inputWrpr)
+                    document.querySelector('#chatList').appendChild(ctnr)
+                    chatLst.push(res.data.response.id)
+                }
+            })
         })
     </script>
 </body>

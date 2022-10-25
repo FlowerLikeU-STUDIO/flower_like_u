@@ -18,4 +18,5 @@ public class Message {
     private String imgSrc;
     private Long sellerId;
     private Long buyerId;
+    private String direction;
 }

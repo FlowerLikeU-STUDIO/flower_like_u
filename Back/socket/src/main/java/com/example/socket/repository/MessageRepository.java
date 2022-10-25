@@ -4,6 +4,8 @@ import com.example.socket.document.Message;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface MessageRepository extends MongoRepository<Message, ObjectId> {
+import java.util.List;
 
+public interface MessageRepository extends MongoRepository<Message, ObjectId> {
+    List<Message> findAllBySellerIdAndBuyerId(Long sellerId, Long buyerId);
 }

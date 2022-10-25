@@ -2,7 +2,6 @@ package com.example.socket.controller;
 
 import com.example.socket.document.Message;
 import com.example.socket.document.Room;
-import com.example.socket.domain.ChatMessage;
 import com.example.socket.dto.BaseResponseDto;
 import com.example.socket.dto.OnlyMessageResponseDto;
 import com.example.socket.service.MessageService;
@@ -33,9 +32,15 @@ public class MessageController {
         return new OnlyMessageResponseDto("success");
     }
 
-    @GetMapping("/api/chatting/room/{userType}/{id}")
+    @GetMapping("/api/chatting/room/list/{userType}/{id}")
     public BaseResponseDto<List<Room>> getRoomList(@PathVariable("userType") String userType, @PathVariable("id") Long id) {
         List<Room> roomList = roomService.getList(userType, id);
         return new BaseResponseDto<>("success", roomList);
+    }
+
+    @GetMapping("/api/chatting/{sellerId}/{buyerId}")
+    public BaseResponseDto<List<Message>> getMessageList(@PathVariable("sellerId") Long sellerId, @PathVariable("buyerId") Long buyerId) {
+        List<Message> messageList = messageService.getList(sellerId,buyerId);
+        return new BaseResponseDto<>("success", messageList);
     }
 }
