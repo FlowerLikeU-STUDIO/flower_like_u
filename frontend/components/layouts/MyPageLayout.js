@@ -6,7 +6,6 @@ const LayoutWrapper = styled.div`
   margin: 0 auto;
   width: 90%;
   max-width: 75rem;
-  background-color: red;
 `;
 
 const MyPageLayout = ({ children }) => {
