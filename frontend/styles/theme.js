@@ -7,9 +7,9 @@ const sizes = {
 
 const colors = {
   // background-image
-  gradient: "linear-gradient(350deg, #5e30ff, #5f6bff, #5299ff, #1ec5ff)",
-
-  butgradient: "linear-gradient(350deg, #5299ff, #1ec5ff, #abdcff, #F6FBFF)",
+  gradient: "linear-gradient(350deg, #FF8FA4, #FFB4B0, #FFD9BB, #FFFBC6)",
+  deepGradient: "linear-gradient(350deg, #FFB800, #F4A39E, #F37F8B, #DE6279)",
+  lightGradient: "linear-gradient(350deg, #FFD8E0, #FFE8E7, #FFEBDC, #FFFFFE)",
 
   transparent: "transparent",
 
@@ -73,17 +73,17 @@ const colors = {
   red300p: "#EACDCC",
 
   // 너닮꽃 Ivory
-  lightBlue300: "#FFFBEB",
-  lightBlue400: "#FDF5D6",
-  lightBlue500: "#F3DD8A",
-  lightBlue600: "#F6D55A",
-  lightBlue700: "#F5CC35",
-  lightBlue800: "#C99D00",
-  lightBlue900: "#907100",
-  lightBlue600p: "#71612A",
-  lightBlue500p: "#978C62",
-  lightBlue400p: "#CFC18D",
-  lightBlue300p: "#DBD6C5",
+  Ivory300: "#FFFBEB",
+  Ivory400: "#FDF5D6",
+  Ivory500: "#F3DD8A",
+  Ivory600: "#F6D55A",
+  Ivory700: "#F5CC35",
+  Ivory800: "#C99D00",
+  Ivory900: "#907100",
+  Ivory600p: "#71612A",
+  Ivory500p: "#978C62",
+  Ivory400p: "#CFC18D",
+  Ivory300p: "#DBD6C5",
 };
 
 const fontWeights = {
@@ -95,7 +95,6 @@ const fontWeights = {
   extraLight: 200,
   button: 700,
 };
-
 
 //* 그림자
 const shadows = {
