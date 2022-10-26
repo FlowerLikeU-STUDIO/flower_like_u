@@ -12,5 +12,5 @@ import javax.persistence.MappedSuperclass;
 public class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-Increment
-    Long id;
+    private Long id;
 }
