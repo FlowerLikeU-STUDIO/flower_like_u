@@ -12,8 +12,11 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 @Controller
 public class ChatController {
 
-    @Autowired
     private SimpMessageSendingOperations messagingTemplate;
+    @Autowired
+    public ChatController(SimpMessageSendingOperations messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
 
     @MessageMapping("/chat.addUser")
     public void addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
