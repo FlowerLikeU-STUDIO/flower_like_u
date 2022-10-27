@@ -93,22 +93,10 @@ const Home = () => {
         <h1>너를 닮은 꽃</h1>
       </HomeTitleWrapper>
       <Section>
-        <HomeFlower
-          left={"-8px"}
-          top={"120px"}
-          width={"400px"}
-          height={"600px"}
-          className={"left"}
-        >
+        <HomeFlower left={"-8px"} top={"120px"} width={"400px"} height={"600px"} className={"left"}>
           <Image src={"/home/homeFlowerLeft.png"} layout={"fill"} />
         </HomeFlower>
-        <HomeFlower
-          right={"-370px"}
-          top={"0px"}
-          width={"900px"}
-          height={"1000px"}
-          className={"right"}
-        >
+        <HomeFlower right={"-370px"} top={"0px"} width={"900px"} height={"1000px"} className={"right"}>
           <Image src={"/home/homeFlowerRight.png"} layout={"fill"} />
         </HomeFlower>
         <div>
