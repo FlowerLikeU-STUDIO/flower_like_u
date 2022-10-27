@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { Fragment } from "react";
 import { useSelector } from "react-redux";
 import Button from "../../styles/Button";
-import styles from "./mypage.module.scss";
+import styles from "./[uid].module.scss";
 
 const Mypage = () => {
   const role = "seller"; // buyer, seller (data로 받게 될 시 삭제)
