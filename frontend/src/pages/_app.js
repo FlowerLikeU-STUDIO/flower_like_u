@@ -1,6 +1,6 @@
 import Layout from "../components/layouts/Layout";
 import wrapper from "../store";
-import "../styles/globals.css";
+import "../styles/globals.scss";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import { useState } from "react";
 import Head from "next/head";
