@@ -1,5 +1,5 @@
 import Button from "@/styles/common/Button";
-import styles from "./mypage.module.scss";
+import styles from "./index.module.scss";
 import useSWR from "swr";
 import axios from "axios";
 import { useEffect, useState } from "react";
