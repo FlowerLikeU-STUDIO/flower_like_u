@@ -1,10 +1,11 @@
 // font
 //* 인수를 넘기지 않으면 기본값으로 설정됩니다.
 //TODO @include 이름(인수) 형식으로 사용
-@mixin font($size: 1rem, $weight: 500, $color: #2a2a2a) {
+@mixin font($size: 1rem, $weight: 500, $color: #2a2a2a, $height: 150%) {
   font-size: $size;
   font-weight: $weight;
   color: $color;
+  line-height: $height;
 }
 
 // flexdiv
