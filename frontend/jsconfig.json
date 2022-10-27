@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    // "paths"가 있는 경우 반드시 지정되어야 합니다.
+    "baseUrl": ".",
+    // 해당 매핑은 "baseUrl"에 상대적입니다.
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  }
+}
