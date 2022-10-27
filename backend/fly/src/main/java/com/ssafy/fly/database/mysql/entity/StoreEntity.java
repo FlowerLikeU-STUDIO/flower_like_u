@@ -1,6 +1,8 @@
 package com.ssafy.fly.database.mysql.entity;
 
+import com.ssafy.fly.database.mysql.enumtype.UserType;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -16,8 +18,8 @@ import java.util.Date;
 @ToString
 public class StoreEntity extends BaseEntity {
     @Column(name = "type", nullable = false)
-    @ColumnDefault("store")
-    private String type;
+    @Enumerated(EnumType.STRING)
+    UserType type;
 
     @Column(name = "user_id", length = 16, nullable = false)
     private String userId;
@@ -47,7 +49,7 @@ public class StoreEntity extends BaseEntity {
     // 휴일은 나중에 작업
 //    @Column(name = "holidays", nullable = true)
 //    private String holidays;
-
+//
     @Column(name = "bio", length = 300, nullable = true)
     private String bio;
 
@@ -55,7 +57,6 @@ public class StoreEntity extends BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDate;
 
-    @Column(name = "withdrawal", nullable = false)
-    @ColumnDefault("false")
+    @Column(name = "withdrawal")
     private boolean withdrawal;
 }
