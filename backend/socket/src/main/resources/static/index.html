@@ -117,16 +117,19 @@
                 chatLst.push(message.address)
             }
             else if (message.messageType != 'JOIN' && message.messageType != 'LEAVE') {
-                let divTmp = document.createElement('div')
-                divTmp.innerText = message.content
-                if (message.messageType === 'SEND') divTmp.setAttribute('style','text-align : end')
-                document.querySelector('#area' + message.address.timestamp).appendChild(divTmp)
+                if (document.querySelector('#area' + message.address.timestamp).style.display != 'none') {
+                    let divTmp = document.createElement('div')
+                    divTmp.innerText = message.content
+                    if (message.messageType === 'SEND') divTmp.setAttribute('style','text-align : end')
+                    document.querySelector('#area' + message.address.timestamp).appendChild(divTmp)
+                }
                 document.querySelector('#latest' + message.address.timestamp).innerText = message.content
             }
         }
 
         let chatLst = []
         let stompClient = null
+
         document.querySelector('button').addEventListener('click',() => {
             chatLst = []
             document.querySelector('#chatList').remove()
