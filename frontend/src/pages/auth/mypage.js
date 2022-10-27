@@ -1,5 +1,4 @@
-import classnames from "classnames";
-import Button from "@/styles/Button";
+import Button from "@/styles/common/Button";
 import styles from "./mypage.module.scss";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
@@ -8,6 +7,7 @@ import ProfileImage from "@/components/mypage/common/ProfileImage";
 const Mypage = () => {
   const [userData, setUserData] = useState("");
   const [userType, setUserType] = useState("buyer");
+  const [component, setComponent] = useState("0");
 
   // ! useSWR이 데이터 변경되면 자동으로 fetching해줌
   const { data, error } = useSWR("https://nextjs-course-f7f75-default-rtdb.firebaseio.com/mypage.json", (url) =>
@@ -30,13 +30,13 @@ const Mypage = () => {
       }
 
       //! buyer
-      setUserType("buyer");
-      transFormedData.push(data[0].response);
-      setUserData({ ...transFormedData }[0]);
-      // !seller;
-      // setUserType("seller");
-      // transFormedData.push(data[1].response);
+      // setUserType("buyer");
+      // transFormedData.push(data[0].response);
       // setUserData({ ...transFormedData }[0]);
+      // !seller
+      setUserType("seller");
+      transFormedData.push(data[1].response);
+      setUserData({ ...transFormedData }[0]);
     }
   }, [data]);
 
@@ -52,19 +52,21 @@ const Mypage = () => {
   return (
     <div className={styles.layout}>
       <div className={styles.profile}>
-        {/* <ProfileImage url={userData.profile} size="medium" /> */}
+        <ProfileImage
+          url={userData.profile !== "" ? userData.profile : "/auth/floristDefaultProfile.png"}
+          size="medium"
+        />
         <div className={styles.flexdiv}>
           <div>
             {userType === "seller" ? (
-              <span>{userData.store || userData.name}</span>
+              <span className={styles.userName}>{userData.storeName || userData.name}</span>
             ) : (
-              <span>{userData.nickname || userData.name}</span>
+              <span className={styles.userName}>{userData.nickname || userData.name}</span>
             )}
             <span className="material-icons-outlined">settings</span>
           </div>
           {userType === "seller" && (
             <div className={styles.profile_seller}>
-              <p>판매자 프로필 하단</p>
               <p>판매자 프로필 하단</p>
             </div>
           )}
@@ -72,14 +74,10 @@ const Mypage = () => {
       </div>
       <hr />
       <div>
-        {/* <Button color="pink">가나다라마바사</Button> */}
-        {/* <button
-          className={classnames({
-            [styles.btn_yellow]: isTrue,
-          })}
-        >
-          asdf
-        </button> */}
+        <Button color="red400" onClick={() => console.log("버튼클릭됨")}>
+          가나다라마바사
+        </Button>
+
         {/* <button className={`commentBtn ${isTrue ? "btn_yellow" : "btn_default"}`}>asdf</button> */}
         <button>asdf</button>
       </div>
@@ -89,12 +87,3 @@ const Mypage = () => {
 };
 
 export default Mypage;
-
-/*
-  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-  standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make
-  a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
-  remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-  Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
-  of Lorem Ipsum.
-*/

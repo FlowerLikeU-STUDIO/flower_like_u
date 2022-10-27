@@ -1,6 +1,5 @@
 $blue: blue;
 $gray: grey;
-$pink: pink;
 
 @mixin button-color($color) {
   background: $color;
@@ -62,8 +61,8 @@ $pink: pink;
     @include button-color($gray);
   }
 
-  &.pink {
-    @include button-color($pink);
+  &.red400 {
+    @include button-color($red400);
   }
 
   & + & {

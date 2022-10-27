@@ -4,28 +4,26 @@
   margin: 0 auto;
   width: 90%;
   max-width: 75rem;
+  // margin-top 임시
+  margin-top: 1rem;
 }
 
 .profile {
   display: flex;
   flex-direction: row;
-  background-color: #ffebee;
 }
 
 .flexdiv {
   display: flex;
   flex-direction: column;
+  margin-left: 3rem;
 }
 
-.profile_img {
-  background-image: url("/auth/happyBtte.jpeg");
-  border-radius: 50%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 8.5rem;
-  width: 8.5rem;
+.userName {
+  @include font(2rem, 600, $mainParagraph);
+  margin-right: 0.5rem;
 }
+
 .profile_seller {
   display: flex;
   flex-direction: column;

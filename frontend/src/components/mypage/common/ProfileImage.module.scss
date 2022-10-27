@@ -1,6 +1,7 @@
 .img_container {
   border-radius: 70%;
   overflow: hidden;
+  background-color: $white100;
   &.extra_small {
     width: 2.25rem;
     height: 2.25rem;
