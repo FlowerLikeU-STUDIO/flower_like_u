@@ -1,10 +1,12 @@
 import Button from "@/styles/common/Button";
 import styles from "./mypage.module.scss";
 import useSWR from "swr";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import ProfileImage from "@/components/mypage/common/ProfileImage";
+import Contents from "@/components/mypage/flower_store/Contents";
 
-const Mypage = () => {
+const Mypage = ({ profile }) => {
   const [userData, setUserData] = useState("");
   const [userType, setUserType] = useState("buyer");
   const [component, setComponent] = useState("0");
@@ -44,9 +46,10 @@ const Mypage = () => {
     return <p>No data Yet</p>;
   }
 
-  if (!data || !userData) {
-    return <p>Loading...</p>;
-  }
+  // if (!data || !userData) {
+  //   return <p>Loading...</p>;
+  // }
+
   console.log(userData);
 
   return (
@@ -68,6 +71,8 @@ const Mypage = () => {
           {userType === "seller" && (
             <div className={styles.profile_seller}>
               <p>판매자 프로필 하단</p>
+              {/* <Contents rating={userData.rating} introduce={userData.introduce} feedsNum={userData.feedsNum} /> */}
+              <Contents {...profile} />
             </div>
           )}
         </div>
@@ -85,5 +90,33 @@ const Mypage = () => {
     </div>
   );
 };
-
 export default Mypage;
+
+export const getStaticProps = async () => {
+  const res = await axios.get("https://jsonplaceholder.typicode.com/users/1").then((res) => res);
+  const profile = {
+    type: "seller",
+    userId: "ssafyb209",
+    name: "김싸피",
+    email: "ssafyb209@gmail.com",
+    storeName: "flowershop",
+    license: "00-000-00000",
+    address: "대전광역시 유성구 XXX",
+    profile: "/auth/floristDefaultProfile.png",
+    feedsNum: 104,
+    holidays: [
+      { dayOfWeek: "Sun", value: true },
+      { dayOfWeek: "Mon", value: false },
+      { dayOfWeek: "Tue", value: false },
+      { dayOfWeek: "Wed", value: true },
+      { dayOfWeek: "Thu", value: false },
+      { dayOfWeek: "Fri", value: false },
+      { dayOfWeek: "Sat", value: false },
+    ],
+    introduce:
+      "안녕하세요. 이번에 덕명동으로 입점한 너닮꽃집이에요~\n대전 삼성화재 연수원 근처에 있습니다.\n문의는 채팅을통해 부탁드려요",
+    rating: "4.5",
+    regDate: "2022-10-25",
+  };
+  return { props: { profile: profile } };
+};
