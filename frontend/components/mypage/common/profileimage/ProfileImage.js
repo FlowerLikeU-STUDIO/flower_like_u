@@ -2,6 +2,7 @@ import styles from "./ProfileImage.module.scss";
 import classNames from "classnames/bind";
 import Image from "next/image";
 
+//* props로 이미지의 url과 size(extra_small, small, medium, large, extra_large)를 넘겨서 사용
 const ProfileImage = (props) => {
   const cx = classNames.bind(styles);
   return (
