@@ -1,7 +1,7 @@
 package com.ssafy.fly.database.mysql.entity;
 
+import com.ssafy.fly.database.mysql.enumtype.UserType;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,9 +15,9 @@ import java.util.Date;
 @Builder
 @ToString
 public class ConsumerEntity extends BaseEntity {
-    @Column(name = "type", length = 10, nullable = false)
-    @ColumnDefault("consumer")
-    private String type;
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    UserType type;
 
     @Column(name = "user_id", length = 16, nullable = false)
     private String userId;
@@ -45,7 +45,6 @@ public class ConsumerEntity extends BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDate;
 
-    @Column(name = "withdrawal", nullable = false)
-    @ColumnDefault("false")
+    @Column(name = "withdrawal")
     private boolean withdrawal;
 }
