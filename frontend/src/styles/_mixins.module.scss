@@ -1,0 +1,32 @@
+// font
+//* 인수를 넘기지 않으면 기본값으로 설정됩니다.
+//TODO @include 이름(인수) 형식으로 사용
+@mixin font($size: 1rem, $weight: 500, $color: #2a2a2a, $height: 150%) {
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+  line-height: $height;
+}
+
+// flexdiv
+//* 인수를 넘기지 않으면 기본값으로 설정됩니다.
+//TODO 스타일을 추가해서 사용 가능
+@mixin flexDiv($direction: row, $align: center, $justify: center) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: $align;
+  justify-content: $justify;
+  @content;
+}
+
+// grid
+//* 인수를 넘기지 않으면 기본값으로 설정됩니다.
+@mixin grid($columns: 25%, $rows: 25%) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax($columns, auto));
+  grid-template-rows: repeat(auto-fill, minmax($rows, auto));
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
