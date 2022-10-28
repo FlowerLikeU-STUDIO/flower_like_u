@@ -1,6 +1,9 @@
+import SuccessAlert from "@/lib/SuccessAlert";
+import storage from "@/lib/utils/storage";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import useSWR, { mutate } from "swr";
 
 const HeaderWrapper = styled.div`
   padding: ${(props) => props.padding};
@@ -14,8 +17,22 @@ const HeaderAnchor = styled.a`
   margin: 10px;
   cursor: pointer;
 `;
+
+const LogOutButton = styled.button`
+  color: #445b0f;
+  font-size: 1rem;
+`;
+
 const Header = () => {
-  const user = useSelector((state) => state.user);
+  const { data: isLogin } = useSWR("logIn", storage);
+  const router = useRouter();
+  const onHandleLogout = () => {
+    window.sessionStorage.removeItem("ACCESS_TOKEN");
+    window.sessionStorage.removeItem("REFRESH_TOKEN");
+    mutate("logIn", null);
+    SuccessAlert("로그아웃 되었습니다.");
+    router.push("/");
+  };
   return (
     <HeaderWrapper padding={"24px 32px"}>
       <div>
@@ -30,12 +47,12 @@ const Header = () => {
         </Link>
       </div>
       <div>
-        {user.isLogin ? (
+        {isLogin ? (
           <>
             <Link href="/auth/mypage">
               <HeaderAnchor>마이페이지</HeaderAnchor>
             </Link>
-            <HeaderAnchor>로그아웃</HeaderAnchor>
+            <LogOutButton onClick={onHandleLogout}>로그아웃</LogOutButton>
           </>
         ) : (
           <>
