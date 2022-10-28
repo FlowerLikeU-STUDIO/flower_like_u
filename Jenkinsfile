@@ -11,22 +11,20 @@ pipeline {
                 }
             }
         }
-        stage('Docker Build') {
+        stage('Backend Dockerizing') {
             steps {
+                sh "pwd"
                 dir('./backend/fly'){
                     sh "docker build -t martinflower/fly ."
-                    sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
                 }
             }
         }
-        // stage('Archive') {
-        //     steps {
-        //         sh '''
-        //         echo "Start Archiving"
-        //         mv ./main ./artifact/
-        //         '''
-        //         archiveArtifacts artifacts: 'artifact/*', fingerprint: true 
-        //     }
-        // }
+        stage('deploy') {
+            steps {
+                sh '''
+                  docker run -d -p 5000:5000 martinflower/fly
+                '''
+            }
+        }
     }
 }
