@@ -1,0 +1,30 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 90%;
+  max-width: 75rem;
+  // margin-top 임시
+  margin-top: 1rem;
+}
+
+.profile {
+  display: flex;
+  flex-direction: row;
+}
+
+.flexdiv {
+  display: flex;
+  flex-direction: column;
+  margin-left: 3rem;
+}
+
+.userName {
+  @include font(2rem, 600, $mainParagraph);
+  margin-right: 0.5rem;
+}
+
+.profile_seller {
+  display: flex;
+  flex-direction: column;
+}
