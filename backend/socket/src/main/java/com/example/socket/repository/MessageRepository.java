@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface MessageRepository extends MongoRepository<Message, ObjectId> {
-    List<Message> findAllBySellerIdAndBuyerId(Long sellerId, Long buyerId);
+    List<Message> findAllByStoreIdAndConsumerId(Long storeId, Long consumerId);
 }

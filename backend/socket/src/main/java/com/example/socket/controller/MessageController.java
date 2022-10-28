@@ -38,9 +38,9 @@ public class MessageController {
         return new BaseResponseDto<>("success", roomList);
     }
 
-    @GetMapping("/api/chatting/{sellerId}/{buyerId}")
-    public BaseResponseDto<List<Message>> getMessageList(@PathVariable("sellerId") Long sellerId, @PathVariable("buyerId") Long buyerId) {
-        List<Message> messageList = messageService.getList(sellerId,buyerId);
+    @GetMapping("/api/chatting/{storeId}/{consumerId}")
+    public BaseResponseDto<List<Message>> getMessageList(@PathVariable("storeId") Long storeId, @PathVariable("consumerId") Long consumerId) {
+        List<Message> messageList = messageService.getList(storeId,consumerId);
         return new BaseResponseDto<>("success", messageList);
     }
 }

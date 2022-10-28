@@ -25,7 +25,7 @@ public class MessageServiceImpl implements MessageService {
         }
     }
 
-    public List<Message> getList(Long sellerId, Long buyerId) {
-        return messageRepository.findAllBySellerIdAndBuyerId(sellerId,buyerId);
+    public List<Message> getList(Long storeId, Long consumerId) {
+        return messageRepository.findAllByStoreIdAndConsumerId(storeId,consumerId);
     }
 }

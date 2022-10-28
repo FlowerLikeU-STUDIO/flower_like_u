@@ -14,12 +14,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Room {
     @Id
     private ObjectId id;
-    private Long sellerId;
-    private Long buyerId;
+    private Long storeId;
+    private Long consumerId;
     private String latestMessage;
+    private int storeNotReadCnt;
+    private int consumerNotReadCnt;
 
-    public Room(Long sellerId, Long buyerId) {
-        this.sellerId = sellerId;
-        this.buyerId = buyerId;
+    public Room(Long storeId, Long consumerId) {
+        this.storeId = storeId;
+        this.consumerId = consumerId;
+        this.storeNotReadCnt = 0;
+        this.consumerNotReadCnt = 0;
+        this.latestMessage = "";
     }
 }

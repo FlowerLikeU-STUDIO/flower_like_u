@@ -5,7 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RoomPostReqDto {
+public class RoomCntPutReqDto {
     private Long storeId;
     private Long consumerId;
+    private String userType;
 }

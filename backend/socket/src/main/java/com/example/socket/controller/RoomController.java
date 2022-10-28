@@ -3,6 +3,7 @@ package com.example.socket.controller;
 import com.example.socket.document.Room;
 import com.example.socket.dto.BaseResponseDto;
 import com.example.socket.dto.OnlyMessageResponseDto;
+import com.example.socket.dto.request.RoomCntPutReqDto;
 import com.example.socket.dto.request.RoomPostReqDto;
 import com.example.socket.dto.request.RoomPutReqDto;
 import com.example.socket.dto.response.RoomNoLatestMessageResDto;
@@ -23,29 +24,35 @@ public class RoomController {
 
     @PostMapping("api/chatting/room")
     public BaseResponseDto<RoomOnlyAddressResDto> createRoom(@RequestBody RoomPostReqDto roomPostReqDto) {
-        Long sellerId = roomPostReqDto.getSellerId();
-        Long buyerId = roomPostReqDto.getBuyerId();
-        ObjectId address = roomService.create(sellerId,buyerId);
+        Long storeId = roomPostReqDto.getStoreId();
+        Long consumerId = roomPostReqDto.getConsumerId();
+        ObjectId address = roomService.create(storeId,consumerId);
         return new BaseResponseDto<>("success", new RoomOnlyAddressResDto(address));
     }
 
-    @GetMapping("api/chatting/room/{sellerId}/{buyerId}")
-    public BaseResponseDto<RoomNoLatestMessageResDto> getRoom(@PathVariable("buyerId") Long buyerId, @PathVariable("sellerId") Long sellerId) {
-        Optional<Room> optRoom = roomService.getOptRoom(sellerId,buyerId);
+    @GetMapping("api/chatting/room/{storeId}/{consumerId}")
+    public BaseResponseDto<RoomNoLatestMessageResDto> getRoom(@PathVariable("consumerId") Long consumerId, @PathVariable("storeId") Long storeId) {
+        Optional<Room> optRoom = roomService.getOptRoom(storeId,consumerId);
         if (optRoom.isPresent())
             return new BaseResponseDto<>("success",new RoomNoLatestMessageResDto(
                     optRoom.get().getId(),
-                    optRoom.get().getBuyerId(),
-                    optRoom.get().getSellerId()));
+                    optRoom.get().getStoreId(),
+                    optRoom.get().getConsumerId()));
         else {
-            ObjectId address = roomService.create(sellerId,buyerId);
-            return new BaseResponseDto<>("success", new RoomNoLatestMessageResDto(address,buyerId,sellerId));
+            ObjectId address = roomService.create(storeId,consumerId);
+            return new BaseResponseDto<>("success", new RoomNoLatestMessageResDto(address,consumerId,storeId));
         }
     }
 
     @PutMapping("api/chatting/room")
-    public OnlyMessageResponseDto updateLatestMessage(@RequestBody RoomPutReqDto roomPutReqDto) {
-        roomService.updateLatestMessage(roomPutReqDto.getSellerId(),roomPutReqDto.getBuyerId(),roomPutReqDto.getLatestMessage());
+    public OnlyMessageResponseDto updateAdd(@RequestBody RoomPutReqDto roomPutReqDto) {
+        roomService.updateAdd(roomPutReqDto.getStoreId(),roomPutReqDto.getConsumerId(),roomPutReqDto.getLatestMessage(),roomPutReqDto.getUserType());
+        return new OnlyMessageResponseDto("success");
+    }
+
+    @PutMapping("api/chatting/room/cnt")
+    public OnlyMessageResponseDto resetCnt(@RequestBody RoomCntPutReqDto roomCntPutReqDto) {
+        roomService.resetCnt(roomCntPutReqDto);
         return new OnlyMessageResponseDto("success");
     }
 }
