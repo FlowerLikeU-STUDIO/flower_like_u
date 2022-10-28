@@ -4,7 +4,10 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Hello'
+                dir('./backend/fly'){
+                    sh "pwd"
+                    sh "chmod 777 gradlew"
+                }
             }
         }
         // stage('Push Dockerfile') {
