@@ -4,11 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'cd backend'
-                sh 'cd fly'
-                sh 'chmod 777 gradlew '
-                sh './gradlew clean build'
-                sh 'ls'
+                echo 'Hello'
             }
         }
         // stage('Push Dockerfile') {
