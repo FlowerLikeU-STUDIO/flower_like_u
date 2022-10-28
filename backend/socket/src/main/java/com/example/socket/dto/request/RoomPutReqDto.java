@@ -8,7 +8,8 @@ import org.bson.types.ObjectId;
 @Setter
 public class RoomPutReqDto {
     private ObjectId id;
-    private Long buyerId;
-    private Long sellerId;
+    private Long consumerId;
+    private Long storeId;
     private String latestMessage;
+    private String userType;
 }

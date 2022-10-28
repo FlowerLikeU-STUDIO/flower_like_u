@@ -1,6 +1,7 @@
 package com.example.socket.service;
 
 import com.example.socket.document.Room;
+import com.example.socket.dto.request.RoomCntPutReqDto;
 import org.bson.types.ObjectId;
 
 import java.math.BigInteger;
@@ -10,9 +11,11 @@ import java.util.Optional;
 public interface RoomService {
     public List<Room> getList(String userType, Long id);
 
-    public ObjectId create(Long sellerId, Long buyerId);
+    public ObjectId create(Long storeId, Long consumerId);
 
-    public Optional<Room> getOptRoom(Long sellerId, Long buyerId);
+    public Optional<Room> getOptRoom(Long storeId, Long consumerId);
 
-    public void updateLatestMessage(Long sellerId, Long buyerId, String latestMessage);
+    public void updateAdd(Long storeId, Long consumerId, String latestMessage, String userType);
+
+    public void resetCnt(RoomCntPutReqDto roomCntPutReqDto);
 }

@@ -12,6 +12,6 @@ import java.math.BigInteger;
 @AllArgsConstructor
 public class RoomNoLatestMessageResDto {
     private ObjectId id;
-    private Long buyerId;
-    private Long sellerId;
+    private Long consumerId;
+    private Long storeId;
 }

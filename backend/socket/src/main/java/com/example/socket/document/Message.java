@@ -16,7 +16,7 @@ public class Message {
     private ObjectId id;
     private String content;
     private String imgSrc;
-    private Long sellerId;
-    private Long buyerId;
+    private Long storeId;
+    private Long consumerId;
     private String direction;
 }

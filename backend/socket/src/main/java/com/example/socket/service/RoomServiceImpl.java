@@ -1,6 +1,7 @@
 package com.example.socket.service;
 
 import com.example.socket.document.Room;
+import com.example.socket.dto.request.RoomCntPutReqDto;
 import com.example.socket.repository.RoomRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,34 +25,38 @@ public class RoomServiceImpl implements RoomService{
 
     public List<Room> getList(String userType, Long id) {
         List<Room> RoomList;
-        if (userType.equals("buyer"))
-            RoomList = roomRepository.findAllByBuyerId(id);
+        if (userType.equals("consumer"))
+            RoomList = roomRepository.findAllByConsumerId(id);
         else
-            RoomList = roomRepository.findAllBySellerId(id);
+            RoomList = roomRepository.findAllByStoreId(id);
         return RoomList;
     }
 
-    public ObjectId create(Long sellerId, Long buyerId) {
+    public ObjectId create(Long storeId, Long consumerId) {
         try {
-            return roomRepository.save(new Room(sellerId,buyerId)).getId();
+            return roomRepository.save(new Room(storeId,consumerId)).getId();
         } catch (Exception e) {
             throw new IllegalArgumentException("방 생성에 실패했습니다.");
         }
     }
 
-    public Optional<Room> getOptRoom(Long sellerId, Long buyerId) {
-        return roomRepository.findBySellerIdAndBuyerId(sellerId, buyerId);
+    public Optional<Room> getOptRoom(Long storeId, Long consumerId) {
+        return roomRepository.findByStoreIdAndConsumerId(storeId, consumerId);
     }
 
     @Transactional
-    public void updateLatestMessage(Long sellerId, Long buyerId, String latestMessage) {
-        Room room = roomRepository.findBySellerIdAndBuyerId(sellerId,buyerId).orElseThrow(new Supplier<IllegalArgumentException>() {
+    public void updateAdd(Long storeId, Long consumerId, String latestMessage, String userType) {
+        Room room = roomRepository.findByStoreIdAndConsumerId(storeId,consumerId).orElseThrow(new Supplier<IllegalArgumentException>() {
             @Override
             public IllegalArgumentException get() {
                 return new IllegalArgumentException("해당 방이 없습니다.");
             }
         });
         room.setLatestMessage(latestMessage);
+        if (userType.equals("store"))
+            room.setStoreNotReadCnt(room.getStoreNotReadCnt() + 1);
+        else
+            room.setConsumerNotReadCnt(room.getConsumerNotReadCnt() + 1);
         try {
             roomRepository.save(room);
         } catch(Exception e) {
@@ -59,5 +64,23 @@ public class RoomServiceImpl implements RoomService{
         }
     }
 
-
+    @Transactional
+    public void resetCnt(RoomCntPutReqDto roomCntPutReqDto) {
+        Room room = roomRepository.findByStoreIdAndConsumerId(roomCntPutReqDto.getStoreId(),roomCntPutReqDto.getConsumerId()).orElseThrow(new Supplier<IllegalArgumentException>() {
+            @Override
+            public IllegalArgumentException get() {
+                return new IllegalArgumentException("해당 방이 없습니다.");
+            }
+        });
+        try {
+            if (roomCntPutReqDto.getUserType().equals("store")) {
+                room.setStoreNotReadCnt(0);
+            } else {
+                room.setConsumerNotReadCnt(0);
+            }
+            roomRepository.save(room);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("카운트 갱신에 실패했습니다.");
+        }
+    }
 }
