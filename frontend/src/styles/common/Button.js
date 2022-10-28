@@ -20,4 +20,5 @@ export default Button;
 Button.defaultProps = {
   size: "medium",
   color: "blue",
+  onClick: () => {},
 };
