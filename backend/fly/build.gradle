@@ -27,6 +27,9 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Spring Security
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.7.2'
 }
 
 tasks.named('test') {

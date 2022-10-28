@@ -26,7 +26,6 @@ public class AccountServiceImpl implements AccountService {
     private final StoreRepository storeRepository;
     private final ValidationChecker validationChecker;
     private final RandomStringGenerator randomStringGenerator;
-    //private final MailSendService mailSendService;
     private final FlyMailSender flyMailSender;
 
     @Autowired
@@ -40,7 +39,6 @@ public class AccountServiceImpl implements AccountService {
         this.validationChecker = validationChecker;
         this.randomStringGenerator = randomStringGenerator;
         this.flyMailSender = flyMailSender;
-        //this.mailSendService = mailSendService;
     }
 
     // 1. 아이디 중복 검사
@@ -58,14 +56,22 @@ public class AccountServiceImpl implements AccountService {
     public boolean saveMember(RegisterReq registerReq) {
 
         // 비밀번호 재확인
-        if (!registerReq.getPassword().equals(registerReq.getPassword2())) return false;
+        if (!registerReq.getPassword().equals(registerReq.getPassword2())) {
+            System.out.println("서로 다른 비밀번호 입력");
+            return false;
+        }
 
         // 아이디 유효성 검사(알파벳 + 숫자 조합 8자 이상 16자 이하)
-        if (!validationChecker.idValidationCheck(registerReq.getUserId())) return false;
+        if (!validationChecker.idValidationCheck(registerReq.getUserId())) {
+            System.out.println("아이디 유효성 검증 실패");
+            return false;
+        }
 
-        // 비밀번호 유효성 검사(알파벳 + 숫자 조합 12자 이상)
-        // 특수문자 유효성 검사는 보류
-        if (!validationChecker.pwdValidationCheck(registerReq.getPassword())) return false;
+        // 비밀번호 유효성 검사(알파벳 + 숫자 + 특수문자 조합 8자 이상 16자 이하)
+        if (!validationChecker.pwdValidationCheck(registerReq.getPassword())) {
+            System.out.println("비밀번호 유효성 검증 실패");
+            return false;
+        }
 
         // 구매자(consumer) 회원 정보 등록
         if ("consumer".equals(registerReq.getType())) {
@@ -144,10 +150,10 @@ public class AccountServiceImpl implements AccountService {
         System.out.printf("TEMPORARY PASSWORD: %s\n", tempPassword);
 
         // Database에서 비밀번호 업데이트
-        int result = 0;
+        int result;
         if (consumer != null) {
             result = consumerRepository.updatePassword(inputUserId, tempPassword);
-        } else if (store != null) {
+        } else {
             result = storeRepository.updatePassword(inputUserId, tempPassword);
         }
 
@@ -186,12 +192,12 @@ public class AccountServiceImpl implements AccountService {
 
         if (consumer == null && store == null) return false;
 
-        int result = 0;
+        int result;
         if (consumer != null) {
             String nickname = changeInfoReq.getNickname();
             String address = changeInfoReq.getAddress();
             result = consumerRepository.updateConsumerInfo(userId, nickname, address);
-        } else if (store != null) {
+        } else {
             String storeName = changeInfoReq.getStore();
             String address = changeInfoReq.getAddress();
             // String holidays = changeInfoReq;
@@ -218,9 +224,9 @@ public class AccountServiceImpl implements AccountService {
         String newPwd = changePwdReq.getNewPwd();
         String newPwd2 = changePwdReq.getNewPwd2();
 
-        if(!newPwd.equals(newPwd2)) return false;
+        if (!newPwd.equals(newPwd2)) return false;
 
-        if(!validationChecker.pwdValidationCheck(newPwd)) return false;
+        if (!validationChecker.pwdValidationCheck(newPwd)) return false;
 
         // 구매자와 판매자 테이블에서 (아이디, 비밀번호, 미탈퇴자)로 탐색
         // Spring Security 적용 후에는 matches로 비밀번호 확인
@@ -230,10 +236,10 @@ public class AccountServiceImpl implements AccountService {
         if (consumer == null && store == null) return false;
 
         // Database에서 비밀번호 업데이트
-        int result = 0;
+        int result;
         if (consumer != null) {
             result = consumerRepository.updatePassword(userId, newPwd);
-        } else if (store != null) {
+        } else {
             result = storeRepository.updatePassword(userId, newPwd);
         }
 
@@ -252,10 +258,10 @@ public class AccountServiceImpl implements AccountService {
         if (consumer == null && store == null) return false;
 
         // Database에서 프로필 이미지 업데이트
-        int result = 0;
+        int result;
         if (consumer != null) {
             result = consumerRepository.updateProfileImage(userId, image);
-        } else if (store != null) {
+        } else {
             result = storeRepository.updateProfileImage(userId, image);
         }
 
@@ -274,10 +280,10 @@ public class AccountServiceImpl implements AccountService {
         if (consumer == null && store == null) return false;
 
         // Database에서 탈퇴 속성 업데이트
-        int result = 0;
+        int result;
         if (consumer != null) {
             result = consumerRepository.accountWithdraw(userId, password);
-        } else if (store != null) {
+        } else {
             result = storeRepository.accountWithdraw(userId, password);
         }
 
@@ -293,7 +299,7 @@ public class AccountServiceImpl implements AccountService {
         if (consumer == null && store == null) return null;
 
         if (consumer != null) {
-            ConsumerInfoRes consumerInfo = ConsumerInfoRes.builder()
+            return ConsumerInfoRes.builder()
                     .type(consumer.getType().toString().toLowerCase())
                     .userId(consumer.getUserId())
                     .name(consumer.getName())
@@ -303,9 +309,8 @@ public class AccountServiceImpl implements AccountService {
                     .profile(consumer.getProfile())
                     .regDate(consumer.getRegDate())
                     .build();
-            return consumerInfo;
         } else if (store != null) {
-            StoreInfoRes storeInfo = StoreInfoRes.builder()
+            return StoreInfoRes.builder()
                     .type(store.getType().toString().toLowerCase())
                     .userId(store.getUserId())
                     .name(store.getName())
@@ -319,7 +324,6 @@ public class AccountServiceImpl implements AccountService {
                     .rating(4.35)
                     .regDate(store.getRegDate())
                     .build();
-            return storeInfo;
         } else {
             return null;
         }
