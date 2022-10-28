@@ -4,13 +4,11 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                script {
-                    cd backend
-                    cd fly
-                    chmod 777 gradlew 
-                    ./gradlew clean build
-                    ls
-                }
+                sh 'cd backend'
+                sh 'cd fly'
+                sh 'chmod 777 gradlew '
+                sh './gradlew clean build'
+                sh 'ls'
             }
         }
         // stage('Push Dockerfile') {
