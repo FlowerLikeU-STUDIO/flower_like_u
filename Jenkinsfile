@@ -13,8 +13,10 @@ pipeline {
         }
         stage('Docker Build') {
             steps {
-                sh "docker build -t martinflower/fly ."
-                sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
+                dir('./backend/fly'){
+                    sh "docker build -t martinflower/fly ."
+                    sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
+                }
             }
         }
         // stage('Archive') {
