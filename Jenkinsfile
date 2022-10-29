@@ -21,8 +21,13 @@ pipeline {
         }
         stage('deploy') {
             steps {
-                sh "docker run -d -p 5000:5000 martinflower/fly"
-                sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
+                script {
+                    docker run -d -p 5000:5000 martinflower/fly
+                    docker login -u $USERNAME --password-stdin
+                    docker push martinflower/fly
+                    docker rmi martinflower/fly
+                    pwd
+                }
             }
         }
     }
