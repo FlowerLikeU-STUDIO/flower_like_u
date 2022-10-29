@@ -86,3 +86,53 @@ $shadow600: 0px 20px 80px rgba(0, 0, 0, 0.07), 0px 12.52px 10.02px rgba(0, 0, 0,
   0px 2.77px 2.21px rgba(0, 0, 0, 0.0197);
 $shadow500: 0px 0px 8px rgba(0, 0, 0, 0.1);
 $shadow400: 0px 0px 4px rgba(0, 0, 0, 0.1);
+
+// @ media-query break-points
+// *min-width: 해당 너비 이상일때 적용 (최소너비 제한)
+// *max-width: 해당 너비 이하일때 적용 (최대너비 제한)
+$breakpoints: (
+  "mobile-extra-small": (
+    min-width: 21.25rem,
+    // 340
+  ),
+  "mobile-portrait-only": (
+    max-width: 29.9375rem,
+    // 479
+  ),
+  "mobile-landscape": (
+    max-width: 51rem,
+    // 816
+  ),
+  "tablet-portrait": (
+    min-width: 48rem,
+    // 768
+  ),
+  "desktop-template": (
+    min-width: 48.0625rem,
+    // 769
+  ),
+  "tablet-portrait-only": (
+    max-width: 48rem,
+    // 768
+  ),
+  "tablet-big": (
+    min-width: 60.625rem,
+    // 970
+  ),
+  "desktop": (
+    min-width: 64rem,
+    // 1024
+  ),
+  "desktop-medium": (
+    min-width: 75rem,
+    // 1200
+  ),
+  "desktop-large": (
+    min-width: 90rem,
+    // 1440
+  ),
+  "desktop-extra-large": (
+    min-width: 120rem,
+    // 1920
+  ),
+);

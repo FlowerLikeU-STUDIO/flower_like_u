@@ -30,3 +30,16 @@
   align-items: center;
   align-content: center;
 }
+
+// 반응형
+//* ex) @include respond-to("tablet-portrait-only") {height: 100px; width: 100px;}
+@mixin respond-to($name) {
+  @if map-has-key($breakpoints, $name) {
+    // media only (all-모든기기) &&  map-get (변수, 키값)
+    @media only all and #{inspect(map-get($breakpoints, $name))} {
+      @content;
+    }
+  } @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. Please make sure it is defined in `$breakpoints` map.";
+  }
+}
