@@ -11,5 +11,5 @@ import java.math.BigInteger;
 @Setter
 @AllArgsConstructor
 public class RoomOnlyAddressResDto {
-    private ObjectId id;
+    private String id;
 }

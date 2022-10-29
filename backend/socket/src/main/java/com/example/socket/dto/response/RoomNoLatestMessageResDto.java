@@ -11,7 +11,7 @@ import java.math.BigInteger;
 @Setter
 @AllArgsConstructor
 public class RoomNoLatestMessageResDto {
-    private ObjectId id;
+    private String id;
     private Long consumerId;
     private Long storeId;
 }
