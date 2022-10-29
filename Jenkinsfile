@@ -19,12 +19,17 @@ pipeline {
                 }
             }
         }
-        stage('deploy') {
+        stage('push') {
             steps {
                 sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
                 sh "docker push martinflower/fly"
                 sh "docker rmi martinflower/fly"
                 sh "pwd"
+            }
+        }
+        stage('pull') {
+            steps {
+                sh "sudo docker pull martinflower/fly"
             }
         }
     }
