@@ -29,7 +29,7 @@ pipeline {
         }
         stage('pull') {
             steps {
-                sudo docker pull martinflower/fly
+                sh "sudo docker pull martinflower/fly"
             }
         }
     }
