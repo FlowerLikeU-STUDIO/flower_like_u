@@ -21,7 +21,7 @@ pipeline {
         }
         stage('deploy') {
             steps {
-                sh "$PASSWORD | docker login -u $USERNAME --password-stdin"
+                sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
                 sh "docker push martinflower/fly"
                 sh "docker rmi martinflower/fly"
                 sh "pwd"
