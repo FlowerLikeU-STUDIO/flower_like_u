@@ -2,12 +2,19 @@ pipeline {
     agent any
 
     stages {
-        stage('Backend Dockerizing') {
+        stage('Build') {
             steps {
                 dir('./backend/fly'){
                     sh "pwd"
                     sh "chmod 777 gradlew"
                     sh "./gradlew clean build"
+                }
+            }
+        }
+        stage('Backend Dockerizing') {
+            steps {
+                sh "pwd"
+                dir('./backend/fly'){
                     sh "docker build -t martinflower/fly:fly ."
                 }
             }
@@ -22,7 +29,9 @@ pipeline {
         }
         stage('pull') {
             steps {
-                sh "docker pull martinflower/fly"
+                dir('./backend/fly'){
+                    sh "sudo docker pull martinflower/fly"
+                }
             }
         }
     }
