@@ -32,7 +32,6 @@ pipeline {
                 sh "docker pull martinflower/fly:fly"
                 // sh "docker run -p 8080:8080 martinflower/fly:fly"
                 sh "docker run -d 8080:8080 --link mysql-container -e TZ=Asia/Seoul martinflower/fly:fly"
-                sh "docker rmi -f $(docker images -f 'dangling=true -q) || true "
             }
         }
     }
