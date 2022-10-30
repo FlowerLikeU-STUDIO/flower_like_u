@@ -30,7 +30,8 @@ pipeline {
         stage('pull') {
             steps {
                 sh "docker pull martinflower/fly:fly"
-                sh "docker run -p 8080:8080 martinflower/fly:fly"
+                // sh "docker run -p 8080:8080 martinflower/fly:fly"
+                sh "docker run -d -p 3000:3000 --link mysql-container martinflower/fly:fly"
             }
         }
     }
