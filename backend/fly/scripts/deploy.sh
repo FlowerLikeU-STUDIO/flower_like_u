@@ -1,1 +1,0 @@
-echo $PASSWORD | docker login -u $USERNAME --password-stdin
