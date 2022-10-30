@@ -15,7 +15,9 @@ pipeline {
             steps {
                 sh "pwd"
                 dir('./backend/fly'){
-                    sh "docker build -t martinflower/fly ."
+                    sh "gradle clean"
+                    sh "gradle bootJar"
+                    sh "docker build -t martinflower/fly:fly ."
                 }
             }
         }
