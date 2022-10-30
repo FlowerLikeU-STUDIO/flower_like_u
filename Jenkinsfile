@@ -29,8 +29,8 @@ pipeline {
         }
         stage('pull') {
             steps {
-                dir('./backend/fly'){
-                    sh "docker pull martinflower/fly:fly"
+                sh "docker pull martinflower/fly:fly"
+                dir('./backend/fly/build/libs'){
                     sh "docker run -p 8080:8080 martinflower/fly:fly"
                 }
             }
