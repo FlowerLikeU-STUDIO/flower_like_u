@@ -3,10 +3,10 @@ import Link from "next/link";
 import styles from "./MyContentBtn.module.scss";
 
 const MyContentBtn = ({ props }) => {
-  const pagePath = { buyer: ["reservation", "order", "design"], seller: ["feeds", "reviews", "order-manage"] };
+  const pagePath = { consumer: ["reservation", "order", "design"], seller: ["feeds", "reviews", "order-manage"] };
   if (!props) return;
   const path = pagePath[props];
-
+  console.log(props);
   return (
     <div className={styles.btn__div}>
       <Link href={`/mypage/${path[0]}`}>
