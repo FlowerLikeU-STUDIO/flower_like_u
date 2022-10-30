@@ -13,6 +13,10 @@
   &.medium {
     width: 12.5rem;
     height: 12.5rem;
+    @include respond-to("tablet-portrait-only") {
+      width: 8rem;
+      height: 8rem;
+    }
   }
   &.large {
     width: 17.5rem;
@@ -21,6 +25,15 @@
   &.extra_large {
     width: 22.5rem;
     height: 22.5rem;
+  }
+  // *마이페이지 수정 - 위치
+  &.modifyProfile {
+    position: absolute;
+    padding: 5px 5px;
+    background-color: $primary300p;
+    left: 50%;
+    bottom: 0%;
+    transform: translate(-50%);
   }
 }
 
