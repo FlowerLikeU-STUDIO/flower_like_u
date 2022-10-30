@@ -30,7 +30,7 @@ pipeline {
         stage('pull') {
             steps {
                 dir('./backend/fly'){
-                    sh "sudo docker pull martinflower/fly:fly"
+                    sh "docker pull martinflower/fly:fly"
                 }
             }
         }
