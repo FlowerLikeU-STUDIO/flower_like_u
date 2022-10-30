@@ -31,7 +31,7 @@ pipeline {
             steps {
                 dir('./backend/fly'){
                     sh "docker pull martinflower/fly:fly"
-                    sh "docker run martinflower/fly:fly"
+                    sh "docker run --name fly:fly -d -p 8080:8080 martinflower/fly:fly"
                 }
             }
         }
