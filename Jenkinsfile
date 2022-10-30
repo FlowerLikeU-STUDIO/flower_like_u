@@ -22,15 +22,15 @@ pipeline {
         stage('push') {
             steps {
                 sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
-                sh "docker push martinflower/fly"
-                sh "docker rmi martinflower/fly"
+                sh "docker push martinflower/fly:fly"
+                sh "docker rmi martinflower/fly:fly"
                 sh "pwd"
             }
         }
         stage('pull') {
             steps {
                 dir('./backend/fly'){
-                    sh "sudo docker pull martinflower/fly"
+                    sh "sudo docker pull martinflower/fly:fly"
                 }
             }
         }
