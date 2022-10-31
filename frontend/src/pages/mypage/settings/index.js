@@ -1,5 +1,5 @@
 import MySetting from "@/components/auth/MySetting";
-import Button from "@/styles/common/Button";
+import Button from "@/components/common/Button";
 
 const MyPageSettings = () => {
   return (

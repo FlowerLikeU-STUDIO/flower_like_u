@@ -1,5 +1,5 @@
 import styles from "./index.module.scss";
-import Button from "@/styles/common/Button";
+import Button from "@/components/common/Button";
 
 const Custom = () => {
   return (
