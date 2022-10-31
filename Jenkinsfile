@@ -16,14 +16,17 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerlogin', 
                                  usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     script {
-                        sh """
-                            chmod u+x ./gradlew
-                            ./gradlew clean build -Pdocker.repository=${dockerRepository} \
-                                                  -Pdocker.repository.username=${USERNAME} \
-                                                  -Pdocker.repository.password=${PASSWORD} \
-                                                  -Pdocker.image.name=${dockerImageName} \
-                                                  -Pdocker.image.tag=${currentBuild.number}
-                        """
+                        dir('./backend/fly'){
+                            sh """
+                                chmod u+x ./gradlew
+                                ./gradlew clean build -Pdocker.repository=${dockerRepository} \
+                                                    -Pdocker.repository.username=${USERNAME} \
+                                                    -Pdocker.repository.password=${PASSWORD} \
+                                                    -Pdocker.image.name=${dockerImageName} \
+                                                    -Pdocker.image.tag=${currentBuild.number}
+                            """
+                        }
+
                     }
                 }
             }
