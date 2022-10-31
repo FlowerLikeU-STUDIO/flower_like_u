@@ -9,6 +9,7 @@ pipeline {
                     sh "chmod 777 gradlew"
                     sh "./gradlew clean build"
                     sh "docker build -t martinflower/fly:fly ."
+                    sh "docker rmi martinflower/fly:fly"
                 }
             }
         }
