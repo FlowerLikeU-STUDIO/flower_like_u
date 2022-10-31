@@ -51,7 +51,6 @@ public class AccountServiceImpl implements AccountService {
         boolean hasConsumer = consumerRepository.findFirstByUserId(inputId) != null;
         boolean hasStore = storeRepository.findFirstByUserId(inputId) != null;
 
-        System.out.println(hasConsumer + " " + hasStore);
         return hasConsumer || hasStore;
     }
 
@@ -187,21 +186,19 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean updateAccountInfo(ChangeInfoReq changeInfoReq) {
         String userId = changeInfoReq.getUserId();
-        String password = changeInfoReq.getPassword();
 
         // 구매자와 판매자 테이블에서 (아이디, 비밀번호, 미탈퇴자)로 탐색
-        // Spring Security 적용 후에는 matches로 비밀번호 확인
         ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(userId, false);
         StoreEntity store = storeRepository.findByUserIdAndWithdrawal(userId, false);
 
         if (consumer == null && store == null) return false;
 
         int result;
-        if (consumer != null && passwordEncoder.matches(password, consumer.getPassword())) {
+        if (consumer != null) {
             String nickname = changeInfoReq.getNickname();
             String address = changeInfoReq.getAddress();
             result = consumerRepository.updateConsumerInfo(userId, nickname, address);
-        } else if(store != null && passwordEncoder.matches(password, store.getPassword())) {
+        } else if(store != null) {
             String storeName = changeInfoReq.getStore();
             String address = changeInfoReq.getAddress();
             // String holidays = changeInfoReq;
@@ -235,7 +232,6 @@ public class AccountServiceImpl implements AccountService {
         if (!validationChecker.pwdValidationCheck(newPwd)) return false;
 
         // 구매자와 판매자 테이블에서 (아이디, 비밀번호, 미탈퇴자)로 탐색
-        // Spring Security 적용 후에는 matches로 비밀번호 확인
         ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(userId, false);
         StoreEntity store = storeRepository.findByUserIdAndWithdrawal(userId, false);
 
@@ -258,7 +254,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean updateProfileImage(ChangeProfileReq changeProfileReq) {
         String userId = changeProfileReq.getUserId();
-        String image = changeProfileReq.getProfile();
+        String image = changeProfileReq.getImage();
 
         ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(userId, false);
         StoreEntity store = storeRepository.findByUserIdAndWithdrawal(userId, false);

@@ -7,5 +7,5 @@ import lombok.Data;
 @Builder
 public class ChangeProfileReq {
     private String userId;
-    private String profile;
+    private String image;
 }
