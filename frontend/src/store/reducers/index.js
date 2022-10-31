@@ -2,6 +2,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
 
 import chatSlice from "./chat";
+import customSlice from "./custom";
 import userSlice from "./user";
 
 const rootReducer = (state, action) => {
@@ -12,6 +13,7 @@ const rootReducer = (state, action) => {
       const combineReducer = combineReducers({
         chat: chatSlice.reducer,
         user: userSlice.reducer,
+        custom: customSlice.reducer,
       });
       return combineReducer(state, action);
     }
