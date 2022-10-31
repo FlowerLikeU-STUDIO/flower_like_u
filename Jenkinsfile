@@ -4,8 +4,11 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                sh "docker images"
                 sh "docker stop fly"
+                sh "docker images"
                 sh "docker rm fly"
+                sh "docker images"
                 sh "docker rmi martinflower/fly:fly"
                 dir('./backend/fly'){
                     sh "pwd"
