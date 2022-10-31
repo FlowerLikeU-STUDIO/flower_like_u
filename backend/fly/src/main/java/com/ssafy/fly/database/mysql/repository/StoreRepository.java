@@ -15,8 +15,6 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
 
     public StoreEntity findByUserIdAndNameAndEmailAndWithdrawal(String userId, String name, String email, boolean isDeleted);
 
-    public StoreEntity findByUserIdAndPasswordAndWithdrawal(String userId, String password, boolean isDeleted);
-
     public StoreEntity findByUserIdAndWithdrawal(String userId, boolean isDeleted);
 
     @Modifying
@@ -56,7 +54,6 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
     @Transactional
     @Query("UPDATE StoreEntity as s " +
             "SET s.withdrawal = true " +
-            "WHERE s.userId = :userId And s.password = :password")
-    public int accountWithdraw(@Param("userId") String userId,
-                               @Param("password") String password);
+            "WHERE s.userId = :userId")
+    public int accountWithdraw(@Param("userId") String userId);
 }

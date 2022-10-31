@@ -2,8 +2,6 @@ package com.ssafy.fly.database.mysql.entity;
 
 import com.ssafy.fly.database.mysql.enumtype.UserType;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.Date;

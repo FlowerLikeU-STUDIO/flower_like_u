@@ -1,4 +1,18 @@
 .testbox {
-  @include font(3rem, 700, $ivory500);
-  @include flexDiv;
+  // @include font(3rem, 700, $ivory500);
+  // @include flexDiv;
+  @include defaultLayout;
+  background: linear-gradient(
+      to top,
+      rgba(255, 255, 255, 0.6) 10%,
+      rgba(255, 255, 255, 0.7) 25%,
+      rgba(255, 255, 255, 0.8) 40%,
+      rgba(255, 255, 255, 0.9) 50%,
+      rgba(255, 255, 255, 1) 75%,
+      rgba(255, 255, 255, 1) 100%
+    ),
+    url("/custom/custom_background.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }

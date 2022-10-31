@@ -6,8 +6,13 @@ import Image from "next/image";
 const ProfileImage = (props) => {
   const cx = classNames.bind(styles);
   return (
-    <div className={cx("img_container", props.size)}>
-      <Image src={props.url} className={styles.profile_img} width={360} height={360} />
+    <div className={cx("img_container", props.size, props?.isModify)}>
+      <Image
+        src={props.url ? props.url : "/auth/profileDefault.png"}
+        className={styles.profile_img}
+        width={360}
+        height={360}
+      />
     </div>
   );
 };
