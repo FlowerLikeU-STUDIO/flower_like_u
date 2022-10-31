@@ -45,4 +45,9 @@ public class MessageController {
         List<Message> messageList = messageService.getList(storeId,consumerId);
         return new BaseResponseDto<>("success", messageList);
     }
+
+    @GetMapping("/api/chatting/{id}")
+    public BaseResponseDto<String> getImgSrc(@PathVariable("id") String id) {
+        return new BaseResponseDto<>("success",messageService.getImgSrc(id));
+    }
 }

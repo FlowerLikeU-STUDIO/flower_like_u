@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -37,5 +38,14 @@ public class MessageServiceImpl implements MessageService {
 
     public List<Message> getList(Long storeId, Long consumerId) {
         return messageRepository.findAllByStoreIdAndConsumerId(storeId,consumerId);
+    }
+
+    public String getImgSrc(String id) {
+        return messageRepository.findById(id).orElseThrow(new Supplier<IllegalArgumentException>() {
+            @Override
+            public IllegalArgumentException get() {
+                return new IllegalArgumentException("해당 메세지가 없습니다.");
+            }
+        }).getImgSrc();
     }
 }

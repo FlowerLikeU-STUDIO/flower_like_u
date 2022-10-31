@@ -62,7 +62,7 @@
           return img;
         }
         // 메세지를 수신할 때 동작하는 함수 messageType에 따라 동작이 분기된다.
-        function onMessageReceived(payload) {
+        async function onMessageReceived(payload) {
             let message = JSON.parse(payload.body);
             /*
                 누군가가 처음으로 어떤 사람과 채팅을 시작했을 때 messageType은 'START'로 전송된다.
@@ -88,6 +88,7 @@
                 input.setAttribute('id', "id" + String(message.address))
                 let button = document.createElement('button')
                 button.innerText = '메세지 보내기'
+                let imgArea = document.createElement('div')
                 let inputWrpr = document.createElement('div')
                 inputWrpr.setAttribute('style','display : none')
                 let receiveId = message.consumerId
@@ -170,18 +171,21 @@
                     divTmp.setAttribute('style','text-align : end')
                     document.querySelector('#area' + message.address).appendChild(divTmp)
 
-                    // stompClient의 send 메서드는 사용하는 프레임워크마다 구조가 달라서 한 번 더 확인해야한다.
-                    // 상대방에게 보는 거는 messageType을 'RECEIVE'로 자신에게 보내는 것은 'SEND'로 보낸다.
-                    // 여기서 address는 상대방과 나만의 채팅방 id를 의미한다.
-                    stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
+                    let imgSrcLst = []
+                    imgArea.childNodes.forEach((child) => {
+                        imgSrcLst.push(child.src)
+                    })
+                    if (imgSrcLst.length === 0)
+                      stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
                           {},
                           JSON.stringify({
-                            content : document.querySelector('#id' + String(message.address)).value,
-                            address : message.address,
-                            messageType : 'RECEIVE'
+                            content : document.querySelector('#id' + String(message.address.id)).value,
+                            address : message.address.id,
+                            messageType : 'RECEIVE',
+                            storeId : message.storeId,
+                            consumerId : message.consumerId,
                         })
-                    )
-
+                      )
                     // 메세지를 MongoDB에 저장한다. 'direction'을 통해 보낸 사람이 누구인지 명시한다.
                     // 메세지 등록이 성공하면 해당 채팅방에 대한 최근 메세지 수정 요청을 보내고 element value도 수정한다.
                     axios.post('http://localhost:8080/api/chatting',{
@@ -189,6 +193,19 @@
                         'storeId' : message.storeId,
                         'consumerId' : message.consumerId,
                         'direction' : document.querySelector('#userType').value
+                    }).then(r => {
+                      if (imgSrcLst.length > 0)
+                          stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
+                              {},
+                              JSON.stringify({
+                                content : document.querySelector('#id' + String(message.address)).value,
+                                address : message.address,
+                                messageType : 'RECEIVE',
+                                storeId : message.storeId,
+                                consumerId : message.consumerId,
+                                imgSrc : r.data.response
+                            })
+                          )
                     })
 
                     axios.put('http://localhost:8080/api/chatting/room', {
@@ -222,15 +239,25 @@
             // 최근 메세지에 대한 element value를 수정한다.
             else if (message.messageType != 'JOIN' && message.messageType != 'LEAVE') {
                 if (alreadyLoaded.includes(message.address)) {
-                    let divTmp = document.createElement('div')
-                    if (message.imgSrc != null) {
-                      message.imgSrc.forEach(img => {
-                        let imgTmp = document.createElement('img')
-                        imgTmp.src = img.src
-                        document.querySelector('#area' + message.address).appendChild(imgTmp)
-                      })
+                    function isImg() {
+                        return new Promise((resolve) => {
+                            if (message.imgSrc != null) {
+                              axios.get("http://localhost:8080/api/chatting/" + message.imgSrc).then(res => {
+                                let imgSrcs = res.data.response.split('`')
+                                for (let imgSrc of imgSrcs) {
+                                  let imgTmp = document.createElement('img')
+                                  imgTmp.src = imgSrc
+                                  document.querySelector('#area' + message.address).appendChild(imgTmp)
+                                }
+                              })
+                            }
+                            resolve('resolve')
+                        })
                     }
+                    await isImg()
+
                     if (message.content != null) {
+                      let divTmp = document.createElement('div')
                       divTmp.innerText = message.content
                       document.querySelector('#area' + message.address).appendChild(divTmp)
                     }
@@ -421,7 +448,7 @@
                                     'consumerId' : res.data.response[i].consumerId,
                                     'direction' : document.querySelector('#userType').value,
                                     'imgSrc' : imgSrcLst
-                                }).then(id => {
+                                }).then(r => {
                                     if (imgSrcLst.length > 0)
                                       stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
                                           {},
@@ -431,7 +458,7 @@
                                             messageType : 'RECEIVE',
                                             storeId : res.data.response[i].storeId,
                                             consumerId : res.data.response[i].consumerId,
-                                            imgSrc : id
+                                            imgSrc : r.data.response
                                         })
                                       )
                                 })
@@ -603,14 +630,22 @@
                         }
                         await startCheck()
 
-                        stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
+                        let imgSrcLst = []
+                        imgArea.childNodes.forEach((child) => {
+                            imgSrcLst.push(child.src)
+                        })
+                        if (imgSrcLst.length === 0)
+                          stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
                               {},
                               JSON.stringify({
                                 content : document.querySelector('#id' + String(res.data.response.id)).value,
                                 address : res.data.response.id,
-                                messageType : 'RECEIVE'
+                                messageType : 'RECEIVE',
+                                storeId : res.data.response.storeId,
+                                consumerId : res.data.response.consumerId,
                             })
-                        )
+                          )
+
 
                         let divTmp = document.createElement('div')
                         divTmp.innerText = document.querySelector('#id' + String(res.data.response.id)).value
@@ -622,6 +657,19 @@
                             'storeId' : res.data.response.storeId,
                             'consumerId' : res.data.response.consumerId,
                             'direction' : document.querySelector('#userType').value
+                        }).then(r => {
+                            if (imgSrcLst.length > 0)
+                              stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
+                                  {},
+                                  JSON.stringify({
+                                    content : document.querySelector('#id' + String(res.data.response.id)).value,
+                                    address : res.data.response.id,
+                                    messageType : 'RECEIVE',
+                                    storeId : res.data.response.storeId,
+                                    consumerId : res.data.response.consumerId,
+                                    imgSrc : r.data.response
+                                })
+                              )
                         })
 
                         axios.put('http://localhost:8080/api/chatting/room', {

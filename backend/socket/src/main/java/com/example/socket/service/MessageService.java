@@ -10,4 +10,6 @@ public interface MessageService {
     public String create(MessagePostReqDto messagePostReqDto);
 
     public List<Message> getList(Long storeId, Long consumerId);
+
+    public String getImgSrc(String id);
 }
