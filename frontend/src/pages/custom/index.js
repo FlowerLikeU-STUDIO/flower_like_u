@@ -16,7 +16,7 @@ const Custom = () => {
         </h1>
         <div className={styles.button_wrapper}>
           <div>
-            <Button size="custom_small" link="/custom/package" color="mainPrimary">
+            <Button size="custom_small" link="/custom/step" color="mainPrimary">
               커스텀 시작하기
             </Button>
             {/* 내 커스텀 리스트가 보이는 모달 창 띄우기 */}
