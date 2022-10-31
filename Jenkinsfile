@@ -18,7 +18,7 @@ pipeline {
                 }
             }
         }
-        stage('push') {
+        stage('Publish') {
             steps {
                 sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
                 sh "docker push martinflower/fly:fly"
