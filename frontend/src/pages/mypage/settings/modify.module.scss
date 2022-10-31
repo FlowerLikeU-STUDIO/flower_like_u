@@ -1,0 +1,90 @@
+.modify__form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: -1rem;
+}
+
+.label {
+  @include font(1.3rem, 600, $gray250);
+  text-align: center;
+  margin: 0.8rem 0rem 0.5rem 0rem;
+}
+
+.list__tag {
+  // location
+  max-width: 20rem;
+  min-width: 12rem;
+  padding: 0.5rem 2rem;
+  text-align: center;
+  // color
+  color: $mainButton;
+  border: solid $primary300p 0.3rem;
+  border-radius: 1rem;
+  @include font(1.125rem, normal, $mainButton);
+  background: $white;
+}
+
+.input__box {
+  border: none;
+  @include font(1.125rem, normal, $mainButton);
+  text-align: center;
+}
+
+.nickname__div {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  gap: 0.4rem;
+  margin-left: 4rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.nickname__check {
+  min-width: fit-content;
+  width: 7.5rem;
+  height: 1.875rem;
+  border-radius: 0.5rem;
+}
+
+.nickname__check__false {
+  width: 7.5rem;
+  max-width: fit-content;
+  background-color: $primary900;
+  @include font(1rem, 500, $white100);
+}
+
+.nickname__check__true {
+  width: 7.5rem;
+  max-width: fit-content;
+  background-color: $primary300p;
+  @include font(1rem, 500, $white100);
+}
+
+.position__btn {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-right: 5rem;
+}
+
+.submit__btn {
+  min-width: fit-content;
+  width: 7.5rem;
+  height: 1.875rem;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+}
+
+.edit__falsebtn {
+  background-color: $primary900;
+  @include font(1rem, bold, $white100);
+}
+
+.edit__truebtn {
+  background-color: $primary300p;
+  @include font(1rem, bold, $white100);
+}
