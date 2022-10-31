@@ -10,9 +10,9 @@ const MyPageSettings = ({ children }) => {
   // *profile 정보 hook에서 불러오기
   const uid = "mypage-buyer";
   // const uid = "mypage-seller";
-  const { data } = useMypage(uid);
+  const { data, type } = useMypage(uid);
+  // console.log(data, type);
   console.log(data);
-
   return (
     <MyWrapper>
       <div className={styles.main__div}>
