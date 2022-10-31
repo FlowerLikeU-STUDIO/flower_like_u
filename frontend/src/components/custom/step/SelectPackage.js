@@ -19,7 +19,7 @@ const SelectPackage = () => {
           img="/home/centerFlower.png"
           title={title}
           content={packageContent.contents[index]}
-          handler={() => packageHandler(index + 1)}
+          handler={() => packageHandler(index)}
         />
       ))}
     </div>

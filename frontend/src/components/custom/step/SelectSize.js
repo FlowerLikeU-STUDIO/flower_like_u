@@ -11,7 +11,7 @@ const SelectSize = () => {
   //* 패키지 타입에 따라서 사이즈 옵션이 다르다.
   const stepState = useSelector((state) => state.custom);
   const packageType = stepState.package;
-  const contents = SizeContent[packageType - 1];
+  const contents = SizeContent[packageType];
 
   //* 사이즈 값을 변경하는 함수
   const sizeHandler = (index) => {
@@ -27,7 +27,7 @@ const SelectSize = () => {
           img="/home/centerFlower.png"
           title={title}
           content={contents.contents[index]}
-          handler={() => sizeHandler(index + 1)}
+          handler={() => sizeHandler(index)}
         />
       ))}
     </div>
