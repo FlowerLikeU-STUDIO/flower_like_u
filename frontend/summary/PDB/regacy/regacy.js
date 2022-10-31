@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 
 import styles from "./index.module.scss";
-import Button from "@/styles/common/Button";
+import Button from "@/components/common/Button";
 import ProfileImage from "@/components/common/ProfileImage";
 import Contents from "@/components/mypage/flower_store/Contents";
 
