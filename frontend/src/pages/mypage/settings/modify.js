@@ -1,7 +1,7 @@
-import React from "react";
+import MySetting from "@/components/auth/MySetting";
 
 const ModifyAuth = () => {
-  return <div>ModifyAuth</div>;
+  return <MySetting>asdf</MySetting>;
 };
 
 export default ModifyAuth;

@@ -10,7 +10,7 @@ const MyPageSettings = ({ children }) => {
   // *profile 정보 hook에서 불러오기
   const uid = "mypage-buyer";
   // const uid = "mypage-seller";
-  const { data, type, isError, isLoading } = useMypage(uid);
+  const { data } = useMypage(uid);
   console.log(data);
 
   return (
@@ -21,7 +21,7 @@ const MyPageSettings = ({ children }) => {
           <ProfileImage url={data.profile} size="medium" isModify="modifyProfile" />
           <span className={cx("material-icons-outlined", "settings")}>settings</span>
         </div>
-        {children}
+        <div className={styles.info__div}>{children}</div>
       </div>
     </MyWrapper>
   );
