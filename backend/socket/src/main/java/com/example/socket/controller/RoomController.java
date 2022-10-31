@@ -26,7 +26,7 @@ public class RoomController {
     public BaseResponseDto<RoomOnlyAddressResDto> createRoom(@RequestBody RoomPostReqDto roomPostReqDto) {
         Long storeId = roomPostReqDto.getStoreId();
         Long consumerId = roomPostReqDto.getConsumerId();
-        ObjectId address = roomService.create(storeId,consumerId);
+        String address = roomService.create(storeId,consumerId);
         return new BaseResponseDto<>("success", new RoomOnlyAddressResDto(address));
     }
 
@@ -39,7 +39,7 @@ public class RoomController {
                     optRoom.get().getStoreId(),
                     optRoom.get().getConsumerId()));
         else {
-            ObjectId address = roomService.create(storeId,consumerId);
+            String address = roomService.create(storeId,consumerId);
             return new BaseResponseDto<>("success", new RoomNoLatestMessageResDto(address,consumerId,storeId));
         }
     }
@@ -55,4 +55,5 @@ public class RoomController {
         roomService.resetCnt(roomCntPutReqDto);
         return new OnlyMessageResponseDto("success");
     }
+
 }

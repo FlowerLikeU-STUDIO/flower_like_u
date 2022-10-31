@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 public class Room {
     @Id
-    private ObjectId id;
+    private String id;
     private Long storeId;
     private Long consumerId;
     private String latestMessage;
