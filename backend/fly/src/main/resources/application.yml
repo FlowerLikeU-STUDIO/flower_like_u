@@ -1,6 +1,5 @@
 server:
   port: 8080
-  address: localhost
   servlet:
     context-path: /api
 spring:
