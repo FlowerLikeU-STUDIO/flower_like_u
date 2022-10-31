@@ -1,5 +1,5 @@
 import classes from "./index.module.scss";
-import ProfileImage from "@/components/mypage/common/ProfileImage";
+import ProfileImage from "@/components/common/ProfileImage";
 
 const Custom = () => {
   return (

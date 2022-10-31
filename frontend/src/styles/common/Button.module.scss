@@ -1,0 +1,91 @@
+$blue: blue;
+$gray: grey;
+
+@mixin button-color($color) {
+  color: $mainButton;
+  background: $color;
+  &:hover {
+    background: lighten($color, 10%);
+  }
+  &:active {
+    background: darken($color, 10%);
+  }
+}
+
+.Button {
+  color: white;
+  font-weight: bold;
+  outline: none;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+
+  height: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-size: 1rem;
+
+  background: $red400; // 주석 사용
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  // 사이즈 관리
+  &.large {
+    height: 3rem;
+    font-size: 1.25rem;
+  }
+
+  &.medium {
+    height: 2.25rem;
+    font-size: 1rem;
+  }
+
+  &.small {
+    height: 1.75rem;
+    font-size: 0.875rem;
+  }
+
+  &.setting-index {
+    margin-top: 3rem;
+    width: 50%;
+    max-width: 20rem;
+    min-width: 12rem;
+    padding: 0.5rem 2rem;
+    border: solid $primary300p 0.7rem;
+    border-radius: 1rem;
+    @include font(1.3rem, bold, $mainButton);
+    @include button-color($white);
+    & + & {
+      margin-top: 3rem;
+    }
+  }
+
+  // 색상 관리
+  &.blue {
+    @include button-color($blue);
+  }
+
+  &.gray {
+    @include button-color($gray);
+  }
+
+  &.red400 {
+    @include button-color($red400);
+  }
+}
+
+.btn:hover,
+.btn:active {
+  &.blue {
+    background: lighten($blue, 10%);
+  }
+
+  &.gray {
+    background: lighten($gray, 10%);
+  }
+
+  &.red400 {
+    background: lighten($red400, 10%);
+  }
+}
