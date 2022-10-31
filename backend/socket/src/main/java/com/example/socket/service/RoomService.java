@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface RoomService {
     public List<Room> getList(String userType, Long id);
 
-    public ObjectId create(Long storeId, Long consumerId);
+    public String create(Long storeId, Long consumerId);
 
     public Optional<Room> getOptRoom(Long storeId, Long consumerId);
 

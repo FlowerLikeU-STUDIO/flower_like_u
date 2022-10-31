@@ -7,7 +7,7 @@ import org.bson.types.ObjectId;
 @Getter
 @Setter
 public class RoomPutReqDto {
-    private ObjectId id;
+    private String id;
     private Long consumerId;
     private Long storeId;
     private String latestMessage;
