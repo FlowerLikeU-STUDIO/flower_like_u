@@ -9,6 +9,7 @@ const LayoutWrapper = styled.div`
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  height: 100vh;
 `;
 const Layout = ({ children }) => {
   return (
