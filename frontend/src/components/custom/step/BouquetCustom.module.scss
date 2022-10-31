@@ -1,0 +1,4 @@
+.text {
+  @include font(3rem, 700, $ivory500);
+  @include flexDiv;
+}
