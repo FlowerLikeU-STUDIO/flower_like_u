@@ -27,9 +27,11 @@ pipeline {
                 sh "pwd"
             }
         }
-        stage('pull') {
+        stage('pull') {             
             steps {
                 sh "docker pull martinflower/fly:fly"
+                sh "docker stop 8080"
+                sh "docker rm 8080"
                 // sh "docker rm $(docker ps -a -q)"
                 sh "docker run -d -p 8080:8080 martinflower/fly:fly"
                 // sh "docker run -d --name 8080 -p 8080:8080 --link mysql-container -e TZ=Asia/Seoul martinflower/fly:fly"
