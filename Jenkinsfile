@@ -23,7 +23,7 @@ pipeline {
             steps {
                 sh "docker stop fly"
                 sh "docker rm fly"
-                sh "docker rmi fly"
+                sh "docker rmi martinflower/fly:fly"
                 sh "docker pull martinflower/fly:fly"
                 sh "docker run -d --name fly -p 8080:8080 martinflower/fly:fly"
             }
