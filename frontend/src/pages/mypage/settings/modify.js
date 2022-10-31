@@ -34,17 +34,7 @@ const ModifyAuth = () => {
         </label>
         <div className={styles.nickname__div}>
           <li className={styles.list__tag}>
-            <input
-              id="nick"
-              // className={cx({
-              //   [styles.input__box__disable]: !isModify,
-              //   [styles.input__box]: isModify,
-              // })}
-              className={styles.input__box}
-              name="닉네임"
-              value={data.nickname}
-              disabled={!isModify}
-            />
+            <input id="nick" className={styles.input__box} name="닉네임" value={data.nickname} disabled={!isModify} />
           </li>
           <button
             className={cx(styles.nickname__check, {
