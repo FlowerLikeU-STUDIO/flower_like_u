@@ -19,8 +19,6 @@ public interface ConsumerRepository extends JpaRepository<ConsumerEntity, Long> 
 
     public ConsumerEntity findByNickname(String nickname);
 
-    public ConsumerEntity findByUserIdAndPasswordAndWithdrawal(String userId, String password, boolean isDeleted);
-
     public ConsumerEntity findByUserIdAndWithdrawal(String userId, boolean isDeleted);
 
     @Modifying
@@ -52,7 +50,6 @@ public interface ConsumerRepository extends JpaRepository<ConsumerEntity, Long> 
     @Transactional
     @Query("UPDATE ConsumerEntity as c " +
             "SET c.withdrawal = true " +
-            "WHERE c.userId = :userId And c.password = :password")
-    public int accountWithdraw(@Param("userId") String userId,
-                               @Param("password") String password);
+            "WHERE c.userId = :userId")
+    public int accountWithdraw(@Param("userId") String userId);
 }

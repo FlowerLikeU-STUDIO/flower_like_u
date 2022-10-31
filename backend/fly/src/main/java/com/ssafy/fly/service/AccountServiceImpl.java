@@ -13,6 +13,7 @@ import com.ssafy.fly.dto.response.ConsumerInfoRes;
 import com.ssafy.fly.dto.response.MailRes;
 import com.ssafy.fly.dto.response.StoreInfoRes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -27,18 +28,21 @@ public class AccountServiceImpl implements AccountService {
     private final ValidationChecker validationChecker;
     private final RandomStringGenerator randomStringGenerator;
     private final FlyMailSender flyMailSender;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AccountServiceImpl(ConsumerRepository consumerRepository,
                               StoreRepository storeRepository,
                               ValidationChecker validationChecker,
                               RandomStringGenerator randomStringGenerator,
-                              FlyMailSender flyMailSender) {
+                              FlyMailSender flyMailSender,
+                              PasswordEncoder passwordEncoder) {
         this.consumerRepository = consumerRepository;
         this.storeRepository = storeRepository;
         this.validationChecker = validationChecker;
         this.randomStringGenerator = randomStringGenerator;
         this.flyMailSender = flyMailSender;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // 1. 아이디 중복 검사
@@ -78,7 +82,7 @@ public class AccountServiceImpl implements AccountService {
             ConsumerEntity newMember = ConsumerEntity.builder()
                     .type(UserType.CONSUMER)
                     .userId(registerReq.getUserId())
-                    .password(registerReq.getPassword())
+                    .password(passwordEncoder.encode(registerReq.getPassword()))
                     .name(registerReq.getName())
                     .nickname("랜덤닉네임")
                     .email(registerReq.getEmail())
@@ -96,7 +100,7 @@ public class AccountServiceImpl implements AccountService {
             StoreEntity newMember = StoreEntity.builder()
                     .type(UserType.STORE)
                     .userId(registerReq.getUserId())
-                    .password(registerReq.getPassword())
+                    .password(passwordEncoder.encode(registerReq.getPassword()))
                     .name(registerReq.getName())
                     .store(registerReq.getStore())
                     .license(registerReq.getLicense())
@@ -152,9 +156,9 @@ public class AccountServiceImpl implements AccountService {
         // Database에서 비밀번호 업데이트
         int result;
         if (consumer != null) {
-            result = consumerRepository.updatePassword(inputUserId, tempPassword);
+            result = consumerRepository.updatePassword(inputUserId, passwordEncoder.encode(tempPassword));
         } else {
-            result = storeRepository.updatePassword(inputUserId, tempPassword);
+            result = storeRepository.updatePassword(inputUserId, passwordEncoder.encode(tempPassword));
         }
 
         // 임시 비밀번호 변경 성공 시 사용자 메일로 발송
@@ -187,21 +191,23 @@ public class AccountServiceImpl implements AccountService {
 
         // 구매자와 판매자 테이블에서 (아이디, 비밀번호, 미탈퇴자)로 탐색
         // Spring Security 적용 후에는 matches로 비밀번호 확인
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndPasswordAndWithdrawal(userId, password, false);
-        StoreEntity store = storeRepository.findByUserIdAndPasswordAndWithdrawal(userId, password, false);
+        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(userId, false);
+        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(userId, false);
 
         if (consumer == null && store == null) return false;
 
         int result;
-        if (consumer != null) {
+        if (consumer != null && passwordEncoder.matches(password, consumer.getPassword())) {
             String nickname = changeInfoReq.getNickname();
             String address = changeInfoReq.getAddress();
             result = consumerRepository.updateConsumerInfo(userId, nickname, address);
-        } else {
+        } else if(store != null && passwordEncoder.matches(password, store.getPassword())) {
             String storeName = changeInfoReq.getStore();
             String address = changeInfoReq.getAddress();
             // String holidays = changeInfoReq;
             result = storeRepository.updateStoreInfo(userId, storeName, address);
+        } else {
+            result = -1;
         }
 
         return result > 0;
@@ -230,17 +236,19 @@ public class AccountServiceImpl implements AccountService {
 
         // 구매자와 판매자 테이블에서 (아이디, 비밀번호, 미탈퇴자)로 탐색
         // Spring Security 적용 후에는 matches로 비밀번호 확인
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndPasswordAndWithdrawal(userId, curPwd, false);
-        StoreEntity store = storeRepository.findByUserIdAndPasswordAndWithdrawal(userId, curPwd, false);
+        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(userId, false);
+        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(userId, false);
 
         if (consumer == null && store == null) return false;
 
         // Database에서 비밀번호 업데이트
         int result;
-        if (consumer != null) {
-            result = consumerRepository.updatePassword(userId, newPwd);
+        if (consumer != null && passwordEncoder.matches(curPwd, consumer.getPassword())) {
+            result = consumerRepository.updatePassword(userId, passwordEncoder.encode(newPwd));
+        } else if(store != null && passwordEncoder.matches(curPwd, store.getPassword())) {
+            result = storeRepository.updatePassword(userId, passwordEncoder.encode(newPwd));
         } else {
-            result = storeRepository.updatePassword(userId, newPwd);
+            result = -1;
         }
 
         return result > 0;
@@ -274,17 +282,19 @@ public class AccountServiceImpl implements AccountService {
         String userId = withdrawReq.getUserId();
         String password = withdrawReq.getPassword();
 
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndPasswordAndWithdrawal(userId, password, false);
-        StoreEntity store = storeRepository.findByUserIdAndPasswordAndWithdrawal(userId, password, false);
+        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(userId, false);
+        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(userId, false);
 
         if (consumer == null && store == null) return false;
 
         // Database에서 탈퇴 속성 업데이트
         int result;
-        if (consumer != null) {
-            result = consumerRepository.accountWithdraw(userId, password);
+        if (consumer != null && passwordEncoder.matches(password, consumer.getPassword())) {
+            result = consumerRepository.accountWithdraw(userId);
+        } else if (store != null && passwordEncoder.matches(password, store.getPassword())){
+            result = storeRepository.accountWithdraw(userId);
         } else {
-            result = storeRepository.accountWithdraw(userId, password);
+            result = -1;
         }
 
         return result > 0;
