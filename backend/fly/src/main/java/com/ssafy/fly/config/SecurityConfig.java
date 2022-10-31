@@ -19,10 +19,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .formLogin().disable();
         http.authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
-                .antMatchers("/account/**").hasAnyRole("USER")
-                .anyRequest().authenticated();
-        http.formLogin().disable();
+                //.antMatchers("/auth/**").permitAll()
+                //.antMatchers("/account/**").permitAll()
+                //.antMatchers("/account/**").hasAnyRole("USER")
+                //.anyRequest().authenticated()
+                .anyRequest().permitAll();
     }
 }
