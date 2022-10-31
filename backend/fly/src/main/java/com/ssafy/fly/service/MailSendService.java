@@ -1,3 +1,7 @@
+/**
+ * 안 쓰는 코드 - 지울 것
+ */
+
 package com.ssafy.fly.service;
 
 import com.ssafy.fly.dto.response.MailRes;

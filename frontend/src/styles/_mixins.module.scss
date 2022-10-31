@@ -43,3 +43,15 @@
     @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. Please make sure it is defined in `$breakpoints` map.";
   }
 }
+
+// defaultlayout
+//* 페이지에 기본으로 적용되는 패딩이 적용된 디폴트 레이아웃입니다.
+@mixin defaultLayout {
+  width: 100%;
+  min-height: 100vh;
+  padding: 4rem 1rem 1rem;
+
+  @media screen and (min-width: 1350px) {
+    padding: 4rem 6rem 1rem;
+  }
+}

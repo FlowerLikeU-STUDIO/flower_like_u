@@ -32,7 +32,7 @@ public class RoomServiceImpl implements RoomService{
         return RoomList;
     }
 
-    public ObjectId create(Long storeId, Long consumerId) {
+    public String create(Long storeId, Long consumerId) {
         try {
             return roomRepository.save(new Room(storeId,consumerId)).getId();
         } catch (Exception e) {

@@ -8,7 +8,6 @@ import lombok.Data;
 public class ChangeInfoReq {
     private String type;
     private String userId;
-    private String password;
     private String nickname;
     private String store;
     private String address;
