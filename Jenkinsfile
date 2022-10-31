@@ -1,64 +1,39 @@
-def dockerRepository = "martinflower/fly"
-def dockerImageName = "fly"
-def deployHost = "http://k7b209.p.ssafy.io/"
-
 pipeline {
     agent any
-    
+
     stages {
-        stage('Checkout'){
-            steps {
-                checkout scm
-            }
-        }
         stage('Build') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerlogin', 
-                                 usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    script {
-                        dir('./backend/fly'){
-                            sh """
-                                chmod u+x ./gradlew
-                                ./gradlew clean build -Pdocker.repository=${dockerRepository} \
-                                                    -Pdocker.repository.username=${USERNAME} \
-                                                    -Pdocker.repository.password=${PASSWORD} \
-                                                    -Pdocker.image.name=${dockerImageName} \
-                                                    -Pdocker.image.tag=${currentBuild.number}
-                            """
-                        }
-
-                    }
-                }
-            }
-        }    
-        stage('Publish') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerlogin', 
-                                 usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    script {
-                        dir('./backend/fly'){
-                            sh """
-                                ./gradlew jib -Pdocker.repository=${dockerRepository} \
-                                            -Pdocker.repository.username=${USERNAME} \
-                                            -Pdocker.repository.password=${PASSWORD} \
-                                            -Pdocker.image.name=${dockerImageName} \
-                                            -Pdocker.image.tag=${currentBuild.number}
-                            """
-                        }
-                    }
+                dir('./backend/fly'){
+                    sh "pwd"
+                    sh "chmod 777 gradlew"
+                    sh "./gradlew clean build"
                 }
             }
         }
-        // stage('Deploy'){
-        //     steps {
-        //         sshagent(credentials: ["deploy-key"]) {
-        //             sh """
-        //                 ssh -o StrictHostKeyChecking=no ec2-user@${deployHost} \
-        //                 'docker container rm -f springbootapp &&  
-        //                  docker container run -d -t -p 80:8080 --rm --name springbootapp ${dockerRepository}/${dockerImageName}:${currentBuild.number};'
-        //             """
-        //         }
-        //     }
-        // }
+        stage('Backend Dockerizing') {
+            steps {
+                sh "pwd"
+                dir('./backend/fly'){
+                    sh "docker build -t martinflower/fly:fly ."
+                }
+            }
+        }
+        stage('push') {
+            steps {
+                sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
+                sh "docker push martinflower/fly:fly"
+                sh "docker rmi martinflower/fly:fly"
+                sh "pwd"
+            }
+        }
+        stage('pull') {
+            steps {
+                sh "docker pull martinflower/fly:fly"
+                // sh "docker run -p 8080:8080 martinflower/fly:fly"
+                sh "docker run -d --name 8080 -p 8080:8080 --link mysql-container -e TZ=Asia/Seoul martinflower/fly:fly"
+                // sh "ssh -o StrictHostKeyChecking=no ubuntu@k7b209.p.ssafy.io -t -t < /var/jenkins_home/workspace/fly/backend/fly/scripts/deploy.sh"
+            }
+        }
     }
 }
