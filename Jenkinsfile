@@ -33,6 +33,7 @@ pipeline {
             steps {
                 sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
                 sh "docker push martinflower/fly:fly_be"
+                sh "docker push martinflower/fly:fly_fe"
                 sh "pwd"
             }
         }
