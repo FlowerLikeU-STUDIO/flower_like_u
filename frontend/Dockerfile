@@ -6,7 +6,7 @@ COPY ./package*.json
 
 RUN npm
 
-COPY ./ ./
+COPY ..
 
 RUN npm run build
 
