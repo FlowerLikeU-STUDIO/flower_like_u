@@ -41,6 +41,7 @@ pipeline {
                 sh "docker run -d --name fly_be -p 8080:8080 martinflower/fly:fly_be"
                 sh "docker pull martinflower/fly:fly_fe"
                 sh "docker run -d --name fly_fe -p 3000:3000 martinflower/fly:fly_fe"
+
             }
         }
     }
