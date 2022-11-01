@@ -10,13 +10,13 @@ pipeline {
         //         """
         //     }
         // }
-        stage('Frontend Dockerizing') {
-            steps {
-                dir('./frontend'){
-                    sh "docker build -t martinflower/fly:fly_fe ."
-                }
-            }
-        }
+        // stage('Frontend Dockerizing') {
+        //     steps {
+        //         dir('./frontend'){
+        //             sh "docker build -t martinflower/fly:fly_fe ."
+        //         }
+        //     }
+        // }
         stage('Backend Dockerizing') {
             steps {
                 sh "docker rmi martinflower/fly:fly_be"
