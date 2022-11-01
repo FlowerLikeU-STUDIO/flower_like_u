@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     stages {
-        // stage('Init') {
-        //     steps {
-        //         sh """
-        //             docker stop fly_be
-        //             docker rm fly_be
-        //         """
-        //     }
-        // }
+        stage('Init') {
+            steps {
+                sh """
+                    docker stop fly_be
+                    docker rm fly_be
+                """
+            }
+        }
         // stage('Frontend Dockerizing') {
         //     steps {
         //         dir('./frontend'){
