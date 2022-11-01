@@ -12,7 +12,7 @@ const MyPageSettings = ({ children }) => {
   // const uid = "mypage-seller";
   const { data, type } = useMypage(uid);
   // console.log(data, type);
-  console.log(data);
+  // console.log(data);
   return (
     <MyWrapper>
       <div className={styles.main__div}>

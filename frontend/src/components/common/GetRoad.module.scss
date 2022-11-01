@@ -1,0 +1,26 @@
+.road__flex input:not(.post__btn) {
+  display: flex;
+  flex-direction: column;
+  @include font(1rem, 500, $mainParagraph, 1.5rem);
+}
+
+.post__flex {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+.post {
+  width: 5rem;
+}
+
+.post__btn {
+  width: fit-content;
+  background-color: $mainPrimary;
+  border-radius: 10%;
+  padding: 0rem 0.3rem;
+  cursor: pointer;
+}
+.post__btn:hover {
+  background-color: $primary300p;
+}

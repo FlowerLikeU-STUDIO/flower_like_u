@@ -24,7 +24,6 @@ const ModifyPassword = () => {
 
   return (
     <MySetting>
-      <h1>비밀번호 변경</h1>
       {/* 0 */}
       <label for="password1" className={styles.label}>
         현재 비밀번호

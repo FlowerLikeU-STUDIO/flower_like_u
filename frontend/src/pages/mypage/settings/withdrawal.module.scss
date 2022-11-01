@@ -3,6 +3,7 @@
   text-align: center;
   margin: 0.8rem 0rem 0.5rem 0rem;
 }
+
 .sub__label {
   @include font(1rem, 600, $red600p);
   text-align: center;
@@ -24,9 +25,9 @@
 }
 
 .input__box {
-  border: none;
-  @include font(1.125rem, normal, $mainButton);
+  outline: none;
   text-align: center;
+  @include font(1.125rem, normal, $mainButton);
 }
 
 .submit__btn {

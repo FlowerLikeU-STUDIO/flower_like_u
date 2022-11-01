@@ -27,7 +27,7 @@
 }
 
 .input__box {
-  border: none;
+  outline: none;
   @include font(1.125rem, normal, $mainButton);
   text-align: center;
 }
@@ -37,7 +37,6 @@
   width: 100%;
   flex-direction: row;
   gap: 0.4rem;
-  margin-left: 4rem;
   justify-content: center;
   align-items: center;
 }
@@ -50,6 +49,7 @@
 }
 
 .nickname__check__false {
+  margin-right: -4rem;
   width: 7.5rem;
   max-width: fit-content;
   background-color: $primary900;
@@ -57,6 +57,7 @@
 }
 
 .nickname__check__true {
+  margin-right: -4rem;
   width: 7.5rem;
   max-width: fit-content;
   background-color: $primary300p;
