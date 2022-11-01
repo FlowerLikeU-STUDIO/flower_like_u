@@ -24,7 +24,10 @@ const CustomBackButton = () => {
   return (
     <>
       {stepState.package === null ? (
-        <div className={styles.custom_backbutton} onClick={() => packageHandler()}>
+        <div
+          className={styles.custom_backbutton}
+          onClick={() => packageHandler()}
+        >
           <button className="material-icons-outlined">arrow_back</button>
         </div>
       ) : stepState.size === null ? (

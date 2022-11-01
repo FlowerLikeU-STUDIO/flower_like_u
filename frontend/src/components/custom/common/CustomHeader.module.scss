@@ -13,6 +13,7 @@
 .number_title_wrapper {
   @include flexDiv(column, center, center);
   gap: 0.5rem;
+  cursor: pointer;
   & > p {
     @include font(0.8rem, 400, $gray);
   }

@@ -25,7 +25,9 @@ const BuoquetCustom = () => {
         </aside>
         <div className={styles.custom} />
         <div className={styles.custom_info_wrapper}>
-          <p>{SizeContent[customOption.package].title[customOption.size]} 사이즈</p>
+          <p>
+            {SizeContent[customOption.package].title[customOption.size]} 사이즈
+          </p>
           <p>{SizeContent[customOption.package].kotitle} 패키지</p>
           <Link href="/custom/save">
             <div onClick={() => bouquetHandler()}>완성!</div>
