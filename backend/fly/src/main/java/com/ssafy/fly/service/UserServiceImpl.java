@@ -19,9 +19,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Date;
 
-@Service("accountService")
+@Service("userService")
 @Transactional
-public class AccountServiceImpl implements AccountService {
+public class UserServiceImpl implements UserService {
 
     private final ConsumerRepository consumerRepository;
     private final StoreRepository storeRepository;
@@ -31,12 +31,12 @@ public class AccountServiceImpl implements AccountService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AccountServiceImpl(ConsumerRepository consumerRepository,
-                              StoreRepository storeRepository,
-                              ValidationChecker validationChecker,
-                              RandomStringGenerator randomStringGenerator,
-                              FlyMailSender flyMailSender,
-                              PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(ConsumerRepository consumerRepository,
+                           StoreRepository storeRepository,
+                           ValidationChecker validationChecker,
+                           RandomStringGenerator randomStringGenerator,
+                           FlyMailSender flyMailSender,
+                           PasswordEncoder passwordEncoder) {
         this.consumerRepository = consumerRepository;
         this.storeRepository = storeRepository;
         this.validationChecker = validationChecker;
@@ -184,7 +184,7 @@ public class AccountServiceImpl implements AccountService {
 
     // 6. 회원 정보 수정
     @Override
-    public boolean updateAccountInfo(ChangeInfoReq changeInfoReq) {
+    public boolean updateUserInfo(ChangeInfoReq changeInfoReq) {
         String userId = changeInfoReq.getUserId();
 
         // 구매자와 판매자 테이블에서 (아이디, 비밀번호, 미탈퇴자)로 탐색
@@ -274,7 +274,7 @@ public class AccountServiceImpl implements AccountService {
 
     // 10. 회원 탈퇴
     @Override
-    public boolean deleteAccount(WithdrawReq withdrawReq) {
+    public boolean deleteUser(WithdrawReq withdrawReq) {
         String userId = withdrawReq.getUserId();
         String password = withdrawReq.getPassword();
 
@@ -298,7 +298,7 @@ public class AccountServiceImpl implements AccountService {
 
     // 11. 회원 정보 조회
     @Override
-    public Object findAccountInfo(String userId) {
+    public Object findUserInfo(String userId) {
         ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(userId, false);
         StoreEntity store = storeRepository.findByUserIdAndWithdrawal(userId, false);
 

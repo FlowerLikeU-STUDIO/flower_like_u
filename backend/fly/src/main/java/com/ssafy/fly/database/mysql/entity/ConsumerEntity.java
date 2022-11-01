@@ -52,5 +52,6 @@ public class ConsumerEntity extends BaseEntity {
 
     // consumer과 custom_flower 테이블의 1:N 관계 매핑
     @OneToMany(mappedBy = "consumerId")
+    @Builder.Default
     private List<CustomFlowerEntity> customFlowers = new ArrayList<>();
 }

@@ -2,7 +2,7 @@ package com.ssafy.fly.controller;
 
 import com.ssafy.fly.common.util.ResultMessageSet;
 import com.ssafy.fly.dto.request.*;
-import com.ssafy.fly.service.AccountService;
+import com.ssafy.fly.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,24 +16,24 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
-    private final AccountService accountService;
+    private final UserService userService;
     private final ResultMessageSet resultMessageSet;
 
     @Autowired
     public UserController(ResultMessageSet resultMessageSet,
-                          AccountService accountService) {
+                          UserService userService) {
         this.resultMessageSet = resultMessageSet;
-        this.accountService = accountService;
+        this.userService = userService;
     }
 
     // 1. 아이디 중복 검사
     @GetMapping("/chkId/{inputId}")
     public ResponseEntity<Map<String, Object>> checkDuplicatedID(@PathVariable String inputId) {
-        System.out.println("[POST] - /account/chkId" + inputId);
+        System.out.println("[POST] - /user/chkId" + inputId);
 
         Map<String, Object> response = new HashMap<>();
 
-        if (accountService.checkIdDuplication(inputId)) {
+        if (userService.checkIdDuplication(inputId)) {
             response.put("result", resultMessageSet.DUPLICATED);
         } else {
             response.put("result", resultMessageSet.NONDUPLICATED);
@@ -49,7 +49,7 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
 
-        if (accountService.saveMember(registerReq)) {
+        if (userService.saveMember(registerReq)) {
             response.put("result", resultMessageSet.SUCCESS);
         } else {
             response.put("result", resultMessageSet.FAIL);
@@ -64,7 +64,7 @@ public class UserController {
         System.out.println("[POST] - /user/findId " + findIdReq);
 
         Map<String, Object> response = new HashMap<>();
-        String userId = accountService.findID(findIdReq);
+        String userId = userService.findID(findIdReq);
 
         if (userId != null) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -83,7 +83,7 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
 
-        if (accountService.issueTemporaryPassword(findPwdReq)) {
+        if (userService.issueTemporaryPassword(findPwdReq)) {
             response.put("result", resultMessageSet.SUCCESS);
         } else {
             response.put("result", resultMessageSet.FAIL);
@@ -99,7 +99,7 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
 
-        if (accountService.checkNicknameDuplication(nickname)) {
+        if (userService.checkNicknameDuplication(nickname)) {
             response.put("result", resultMessageSet.DUPLICATED);
         } else {
             response.put("result", resultMessageSet.NONDUPLICATED);
@@ -115,7 +115,7 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
 
-        if (accountService.updateAccountInfo(changeInfoReq)) {
+        if (userService.updateUserInfo(changeInfoReq)) {
             response.put("result", resultMessageSet.SUCCESS);
         } else {
             response.put("result", resultMessageSet.FAIL);
@@ -131,7 +131,7 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
 
-        if (accountService.updateIntroduction(changeIntroductionReq)) {
+        if (userService.updateIntroduction(changeIntroductionReq)) {
             response.put("result", resultMessageSet.SUCCESS);
         } else {
             response.put("result", resultMessageSet.FAIL);
@@ -147,7 +147,7 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
 
-        if (accountService.updatePassword(changePwdReq)) {
+        if (userService.updatePassword(changePwdReq)) {
             response.put("result", resultMessageSet.SUCCESS);
         } else {
             response.put("result", resultMessageSet.FAIL);
@@ -163,7 +163,7 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
 
-        if (accountService.updateProfileImage(changeProfileReq)) {
+        if (userService.updateProfileImage(changeProfileReq)) {
             response.put("result", resultMessageSet.SUCCESS);
         } else {
             response.put("message", resultMessageSet.FAIL);
@@ -179,7 +179,7 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
 
-        if (accountService.deleteAccount(withdrawReq)) {
+        if (userService.deleteUser(withdrawReq)) {
             response.put("result", resultMessageSet.SUCCESS);
         } else {
             response.put("result", resultMessageSet.FAIL);
@@ -190,16 +190,16 @@ public class UserController {
 
     // 11. 회원 정보 조회
     @GetMapping("/{userId}")
-    public ResponseEntity<Map<String, Object>> getAccountInfo(@PathVariable String userId) {
+    public ResponseEntity<Map<String, Object>> getUserInfo(@PathVariable String userId) {
         System.out.println("[GET] - /member/{userId}");
 
         Map<String, Object> response = new HashMap<>();
 
-        Object accountInfo = accountService.findAccountInfo(userId);
+        Object userInfo = userService.findUserInfo(userId);
 
-        if (accountInfo != null) {
+        if (userInfo != null) {
             response.put("result", resultMessageSet.SUCCESS);
-            response.put("userInfo", accountInfo);
+            response.put("userInfo", userInfo);
         } else {
             response.put("result", resultMessageSet.FAIL);
         }

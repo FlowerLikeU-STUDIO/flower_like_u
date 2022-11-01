@@ -9,7 +9,6 @@ import com.example.socket.dto.request.RoomPutReqDto;
 import com.example.socket.dto.response.RoomNoLatestMessageResDto;
 import com.example.socket.dto.response.RoomOnlyAddressResDto;
 import com.example.socket.service.RoomService;
-import org.bson.types.ObjectId;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
