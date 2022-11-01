@@ -6,6 +6,8 @@ import { selectPackage } from "@/store/reducers/custom";
 
 const SelectPackage = () => {
   const dispatch = useDispatch();
+
+  //* 패키지 종류를 변경하는 함수
   const packageHandler = (index) => {
     dispatch(selectPackage(index));
   };
@@ -16,7 +18,7 @@ const SelectPackage = () => {
         <OptionCard
           key={title}
           size="medium"
-          img="/home/centerFlower.png"
+          img={`/custom/${packageContent.engtitle[index]}/2.png`}
           title={title}
           content={packageContent.contents[index]}
           handler={() => packageHandler(index)}
