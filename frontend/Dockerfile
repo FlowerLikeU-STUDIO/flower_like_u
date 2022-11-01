@@ -2,7 +2,7 @@ FROM node:16-alpine
 
 WORKDIR /frontend
 
-COPY ./package*.json
+COPY package.json package-lock.json ./
 
 RUN npm
 
