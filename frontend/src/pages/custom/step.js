@@ -10,17 +10,23 @@ const Step = () => {
   const stepState = useSelector((state) => state.custom);
   return (
     <>
-      <CustomHeader />
       <main className={styles.step_background}>
-        <CustomBackButton />
-        {stepState.package === null ? (
-          <SelectPackage />
-        ) : stepState.size === null ? (
-          <SelectSize />
-        ) : (
-          <BuoquetCustom />
-        )}
-        {/* <button className="material-icons-outlined">arrow_forward</button> */}
+        <CustomHeader stepState={stepState} />
+        <section className={styles.step_content}>
+          {stepState.package === null ? (
+            <div className={styles.card_button_wrapper}>
+              <SelectPackage />
+              <CustomBackButton />
+            </div>
+          ) : stepState.size === null ? (
+            <div className={styles.card_button_wrapper}>
+              <SelectSize />
+              <CustomBackButton />
+            </div>
+          ) : (
+            <BuoquetCustom />
+          )}
+        </section>
       </main>
     </>
   );
