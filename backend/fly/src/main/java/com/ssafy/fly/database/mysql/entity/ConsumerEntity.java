@@ -4,7 +4,9 @@ import com.ssafy.fly.database.mysql.enumtype.UserType;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "consumer")
@@ -13,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
+@ToString(exclude = {"customFlowers", "reviews"})
 public class ConsumerEntity extends BaseEntity {
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -47,4 +49,14 @@ public class ConsumerEntity extends BaseEntity {
 
     @Column(name = "withdrawal")
     private boolean withdrawal;
+
+    // consumer과 custom_flower 테이블의 1:N 관계 매핑
+    @OneToMany(mappedBy = "consumerId")
+    @Builder.Default
+    private List<CustomFlowerEntity> customFlowers = new ArrayList<>();
+
+    // consumer과 review 테이블의 1:N 관계 매핑
+    @OneToMany(mappedBy = "consumerId")
+    @Builder.Default
+    private List<ReviewEntity> reviews = new ArrayList<>();
 }

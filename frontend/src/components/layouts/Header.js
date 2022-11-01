@@ -1,8 +1,7 @@
-import SuccessAlert from "@/lib/SuccessAlert";
-import storage from "@/lib/utils/storage";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
+import storage from "../../lib/utils/storage";
+import UserHeaderItem from "./UserHeaderItem";
 import styles from "./Header.module.scss";
 import classNames from "classnames/bind";
 import { useState, useEffect } from "react";
@@ -10,14 +9,6 @@ import { useState, useEffect } from "react";
 const Header = () => {
   const cx = classNames.bind(styles);
   const { data: isLogin } = useSWR("logIn", storage);
-  const router = useRouter();
-  const onHandleLogout = () => {
-    window.sessionStorage.removeItem("ACCESS_TOKEN");
-    window.sessionStorage.removeItem("REFRESH_TOKEN");
-    mutate("logIn", null);
-    SuccessAlert("로그아웃 되었습니다.");
-    router.push("/");
-  };
 
   //* 헤더 opacity 조정을 위한 State
   const [scrollY, setScrollY] = useState(0);
@@ -67,14 +58,7 @@ const Header = () => {
       </div>
       <div>
         {isLogin ? (
-          <>
-            <Link href="/auth/mypage">
-              <a className={styles.header_anchor}>마이페이지</a>
-            </Link>
-            <button className={styles.logout_button} onClick={onHandleLogout}>
-              로그아웃
-            </button>
-          </>
+          <UserHeaderItem />
         ) : (
           <>
             <Link href="/auth/login">
