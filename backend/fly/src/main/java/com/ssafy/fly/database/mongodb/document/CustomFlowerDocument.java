@@ -1,5 +1,6 @@
 package com.ssafy.fly.database.mongodb.document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ import java.util.List;
 @Builder
 public class CustomFlowerDocument {
     @Id
+    @JsonIgnore
     private String id;
 
     private Packing packing;
