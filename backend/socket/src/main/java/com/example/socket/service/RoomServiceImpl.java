@@ -52,7 +52,10 @@ public class RoomServiceImpl implements RoomService{
                 return new IllegalArgumentException("해당 방이 없습니다.");
             }
         });
-        room.setLatestMessage(latestMessage);
+        if (latestMessage.equals(""))
+            room.setLatestMessage("사진");
+        else
+            room.setLatestMessage(latestMessage);
         if (userType.equals("store"))
             room.setStoreNotReadCnt(room.getStoreNotReadCnt() + 1);
         else
