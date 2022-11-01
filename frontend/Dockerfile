@@ -4,7 +4,7 @@ WORKDIR /frontend
 
 COPY package.json package-lock.json ./
 
-RUN npm
+RUN npm i
 
 COPY . ./
 
