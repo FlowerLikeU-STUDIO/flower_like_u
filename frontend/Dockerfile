@@ -1,21 +1,15 @@
-FROM node:16-alpine as build-stage
+FROM node:16-alpine
 
 WORKDIR /frontend
 
-COPY ./package.json
-COPY ./package-lock.json
+COPY ./package*.json
 
 RUN npm
 
-COPY ./ ./
+COPY . .
 
 RUN npm run build
 
 EXPOSE 3000
 
 CMD ["npm", "start"]
-
-COPY --from=build-stage /var/jenkins_home/workspace/deploytest/testproject_react/build /usr/share/nginx/html
-
-EXPOSE 80
-CMD ["nginx", "-g","daemon off;"]
