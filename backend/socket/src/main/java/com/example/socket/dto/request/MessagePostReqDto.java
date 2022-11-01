@@ -13,4 +13,5 @@ public class MessagePostReqDto {
     private Long storeId;
     private Long consumerId;
     private String direction;
+
 }
