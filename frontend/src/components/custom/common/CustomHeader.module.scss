@@ -1,0 +1,45 @@
+.custom_header_wrapper {
+  @include flexDiv;
+  height: 6rem;
+  background-color: $white;
+  box-shadow: $shadow500;
+}
+
+.step_wrapper {
+  @include flexDiv(row, center, space-between);
+  width: 35rem;
+}
+
+.number_title_wrapper {
+  @include flexDiv(column, center, center);
+  gap: 0.5rem;
+  cursor: pointer;
+  & > p {
+    @include font(0.8rem, 400, $gray);
+  }
+  & > div {
+    @include flexDiv;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100rem;
+    color: $primary900;
+    background-color: $primary300;
+    font-size: 0.8rem;
+    box-shadow: $shadow400;
+  }
+  &.active {
+    & > p {
+      @include font(1rem, 500, $mainParagraph);
+    }
+    & > div {
+      background-color: $primary500;
+    }
+  }
+}
+
+.step_line {
+  width: 20%;
+  border: 0.5px solid $primary300p;
+  margin-bottom: 1.5rem;
+  opacity: 0.5;
+}

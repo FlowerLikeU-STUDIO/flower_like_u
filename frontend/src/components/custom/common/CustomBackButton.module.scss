@@ -1,0 +1,17 @@
+.custom_backbutton {
+  @include flexDiv;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 100rem;
+  background-color: $white;
+  box-shadow: $shadow400;
+  & > button {
+    width: 100%;
+    height: 100%;
+    color: $primary300p;
+  }
+}
+
+.invisible {
+  display: none;
+}

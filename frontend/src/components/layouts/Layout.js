@@ -1,23 +1,14 @@
-import styled from "styled-components";
 import Chat from "../chat/Chat";
 import Header from "./Header";
+import styles from "./Layout.module.scss";
 
-const LayoutWrapper = styled.div`
-  position: relative;
-  width: 100vw;
-  max-width: 1680px;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  height: 100vh;
-`;
 const Layout = ({ children }) => {
   return (
-    <LayoutWrapper>
+    <main className={styles.layout}>
       <Header />
       {children}
       <Chat />
-    </LayoutWrapper>
+    </main>
   );
 };
 
