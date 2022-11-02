@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = {"customFlowers", "reviews"})
+@ToString(exclude = {"customFlowers", "reviews", "books"})
 public class ConsumerEntity extends BaseEntity {
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -59,4 +59,9 @@ public class ConsumerEntity extends BaseEntity {
     @OneToMany(mappedBy = "consumerId")
     @Builder.Default
     private List<ReviewEntity> reviews = new ArrayList<>();
+
+    // consumer과 book 테이블의 1:N 관계 매핑
+    @OneToMany(mappedBy = "consumerId")
+    @Builder.Default
+    private List<BookEntity> books = new ArrayList<>();
 }
