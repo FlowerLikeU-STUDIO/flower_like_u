@@ -23,7 +23,6 @@ const Header = () => {
     //* scrollY 값에 따라서 setHeaderStatus 값을 바꾸는 함수
     const handleColor = () => {
       setScrollY(window.pageYOffset);
-      console.log(scrollY);
       scrollY > headerHeight ? setHeaderStatus(true) : setHeaderStatus(false);
     };
 
