@@ -3,11 +3,14 @@ import classNames from "classnames/bind";
 import { useDispatch } from "react-redux";
 import { selectPackage, selectSize } from "@/store/reducers/custom";
 import FailAlert from "@/lib/FailAlert";
+import findStep from "@/lib/utils/findStep";
 
 const CustomHeader = (props) => {
   const dispatch = useDispatch();
   const cx = classNames.bind(styles);
   const stepState = props.stepState;
+  //* 현재 단계 가져오기
+  const step = findStep();
 
   //* 패키지와 사이즈 값을 모두 null로 초기화
   const packageHandler = () => {
@@ -36,11 +39,7 @@ const CustomHeader = (props) => {
     <nav className={styles.custom_header_wrapper}>
       <div className={styles.step_wrapper}>
         <div
-          className={
-            stepState.package === null && stepState.size === null
-              ? cx("number_title_wrapper", "active")
-              : styles.number_title_wrapper
-          }
+          className={step === "package" ? cx("number_title_wrapper", "active") : styles.number_title_wrapper}
           onClick={() => packageHandler()}
         >
           <div>1</div>
@@ -48,11 +47,7 @@ const CustomHeader = (props) => {
         </div>
         <div className={styles.step_line} />
         <div
-          className={
-            stepState.package !== null && stepState.size === null
-              ? cx("number_title_wrapper", "active")
-              : styles.number_title_wrapper
-          }
+          className={step === "size" ? cx("number_title_wrapper", "active") : styles.number_title_wrapper}
           onClick={() => sizeHandler()}
         >
           <div>2</div>
@@ -60,11 +55,7 @@ const CustomHeader = (props) => {
         </div>
         <div className={styles.step_line} />
         <div
-          className={
-            stepState.package !== null && stepState.size !== null
-              ? cx("number_title_wrapper", "active")
-              : styles.number_title_wrapper
-          }
+          className={step === "custom" ? cx("number_title_wrapper", "active") : styles.number_title_wrapper}
           onClick={() => flowerHandler()}
         >
           <div>3</div>

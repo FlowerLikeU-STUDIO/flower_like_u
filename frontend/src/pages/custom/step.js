@@ -5,20 +5,25 @@ import SelectSize from "@/components/custom/step/SelectSize";
 import BuoquetCustom from "@/components/custom/step/BouquetCustom";
 import CustomBackButton from "@/components/custom/common/CustomBackButton";
 import { useSelector } from "react-redux";
+import findStep from "@/lib/utils/findStep";
 
 const Step = () => {
   const stepState = useSelector((state) => state.custom);
+
+  //* 현재 단계 가져오기
+  const step = findStep();
+
   return (
     <>
       <main className={styles.step_background}>
         <CustomHeader stepState={stepState} />
         <section className={styles.step_content}>
-          {stepState.package === null ? (
+          {step === "package" ? (
             <div className={styles.card_button_wrapper}>
               <SelectPackage />
               <CustomBackButton />
             </div>
-          ) : stepState.size === null ? (
+          ) : step === "size" ? (
             <div className={styles.card_button_wrapper}>
               <SelectSize />
               <CustomBackButton />

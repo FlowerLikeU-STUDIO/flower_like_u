@@ -2,10 +2,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectPackage } from "@/store/reducers/custom";
 import { useRouter } from "next/router";
 import styles from "./CustomBackButton.module.scss";
+import findStep from "@/lib/utils/findStep";
 
 const CustomBackButton = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+
+  //* 현재 단계 가져오기
+  const step = findStep();
 
   //* 패키지 값을 다시 null로 초기화 후 router.push
   const packageHandler = () => {
@@ -18,19 +22,13 @@ const CustomBackButton = () => {
     dispatch(selectPackage(null));
   };
 
-  //* 현재 state 값 확인
-  const stepState = useSelector((state) => state.custom);
-
   return (
     <>
-      {stepState.package === null ? (
-        <div
-          className={styles.custom_backbutton}
-          onClick={() => packageHandler()}
-        >
+      {step === "package" ? (
+        <div className={styles.custom_backbutton} onClick={() => packageHandler()}>
           <button className="material-icons-outlined">arrow_back</button>
         </div>
-      ) : stepState.size === null ? (
+      ) : step === "size" ? (
         <div className={styles.custom_backbutton} onClick={() => sizeHandler()}>
           <button className="material-icons-outlined">arrow_back</button>
         </div>
