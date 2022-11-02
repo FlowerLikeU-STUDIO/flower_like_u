@@ -40,4 +40,54 @@
   border-radius: 0.25rem;
   box-shadow: $shadow600;
   padding-bottom: 1rem;
+  gap: 0.5rem;
+}
+
+.custom_info_package {
+  @include font(1rem, 700);
+  width: 80%;
+}
+
+.custom_info_size {
+  @include font(0.95rem, 500, $gray);
+  width: 80%;
+}
+
+.circle_1 {
+  position: relative;
+  width: 6rem;
+  height: 6rem;
+  background-color: $ivory500;
+  border: 1px solid $mainPrimary;
+  border-radius: 100rem;
+  top: 10rem;
+  left: 12.5rem;
+  opacity: 0.8;
+  z-index: 3;
+}
+
+.circle_2 {
+  position: relative;
+  width: 6rem;
+  height: 6rem;
+  background-color: $ivory500;
+  border: 1px solid $mainPrimary;
+  border-radius: 100rem;
+  top: 10rem;
+  left: 12.5rem;
+  opacity: 0.8;
+  z-index: 2;
+}
+
+.circle_3 {
+  position: relative;
+  width: 6rem;
+  height: 6rem;
+  background-color: $ivory500;
+  border: 1px solid $mainPrimary;
+  border-radius: 100rem;
+  top: 10rem;
+  left: 12.5rem;
+  opacity: 0.8;
+  z-index: 1;
 }

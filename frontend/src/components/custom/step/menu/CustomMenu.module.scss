@@ -1,8 +1,8 @@
 .custom_menu_wrapper {
   @include flexDiv(column, center, flex-start);
-  width: 20rem;
+  width: 24rem;
   height: 32rem;
-  background-color: $white;
+  background-color: $ivory300;
   border-radius: 0.25rem;
   box-shadow: $shadow600;
   margin-left: 2rem;

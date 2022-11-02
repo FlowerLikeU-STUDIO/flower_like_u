@@ -3,6 +3,7 @@ import { wrapper, ribbon, flower } from "./MenuContents";
 import styles from "./MenuBox.module.scss";
 
 const MenuBox = (props) => {
+  console.log(props.tab);
   if (props.tab === 0) {
     return (
       <div className={styles.card_wrapper}>
@@ -39,8 +40,8 @@ const MenuBox = (props) => {
         <div className={styles.inner_wrapper}>
           {flower.map((name, index) => (
             <MenuCard
-              key={flower[index].name}
-              img={`/custom/flower/${flower[index].name}/white.png`}
+              key={`${flower[index].name}_${flower[index].color}`}
+              img={`/custom/flower/${flower[index].color}_${flower[index].name}.png`}
               title={flower[index].koname}
               contents={flower[index].contents}
             />

@@ -23,7 +23,8 @@
     background-color: $lightGradient;
     background-image: $lightGradient;
     opacity: 0.3;
-    box-shadow: -7px -7px 20px 0px #fff9, -4px -4px 5px 0px #fff9, 7px 7px 20px 0px #0002, 4px 4px 5px 0px #0001;
+    box-shadow: -7px -7px 20px 0px #fff9, -4px -4px 5px 0px #fff9,
+      7px 7px 20px 0px #0002, 4px 4px 5px 0px #0001;
     transition: all 0.5s ease;
   }
 }
@@ -32,7 +33,7 @@
   @include flexDiv(column, center, center);
   box-shadow: $shadow600;
   border-radius: 0.25rem;
-  background-color: $white;
+  background-color: $white 0.8;
   color: $mainParagraph;
   padding: 2rem 0.6rem 2rem 0.6rem;
   gap: 0.25rem;
