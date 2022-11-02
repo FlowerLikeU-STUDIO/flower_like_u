@@ -11,6 +11,7 @@
 
 .step_content {
   @include flexDiv;
+  height: 100%;
 }
 
 .card_button_wrapper {

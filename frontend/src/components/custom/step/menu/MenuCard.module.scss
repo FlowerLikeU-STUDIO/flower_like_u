@@ -1,0 +1,20 @@
+.menu_image {
+  object-fit: contain;
+}
+
+.menu_card_wrapper {
+  @include flexDiv(row, center, flex-start);
+  gap: 1rem;
+  width: 95%;
+  height: 6rem;
+  background-color: $ivory300p;
+  margin: 0.2rem 0rem 1rem 0.1rem;
+  border-radius: 0.25rem;
+  box-shadow: $shadow400;
+  cursor: pointer;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+}
+
+.letter_wrapper {
+  @include flexDiv(column, flex-start);
+}

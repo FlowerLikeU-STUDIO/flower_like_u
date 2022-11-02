@@ -5,7 +5,7 @@
 
 .custom_wrapper {
   @include flexDiv(row, flex-end, flex-end);
-  padding-top: 3rem;
+  padding-top: 1.5rem;
 }
 
 .recommend_wrapper {
@@ -18,7 +18,7 @@
   @include flexDiv;
   width: 3rem;
   height: 3rem;
-  background-color: $red300;
+  background-color: $ivory500;
   border-radius: 100rem;
   box-shadow: $shadow600;
 }
@@ -36,19 +36,8 @@
   @include flexDiv(column);
   width: 10rem;
   height: 13rem;
-  background-color: $primary400;
+  background-color: $ivory400;
   border-radius: 0.25rem;
   box-shadow: $shadow600;
-  padding-bottom: 1rem;
-}
-
-.custom_option {
-  @include flexDiv(column);
-  width: 18.6rem;
-  height: 30rem;
-  background-color: $ivory300;
-  border-radius: 0.25rem;
-  box-shadow: $shadow600;
-  margin-left: 2rem;
   padding-bottom: 1rem;
 }

@@ -4,6 +4,7 @@ import { selectPackage, selectSize } from "@/store/reducers/custom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { SizeContent } from "./StepContents";
+import CustomMenu from "./menu/CustomMenu";
 
 const BuoquetCustom = () => {
   const dispatch = useDispatch();
@@ -25,15 +26,13 @@ const BuoquetCustom = () => {
         </aside>
         <div className={styles.custom} />
         <div className={styles.custom_info_wrapper}>
-          <p>
-            {SizeContent[customOption.package].title[customOption.size]} 사이즈
-          </p>
+          <p>{SizeContent[customOption.package].title[customOption.size]} 사이즈</p>
           <p>{SizeContent[customOption.package].kotitle} 패키지</p>
           <Link href="/custom/save">
             <div onClick={() => bouquetHandler()}>완성!</div>
           </Link>
         </div>
-        <div className={styles.custom_option}>옵션</div>
+        <CustomMenu />
       </main>
     </>
   );
