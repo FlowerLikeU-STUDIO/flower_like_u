@@ -4,6 +4,7 @@ import { selectPackage, selectSize } from "@/store/reducers/custom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { SizeContent } from "./StepContents";
+import { useState } from "react";
 import CustomMenu from "./menu/CustomMenu";
 
 const BuoquetCustom = () => {
@@ -15,68 +16,26 @@ const BuoquetCustom = () => {
     dispatch(selectSize(null));
   };
 
-  (function dragndrop() {
-    let xpos = "";
-    let ypos = "";
-    let whichArt = "";
+  //드래그 앤 드롭 관련 로직
+  const [enter, setEnter] = useState(0);
+  const [tmp, setTmp] = useState(null);
 
-    function resetZ() {
-      const imgEl = document.querySelectorAll("img");
-      for (let i = imgEl.length - 1; i >= 0; i--) {
-        imgEl[i].style.zIndex = 5;
-      }
-    }
+  const onDragEnter = (e) => {
+    console.log("들어왔다!");
+    setEnter(1);
+  };
 
-    function moveStart(e) {
-      whichArt = e.target;
-      xpos = e.offsetX === undefined ? e.layerX : e.offsetX;
-      ypos = e.offsetY === undefined ? e.layerY : e.offsetY;
-      whichArt.style.zIndex = 10;
-    }
+  const onDragOver = (e) => {
+    console.log("지금 위에 있어!");
+    setTmp(e.currentTarget.dataset.position);
+    console.log(tmp);
+    setEnter(1);
+  };
 
-    function moveDragOver(e) {
-      e.preventDefault();
-    }
-
-    function moveDrop(e) {
-      e.preventDefault();
-      whichArt.style.left = e.pageX - xpos + "px";
-      whichArt.style.top = e.pageY - ypos + "px";
-    }
-
-    function touchStart(e) {
-      e.preventDefault();
-      const whichArt = e.target;
-      const touch = e.touches[0];
-      let moveOffsetX = whichArt.offsetLeft - touch.pageX;
-      let moveOffsetY = whichArt.offsetTop - touch.pageY;
-      resetZ();
-      whichArt.style.zIndex = 10;
-
-      whichArt.addEventListener(
-        "touchmove",
-        function () {
-          let posX = touch.pageX + moveOffsetX;
-          let posY = touch.pageY + moveOffsetY;
-          whichArt.style.left = posX + "px";
-          whichArt.style.top = posY + "px";
-        },
-        false
-      );
-    }
-
-    document
-      .querySelector("body")
-      .addEventListener("dragstart", moveStart, false);
-    document
-      .querySelector("body")
-      .addEventListener("dragover", moveDragOver, false);
-    document.querySelector("body").addEventListener("drop", moveDrop, false);
-
-    document
-      .querySelector("body")
-      .addEventListener("touchstart", touchStart, false);
-  })();
+  const onDragLeave = (e) => {
+    console.log("나갔다!");
+    setEnter(0);
+  };
 
   return (
     <>
@@ -88,22 +47,38 @@ const BuoquetCustom = () => {
           <div className={styles.recommend_menu}>추천</div>
         </aside>
         <div className={styles.custom}>
-          <div className={styles.circle_1} />
-          <div className={styles.circle_2} />
-          <div className={styles.circle_3} />
+          <div className={styles.circle_wrapper}>
+            <div
+              className={styles.circle_1}
+              onDragEnter={onDragEnter}
+              onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
+              data-position={0}
+            ></div>
+            <div
+              className={styles.circle_2}
+              onDragEnter={onDragEnter}
+              onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
+              data-position={1}
+            ></div>
+            <div
+              className={styles.circle_3}
+              onDragEnter={onDragEnter}
+              onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
+              data-position={2}
+            ></div>
+          </div>
         </div>
         <div className={styles.custom_info_wrapper}>
-          <p className={styles.custom_info_package}>
-            {SizeContent[customOption.package].kotitle} 커스텀
-          </p>
-          <p className={styles.custom_info_size}>
-            {SizeContent[customOption.package].title[customOption.size]} 사이즈
-          </p>
+          <p className={styles.custom_info_package}>{SizeContent[customOption.package].kotitle} 커스텀</p>
+          <p className={styles.custom_info_size}>{SizeContent[customOption.package].title[customOption.size]} 사이즈</p>
           <Link href="/custom/save">
             <div onClick={() => bouquetHandler()}>완성!</div>
           </Link>
         </div>
-        <CustomMenu />
+        <CustomMenu enter={enter} />
       </main>
     </>
   );

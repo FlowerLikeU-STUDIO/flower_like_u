@@ -3,7 +3,6 @@ import { wrapper, ribbon, flower } from "./MenuContents";
 import styles from "./MenuBox.module.scss";
 
 const MenuBox = (props) => {
-  console.log(props.tab);
   if (props.tab === 0) {
     return (
       <div className={styles.card_wrapper}>
@@ -14,6 +13,9 @@ const MenuBox = (props) => {
               img={"/custom/custom_background.png"}
               title={wrapper[index].koname}
               contents={wrapper[index].contents}
+              enter={props.enter}
+              tab={props.tab}
+              name={wrapper[index].color}
             />
           ))}
         </div>
@@ -29,6 +31,9 @@ const MenuBox = (props) => {
               img={"/custom/custom_background.png"}
               title={ribbon[index].koname}
               contents={ribbon[index].contents}
+              enter={props.enter}
+              tab={props.tab}
+              name={ribbon[index].color}
             />
           ))}
         </div>
@@ -44,6 +49,9 @@ const MenuBox = (props) => {
               img={`/custom/flower/${flower[index].color}_${flower[index].name}.png`}
               title={flower[index].koname}
               contents={flower[index].contents}
+              enter={props.enter}
+              tab={props.tab}
+              name={`${flower[index].name}_${flower[index].color}`}
             />
           ))}
         </div>

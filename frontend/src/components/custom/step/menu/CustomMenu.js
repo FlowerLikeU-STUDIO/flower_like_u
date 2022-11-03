@@ -2,7 +2,7 @@ import styles from "./CustomMenu.module.scss";
 import MenuBox from "./MenuBox";
 import { useState } from "react";
 
-const CustomMenu = () => {
+const CustomMenu = (props) => {
   const [tabStatus, setTabStatus] = useState(0);
 
   const tabHandler = (tab) => {
@@ -23,7 +23,7 @@ const CustomMenu = () => {
         </button>
       </div>
       <div className={styles.line} />
-      <MenuBox tab={tabStatus} />
+      <MenuBox tab={tabStatus} enter={props.enter} />
     </section>
   );
 };
