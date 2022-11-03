@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 const ModifyPassword = () => {
   const cx = classnames.bind(styles);
   const router = useRouter();
-  const { user } = useUser("useruser1");
+  const { user } = useUser();
   const [isModify, setIsModify] = useState(false);
 
   const [curPw, setCurPw] = useState("");

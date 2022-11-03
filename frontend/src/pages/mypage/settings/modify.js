@@ -10,7 +10,7 @@ import styles from "./modify.module.scss";
 const ModifyAuth = () => {
   const cx = classnames.bind(styles);
   // useSWR
-  const { user, mutate } = useUser("useruser1");
+  const { user, mutate } = useUser();
   const { nickNameCheck } = useModifyUser();
   // 수정여부
   const [isModify, setIsModify] = useState(false);
