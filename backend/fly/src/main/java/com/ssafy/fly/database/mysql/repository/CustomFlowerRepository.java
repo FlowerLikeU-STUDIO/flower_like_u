@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface CustomFlowerRepository extends JpaRepository<CustomFlowerEntity, Long> {
-    public CustomFlowerEntity findByDesignId(String flowerId);
+    // public CustomFlowerEntity findByDesignId(String flowerId);
+    public CustomFlowerEntity findByDesignIdAndRemoval(String flowerId, boolean isRemoved);
     public Page<CustomFlowerEntity> findAllByConsumerId(ConsumerEntity consumer, Pageable pageable);
 }

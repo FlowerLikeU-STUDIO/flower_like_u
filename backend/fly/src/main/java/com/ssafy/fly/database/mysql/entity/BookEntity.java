@@ -1,6 +1,8 @@
 package com.ssafy.fly.database.mysql.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.fly.database.mysql.enumtype.BookState;
+import com.ssafy.fly.database.mysql.enumtype.BookType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,7 +29,7 @@ public class BookEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "custom_id")
     @JsonIgnore
-    private CustomFlowerEntity customId;
+    private CustomFlowerEntity customId ;
 
     @Column(name = "book_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -40,7 +42,11 @@ public class BookEntity extends BaseEntity {
     @Column(name = "request", nullable = true)
     private String request;
 
-    // @Column(name = "status", nullable = false)
+    @Column(name = "state", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BookState state;
 
-    // @Column(name = "type", nullable = false)
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BookType type;
 }

@@ -17,6 +17,8 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
 
     public StoreEntity findByUserIdAndWithdrawal(String userId, boolean isDeleted);
 
+    public StoreEntity findByIdAndWithdrawal(Long storeId, boolean isDeleted);
+
     @Modifying
     @Transactional
     @Query("UPDATE StoreEntity as s " +
