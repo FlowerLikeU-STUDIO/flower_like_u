@@ -9,29 +9,21 @@ import useUser from "@/hooks/useUser";
 
 const MyHeader = () => {
   const router = useRouter();
-  const { user, loading } = useUser("useruser1");
-
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
-  }, [user]);
+  const { user, error } = useUser();
 
   useEffect(() => {
     if (!user.type) return;
-    if (user.type === "seller") {
+    if (user.type === "store") {
       // * replace로 히스토리 스택에 쌓이는 것 방지
       router.replace("/mypage/feeds");
-    } else if (user.type === "buyer") {
+    } else if (user.type === "consumer") {
       router.replace("/mypage/reservation");
     }
   }, []);
 
   return (
     <>
-      {user ? (
-        <>Loading...</>
-      ) : (
+      {user && (
         <>
           <div className={styles.profile}>
             <ProfileImage url={user.profile} size="medium" />

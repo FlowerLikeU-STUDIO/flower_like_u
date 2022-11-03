@@ -87,7 +87,7 @@ const ModifyAuth = () => {
       setNewStoreName(newStoreName || user.storeName || "");
     }
   }, [user]);
-  console.log(user);
+
   return (
     <>
       {user && (
