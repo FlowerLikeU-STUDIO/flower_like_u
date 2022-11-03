@@ -33,8 +33,8 @@ const GetRoadAdr = ({ adr, setAdr }) => {
 
   const getDetail = (e) => {
     const value = e.target.value;
-    if (value.length > 50) {
-      setRoadDetail(roadDetail.slice(0, 50));
+    if (value.length >= 50) {
+      setRoadDetail(value.slice(0, 49));
       alert("50자 내로 입력해주세요.");
       return;
     }
