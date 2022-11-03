@@ -2,16 +2,16 @@ pipeline {
     agent any
 
     stages {
-        // stage('Init') {
-        //     steps {
-        //         sh """
-        //             docker stop fly_be
-        //             docker rm fly_be
-        //             docker stop fly_fe
-        //             docker rm fly_fe
-        //         """
-        //     }
-        // }
+        stage('Init') {
+            steps {
+                sh """
+                    docker stop fly_be
+                    docker rm fly_be
+                    docker stop fly_fe
+                    docker rm fly_fe
+                """
+            }
+        }
         stage('Frontend Dockerizing') {
             steps {
                 sh "docker rmi martinflower/fly:fly_fe"
