@@ -2,3 +2,53 @@
   @include font(3rem, 700, $ivory500);
   @include flexDiv;
 }
+
+.custom_wrapper {
+  @include flexDiv(row, flex-end, flex-end);
+  padding-top: 3rem;
+}
+
+.recommend_wrapper {
+  @include flexDiv(column, flex-end, flex-end);
+  gap: 2rem;
+  padding-bottom: 1rem;
+}
+
+.recommend_menu {
+  @include flexDiv;
+  width: 3rem;
+  height: 3rem;
+  background-color: $red300;
+  border-radius: 100rem;
+  box-shadow: $shadow600;
+}
+
+.custom {
+  width: 30rem;
+  height: 30rem;
+  background-image: url("/custom/bouquet/1.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.custom_info_wrapper {
+  @include flexDiv(column);
+  width: 10rem;
+  height: 13rem;
+  background-color: $primary400;
+  border-radius: 0.25rem;
+  box-shadow: $shadow600;
+  padding-bottom: 1rem;
+}
+
+.custom_option {
+  @include flexDiv(column);
+  width: 18.6rem;
+  height: 30rem;
+  background-color: $ivory300;
+  border-radius: 0.25rem;
+  box-shadow: $shadow600;
+  margin-left: 2rem;
+  padding-bottom: 1rem;
+}

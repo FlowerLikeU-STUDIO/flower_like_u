@@ -1,35 +1,58 @@
 import Link from "next/link";
-import styled from "styled-components";
 import useSWR from "swr";
 import storage from "../../lib/utils/storage";
 import UserHeaderItem from "./UserHeaderItem";
-
-const HeaderWrapper = styled.div`
-  padding: ${(props) => props.padding};
-  display: flex;
-  background-color: #fffbeb;
-  justify-content: space-between;
-`;
-
-const HeaderAnchor = styled.a`
-  color: #445b0f;
-  margin: 10px;
-  cursor: pointer;
-`;
+import styles from "./Header.module.scss";
+import classNames from "classnames/bind";
+import { useState, useEffect } from "react";
 
 const Header = () => {
+  const cx = classNames.bind(styles);
   const { data: isLogin } = useSWR("logIn", storage);
+
+  //* 헤더 opacity 조정을 위한 State
+  const [scrollY, setScrollY] = useState(0);
+  const [headerStatus, setHeaderStatus] = useState(false);
+
+  //* document가 렌더링 되었을 때 동작
+  if (typeof document !== "undefined") {
+    //* 헤더의 높이 감지
+    const header = document.getElementById("header");
+    const headerHeight = header?.getBoundingClientRect().height;
+
+    //* scrollY 값에 따라서 setHeaderStatus 값을 바꾸는 함수
+    const handleColor = () => {
+      setScrollY(window.pageYOffset);
+      scrollY > headerHeight ? setHeaderStatus(true) : setHeaderStatus(false);
+    };
+
+    //* 이벤트 감지
+    useEffect(() => {
+      const watch = () => {
+        window.addEventListener("scroll", handleColor);
+      };
+      handleColor();
+      watch();
+      return () => {
+        window.removeEventListener("scroll", handleColor);
+      };
+    });
+  }
+
   return (
-    <HeaderWrapper padding={"24px 32px"}>
+    <header
+      className={!headerStatus ? cx("header_wrapper", "opacity") : cx("header_wrapper", "nonopacity")}
+      id="header"
+    >
       <div>
         <Link href="/">
-          <HeaderAnchor>너 닮 꽃</HeaderAnchor>
+          <a className={styles.header_anchor}>너 닮 꽃</a>
         </Link>
         <Link href="/florist">
-          <HeaderAnchor>플로리스트</HeaderAnchor>
+          <a className={styles.header_anchor}>플로리스트</a>
         </Link>
         <Link href="/custom">
-          <HeaderAnchor>꽃다발커스텀</HeaderAnchor>
+          <a className={styles.header_anchor}>꽃다발커스텀</a>
         </Link>
       </div>
       <div>
@@ -38,15 +61,15 @@ const Header = () => {
         ) : (
           <>
             <Link href="/auth/login">
-              <HeaderAnchor>로그인</HeaderAnchor>
+              <a className={styles.header_anchor}>로그인</a>
             </Link>
             <Link href="/auth/signup">
-              <HeaderAnchor>회원가입</HeaderAnchor>
+              <a className={styles.header_anchor}>회원가입</a>
             </Link>
           </>
         )}
       </div>
-    </HeaderWrapper>
+    </header>
   );
 };
 

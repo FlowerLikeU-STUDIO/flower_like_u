@@ -1,9 +1,8 @@
 import styles from "./SelectSize.module.scss";
 import OptionCard from "../common/OptionCard";
 import { SizeContent } from "./StepContents";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectSize } from "@/store/reducers/custom";
-import { useSelector } from "react-redux";
 
 const SelectSize = () => {
   const dispatch = useDispatch();
@@ -24,7 +23,7 @@ const SelectSize = () => {
         <OptionCard
           key={title}
           size="small"
-          img="/home/centerFlower.png"
+          img={`/custom/${contents.engtitle}/${index}.png`}
           title={title}
           content={contents.contents[index]}
           handler={() => sizeHandler(index)}

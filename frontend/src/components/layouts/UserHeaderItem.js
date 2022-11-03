@@ -1,20 +1,10 @@
 import Link from "next/link";
-import styled from "styled-components";
 import useUser from "../../hooks/useUser";
 import SuccessAlert from "../../lib/SuccessAlert";
 import { useRouter } from "next/router";
 import { mutate } from "swr";
+import styles from "./Header.module.scss";
 
-const LogOutButton = styled.button`
-  color: #445b0f;
-  font-size: 1rem;
-`;
-
-const HeaderAnchor = styled.a`
-  color: #445b0f;
-  margin: 10px;
-  cursor: pointer;
-`;
 const UserHeaderItem = () => {
   const { user } = useUser();
   const router = useRouter();
@@ -32,9 +22,11 @@ const UserHeaderItem = () => {
       {user ? (
         <>
           <Link href={user.type === "seller" ? "/mypage/feeds" : "/mypage/reservation"}>
-            <HeaderAnchor>마이페이지</HeaderAnchor>
+            <a className={styles.header_anchor}>마이페이지</a>
           </Link>
-          <LogOutButton onClick={onHandleLogout}>로그아웃</LogOutButton>
+          <button className={styles.logout_button} onClick={onHandleLogout}>
+            로그아웃
+          </button>
         </>
       ) : (
         <></>

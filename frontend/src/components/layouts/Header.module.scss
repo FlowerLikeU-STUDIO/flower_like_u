@@ -1,0 +1,29 @@
+.header_wrapper {
+  @include flexDiv(row, center, space-between);
+  position: fixed;
+  top: 0;
+  height: 4rem;
+  background-color: $ivory300;
+  width: 100%;
+  padding: 1.5rem 2rem;
+  max-width: 1680px;
+  z-index: 1;
+  &.opacity {
+    opacity: 1;
+  }
+  &.nonopacity {
+    opacity: 0;
+  }
+}
+
+.header_anchor {
+  margin: 0.625rem;
+  color: $primary900;
+  cursor: pointer;
+}
+
+.logout_button {
+  color: #445b0f;
+  font-size: 1rem;
+  margin: 10px;
+}
