@@ -29,7 +29,6 @@ const ModifyAuth = () => {
     }
     if (inputV.length <= 10) {
       setNewNick(e.target.value);
-      console.log(inputV);
     } else {
       setNewNick(newNick.slice(0, 10));
       alert("닉네임은 10자 미만으로 제한됩니다.");
@@ -77,10 +76,8 @@ const ModifyAuth = () => {
       };
       // !user/ -> user
       const res = await Axios.put("user/", newData).then((res) => res.data);
-      console.log("asdfasdf", res);
       if (res.result === "success") {
         mutate();
-        setIsModify(!isModify);
         setIsModify(false);
       }
     }
@@ -167,7 +164,6 @@ const ModifyAuth = () => {
                 [styles.edit__truebtn]: !isModify,
               })}
               onClick={dataSubmit}
-              onKeyDown={(e) => e.preventDefault()}
             >
               {!isModify ? "수정" : "완료"}
             </button>
