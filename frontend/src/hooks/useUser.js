@@ -4,7 +4,7 @@ import useSWR from "swr";
 // ! FETCH USER DATA
 const useUser = () => {
   //!!!! 현재 요청할 유저 아이디 넣기
-  const uid = "useruser2";
+  const uid = "useruser1";
   const { data, mutate, error } = useSWR(`user/${uid}`, Fetcher);
 
   const loading = !data && !error;

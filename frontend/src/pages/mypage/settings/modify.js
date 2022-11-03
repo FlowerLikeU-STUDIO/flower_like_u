@@ -15,7 +15,7 @@ const ModifyAuth = () => {
   // 수정여부
   const [isModify, setIsModify] = useState(false);
   // 닉네임
-  const [newNick, setNewNick] = useState(user.nickname || "");
+  const [newNick, setNewNick] = useState("");
   // 닉네임 중복체크
   const [isNickname, setIsNickname] = useState(true);
   // 주소 입력
@@ -42,7 +42,7 @@ const ModifyAuth = () => {
     if (newNick === user.nickname) {
       return;
     }
-    if (nicknameRes === "nonDuplicated") {
+    if (nicknameRes.data.result === "nonDuplicated") {
       setIsNickname(true);
       alert("사용가능한 닉네임입니다.");
     } else {
