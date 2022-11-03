@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     stages {
-        stage('Init') {
-            steps {
-                sh """
-                    docker stop fly_be
-                    docker rm fly_be
-                """
-            }
-        }
+        // stage('Init') {
+        //     steps {
+        //         sh """
+        //             docker stop fly_be
+        //             docker rm fly_be
+        //         """
+        //     }
+        // }
         stage('Frontend Dockerizing') {
             steps {
                 sh "docker rmi martinflower/fly:fly_fe"
@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Backend Dockerizing') {
             steps {
-                sh "docker rmi martinflower/fly:fly_be"
+                // sh "docker rmi martinflower/fly:fly_be"
                 dir('./backend/fly'){
                     sh "pwd"
                     sh "chmod 777 gradlew"
