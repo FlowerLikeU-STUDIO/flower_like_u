@@ -1,7 +1,6 @@
 import Axios from "@/api/axios";
 import MySetting from "@/components/auth/MySetting";
 import GetRoadAdr from "@/components/common/GetRoad";
-import useModifyUser from "@/hooks/useModifyUser";
 import useUser from "@/hooks/useUser";
 import classnames from "classnames";
 import { useEffect, useState } from "react";
@@ -11,57 +10,31 @@ const ModifyAuth = () => {
   const cx = classnames.bind(styles);
   // useSWR
   const { user, mutate } = useUser();
-  const { nickNameCheck } = useModifyUser();
   // 수정여부
   const [isModify, setIsModify] = useState(false);
-  // 닉네임
-  const [newNick, setNewNick] = useState("");
-  // 닉네임 중복체크
-  const [isNickname, setIsNickname] = useState(true);
+  // 상점명
+  const [newStoreName, setNewStoreName] = useState("");
   // 주소 입력
   const [addr, setAddr] = useState({ zipCode: "", street: "", detail: "", sigunguCode: "" });
 
-  const inputNickname = (e) => {
+  const inputStoreName = (e) => {
     const inputV = e.target.value;
-    setIsNickname(false);
-    if (inputV === user.nickname) {
-      setIsNickname(true);
-    }
-    if (inputV.length <= 10) {
-      setNewNick(e.target.value);
+    if (inputV.length <= 50) {
+      setNewStoreName(e.target.value);
     } else {
-      setNewNick(newNick.slice(0, 10));
-      alert("닉네임은 10자 미만으로 제한됩니다.");
-    }
-  };
-
-  const { nicknameRes } = nickNameCheck(newNick);
-
-  const checkNickName = (e) => {
-    e.preventDefault();
-    if (newNick === user.nickname) {
-      return;
-    }
-    if (nicknameRes.data.result === "nonDuplicated") {
-      setIsNickname(true);
-      alert("사용가능한 닉네임입니다.");
-    } else {
-      setIsNickname(false);
-      alert("사용불가능한 닉네임입니다.");
+      setNewStoreName(newStoreName.slice(0, 50));
+      alert("상점명은 50자 이하로 제한됩니다.");
     }
   };
 
   const dataSubmit = async (e) => {
     e.preventDefault();
-    if (isModify === false) setIsModify(true);
-    if (!isNickname) {
-      alert("닉네임 중복확인이 필요합니다.");
-      return;
+    if (isModify === false) {
+      setIsModify(true);
     }
-
     if (isModify === true) {
-      if (!newNick) {
-        alert("닉네임을 설정해주세요");
+      if (!newStoreName) {
+        alert("상점명을 설정해주세요");
         return;
       }
       if (!addr.street) {
@@ -71,9 +44,35 @@ const ModifyAuth = () => {
       const newData = {
         type: user.type,
         userId: user.userId,
-        nickname: newNick,
+        store: newStoreName,
         address: addr.street + addr.detail, //!addr로 변경할 것.
+        // holidays:
       };
+
+      /**
+      //! 추후 holidays 로직 추가 예정( - 백엔드 미완성)
+      {
+          "type" : "store",
+          "userId" : "ssafyb209",
+          "store" : "flowershop",
+          "address" : {
+              "zipCode" : "20312",
+              "street" : "대전광역시 유성구 xx로",
+              "details" : "OO빌딩 104호",
+              "sigunguCode" : "12345",
+          },
+          "holidays" : [
+              {"idx" : "0", "val" : true},
+              {"idx" : "1", "val" : false},
+              {"idx" : "2", "val" : false},
+              {"idx" : "3", "val" : false},
+              {"idx" : "4", "val" : false},
+              {"idx" : "5", "val" : false},
+              {"idx" : "6", "val" : true}
+          ]
+      }
+      */
+
       // !user/ -> user
       const res = await Axios.put("user/", newData).then((res) => res.data);
       if (res.result === "success") {
@@ -85,7 +84,7 @@ const ModifyAuth = () => {
 
   useEffect(() => {
     if (user) {
-      setNewNick(newNick || user.nickname || "");
+      setNewStoreName(newStoreName || user.storeName || "");
     }
   }, [user]);
 
@@ -98,32 +97,23 @@ const ModifyAuth = () => {
             <li className={styles.list__tag}>{user.email}</li>
             <label className={styles.label}>이름</label>
             <li className={styles.list__tag}>{user.name}</li>
-            <label htmlFor="nick" className={styles.label}>
-              닉네임
+            <label className={styles.label}>사업자 등록번호</label>
+            <li className={styles.list__tag}>{user.license}</li>
+            <label htmlFor="storename" className={styles.label}>
+              상점명
             </label>
             <div className={styles.nickname__div}>
               <li className={styles.list__tag}>
-                <input
-                  id="nick"
-                  name="닉네임"
-                  className={styles.input__box}
-                  // defaultValue={user.nickname}
-                  onChange={inputNickname}
-                  value={newNick}
+                <textarea
+                  id="storename"
+                  name="상점명"
+                  autoFocus
+                  className={styles.store__name}
+                  onChange={inputStoreName}
+                  value={newStoreName}
                   disabled={!isModify}
                 />
               </li>
-              {isModify && (
-                <button
-                  className={cx(styles.nickname__check, {
-                    [styles.nickname__check__true]: isNickname,
-                    [styles.nickname__check__false]: !isNickname,
-                  })}
-                  onClick={checkNickName}
-                >
-                  중복확인
-                </button>
-              )}
             </div>
             <label htmlFor="addr" className={styles.label}>
               주소
@@ -150,7 +140,7 @@ const ModifyAuth = () => {
                 })}
                 onClick={() => {
                   setIsModify(!isModify);
-                  setNewNick(user.nickname || "");
+                  setNewStoreName(user.storeName || "");
                 }}
               >
                 취소

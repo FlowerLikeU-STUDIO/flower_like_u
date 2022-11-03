@@ -4,16 +4,10 @@
   margin: 0.8rem 0rem 0.5rem 0rem;
 }
 
-.sub__label {
-  @include font(1rem, 600, $red600p);
-  text-align: center;
-  margin: 0.8rem 0rem 0.5rem 0rem;
-}
-
 .list__tag {
   // location
+  width: 100%;
   max-width: 20rem;
-  min-width: 12rem;
   padding: 0.5rem 2rem;
   text-align: center;
   // color
@@ -24,17 +18,12 @@
 }
 
 .input__box {
+  border: none;
   outline: none;
-  text-align: center;
   @include font(1.125rem, normal, $mainButton);
+  text-align: center;
 }
 
-.submit__btn {
-  min-width: fit-content;
-  width: 7.5rem;
-  height: 1.875rem;
-  border-radius: 0.5rem;
-  margin-top: 1rem;
-  background-color: $primary900;
-  @include font(1rem, bold, $white100);
+.err {
+  @include font(0.8rem, normal, $red700, 150%);
 }
