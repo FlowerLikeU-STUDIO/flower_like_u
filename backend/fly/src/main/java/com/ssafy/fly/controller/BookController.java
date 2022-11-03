@@ -32,7 +32,93 @@ public class BookController {
         System.out.println("[POST] - /book/custom " + bookCustomFlowerReq);
 
         Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = bookService.registCustomFlowerBookInfo(bookCustomFlowerReq);
+
+        if((boolean) result.get("result")) {
+            response.put("result", resultMessageSet.SUCCESS);
+        } else {
+            response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    // 2. 꽃다발 예약(피드)
+
+    // 3. 예약 상태 변경
+    @PutMapping("/{bookId}")
+    public ResponseEntity<Map<String, Object>> updateBookState(@PathVariable Long bookId) {
+        System.out.println("[PUT] - /book/{bookId} " + bookId);
+
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = bookService.updateBookState(bookId);
+
+        if((boolean) result.get("result")) {
+            response.put("result", resultMessageSet.SUCCESS);
+        } else {
+            response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    // 4. 예약 목록 조회
+    @GetMapping("/list/{userId}")
+    public ResponseEntity<Map<String, Object>> getBookInfoList(@PathVariable String userId,
+                                                               @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
+                                                               @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+                                                               @RequestParam(value = "filter", required = false, defaultValue = "") String filter) {
+        System.out.println("[GET] - /book/list/{userId} " + userId);
+
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = bookService.getBookInfoList(userId, pageNo, size, filter);
+
+        if((boolean) result.get("result")) {
+            response.put("result", resultMessageSet.SUCCESS);
+            response.put(filter + "Info", result.get("info"));
+        } else {
+            response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
+        }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 5. 예약 목록 상세 조회(커스텀, 피드)
+    @GetMapping("/detail/{bookId}")
+    public ResponseEntity<Map<String, Object>> getDetailReservationInfo(@PathVariable Long bookId) {
+        System.out.println("[GET] - /book/detail/{bookId} " + bookId);
+
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = bookService.getDetailBookInfo(bookId);
+
+        if((boolean) result.get("result")) {
+            response.put("result", resultMessageSet.SUCCESS);
+            response.put("bookInfo", result.get("bookInfo"));
+        } else {
+            response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 6. 예약 취소
+    @DeleteMapping("/{bookId}")
+    public ResponseEntity<Map<String, Object>> cancelReservation(@PathVariable Long bookId) {
+        System.out.println("[DELETE] - /book/{bookId} " + bookId);
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = bookService.deleteBookInfo(bookId);
+
+        if((boolean) result.get("result")) {
+            response.put("result", resultMessageSet.SUCCESS);
+        } else {
+            response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
