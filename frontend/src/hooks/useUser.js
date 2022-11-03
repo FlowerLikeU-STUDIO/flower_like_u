@@ -14,9 +14,9 @@ const useUser = () => {
   return {
     loading,
     loggedOut,
-    user: data ? data.data.userInfo : data, // -> runtimeerror
+    // user: data ? data.data.userInfo : data, // -> runtimeerror
     // @ 최종로직
-    // user: loading ? "" : data.data.userInfo,
+    user: loading ? "" : data.data.userInfo,
     mutate,
     /* 그외 참고할 데이터
     @ 꽃가게 더미데이터
