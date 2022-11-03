@@ -1,60 +1,46 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import MyContentBtn from "./MyContentBtn";
 import styles from "./MyHeader.module.scss";
 import ProfileImage from "@/components/common/ProfileImage";
-import { isEmpty } from "lodash";
 import Contents from "./Contents";
 import Link from "next/link";
-import useMypage from "@/hooks/useMypage";
+import useUser from "@/hooks/useUser";
 
 const MyHeader = () => {
   const router = useRouter();
-
-  // const uid = "mypage-buyer";
-  const uid = "mypage-seller";
-  const { data, type, isError, isLoading } = useMypage(uid);
-  const [userData, setUserData] = useState("");
-  const [userType, setUserType] = useState("");
-
-  if (isError) {
-    return <p>No data Yet</p>;
-  }
+  const { user, loading } = useUser("useruser1");
 
   useEffect(() => {
-    if (!data) {
+    if (!user) {
       return;
     }
-    if (data) {
-      setUserType(type);
-      setUserData(data);
-    }
-  }, [data]);
+  }, [user]);
 
   useEffect(() => {
-    if (!userType) return;
-    if (userType === "seller") {
+    if (!user.type) return;
+    if (user.type === "seller") {
       // * replace로 히스토리 스택에 쌓이는 것 방지
       router.replace("/mypage/feeds");
-    } else if (userType === "buyer") {
+    } else if (user.type === "buyer") {
       router.replace("/mypage/reservation");
     }
   }, []);
 
   return (
     <>
-      {isLoading || isEmpty(userData) ? (
+      {user ? (
         <>Loading...</>
       ) : (
         <>
           <div className={styles.profile}>
-            <ProfileImage url={userData.profile} size="medium" />
+            <ProfileImage url={user.profile} size="medium" />
             <div className={styles.flexdiv}>
               <div>
-                {userType === "seller" ? (
-                  <span className={styles.userName}>{userData.storeName || userData.name}</span>
+                {user.type === "seller" ? (
+                  <span className={styles.userName}>{user.storeName || user.name}</span>
                 ) : (
-                  <span className={styles.userName}>{userData.nickname || userData.name}</span>
+                  <span className={styles.userName}>{user.nickname || user.name}</span>
                 )}
                 <Link href="/mypage/settings">
                   <a className={styles.settings}>
@@ -62,15 +48,15 @@ const MyHeader = () => {
                   </a>
                 </Link>
               </div>
-              {userType === "seller" && (
+              {user.type === "seller" && (
                 <div className={styles.profile_seller}>
                   <p>판매자 프로필 하단</p>
-                  <Contents rating={userData.rating} introduce={userData.introduce} feedsNum={userData.feedsNum} />
+                  <Contents rating={user.rating} introduce={user.introduce} feedsNum={user.feedsNum} />
                 </div>
               )}
             </div>
           </div>
-          <MyContentBtn props={userType} />
+          <MyContentBtn props={user.type} />
         </>
       )}
     </>

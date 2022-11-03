@@ -26,15 +26,12 @@ const UserHeaderItem = () => {
     SuccessAlert("로그아웃 되었습니다.");
     router.push("/");
   };
+
   return (
     <>
       {user ? (
         <>
-          <Link
-            href={
-              user.type === "seller" ? "/mypage/feeds" : "/mypage/reservation"
-            }
-          >
+          <Link href={user.type === "seller" ? "/mypage/feeds" : "/mypage/reservation"}>
             <HeaderAnchor>마이페이지</HeaderAnchor>
           </Link>
           <LogOutButton onClick={onHandleLogout}>로그아웃</LogOutButton>
