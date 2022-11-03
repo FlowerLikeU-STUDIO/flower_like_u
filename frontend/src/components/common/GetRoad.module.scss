@@ -1,6 +1,10 @@
 .road__flex input:not(.post__btn) {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 20rem;
+  padding: 0.5rem 0.5rem;
+  text-align: start;
   @include font(1rem, 500, $mainParagraph, 1.5rem);
 }
 
@@ -10,9 +14,6 @@
   width: 100%;
   justify-content: space-between;
 }
-.post {
-  width: 5rem;
-}
 
 .post__btn {
   width: fit-content;
@@ -21,6 +22,23 @@
   padding: 0rem 0.3rem;
   cursor: pointer;
 }
+
 .post__btn:hover {
   background-color: $primary300p;
+}
+
+.address__detail {
+  width: 100%;
+  max-width: 20rem;
+  height: 1.5rem;
+  padding: 0rem 0.5rem;
+  text-align: start;
+  border: none;
+  resize: none;
+  font-family: "Pretendard Variable";
+  @include font(1rem, 500, $mainParagraph, 1.5rem);
+  & + & {
+    margin-top: 0.5rem;
+    height: 3rem;
+  }
 }
