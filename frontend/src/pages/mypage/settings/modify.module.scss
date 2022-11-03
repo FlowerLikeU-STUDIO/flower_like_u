@@ -14,12 +14,11 @@
 
 .list__tag {
   // location
+  width: 100%;
   max-width: 20rem;
-  min-width: 12rem;
   padding: 0.5rem 2rem;
   text-align: center;
   // color
-  color: $mainButton;
   border: solid $primary300p 0.3rem;
   border-radius: 1rem;
   @include font(1.125rem, normal, $mainButton);
@@ -30,6 +29,17 @@
   outline: none;
   @include font(1.125rem, normal, $mainButton);
   text-align: center;
+}
+.text__box {
+  width: 100%;
+  max-width: 20rem;
+  height: 3rem;
+  padding: 0rem 0.5rem;
+  text-align: start;
+  resize: none;
+  @include font(1rem, 500, $mainParagraph, 1.5rem);
+  font-family: "Pretendard Variable";
+  text-align: start;
 }
 
 .nickname__div {
@@ -78,6 +88,9 @@
   height: 1.875rem;
   border-radius: 0.5rem;
   margin-top: 1rem;
+  & + & {
+    margin-left: 0.5rem;
+  }
 }
 
 .edit__falsebtn {
