@@ -2,7 +2,7 @@ import styles from "./SelectSize.module.scss";
 import OptionCard from "../common/OptionCard";
 import { SizeContent } from "./StepContents";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSize } from "@/store/reducers/custom";
+import { selectSize, makeFlowerList } from "@/store/reducers/custom";
 
 const SelectSize = () => {
   const dispatch = useDispatch();
@@ -13,8 +13,23 @@ const SelectSize = () => {
   const contents = SizeContent[packageType];
 
   //* 사이즈 값을 변경하는 함수
+  //* store의 flowers에 리스트 생성
+  let list = [
+    {
+      name: null,
+    },
+  ];
   const sizeHandler = (index) => {
     dispatch(selectSize(index));
+    // console.log(tmp);
+    if (index === 0) {
+      dispatch(makeFlowerList(list));
+    } else {
+      for (var i = 1; i < index * 2 + 1; i++) {
+        list.push({ name: null });
+      }
+      dispatch(makeFlowerList(list));
+    }
   };
 
   return (

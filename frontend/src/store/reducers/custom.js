@@ -16,11 +16,11 @@ const customSlice = createSlice({
     selectSize: (state, action) => {
       return { ...state, size: action.payload };
     },
-    selectFlower: (state, action) => {
+    makeFlowerList: (state, action) => {
       return { ...state, flowers: action.payload };
     },
   },
 });
 
 export default customSlice;
-export const { selectPackage, selectSize, selectFlower } = customSlice.actions;
+export const { selectPackage, selectSize, makeFlowerList } = customSlice.actions;
