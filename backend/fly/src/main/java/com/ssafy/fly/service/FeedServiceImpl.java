@@ -102,7 +102,7 @@ public class FeedServiceImpl implements FeedService {
         }
 
         Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size);
-        Page<FeedEntity> searchList = feedRepository.findByStoreId(store, pageable);
+        Page<FeedEntity> searchList = feedRepository.findByStoreIdAndRemoval(store, false, pageable);
         Map<String, Object> info = new HashMap<>();
 
         if(!searchList.isEmpty()) {
