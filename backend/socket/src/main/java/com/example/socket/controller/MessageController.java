@@ -40,9 +40,9 @@ public class MessageController {
         return new BaseResponseDto<>("success", roomList);
     }
 
-    @GetMapping("/api/chatting/{storeId}/{consumerId}")
-    public BaseResponseDto<List<Message>> getMessageList(@PathVariable("storeId") Long storeId, @PathVariable("consumerId") Long consumerId) {
-        List<Message> messageList = messageService.getList(storeId,consumerId);
+    @GetMapping("/api/chatting/message/{address}")
+    public BaseResponseDto<List<Message>> getMessageList(@PathVariable("address") String address) {
+        List<Message> messageList = messageService.getList(address);
         return new BaseResponseDto<>("success", messageList);
     }
 
