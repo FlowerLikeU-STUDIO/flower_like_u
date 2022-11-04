@@ -31,6 +31,11 @@ public class BookEntity extends BaseEntity {
     @JsonIgnore
     private CustomFlowerEntity customId ;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "feed_id")
+    @JsonIgnore
+    private FeedEntity feedId;
+
     @Column(name = "book_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date bookDate;
