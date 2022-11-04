@@ -1,23 +1,38 @@
-import React, { useState } from "react";
-import Link from "next/link";
 import styles from "./MyContentBtn.module.scss";
+import Button from "@/components/common/Button";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const MyContentBtn = ({ props }) => {
   const pagePath = { consumer: ["reservation", "order", "design"], seller: ["feeds", "reviews", "order-manage"] };
   if (!props) return;
   const path = pagePath[props];
-  console.log(props);
+  const router = useRouter();
+  const currentPath = router.pathname.split("mypage/")[1];
+
   return (
     <div className={styles.btn__div}>
-      <Link href={`/mypage/${path[0]}`}>
-        <button className={styles.path__btn}>{path[0]}</button>
-      </Link>
-      <Link href={`/mypage/${path[1]}`}>
-        <button className={styles.path__btn}>{path[1]}</button>
-      </Link>
-      <Link href={`/mypage/${path[2]}`}>
-        <button className={styles.path__btn}>{path[2]}</button>
-      </Link>
+      <Button
+        size="medium"
+        color={path[0] === currentPath ? "solid_pink_active" : "solid_pink"}
+        link={`/mypage/${path[0]}`}
+      >
+        {path[0]}
+      </Button>
+      <Button
+        size="medium"
+        color={path[1] === currentPath ? "solid_pink_active" : "solid_pink"}
+        link={`/mypage/${path[1]}`}
+      >
+        {path[1]}
+      </Button>
+      <Button
+        size="medium"
+        color={path[2] === currentPath ? "solid_pink_active" : "solid_pink"}
+        link={`/mypage/${path[2]}`}
+      >
+        {path[2]}
+      </Button>
     </div>
   );
 };
