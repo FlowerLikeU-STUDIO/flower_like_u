@@ -2,9 +2,13 @@ package com.ssafy.fly.database.mysql.entity;
 
 import com.ssafy.fly.database.mysql.enumtype.UserType;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString(exclude = {"customFlowers", "reviews", "books"})
-public class ConsumerEntity extends BaseEntity {
+public class ConsumerEntity extends BaseEntity implements UserDetails {
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     UserType type;
@@ -64,4 +68,43 @@ public class ConsumerEntity extends BaseEntity {
     @OneToMany(mappedBy = "consumerId")
     @Builder.Default
     private List<BookEntity> books = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        authorities.add(new SimpleGrantedAuthority("USER"));
+
+        return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return userId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
