@@ -26,8 +26,8 @@ public class ReviewController {
     }
 
     @GetMapping("/{storeId}")
-    public ResponseEntity<Map<String,Object>> getList(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam("size") int size, @PathVariable("storeId") Long id) {
-        Pageable pageable = PageRequest.of(page - 1, size);
+    public ResponseEntity<Map<String,Object>> getList(@RequestParam(value = "page") int page, @RequestParam("size") int size, @PathVariable("storeId") Long id) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("id").descending());
         Map<String,Object> map = new HashMap<>();
         map.put("message","success");
         map.put("response",reviewService.getList(id, pageable));

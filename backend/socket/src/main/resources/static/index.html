@@ -111,7 +111,7 @@
                 })
                 enterChat.addEventListener('click',() => {
                     if (!alreadyLoaded.includes(message.address)) {
-                        axios.get('http://localhost:8080/api/chatting/' + message.storeId + '/' + message.consumerId).then(async r => {
+                        axios.get('http://localhost:8080/api/chatting/message' + message.address).then(async r => {
                           function imgLoad(img,direction) {
                               return new Promise(resolve => {
                                 if (img != "") {
@@ -391,7 +391,7 @@
                         })
                         enterChat.addEventListener('click', () => {
                             if (!alreadyLoaded.includes(res.data.response[i].id)) {
-                                axios.get('http://localhost:8080/api/chatting/' + res.data.response[i].storeId + '/' + res.data.response[i].consumerId).then(async r => {
+                                axios.get('http://localhost:8080/api/chatting/message' + res.data.response[i].id).then(async r => {
                                     function imgLoad(img,direction) {
                                         return new Promise(resolve => {
                                           if (img != "") {
@@ -670,7 +670,7 @@
                     })
                     enterChat.addEventListener('click',() => {
                         if (!alreadyLoaded.includes(res.data.response.id)) {
-                          axios.get('http://localhost:8080/api/chatting/' + res.data.response.storeId + '/' + res.data.response.consumerId).then(async r => {
+                          axios.get('http://localhost:8080/api/chatting/message' + res.data.response.id).then(async r => {
                               function imgLoad(img,direction) {
                                   return new Promise(resolve => {
                                     if (img != "") {

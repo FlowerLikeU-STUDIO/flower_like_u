@@ -7,10 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
     public StoreEntity findFirstByUserId(String inputId);
 
+    public Optional<StoreEntity> findByUserId(String userId);
     public StoreEntity findByNameAndEmailAndWithdrawal(String name, String email, boolean isDeleted);
 
     public StoreEntity findByUserIdAndNameAndEmailAndWithdrawal(String userId, String name, String email, boolean isDeleted);
