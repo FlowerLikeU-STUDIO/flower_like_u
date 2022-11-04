@@ -2,36 +2,36 @@ pipeline {
     agent any
 
     stages {
-        stage('Init') {
-            steps {
-                sh """
-                    docker stop fly_socket
-                    docker rm fly_socket
-                """
-            }
-        }
+        // stage('Init') {
+        //     steps {
+        //         sh """
+        //             docker stop fly_socket
+        //             docker rm fly_socket
+        //         """
+        //     }
+        // }
         stage('Chat Dockerizing') {
             steps {
-                sh "docker rmi martinflower/fly:fly_socket"
+                // sh "docker rmi martinflower/fly:fly_socket"
                 dir('./backend/socket'){
                     sh "pwd"
                     sh "chmod 777 gradlew"
                     sh "./gradlew clean build"
-                    sh "docker build -t martinflower/fly:socket ."
+                    sh "docker build -t martinflower/fly:fly_socket ."
                 }
             }
         }
         stage('Publish') {
             steps {
                 sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
-                sh "docker push martinflower/fly:socket"
+                sh "docker push martinflower/fly:fly_socket"
                 sh "pwd"
             }
         }
         stage('Deploy') {             
             steps {
-                sh "docker pull martinflower/fly:socket"
-                sh "docker run -d --name fly_socket -p 8080:8080 martinflower/fly:socket"
+                sh "docker pull martinflower/fly:fly_socket"
+                sh "docker run -d --name fly_socket -p 8080:8080 martinflower/fly:fly_socket"
             }
         }
     }
