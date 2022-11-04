@@ -43,7 +43,7 @@ public class AuthController {
         UserDetails userDetails = customUserDetailService.loadUserByUsername(loginReq.getUserId());
         List<String> lst = new ArrayList<>();
         lst.add("USER");
-        return jwtTokenProvider.createToken(userDetails.getUsername(), lst);
+        result.put("response",jwtTokenProvider.createToken(userDetails.getUsername(), lst));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
