@@ -8,7 +8,7 @@ const MyContentBtn = ({ props }) => {
   if (!props) return;
   const path = pagePath[props];
   const router = useRouter();
-  const currentPath = router.pathname.split("mypage/")[1];
+  const currentPath = router.pathname.split("/")[2];
 
   return (
     <div className={styles.btn__div}>

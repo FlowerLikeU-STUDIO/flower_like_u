@@ -9,7 +9,7 @@ const HeaderItem = ({ ...props }) => {
 
   return (
     <div className={styles.header__main}>
-      <ProfileImage url={props.profile} size="small_medium" />
+      <ProfileImage url={props.profile} size="medium" />
       <div className={styles.flexdiv}>
         <div>
           {props.type === "store" ? (
