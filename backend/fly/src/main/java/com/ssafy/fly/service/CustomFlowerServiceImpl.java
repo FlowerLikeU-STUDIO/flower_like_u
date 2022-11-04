@@ -71,6 +71,7 @@ public class CustomFlowerServiceImpl implements CustomFlowerService {
                     .consumerId(consumer)
                     .designId(designId)
                     .image(customFlowerRegReq.getImage())
+                    .removal(false)
                     .build();
             customFlowerRepository.save(customFlower);
             result = true;
@@ -101,7 +102,7 @@ public class CustomFlowerServiceImpl implements CustomFlowerService {
 
     @Override
     public Map<String, Object> getCustomFlowerDetails(String flowerId) {
-        CustomFlowerEntity basicInfo = customFlowerRepository.findByDesignId(flowerId);
+        CustomFlowerEntity basicInfo = customFlowerRepository.findByDesignIdAndRemoval(flowerId, false);
         CustomFlowerDocument detailInfo = customFlowerMongoRepository.findById(flowerId).orElse(null);
 
         if(basicInfo == null || detailInfo == null) return null;

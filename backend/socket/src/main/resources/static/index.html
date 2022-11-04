@@ -204,8 +204,8 @@
                       stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
                           {},
                           JSON.stringify({
-                            content : document.querySelector('#id' + String(message.address.id)).value,
-                            address : message.address.id,
+                            content : document.querySelector('#id' + String(message.address)).value,
+                            address : message.address,
                             messageType : 'RECEIVE',
                             storeId : message.storeId,
                             consumerId : message.consumerId,

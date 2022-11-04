@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "custom_flower")
@@ -12,7 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
+@ToString(exclude = {"books"})
 public class CustomFlowerEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,4 +28,12 @@ public class CustomFlowerEntity extends BaseEntity {
     @Column(name = "image", nullable = true)
     @Lob
     private String image;
+
+    @Column(name = "removal", nullable = false)
+    private Boolean removal;
+
+    // custom_flower와 book 테이블의 1:N 관계 매핑
+    @OneToMany(mappedBy = "customId")
+    @Builder.Default
+    private List<BookEntity> books = new ArrayList<>();
 }

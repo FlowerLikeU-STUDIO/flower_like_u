@@ -20,28 +20,29 @@
     left: 0;
     z-index: -1;
     border-radius: 0.3rem;
-    background-color: $gradient;
-    background-image: $gradient;
+    background-color: $lightGradient;
+    background-image: $lightGradient;
     opacity: 0.3;
-    box-shadow: -7px -7px 20px 0px #fff9, -4px -4px 5px 0px #fff9, 7px 7px 20px 0px #0002, 4px 4px 5px 0px #0001;
+    box-shadow: -7px -7px 20px 0px #fff9, -4px -4px 5px 0px #fff9,
+      7px 7px 20px 0px #0002, 4px 4px 5px 0px #0001;
     transition: all 0.5s ease;
   }
 }
 
 .custom_div {
   @include flexDiv(column, center, center);
-  box-shadow: $shadow700;
+  box-shadow: $shadow600;
   border-radius: 0.25rem;
-  background-color: $white;
+  background-color: $white 0.8;
   color: $mainParagraph;
   padding: 2rem 0.6rem 2rem 0.6rem;
   gap: 0.25rem;
   white-space: pre-line;
   text-align: center;
+  height: 20rem;
   &.small {
     @include hoverButton();
     width: 11.25rem;
-    height: 20rem;
     & > p {
       @include font(1.5rem);
     }
@@ -54,7 +55,6 @@
   &.medium {
     @include hoverButton();
     width: 15rem;
-    height: 22rem;
     & > p {
       @include font(1.5rem);
     }
@@ -73,6 +73,7 @@
 
 .card_line {
   width: 60%;
-  border: 0.05rem solid $primary300p;
-  margin-bottom: 0.5rem;
+  border: 0.5px solid $primary300p;
+  margin: 0.5rem 0rem 0.8rem 0rem;
+  opacity: 0.5;
 }
