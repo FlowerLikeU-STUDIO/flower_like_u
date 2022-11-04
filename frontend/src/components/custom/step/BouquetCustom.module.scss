@@ -60,33 +60,35 @@
 
 .circle_1 {
   position: relative;
-  width: 6rem;
-  height: 6rem;
+  width: 7rem;
+  height: 7rem;
   background-color: $white 0.3;
-  border: 1px solid $mainPrimary;
+  // border: 1px solid $mainPrimary;
   border-radius: 100rem;
-  top: 0rem;
-  left: 1rem;
+  top: 2rem;
+  left: 2rem;
 }
 
 .circle_2 {
   position: relative;
-  width: 6rem;
-  height: 6rem;
+  width: 7rem;
+  height: 7rem;
   background-color: $white 0.3;
-  border: 1px solid $mainPrimary;
+  // border: 1px solid $mainPrimary;
   border-radius: 100rem;
   top: -3rem;
-  left: -2rem;
+  left: -1rem;
+  transform: rotate(-10deg);
 }
 
 .circle_3 {
   position: relative;
-  width: 6rem;
-  height: 6rem;
+  width: 7rem;
+  height: 7rem;
   background-color: $white 0.3;
-  border: 1px solid $mainPrimary;
+  // border: 1px solid $mainPrimary;
   border-radius: 100rem;
-  top: -7rem;
-  left: 1rem;
+  top: -8rem;
+  left: 1.5rem;
+  transform: rotate(20deg);
 }

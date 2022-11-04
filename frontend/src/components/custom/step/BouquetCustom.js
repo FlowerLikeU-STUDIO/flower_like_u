@@ -1,15 +1,36 @@
 import styles from "./BouquetCustom.module.scss";
 import Link from "next/link";
-import { selectPackage, selectSize } from "@/store/reducers/custom";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import {
+  selectPackage,
+  selectSize,
+  makeCurrentLocation,
+} from "@/store/reducers/custom";
+import { useDispatch, useSelector } from "react-redux";
 import { SizeContent } from "./StepContents";
-import { useState } from "react";
 import CustomMenu from "./menu/CustomMenu";
+import Image from "next/image";
+import { flower } from "./menu/MenuContents";
+import { useState } from "react";
 
 const BuoquetCustom = () => {
   const dispatch = useDispatch();
   const customOption = useSelector((state) => state.custom);
+  const flowerList = useSelector((state) => state.custom.flowers);
+
+  const [name, setName] = useState([]);
+
+  const flowerNameList = [];
+  const update = () => {
+    for (let i = 0; i < flowerList.length; i++) {
+      if (flowerList[i] !== -1) {
+        flowerNameList.push(`${flower[i].color}_${flower[i].name}`);
+      } else if (flowerList[i] === -1) {
+        flowerNameList.push("white_gypsophila");
+      }
+    }
+    setName(flowerNameList);
+    console.log(name);
+  };
 
   const bouquetHandler = () => {
     dispatch(selectPackage(null));
@@ -17,24 +38,20 @@ const BuoquetCustom = () => {
   };
 
   //드래그 앤 드롭 관련 로직
-  const [enter, setEnter] = useState(0);
-  const [tmp, setTmp] = useState(null);
-
   const onDragEnter = (e) => {
-    console.log("들어왔다!");
-    setEnter(1);
+    e.preventDefault();
+    dispatch(makeCurrentLocation(e.currentTarget.dataset.position));
   };
 
   const onDragOver = (e) => {
-    console.log("지금 위에 있어!");
-    setTmp(e.currentTarget.dataset.position);
-    console.log(tmp);
-    setEnter(1);
+    e.preventDefault();
+    update();
+    dispatch(makeCurrentLocation(e.currentTarget.dataset.position));
   };
 
   const onDragLeave = (e) => {
-    console.log("나갔다!");
-    setEnter(0);
+    e.preventDefault();
+    dispatch(makeCurrentLocation(null));
   };
 
   return (
@@ -54,31 +71,53 @@ const BuoquetCustom = () => {
               onDragOver={onDragOver}
               onDragLeave={onDragLeave}
               data-position={0}
-            ></div>
+            >
+              <Image
+                height={120}
+                width={120}
+                src={`/custom/flower/${name[0]}.png`}
+              />
+            </div>
             <div
               className={styles.circle_2}
               onDragEnter={onDragEnter}
               onDragOver={onDragOver}
               onDragLeave={onDragLeave}
               data-position={1}
-            ></div>
+            >
+              <Image
+                height={120}
+                width={120}
+                src={`/custom/flower/${name[1]}.png`}
+              />
+            </div>
             <div
               className={styles.circle_3}
               onDragEnter={onDragEnter}
               onDragOver={onDragOver}
               onDragLeave={onDragLeave}
               data-position={2}
-            ></div>
+            >
+              <Image
+                height={120}
+                width={120}
+                src={`/custom/flower/${name[2]}.png`}
+              />
+            </div>
           </div>
         </div>
         <div className={styles.custom_info_wrapper}>
-          <p className={styles.custom_info_package}>{SizeContent[customOption.package].kotitle} 커스텀</p>
-          <p className={styles.custom_info_size}>{SizeContent[customOption.package].title[customOption.size]} 사이즈</p>
+          <p className={styles.custom_info_package}>
+            {SizeContent[customOption.package].kotitle} 커스텀
+          </p>
+          <p className={styles.custom_info_size}>
+            {SizeContent[customOption.package].title[customOption.size]} 사이즈
+          </p>
           <Link href="/custom/save">
             <div onClick={() => bouquetHandler()}>완성!</div>
           </Link>
         </div>
-        <CustomMenu enter={enter} />
+        <CustomMenu />
       </main>
     </>
   );

@@ -12,21 +12,15 @@ const SelectSize = () => {
   const packageType = stepState.package;
   const contents = SizeContent[packageType];
 
-  //* 사이즈 값을 변경하는 함수
-  //* store의 flowers에 리스트 생성
-  let list = [
-    {
-      name: null,
-    },
-  ];
+  //* store의 flowers에 리스트를 생성하고, 사이즈 값을 변경하는 함수
+  let list = [-1];
   const sizeHandler = (index) => {
     dispatch(selectSize(index));
-    // console.log(tmp);
     if (index === 0) {
       dispatch(makeFlowerList(list));
     } else {
-      for (var i = 1; i < index * 2 + 1; i++) {
-        list.push({ name: null });
+      for (let i = 1; i < index * 2 + 1; i++) {
+        list.push(-1);
       }
       dispatch(makeFlowerList(list));
     }

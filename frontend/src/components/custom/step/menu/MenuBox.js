@@ -13,8 +13,6 @@ const MenuBox = (props) => {
               img={"/custom/custom_background.png"}
               title={wrapper[index].koname}
               contents={wrapper[index].contents}
-              enter={props.enter}
-              tab={props.tab}
               name={wrapper[index].color}
             />
           ))}
@@ -31,8 +29,6 @@ const MenuBox = (props) => {
               img={"/custom/custom_background.png"}
               title={ribbon[index].koname}
               contents={ribbon[index].contents}
-              enter={props.enter}
-              tab={props.tab}
               name={ribbon[index].color}
             />
           ))}
@@ -49,9 +45,7 @@ const MenuBox = (props) => {
               img={`/custom/flower/${flower[index].color}_${flower[index].name}.png`}
               title={flower[index].koname}
               contents={flower[index].contents}
-              enter={props.enter}
-              tab={props.tab}
-              name={`${flower[index].name}_${flower[index].color}`}
+              index={index}
             />
           ))}
         </div>
