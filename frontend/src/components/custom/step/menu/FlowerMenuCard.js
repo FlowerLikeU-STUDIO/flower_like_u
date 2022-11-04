@@ -1,22 +1,16 @@
 import Image from "next/image";
-import styles from "./MenuCard.module.scss";
+import styles from "./FlowerMenuCard.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  makeFlowerList,
-  makeCurrentFlower,
-  makeCurrentLocation,
-} from "@/store/reducers/custom";
+import { makeFlowerList, makeCurrentFlower, makeCurrentLocation } from "@/store/reducers/custom";
 
 //* img, title, contents
-const MenuCard = (props) => {
+const FlowerMenuCard = (props) => {
   const dispatch = useDispatch();
-  const current_location = useSelector(
-    (state) => state.custom.current_location
-  );
-  let flowerList = useSelector((state) => state.custom.flowers);
+  const current_location = useSelector((state) => state.custom.current_location);
+  const flowerList = useSelector((state) => state.custom.flowers);
 
   // 드래그 앤 드롭
-  //* 드래그를 시작할 때
+  //* 드래그를 시작할 때 current_flower에 드래그로 잡은 꽃의 인덱스를 넣어줍니다.
   const onDragStart = (e) => {
     dispatch(makeCurrentFlower(e.currentTarget.dataset.position));
   };
@@ -39,9 +33,9 @@ const MenuCard = (props) => {
   //* 드래그를 끝내고 드롭했을 때
   const onDragEnd = (e) => {
     if (current_location !== null) {
-      //* 새로운 꽃 리스트로 업데이트한다.
+      //* 새로운 꽃 리스트로 업데이트합니다.
       upDateFlowerList();
-      //* 최근에 선택한 꽃과 드롭한 위치를 초기화한다.
+      //* current_flower, current_location을 초기화합니다.
       dispatch(makeCurrentLocation(null));
       dispatch(makeCurrentFlower(null));
     } else if (current_location === null) {
@@ -70,4 +64,4 @@ const MenuCard = (props) => {
   );
 };
 
-export default MenuCard;
+export default FlowerMenuCard;
