@@ -5,16 +5,14 @@ pipeline {
         // stage('Init') {
         //     steps {
         //         sh """
-        //             docker stop fly_be
-        //             docker rm fly_be
-        //             docker stop fly_fe
-        //             docker rm fly_fe
+        //             docker stop fly_socket
+        //             docker rm fly_socket
         //         """
         //     }
         // }
         stage('Chat Dockerizing') {
             steps {
-                // sh "docker rmi martinflower/fly:fly_be"
+                // sh "docker rmi martinflower/fly:fly_socket"
                 dir('./backend/socket'){
                     sh "pwd"
                     sh "chmod 777 gradlew"
@@ -33,7 +31,7 @@ pipeline {
         stage('Deploy') {             
             steps {
                 sh "docker pull martinflower/fly:socket"
-                sh "docker run -d --name fly_be -p 8080:8080 martinflower/fly:socket"
+                sh "docker run -d --name fly_socket -p 8080:8080 martinflower/fly:socket"
             }
         }
     }
