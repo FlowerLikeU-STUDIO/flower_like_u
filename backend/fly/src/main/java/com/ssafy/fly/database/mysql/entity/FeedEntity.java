@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = {"books"})
+@ToString(exclude = {"books", "images"})
 public class FeedEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
@@ -30,10 +30,6 @@ public class FeedEntity extends BaseEntity {
     @Column(name = "content", length = 300, nullable = false)
     private String content;
 
-    @Column(name = "image", nullable = true)
-    @Lob
-    private String image;
-
     @Column(name = "removal", nullable = false)
     private boolean removal;
 
@@ -41,4 +37,9 @@ public class FeedEntity extends BaseEntity {
     @OneToMany(mappedBy = "feedId")
     @Builder.Default
     private List<BookEntity> books = new ArrayList<>();
+
+    // feed와 feed_id 테이블의 1:N 관계 매핑
+    @OneToMany(mappedBy = "feedId")
+    @Builder.Default
+    private List<FeedImageEntity> images = new ArrayList<>();
 }

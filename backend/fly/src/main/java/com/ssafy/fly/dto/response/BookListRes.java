@@ -29,6 +29,7 @@ public class BookListRes {
         private String consumerName;
     }
 
+    // 상세 조회용
     @Data
     @SuperBuilder
     public static class BookElementForAll extends BookListRes {
