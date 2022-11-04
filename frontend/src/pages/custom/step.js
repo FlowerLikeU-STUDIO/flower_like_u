@@ -6,16 +6,25 @@ import BuoquetCustom from "@/components/custom/step/BouquetCustom";
 import CustomBackButton from "@/components/custom/common/CustomBackButton";
 import { useSelector } from "react-redux";
 import findStep from "@/lib/utils/findStep";
+import classNames from "classnames/bind";
 
 const Step = () => {
+  const cx = classNames.bind(styles);
   const stepState = useSelector((state) => state.custom);
 
   //* 현재 단계 가져오기
   const step = findStep();
+  console.log(step);
 
   return (
     <>
-      <main className={styles.step_background}>
+      <main
+        className={
+          step === "custom"
+            ? cx("step_background", "white100")
+            : styles.step_background
+        }
+      >
         <CustomHeader stepState={stepState} />
         <section className={styles.step_content}>
           {step === "package" ? (

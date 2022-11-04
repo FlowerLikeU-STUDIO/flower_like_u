@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = {"reviews", "books"})
+@ToString(exclude = {"reviews", "books", "feeds"})
 public class StoreEntity extends BaseEntity {
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -69,4 +69,8 @@ public class StoreEntity extends BaseEntity {
     @OneToMany(mappedBy = "storeId")
     @Builder.Default
     private List<BookEntity> books = new ArrayList<>();
+
+    @OneToMany(mappedBy = "storeId")
+    @Builder.Default
+    private List<FeedEntity> feeds = new ArrayList<>();
 }
