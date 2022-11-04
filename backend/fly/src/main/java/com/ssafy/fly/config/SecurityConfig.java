@@ -22,10 +22,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .formLogin().disable();
         http.authorizeRequests()
-                //.antMatchers("/auth/**").permitAll()
-                //.antMatchers("/account/**").permitAll()
-                //.antMatchers("/account/**").hasAnyRole("USER")
-                //.anyRequest().authenticated()
-                .anyRequest().permitAll();
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/account/**").permitAll()
+                .antMatchers("/account/**").hasAnyRole("USER")
+                .anyRequest().authenticated();
+                //.anyRequest().permitAll();
     }
 }

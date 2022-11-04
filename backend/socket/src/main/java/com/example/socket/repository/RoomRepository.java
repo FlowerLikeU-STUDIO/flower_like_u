@@ -10,7 +10,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface RoomRepository extends MongoRepository<Room, ObjectId> {
+public interface RoomRepository extends MongoRepository<Room, String> {
     List<Room> findAllByStoreId(Long storeId);
     List<Room> findAllByConsumerId(Long consumerId);
 

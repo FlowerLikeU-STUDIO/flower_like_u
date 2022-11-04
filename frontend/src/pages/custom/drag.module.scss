@@ -1,0 +1,51 @@
+.aquamarine {
+  background-color: aquamarine;
+  border-radius: 100rem;
+  width: 5rem;
+  height: 5rem;
+  cursor: grab;
+}
+
+.rebeccapurple {
+  background-color: rebeccapurple;
+  border-radius: 100rem;
+  width: 5rem;
+  height: 5rem;
+  cursor: grab;
+}
+
+.palevioletred {
+  background-color: palevioletred;
+  border-radius: 100rem;
+  width: 5rem;
+  height: 5rem;
+  cursor: grab;
+}
+
+.flex {
+  @include flexDiv;
+}
+
+.background {
+  @include defaultLayout;
+  gap: 10rem;
+}
+
+.drop {
+  background-color: cornflowerblue;
+  width: 20rem;
+  height: 20rem;
+  cursor: pointer;
+  &.onthebox {
+    background-color: yellow;
+  }
+  &.aquamarine {
+    background-color: aquamarine;
+  }
+  &.rebeccapurple {
+    background-color: rebeccapurple;
+  }
+  &.palevioletred {
+    background-color: palevioletred;
+  }
+}

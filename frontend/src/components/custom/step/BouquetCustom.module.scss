@@ -24,9 +24,10 @@
 }
 
 .custom {
+  @include flexDiv;
   width: 30rem;
   height: 30rem;
-  background-image: url("/custom/bouquet/1.png");
+  background-image: url("/custom/wrapper.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -53,41 +54,42 @@
   width: 80%;
 }
 
+.circle_wrapper {
+  position: relative;
+}
+
 .circle_1 {
   position: relative;
-  width: 6rem;
-  height: 6rem;
-  background-color: $ivory500;
-  border: 1px solid $mainPrimary;
+  width: 7rem;
+  height: 7rem;
+  background-color: $white 0.3;
+  // border: 1px solid $mainPrimary;
   border-radius: 100rem;
-  top: 10rem;
-  left: 12.5rem;
-  opacity: 0.8;
-  z-index: 3;
+  top: 2rem;
+  left: 2rem;
+  transform: rotate(30deg);
 }
 
 .circle_2 {
   position: relative;
-  width: 6rem;
-  height: 6rem;
-  background-color: $ivory500;
-  border: 1px solid $mainPrimary;
+  width: 7rem;
+  height: 7rem;
+  background-color: $white 0.3;
+  // border: 1px solid $mainPrimary;
   border-radius: 100rem;
-  top: 10rem;
-  left: 12.5rem;
-  opacity: 0.8;
-  z-index: 2;
+  top: -3rem;
+  left: -1rem;
+  transform: rotate(-10deg);
 }
 
 .circle_3 {
   position: relative;
-  width: 6rem;
-  height: 6rem;
-  background-color: $ivory500;
-  border: 1px solid $mainPrimary;
+  width: 7rem;
+  height: 7rem;
+  background-color: $white 0.3;
+  // border: 1px solid $mainPrimary;
   border-radius: 100rem;
-  top: 10rem;
-  left: 12.5rem;
-  opacity: 0.8;
-  z-index: 1;
+  top: -8rem;
+  left: 1.5rem;
+  transform: rotate(20deg);
 }

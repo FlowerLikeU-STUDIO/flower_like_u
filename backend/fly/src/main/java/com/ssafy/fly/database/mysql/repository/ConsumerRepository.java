@@ -8,10 +8,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Repository
 public interface ConsumerRepository extends JpaRepository<ConsumerEntity, Long> {
     public ConsumerEntity findFirstByUserId(String inputId);
+
+    public Optional<ConsumerEntity> findByUserId(String userId);
 
     public ConsumerEntity findByNameAndEmailAndWithdrawal(String name, String email, boolean isDeleted);
 
