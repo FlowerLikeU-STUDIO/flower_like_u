@@ -14,7 +14,6 @@ const Step = () => {
 
   //* 현재 단계 가져오기
   const step = findStep();
-  console.log(step);
 
   return (
     <>
