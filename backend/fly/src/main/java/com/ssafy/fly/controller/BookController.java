@@ -2,6 +2,7 @@ package com.ssafy.fly.controller;
 
 import com.ssafy.fly.common.util.ResultMessageSet;
 import com.ssafy.fly.dto.request.BookCustomFlowerReq;
+import com.ssafy.fly.dto.request.BookFeedFlowerReq;
 import com.ssafy.fly.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,6 +46,22 @@ public class BookController {
     }
 
     // 2. 꽃다발 예약(피드)
+    @PostMapping("/feed")
+    public ResponseEntity<Map<String, Object>> bookFeedFlower(@RequestBody BookFeedFlowerReq bookFeedFlower) {
+        System.out.println("[POST] - /book/feed " + bookFeedFlower);
+
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = bookService.registFeedFlowerBookInfo(bookFeedFlower);
+
+        if((boolean) result.get("result")) {
+            response.put("result", resultMessageSet.SUCCESS);
+        } else {
+            response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 
     // 3. 예약 상태 변경
     @PutMapping("/{bookId}")

@@ -3,23 +3,17 @@ package com.ssafy.fly.service;
 import com.ssafy.fly.common.util.DateConvertor;
 import com.ssafy.fly.database.mongodb.document.CustomFlowerDocument;
 import com.ssafy.fly.database.mongodb.repository.CustomFlowerMongoRepository;
-import com.ssafy.fly.database.mysql.entity.BookEntity;
-import com.ssafy.fly.database.mysql.entity.ConsumerEntity;
-import com.ssafy.fly.database.mysql.entity.CustomFlowerEntity;
-import com.ssafy.fly.database.mysql.entity.StoreEntity;
+import com.ssafy.fly.database.mysql.entity.*;
 import com.ssafy.fly.database.mysql.enumtype.BookState;
 import com.ssafy.fly.database.mysql.enumtype.BookType;
-import com.ssafy.fly.database.mysql.repository.BookRepository;
-import com.ssafy.fly.database.mysql.repository.ConsumerRepository;
-import com.ssafy.fly.database.mysql.repository.CustomFlowerRepository;
-import com.ssafy.fly.database.mysql.repository.StoreRepository;
+import com.ssafy.fly.database.mysql.repository.*;
 import com.ssafy.fly.dto.request.BookCustomFlowerReq;
+import com.ssafy.fly.dto.request.BookFeedFlowerReq;
 import com.ssafy.fly.dto.response.BookListRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -34,6 +28,7 @@ public class BookServiceImpl implements BookService {
     private final StoreRepository storeRepository;
     private final CustomFlowerRepository customFlowerRepository;
     private final CustomFlowerMongoRepository customFlowerMongoRepository;
+    private final FeedRepository feedRepository;
     private final DateConvertor dateConvertor;
 
     @Autowired
@@ -42,12 +37,14 @@ public class BookServiceImpl implements BookService {
                            StoreRepository storeRepository,
                            CustomFlowerRepository customFlowerRepository,
                            CustomFlowerMongoRepository customFlowerMongoRepository,
+                           FeedRepository feedRepository,
                            DateConvertor dateConvertor) {
         this.bookRepository = bookRepository;
         this.consumerRepository = consumerRepository;
         this.storeRepository = storeRepository;
         this.customFlowerRepository = customFlowerRepository;
         this.customFlowerMongoRepository = customFlowerMongoRepository;
+        this.feedRepository = feedRepository;
         this.dateConvertor = dateConvertor;
     }
 
@@ -116,6 +113,59 @@ public class BookServiceImpl implements BookService {
     }
 
     // 2. 꽃다발 예약(피드)
+    @Override
+    public Map<String, Object> registFeedFlowerBookInfo(BookFeedFlowerReq bookFeedFlowerReq) {
+        Map<String, Object> result = new HashMap<>();
+        String message = "";
+
+        String consumerId = bookFeedFlowerReq.getConsumerId();
+        Long storeId = bookFeedFlowerReq.getStoreId();
+        Long feedId = bookFeedFlowerReq.getFeedId();
+        Date dueDate = bookFeedFlowerReq.getDueDate();
+
+        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(consumerId, false);
+        if (consumer == null) {
+            message = "존재하지 않는 구매자 계정입니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        StoreEntity store = storeRepository.findByIdAndWithdrawal(storeId, false);
+        if (store == null) {
+            message = "존재하지 않는 판매자 계정입니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        FeedEntity feed = feedRepository.findByIdAndRemoval(feedId, false);
+        if (feed == null) {
+            message = "존재하지 않는 피드 아이디입니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        BookEntity bookInfo = BookEntity.builder()
+                .consumerId(consumer)
+                .storeId(store)
+                .feedId(feed)
+                .bookDate(new Date())
+                .dueDate(dueDate)
+                .request(bookFeedFlowerReq.getRequest() != null ? bookFeedFlowerReq.getRequest() : "")
+                .state(BookState.WAITED)
+                .type(BookType.FEED)
+                .build();
+
+        bookRepository.save(bookInfo);
+
+        result.put("result", true);
+        return result;
+    }
 
     // 3. 예약 상태 변경
     @Override
@@ -188,11 +238,17 @@ public class BookServiceImpl implements BookService {
             if (searchList != null && searchList.getSize() > 0) {
                 List<BookListRes.BookElementForConsumer> resultList = new ArrayList<>();
                 for (BookEntity curEntity : searchList) {
+                    String image = "";
+                    if(BookType.CUSTOM.equals(curEntity.getType())) {
+                        image = curEntity.getCustomId().getImage();
+                    } else {
+                        image = curEntity.getFeedId().getImages().get(0).getImage();
+                    }
                     BookListRes.BookElementForConsumer bookInfo = BookListRes.BookElementForConsumer.builder()
                             .bookId(curEntity.getId())
                             .type(curEntity.getType().toString().toLowerCase())
                             .storeName(curEntity.getStoreId().getStore())
-                            .image(curEntity.getCustomId().getImage())
+                            .image(image)
                             .request(curEntity.getRequest())
                             .bookDate(curEntity.getBookDate())
                             .dueDate(curEntity.getDueDate())
@@ -222,11 +278,18 @@ public class BookServiceImpl implements BookService {
             if (searchList != null && searchList.getSize() > 0) {
                 List<BookListRes.BookElementForStore> resultList = new ArrayList<>();
                 for (BookEntity curEntity : searchList) {
+                    String image = "";
+                    if(BookType.CUSTOM.equals(curEntity.getType())) {
+                        image = curEntity.getCustomId().getImage();
+                    } else {
+                        image = curEntity.getFeedId().getImages().get(0).getImage();
+                    }
+
                     BookListRes.BookElementForStore bookInfo = BookListRes.BookElementForStore.builder()
                             .bookId(curEntity.getId())
                             .type(curEntity.getType().toString().toLowerCase())
                             .consumerName(curEntity.getConsumerId().getName())
-                            .image(curEntity.getCustomId().getImage())
+                            .image(image)
                             .request(curEntity.getRequest())
                             .bookDate(curEntity.getBookDate())
                             .dueDate(curEntity.getDueDate())
@@ -281,8 +344,18 @@ public class BookServiceImpl implements BookService {
                 bookInfo.put("basics", basicInfo);
                 bookInfo.put("details", detailInfo);
             } else if (BookType.FEED.equals(book.getType())) {
-                message = "미구현";
-                System.out.println("미구현");
+                BookListRes.BookElementForAll basicInfo = BookListRes.BookElementForAll.builder()
+                        .bookId(book.getId())
+                        .type(book.getType().toString().toLowerCase())
+                        .image(book.getFeedId().getImages().size() > 0 ? book.getFeedId().getImages().get(0).getImage() : null)
+                        .request(book.getRequest())
+                        .bookDate(book.getBookDate())
+                        .dueDate(book.getDueDate())
+                        .state(book.getState().toString().toLowerCase())
+                        .consumerName(book.getConsumerId().getName())
+                        .storeName(book.getStoreId().getStore())
+                        .build();
+                bookInfo.put("basics", basicInfo);
             }
 
             result.put("bookInfo", bookInfo);

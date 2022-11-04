@@ -30,10 +30,12 @@ public class CustomFlowerEntity extends BaseEntity {
     private String image;
 
     @Column(name = "removal", nullable = false)
+    @JsonIgnore
     private Boolean removal;
 
     // custom_flower와 book 테이블의 1:N 관계 매핑
     @OneToMany(mappedBy = "customId")
     @Builder.Default
+    @JsonIgnore
     private List<BookEntity> books = new ArrayList<>();
 }
