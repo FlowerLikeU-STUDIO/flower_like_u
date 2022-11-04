@@ -9,7 +9,7 @@ import java.util.List;
 public interface MessageService {
     public String create(MessagePostReqDto messagePostReqDto);
 
-    public List<Message> getList(Long storeId, Long consumerId);
+    public List<Message> getList(String address);
 
     public String getImgSrc(String id);
 }
