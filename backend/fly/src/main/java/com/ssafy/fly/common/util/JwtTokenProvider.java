@@ -17,10 +17,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
-    private String secretKey = "myprojectsecret";
+    private String secretKey = "asdfasdfalsdjfaskdflasdkfasjfkjsaclsmdiewjtjasdlkfasdlvasdmlvmasdmvasdlm";
 
-    // 토큰 유효시간 30분
-    private long tokenValidTime = 30 * 60 * 1000L;
+    // 토큰 유효시간 5일
+    private long tokenValidTime = 5 * 24 * 60 * 60 * 1000L;
 
     private final UserDetailsService userDetailsService;
 
