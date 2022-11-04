@@ -24,11 +24,14 @@ public interface ConsumerRepository extends JpaRepository<ConsumerEntity, Long> 
     @Modifying
     @Transactional
     @Query("UPDATE ConsumerEntity as c " +
-            "SET c.nickname = :nickname, c.address = :address " +
+            "SET c.nickname = :nickname, c.zipCode = :zipCode, c.street = :street, c.detailAddr = :details, c.sigunguCode = :sigunguCode " +
             "WHERE c.userId = :userId")
     public int updateConsumerInfo(@Param("userId") String userId,
                                   @Param("nickname") String nickname,
-                                  @Param("address") String address);
+                                  @Param("zipCode") String zipCode,
+                                  @Param("street") String street,
+                                  @Param("details") String details,
+                                  @Param("sigunguCode") String sigunguCode);
 
     @Modifying
     @Transactional

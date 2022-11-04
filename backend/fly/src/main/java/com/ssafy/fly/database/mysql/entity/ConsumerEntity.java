@@ -30,7 +30,7 @@ public class ConsumerEntity extends BaseEntity {
     @Column(name = "name", length = 30, nullable = false)
     private String name;
 
-    @Column(name = "nickname", length = 30, nullable = false)
+    @Column(name = "nickname", length = 10, nullable = false)
     private String nickname;
 
     @Column(name = "email", length = 50, nullable = false)
@@ -40,8 +40,17 @@ public class ConsumerEntity extends BaseEntity {
     @Lob
     private String profile;
 
-    @Column(name = "address", length = 200, nullable = true)
-    private String address;
+    @Column(name = "zipcode", length = 5, nullable = true)
+    private String zipCode;
+
+    @Column(name = "street", length = 50, nullable = true)
+    private String street;
+
+    @Column(name = "detail_addr", length = 50, nullable = true)
+    private String detailAddr;
+
+    @Column(name = "sigungu_code", length = 5, nullable = true)
+    private String sigunguCode;
 
     @Column(name = "reg_date", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)

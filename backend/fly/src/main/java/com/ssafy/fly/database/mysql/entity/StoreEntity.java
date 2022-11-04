@@ -43,13 +43,21 @@ public class StoreEntity extends BaseEntity {
     @Lob
     private String profile;
 
-    @Column(name = "address", length = 200, nullable = false)
-    private String address;
+    @Column(name = "zipcode", length = 5, nullable = false)
+    private String zipCode;
 
-    // 휴일은 나중에 작업
-//    @Column(name = "holidays", nullable = true)
-//    private String holidays;
-//
+    @Column(name = "street", length = 50, nullable = false)
+    private String street;
+
+    @Column(name = "detail_addr", length = 50, nullable = false)
+    private String detailAddr;
+
+    @Column(name = "sigungu_code", length = 5, nullable = false)
+    private String sigunguCode;
+
+    @Column(name = "holidays", nullable = true)
+    private String holidays;
+
     @Column(name = "bio", length = 300, nullable = true)
     private String bio;
 
