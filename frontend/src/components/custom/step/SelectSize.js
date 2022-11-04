@@ -12,15 +12,16 @@ const SelectSize = () => {
   const packageType = stepState.package;
   const contents = SizeContent[packageType];
 
-  //* store의 flowers에 리스트를 생성하고, 사이즈 값을 변경하는 함수
-  let list = [-1];
+  //* store의 사이즈 값을 변경하는 함수
+  //* store의 flowers에 꽃 개수 길이만큼의 리스트를 생성해서 넣어줍니다.
+  let list = [0];
   const sizeHandler = (index) => {
     dispatch(selectSize(index));
     if (index === 0) {
       dispatch(makeFlowerList(list));
     } else {
       for (let i = 1; i < index * 2 + 1; i++) {
-        list.push(-1);
+        list.push(0);
       }
       dispatch(makeFlowerList(list));
     }
