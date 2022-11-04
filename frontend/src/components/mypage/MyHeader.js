@@ -1,5 +1,4 @@
 import MyContentBtn from "../common/MyContentBtn";
-import styles from "./MyHeader.module.scss";
 import useUser from "@/hooks/useUser";
 import React from "react";
 import HeaderItem from "../common/HeaderItem";
