@@ -6,17 +6,9 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017
-#      authentication-database: admin
-#      username: ssafy
-#      password: qwerty
-      database: testdb
-#      port: 27017
-#      host: localhost
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    properties:
-#      hibernate:
-#        show_sql: true
-#        format_sql : false
+      host: k7b209.q.ssafy.io
+      port: 27017
+      authentication-database: admin
+      username: ssafy
+      password: ks7sba2f0y9
+      database: fly
