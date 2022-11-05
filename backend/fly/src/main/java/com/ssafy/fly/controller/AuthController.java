@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -17,11 +18,12 @@ import java.util.*;
 public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailService customUserDetailService;
-
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    public AuthController(JwtTokenProvider jwtTokenProvider, CustomUserDetailService customUserDetailService) {
+    public AuthController(JwtTokenProvider jwtTokenProvider, CustomUserDetailService customUserDetailService, PasswordEncoder passwordEncoder) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.customUserDetailService = customUserDetailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -41,9 +43,13 @@ public class AuthController {
 
         Map<String, Object> result = new HashMap<>();
         UserDetails userDetails = customUserDetailService.loadUserByUsername(loginReq.getUserId());
-        List<String> lst = new ArrayList<>();
-        lst.add("USER");
-        result.put("response",jwtTokenProvider.createToken(userDetails.getUsername(), lst));
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        if (passwordEncoder.matches(loginReq.getPassword(),userDetails.getPassword())) {
+            List<String> lst = new ArrayList<>();
+            lst.add("USER");
+            result.put("response", jwtTokenProvider.createToken(userDetails.getUsername(), lst));
+            return new ResponseEntity<>(result, HttpStatus.OK);
+            // 요청 header "Authorization : [토큰]"
+        }
+        throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
     }
 }
