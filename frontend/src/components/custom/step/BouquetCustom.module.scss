@@ -23,14 +23,22 @@
   box-shadow: $shadow600;
 }
 
-.custom {
+.custom_place {
   @include flexDiv;
   width: 30rem;
   height: 30rem;
-  background-image: url("/custom/wrapper.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  &.bouquet {
+    background-image: url("/custom/bouquet.png");
+  }
+  &.vase {
+    background-image: url("/custom/vase.png");
+  }
+  &.ballon {
+    background-image: url("/custom/ballon.png");
+  }
 }
 
 .custom_info_wrapper {

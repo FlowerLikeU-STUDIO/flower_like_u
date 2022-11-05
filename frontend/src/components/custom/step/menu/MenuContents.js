@@ -18,36 +18,42 @@ export const wrapper = [
     title: "종이 포장지",
     contents: "어디에나 잘 어울리는 \n 크래프트 소재 종이 포장지",
     color: brown,
+    hex: "#dfd4b9",
   },
   {
     id: 2,
     title: "흰색 포장지",
     contents: "차분하고 깔끔한 느낌의 \n 흰색 포장지",
     color: white,
+    hex: "#fffef4",
   },
   {
     id: 3,
     title: "미색 포장지",
     contents: "부드러운 느낌을 주는\n 미색(아이보리색) 포장지",
     color: ivory,
+    hex: "#ece6cc",
   },
   {
     id: 4,
     title: "분홍색 포장지",
     contents: "따뜻하고 사랑스러운 느낌의 \n 분홍색 포장지",
     color: pink,
+    hex: "#f9eeee",
   },
   {
     id: 5,
     title: "파란색 포장지",
     contents: "누구에게나 선물하기 좋은 \n 파란색 포장지",
     color: blue,
+    hex: "#e1e9f2",
   },
   {
     id: 6,
     title: "회색 포장지",
     contents: "꽃을 더 돋보이게 해주는 \n 회색 포장지",
     color: gray,
+    hex: "#c0c0c0",
   },
 ];
 

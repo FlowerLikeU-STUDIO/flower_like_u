@@ -14,7 +14,7 @@ const MenuBox = (props) => {
           {tab.map((color, index) => (
             <PackageMenuCard
               key={tab[index].color}
-              img={"/custom/custom_background.png"}
+              hex={tab[index].hex}
               title={tab[index].title}
               contents={tab[index].contents}
               name={tab[index].color}

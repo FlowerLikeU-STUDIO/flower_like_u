@@ -1,15 +1,26 @@
 import styles from "./BouquetCustom.module.scss";
 import Link from "next/link";
-import { selectPackage, selectSize, makeCurrentLocation } from "@/store/reducers/custom";
+import {
+  selectPackage,
+  selectSize,
+  makeCurrentLocation,
+} from "@/store/reducers/custom";
 import { useDispatch, useSelector } from "react-redux";
 import { SizeContent } from "./StepContents";
 import CustomMenu from "./menu/CustomMenu";
 import Image from "next/image";
 import { flower } from "./menu/MenuContents";
+import classNames from "classnames/bind";
+import { packageContent } from "./StepContents";
 
 const BuoquetCustom = () => {
+  const cx = classNames.bind(styles);
   const dispatch = useDispatch();
   const customOption = useSelector((state) => state.custom);
+  //* 현재 유저가 선택한 패키지 종류
+  const packageKind = packageContent.engtitle[customOption.package];
+  //* 현재 유저가 선택한 포장지 색 종류
+  const packageColor = customOption.wrapper_color;
 
   //* 현재 유저가 커스텀한 꽃 정보가 담겨있습니다.
   //* console.log(`${flower[flowerList[0]].color}_${flower[flowerList[0]].name}`)
@@ -52,7 +63,12 @@ const BuoquetCustom = () => {
           <div className={styles.recommend_menu}>추천</div>
           <div className={styles.recommend_menu}>추천</div>
         </aside>
-        <div className={styles.custom}>
+        <div
+          className={cx("custom_place", packageKind)}
+          style={{
+            backgroundColor: packageColor,
+          }}
+        >
           <div className={styles.circle_wrapper}>
             <div
               className={styles.circle_1}
@@ -64,7 +80,9 @@ const BuoquetCustom = () => {
               <Image
                 height={120}
                 width={120}
-                src={`/custom/flower/${flower[flowerList[0]].color}_${flower[flowerList[0]].name}.png`}
+                src={`/custom/flower/${flower[flowerList[0]].color}_${
+                  flower[flowerList[0]].name
+                }.png`}
               />
             </div>
             <div
@@ -77,7 +95,9 @@ const BuoquetCustom = () => {
               <Image
                 height={120}
                 width={120}
-                src={`/custom/flower/${flower[flowerList[1]].color}_${flower[flowerList[1]].name}.png`}
+                src={`/custom/flower/${flower[flowerList[1]].color}_${
+                  flower[flowerList[1]].name
+                }.png`}
               />
             </div>
             <div
@@ -90,14 +110,20 @@ const BuoquetCustom = () => {
               <Image
                 height={120}
                 width={120}
-                src={`/custom/flower/${flower[flowerList[2]].color}_${flower[flowerList[2]].name}.png`}
+                src={`/custom/flower/${flower[flowerList[2]].color}_${
+                  flower[flowerList[2]].name
+                }.png`}
               />
             </div>
           </div>
         </div>
         <div className={styles.custom_info_wrapper}>
-          <p className={styles.custom_info_package}>{SizeContent[customOption.package].kotitle} 커스텀</p>
-          <p className={styles.custom_info_size}>{SizeContent[customOption.package].title[customOption.size]} 사이즈</p>
+          <p className={styles.custom_info_package}>
+            {SizeContent[customOption.package].kotitle} 커스텀
+          </p>
+          <p className={styles.custom_info_size}>
+            {SizeContent[customOption.package].title[customOption.size]} 사이즈
+          </p>
           <Link href="/custom/save">
             <div onClick={() => bouquetHandler()}>완성!</div>
           </Link>
