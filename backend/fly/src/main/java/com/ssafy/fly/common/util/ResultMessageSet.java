@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ResultMessageSet {
-    public static final String SUCCESS = "success";
-    public static final String FAIL = "fail";
-    public static final String DUPLICATED = "duplicated";
-    public static final String NONDUPLICATED = "nonDuplicated";
+    public final String SUCCESS = "success";
+    public final String FAIL = "fail";
+    public final String DUPLICATED = "duplicated";
+    public final String NONDUPLICATED = "nonDuplicated";
 }

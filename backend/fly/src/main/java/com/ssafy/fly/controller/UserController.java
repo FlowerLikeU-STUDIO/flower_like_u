@@ -2,6 +2,7 @@ package com.ssafy.fly.controller;
 
 import com.ssafy.fly.common.util.ResultMessageSet;
 import com.ssafy.fly.dto.request.*;
+import com.ssafy.fly.dto.response.UserInfoRes;
 import com.ssafy.fly.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,11 +49,13 @@ public class UserController {
         System.out.println("[POST] - /user/register " + registerReq);
 
         Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = userService.saveMember(registerReq);
 
-        if (userService.saveMember(registerReq)) {
+        if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
         } else {
             response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
         }
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -64,13 +67,14 @@ public class UserController {
         System.out.println("[POST] - /user/findId " + findIdReq);
 
         Map<String, Object> response = new HashMap<>();
-        String userId = userService.findID(findIdReq);
+        Map<String, Object> result = userService.findID(findIdReq);
 
-        if (userId != null) {
+        if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
-            response.put("userId", userId);
+            response.put("userId", result.get("userId"));
         } else {
             response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -82,11 +86,13 @@ public class UserController {
         System.out.println("[POST] - /user/findPassword " + findPwdReq);
 
         Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = userService.issueTemporaryPassword(findPwdReq);
 
-        if (userService.issueTemporaryPassword(findPwdReq)) {
+        if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
         } else {
             response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
         }
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -109,16 +115,18 @@ public class UserController {
     }
 
     // 6. 회원 정보 수정
-    @PutMapping("/")
+    @PutMapping()
     public ResponseEntity<Map<String, Object>> changeInfo(@RequestBody ChangeInfoReq changeInfoReq) {
         System.out.println("[PUT] - /user " + changeInfoReq);
 
         Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = userService.updateUserInfo(changeInfoReq);
 
-        if (userService.updateUserInfo(changeInfoReq)) {
+        if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
         } else {
             response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
         }
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -130,11 +138,13 @@ public class UserController {
         System.out.println("[PUT] - /user/introduction " + changeIntroductionReq);
 
         Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = userService.updateIntroduction(changeIntroductionReq);
 
-        if (userService.updateIntroduction(changeIntroductionReq)) {
+        if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
         } else {
             response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
         }
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -146,11 +156,13 @@ public class UserController {
         System.out.println("[PUT] - /user/changePassword " + changePwdReq);
 
         Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = userService.updatePassword(changePwdReq);
 
-        if (userService.updatePassword(changePwdReq)) {
+        if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
         } else {
             response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
         }
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -162,11 +174,13 @@ public class UserController {
         System.out.println("[PUT] - /user/changeImg " + changeProfileReq);
 
         Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = userService.updateProfileImage(changeProfileReq);
 
-        if (userService.updateProfileImage(changeProfileReq)) {
+        if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
         } else {
-            response.put("message", resultMessageSet.FAIL);
+            response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
         }
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -178,11 +192,13 @@ public class UserController {
         System.out.println("[DELETE] - /user " + withdrawReq);
 
         Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = userService.deleteUser(withdrawReq);
 
-        if (userService.deleteUser(withdrawReq)) {
+        if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
         } else {
             response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -194,12 +210,11 @@ public class UserController {
         System.out.println("[GET] - /member/{userId}");
 
         Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = userService.findUserInfo(userId);
 
-        Object userInfo = userService.findUserInfo(userId);
-
-        if (userInfo != null) {
+        if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
-            response.put("userInfo", userInfo);
+            response.put("userInfo", result.get("userInfo"));
         } else {
             response.put("result", resultMessageSet.FAIL);
         }

@@ -1,82 +1,47 @@
 import styles from "./BouquetCustom.module.scss";
 import Link from "next/link";
-import { selectPackage, selectSize } from "@/store/reducers/custom";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { selectPackage, selectSize, makeCurrentLocation } from "@/store/reducers/custom";
+import { useDispatch, useSelector } from "react-redux";
 import { SizeContent } from "./StepContents";
 import CustomMenu from "./menu/CustomMenu";
+import Image from "next/image";
+import { flower } from "./menu/MenuContents";
 
 const BuoquetCustom = () => {
   const dispatch = useDispatch();
   const customOption = useSelector((state) => state.custom);
+
+  //* 현재 유저가 커스텀한 꽃 정보가 담겨있습니다.
+  //* console.log(`${flower[flowerList[0]].color}_${flower[flowerList[0]].name}`)
+  //* 위 방식으로 인덱스별 꽃 정보에 접근할 수 있습니다.
+  const flowerList = useSelector((state) => state.custom.flowers);
 
   const bouquetHandler = () => {
     dispatch(selectPackage(null));
     dispatch(selectSize(null));
   };
 
-  (function dragndrop() {
-    let xpos = "";
-    let ypos = "";
-    let whichArt = "";
+  //드래그 앤 드롭
+  //* 꽃다발의 꽃 위치 영역 안에 꽃이 들어올 때 실행하는 함수
+  //* current_location에 꽃 위치를 넣어줍니다.
+  const onDragEnter = (e) => {
+    e.preventDefault();
+    dispatch(makeCurrentLocation(e.currentTarget.dataset.position));
+  };
 
-    function resetZ() {
-      const imgEl = document.querySelectorAll("img");
-      for (let i = imgEl.length - 1; i >= 0; i--) {
-        imgEl[i].style.zIndex = 5;
-      }
-    }
+  //* 꽃다발의 꽃 위치 영역 위에 꽃이 있을 때 실행하는 함수
+  //* current_location에 꽃 위치를 넣어줍니다.
+  const onDragOver = (e) => {
+    e.preventDefault();
+    dispatch(makeCurrentLocation(e.currentTarget.dataset.position));
+  };
 
-    function moveStart(e) {
-      whichArt = e.target;
-      xpos = e.offsetX === undefined ? e.layerX : e.offsetX;
-      ypos = e.offsetY === undefined ? e.layerY : e.offsetY;
-      whichArt.style.zIndex = 10;
-    }
-
-    function moveDragOver(e) {
-      e.preventDefault();
-    }
-
-    function moveDrop(e) {
-      e.preventDefault();
-      whichArt.style.left = e.pageX - xpos + "px";
-      whichArt.style.top = e.pageY - ypos + "px";
-    }
-
-    function touchStart(e) {
-      e.preventDefault();
-      const whichArt = e.target;
-      const touch = e.touches[0];
-      let moveOffsetX = whichArt.offsetLeft - touch.pageX;
-      let moveOffsetY = whichArt.offsetTop - touch.pageY;
-      resetZ();
-      whichArt.style.zIndex = 10;
-
-      whichArt.addEventListener(
-        "touchmove",
-        function () {
-          let posX = touch.pageX + moveOffsetX;
-          let posY = touch.pageY + moveOffsetY;
-          whichArt.style.left = posX + "px";
-          whichArt.style.top = posY + "px";
-        },
-        false
-      );
-    }
-
-    document
-      .querySelector("body")
-      .addEventListener("dragstart", moveStart, false);
-    document
-      .querySelector("body")
-      .addEventListener("dragover", moveDragOver, false);
-    document.querySelector("body").addEventListener("drop", moveDrop, false);
-
-    document
-      .querySelector("body")
-      .addEventListener("touchstart", touchStart, false);
-  })();
+  //* 꽃다발의 꽃 위치 영역에서 꽃이 떠날 때 실행하는 함수
+  //* current_location을 초기화해줍니다.
+  const onDragLeave = (e) => {
+    e.preventDefault();
+    dispatch(makeCurrentLocation(null));
+  };
 
   return (
     <>
@@ -88,17 +53,51 @@ const BuoquetCustom = () => {
           <div className={styles.recommend_menu}>추천</div>
         </aside>
         <div className={styles.custom}>
-          <div className={styles.circle_1} />
-          <div className={styles.circle_2} />
-          <div className={styles.circle_3} />
+          <div className={styles.circle_wrapper}>
+            <div
+              className={styles.circle_1}
+              onDragEnter={onDragEnter}
+              onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
+              data-position={0}
+            >
+              <Image
+                height={120}
+                width={120}
+                src={`/custom/flower/${flower[flowerList[0]].color}_${flower[flowerList[0]].name}.png`}
+              />
+            </div>
+            <div
+              className={styles.circle_2}
+              onDragEnter={onDragEnter}
+              onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
+              data-position={1}
+            >
+              <Image
+                height={120}
+                width={120}
+                src={`/custom/flower/${flower[flowerList[1]].color}_${flower[flowerList[1]].name}.png`}
+              />
+            </div>
+            <div
+              className={styles.circle_3}
+              onDragEnter={onDragEnter}
+              onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
+              data-position={2}
+            >
+              <Image
+                height={120}
+                width={120}
+                src={`/custom/flower/${flower[flowerList[2]].color}_${flower[flowerList[2]].name}.png`}
+              />
+            </div>
+          </div>
         </div>
         <div className={styles.custom_info_wrapper}>
-          <p className={styles.custom_info_package}>
-            {SizeContent[customOption.package].kotitle} 커스텀
-          </p>
-          <p className={styles.custom_info_size}>
-            {SizeContent[customOption.package].title[customOption.size]} 사이즈
-          </p>
+          <p className={styles.custom_info_package}>{SizeContent[customOption.package].kotitle} 커스텀</p>
+          <p className={styles.custom_info_size}>{SizeContent[customOption.package].title[customOption.size]} 사이즈</p>
           <Link href="/custom/save">
             <div onClick={() => bouquetHandler()}>완성!</div>
           </Link>

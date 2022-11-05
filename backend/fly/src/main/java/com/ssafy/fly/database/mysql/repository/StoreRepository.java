@@ -24,11 +24,16 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
     @Modifying
     @Transactional
     @Query("UPDATE StoreEntity as s " +
-            "SET s.store = :store, s.address = :address " +
+            "SET s.store = :store, s.zipCode = :zipCode, s.street = :street, " +
+            "s.detailAddr = :details, s.sigunguCode = :sigunguCode, s.holidays = :holidays " +
             "WHERE s.userId = :userId")
     public int updateStoreInfo(@Param("userId") String userId,
                                @Param("store") String storeName,
-                               @Param("address") String address);
+                               @Param("zipCode") String zipCode,
+                               @Param("street") String street,
+                               @Param("details") String details,
+                               @Param("sigunguCode") String sigunguCode,
+                               @Param("holidays") String holidays);
 
     @Modifying
     @Transactional

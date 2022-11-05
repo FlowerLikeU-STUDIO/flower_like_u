@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 
 @Repository
 public interface FeedRepository extends JpaRepository<FeedEntity, Long> {
-    public Page<FeedEntity> findByStoreId(StoreEntity storeId, Pageable pageable);
+    public Page<FeedEntity> findByStoreIdAndRemoval(StoreEntity storeId, boolean isRemoved, Pageable pageable);
     public FeedEntity findByIdAndRemoval(Long feedId, boolean isRemoved);
 
     @Modifying
