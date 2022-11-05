@@ -46,6 +46,9 @@ public class MongoController {
         String mid = nameRepository.insert(names).getId();
         System.out.println(mid);
 
+        NameDocument name = nameRepository.findById(mid).orElse(null);
+
+        result.put("name", name);
         result.put("message", SUCCESS);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
