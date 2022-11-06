@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.*;
 
 @Service("customFlowerService")
@@ -36,11 +37,19 @@ public class CustomFlowerServiceImpl implements CustomFlowerService {
     }
 
     @Override
-    public boolean saveCustomFlower(CustomFlowerRegReq customFlowerRegReq) {
-        String userId = customFlowerRegReq.getUserId();
+    public Map<String, Object> saveCustomFlower(CustomFlowerRegReq customFlowerRegReq, Principal principal) {
+        Map<String, Object> result = new HashMap<>();
+        String message = "";
+
+        String userId = principal.getName();
         ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(userId, false);
 
-        if (consumer == null) return false;
+        if (consumer == null) {
+            message = "잘못된 토큰 정보입니다.";
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
 
         int flowerNum = customFlowerRegReq.getFlowers().size();
         List<CustomFlowerDocument.Flowers> flowerList = new ArrayList<>();
@@ -65,7 +74,7 @@ public class CustomFlowerServiceImpl implements CustomFlowerService {
 
         String designId = customFlowerMongoRepository.insert(customizeInfo).getId();
 
-        boolean result;
+        boolean success;
         if (designId != null) {
             CustomFlowerEntity customFlower = CustomFlowerEntity.builder()
                     .consumerId(consumer)
@@ -74,24 +83,42 @@ public class CustomFlowerServiceImpl implements CustomFlowerService {
                     .removal(false)
                     .build();
             customFlowerRepository.save(customFlower);
-            result = true;
+            success = true;
         } else {
-            result = false;
+            success = false;
+        }
+
+        if (success) {
+            result.put("result", true);
+        } else {
+            message = "서버 문제로 요청 작업을 완료하지 못하였습니다.";
+            result.put("result", false);
+            result.put("message", message);
         }
 
         return result;
     }
 
     @Override
-    public Map<String, Object> getCustomFlowerList(String userId, Pageable pageable, int pageNo) {
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(userId, false);
-        if(consumer == null) return null;
+    public Map<String, Object> getCustomFlowerList(int pageNo, int size, Principal principal) {
+        Map<String, Object> result = new HashMap<>();
+        String message = "";
 
+        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
+        if(consumer == null) {
+            message = "잘못된 토큰 정보입니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size);
         pageable = PageRequest.of(pageNo, FEED_PAEG_SIZE);
         Page<CustomFlowerEntity> resultList = customFlowerRepository.findAllByConsumerId(consumer, pageable);
 
         if(resultList.getSize() > 0) {
-            Map<String, Object> result = new HashMap<>();
+            Map<String, Object> success = new HashMap<>();
             result.put("maxPage", resultList.getTotalPages());
             result.put("list", resultList.getContent());
             return result;
@@ -101,7 +128,7 @@ public class CustomFlowerServiceImpl implements CustomFlowerService {
     }
 
     @Override
-    public Map<String, Object> getCustomFlowerDetails(String flowerId) {
+    public Map<String, Object> getCustomFlowerDetails(String flowerId, Principal principal) {
         CustomFlowerEntity basicInfo = customFlowerRepository.findByDesignIdAndRemoval(flowerId, false);
         CustomFlowerDocument detailInfo = customFlowerMongoRepository.findById(flowerId).orElse(null);
 
@@ -112,5 +139,10 @@ public class CustomFlowerServiceImpl implements CustomFlowerService {
         result.put("details", detailInfo);
 
         return result;
+    }
+
+    @Override
+    public Map<String, Object> removeCustomFlower(String flowerId, Principal principal) {
+        return null;
     }
 }

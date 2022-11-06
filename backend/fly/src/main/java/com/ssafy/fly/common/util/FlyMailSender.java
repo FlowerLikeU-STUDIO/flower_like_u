@@ -17,7 +17,7 @@ public class FlyMailSender {
     private String FROM_ADDRESS;
 
     @Async
-    public void sendEmail(MailRes mail){
+    public void sendEmail(MailRes mail) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mail.getAddress());
         message.setFrom(FROM_ADDRESS);
