@@ -10,7 +10,6 @@ import java.util.List;
 @Data
 @Builder
 public class CustomFlowerRegReq {
-    private String userId;
     private String image;
     private Packing packing;
     private String size;
