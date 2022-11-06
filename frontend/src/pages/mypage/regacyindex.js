@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import MyHeader from "@/components/common/MyHeader";
+import MyHeader from "@/components/mypage/MyHeader";
 import MyWrapper from "@/components/common/MyWrapper";
 import MyContentBtn from "@/components/common/MyContentBtn";
 

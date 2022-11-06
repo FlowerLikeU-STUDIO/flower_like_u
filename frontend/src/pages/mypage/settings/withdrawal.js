@@ -1,5 +1,5 @@
 import Axios from "@/api/axios";
-import MySetting from "@/components/auth/MySetting";
+import MySetting from "@/components/mypage/MySetting";
 import useUser from "@/hooks/useUser";
 import { useRouter } from "next/router";
 import { useState } from "react";

@@ -1,6 +1,6 @@
 @mixin button-color($color, $font_color: $mainButton) {
-  color: $font_color;
   background: $color;
+  color: $font_color;
   &:hover {
     background: lighten($color, 10%);
   }
@@ -11,35 +11,32 @@
 
 .Button {
   color: white;
-  font-weight: bold;
-  outline: none;
+  font-weight: 500;
   border-radius: 4px;
-  border: none;
   cursor: pointer;
   text-align: center;
-
-  height: 100%;
+  vertical-align: middle;
   padding-left: 1rem;
   padding-right: 1rem;
   font-size: 1rem;
-
   background: $red400; // 주석 사용
-  padding-left: 1rem;
-  padding-right: 1rem;
 
   // 사이즈 관리
   &.large {
     height: 3rem;
+    line-height: 3rem;
     font-size: 1.25rem;
   }
 
   &.medium {
     height: 2.25rem;
+    line-height: 2.25rem;
     font-size: 1rem;
   }
 
   &.small {
     height: 1.75rem;
+    line-height: 1.75rem;
     font-size: 0.875rem;
   }
 
@@ -86,6 +83,25 @@
 
   &.white {
     @include button-color($white, $mainPrimary);
+  }
+
+  &.solid_pink {
+    background: $white;
+    color: $mainParagraph;
+    border: 0.01rem solid $white350;
+    &:hover {
+      background: lighten($red400, 5%);
+      color: $white100;
+    }
+    &:active {
+      background: darken($red400, 10%);
+    }
+  }
+
+  &.solid_pink_active {
+    background-color: $red400;
+    border: 0.01rem solid $white350;
+    color: $white100;
   }
 }
 
