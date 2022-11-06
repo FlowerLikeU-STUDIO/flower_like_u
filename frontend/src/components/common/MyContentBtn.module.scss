@@ -1,39 +1,8 @@
 .btn__div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-@mixin button-color($color) {
-  background: $color;
-  &:hover {
-    background: lighten($color, 10%);
-    @include font(1rem, bold, $white100);
-  }
-  &:active {
-    background: darken($color, 10%);
-    @include font(1rem, bold, $white100);
-  }
-}
-
-.path__btn {
-  display: inline-flex;
-  color: white;
-  @include font(1rem, bold, $mainButton);
-  border: solid $red400 0.15rem;
-  border-radius: 0.125rem;
-  cursor: pointer;
-
-  font-size: 1rem;
-
-  &:hover {
-    background-color: $red400;
-    @include font(1rem, bold, $white100);
-  }
-  &:active {
-    background: darken($red400, 1%);
-  }
-  & + & {
-    margin-left: 1rem;
-  }
+  @include flexDiv;
+  width: 100%;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  gap: 1rem;
+  border-top: 0.125rem solid $white350;
 }

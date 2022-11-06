@@ -1,5 +1,5 @@
 import Axios from "@/api/axios";
-import MySetting from "@/components/auth/MySetting";
+import MySetting from "@/components/mypage/MySetting";
 import GetRoadAdr from "@/components/common/GetRoad";
 import useUser from "@/hooks/useUser";
 import classnames from "classnames";
