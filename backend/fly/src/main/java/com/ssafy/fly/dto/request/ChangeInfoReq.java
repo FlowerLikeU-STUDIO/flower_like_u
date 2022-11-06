@@ -10,8 +10,6 @@ import java.util.List;
 @Data
 @Builder
 public class ChangeInfoReq {
-    private String type;
-    private String userId;
     private String nickname;
     private String store;
     private Address address;

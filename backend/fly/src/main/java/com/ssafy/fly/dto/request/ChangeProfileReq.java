@@ -6,6 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class ChangeProfileReq {
-    private String userId;
     private String image;
 }

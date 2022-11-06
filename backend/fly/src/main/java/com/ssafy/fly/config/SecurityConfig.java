@@ -42,10 +42,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .formLogin().disable();
-                
+
         http.httpBasic().disable().authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/user/**").permitAll()
+                .antMatchers("/user/chkId/**", "/user/register", "/user/findId", "/user/findPassword", "/user/chkNickname/**").permitAll()
                 .antMatchers("/account/**").permitAll()
                 .antMatchers("/account/**").hasAnyRole("USER")
                 .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
