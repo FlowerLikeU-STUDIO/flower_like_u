@@ -4,7 +4,7 @@ import { wrapper, ribbon, flower } from "./MenuContents";
 import styles from "./MenuBox.module.scss";
 
 const MenuBox = (props) => {
-  const tabList = [wrapper, ribbon, flower];
+  const tabList = [flower, wrapper, ribbon];
   const tab = tabList[props.tab];
 
   if (tab !== flower) {
