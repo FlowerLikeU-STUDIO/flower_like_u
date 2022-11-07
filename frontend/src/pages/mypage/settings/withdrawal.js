@@ -14,13 +14,12 @@ const WithDrawal = () => {
     setPwd(value);
   };
 
-  const data = {
-    userId: user.userId,
-    password: pwd,
-  };
-
   const authWithDrawal = async (e) => {
     e.preventDefault();
+    const data = {
+      userId: user.userId,
+      password: pwd,
+    };
     const res = await Axios.delete("auth", data).then((res) => res.data);
     if (res.result === "success") {
       alert("성공적으로 탈퇴되었습니다.");
