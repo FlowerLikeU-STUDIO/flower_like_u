@@ -1,5 +1,6 @@
 package com.ssafy.fly.database.mysql.entity;
 
+import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.database.mysql.enumtype.UserType;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString(exclude = {"reviews", "books", "feeds"})
-public class StoreEntity extends BaseEntity implements UserDetails {
+public class StoreEntity extends BaseEntity implements CustomUserDetail {
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     UserType type;
@@ -86,6 +87,11 @@ public class StoreEntity extends BaseEntity implements UserDetails {
     @Builder.Default
     private List<FeedEntity> feeds = new ArrayList<>();
 
+    @Override
+    public Long getUserPk() {return super.getId();}
+
+    @Override
+    public String getUserType() { return "STORE";}
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();

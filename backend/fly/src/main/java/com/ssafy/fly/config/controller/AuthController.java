@@ -1,5 +1,6 @@
-package com.ssafy.fly.controller;
+package com.ssafy.fly.config.controller;
 
+import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.common.util.JwtTokenProvider;
 import com.ssafy.fly.common.util.ResultMessageSet;
 import com.ssafy.fly.dto.request.EmailAuthenticationReq;
@@ -60,12 +61,12 @@ public class AuthController {
         System.out.println("[POST] - /auth/login " + loginReq);
 
         Map<String, Object> result = new HashMap<>();
-        UserDetails userDetails = customUserDetailService.loadUserByUsername(loginReq.getUserId());
-        if (passwordEncoder.matches(loginReq.getPassword(), userDetails.getPassword())) {
+        CustomUserDetail customUserDetail = customUserDetailService.loadUserByUsername(loginReq.getUserId());
+        if (passwordEncoder.matches(loginReq.getPassword(), customUserDetail.getPassword())) {
             List<String> lst = new ArrayList<>();
-            lst.add("USER");
+            lst.add(customUserDetail.getUserType());
             result.put("result", resultMessageSet.SUCCESS);
-            result.put("accessToken", jwtTokenProvider.createToken(userDetails.getUsername(), lst));
+            result.put("response", jwtTokenProvider.createToken(customUserDetail.getUserPk(), lst));
             return new ResponseEntity<>(result, HttpStatus.OK);
             // 요청 header "Authorization : [토큰]"
         }
