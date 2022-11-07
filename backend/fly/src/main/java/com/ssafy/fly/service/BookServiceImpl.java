@@ -456,7 +456,7 @@ public class BookServiceImpl implements BookService {
             message = "접근 권한이 없습니다.";
             result.put("result", false);
         }
-        
+
         result.put("message", message);
         return result;
     }
