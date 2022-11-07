@@ -1,5 +1,6 @@
 package com.ssafy.fly.service;
 
+import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.database.mysql.entity.ConsumerEntity;
 import com.ssafy.fly.database.mysql.entity.StoreEntity;
 import com.ssafy.fly.database.mysql.repository.ConsumerRepository;
@@ -25,7 +26,7 @@ public class CustomUserDetailService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CustomUserDetail loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Optional<ConsumerEntity> optConsumer = consumerRepository.findByUserId(username);
         if (optConsumer.isPresent()) return optConsumer.get();
