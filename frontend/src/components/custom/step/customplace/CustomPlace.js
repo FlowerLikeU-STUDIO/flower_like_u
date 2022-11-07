@@ -9,6 +9,7 @@ const CustomPlace = () => {
   const cx = classNames.bind(styles);
   const dispatch = useDispatch();
   const customOption = useSelector((state) => state.custom);
+  console.log(customOption.current_location);
 
   //* 현재 유저가 커스텀한 꽃 정보가 담겨있습니다.
   //* console.log(`${flower[flowerList[0]].color}_${flower[flowerList[0]].name}`)
@@ -36,6 +37,11 @@ const CustomPlace = () => {
   const onDragOver = (e) => {
     e.preventDefault();
     dispatch(makeCurrentLocation(e.currentTarget.dataset.position));
+    //* 어느 영역 위에 있는지 표시해 줍니다.
+    const whichCircle = e.target;
+    whichCircle.style.borderRadius = "100rem";
+    whichCircle.style.backgroundColor = "rgba(221, 255, 146, 0.6)";
+    whichCircle.style.border = "1px solid rgba(190, 235, 88, 1)";
   };
 
   //* 꽃다발의 꽃 위치 영역에서 꽃이 떠날 때 실행하는 함수
@@ -43,7 +49,20 @@ const CustomPlace = () => {
   const onDragLeave = (e) => {
     e.preventDefault();
     dispatch(makeCurrentLocation(null));
+    //* 표시된 영역을 없애줍니다.
+    const whichCircle = e.target;
+    whichCircle.style.backgroundColor = "rgba(221, 255, 146, 0)";
+    whichCircle.style.border = "1px solid rgba(190, 235, 88, 0)";
   };
+
+  const onDrop = (e) => {
+    e.preventDefault();
+    //* 표시된 영역을 없애줍니다.
+    const whichCircle = e.target;
+    whichCircle.style.backgroundColor = "rgba(221, 255, 146, 0)";
+    whichCircle.style.border = "1px solid rgba(190, 235, 88, 0)";
+  };
+
   return (
     <div className={cx("circle_wrapper", currentSize, currentPackage)}>
       {flowerList.map((title, index) => (
@@ -52,14 +71,13 @@ const CustomPlace = () => {
           onDragEnter={onDragEnter}
           onDragOver={onDragOver}
           onDragLeave={onDragLeave}
+          onDrop={onDrop}
           data-position={index}
         >
           <Image
             height={300}
             width={300}
-            src={`/custom/flower/${flower[flowerList[index]].color}_${
-              flower[flowerList[index]].name
-            }.png`}
+            src={`/custom/flower/${flower[flowerList[index]].color}_${flower[flowerList[index]].name}.png`}
           />
         </div>
       ))}
