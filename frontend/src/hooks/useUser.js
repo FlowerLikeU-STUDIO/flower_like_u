@@ -4,7 +4,7 @@ import useSWR from "swr";
 // ! FETCH USER DATA
 const useUser = () => {
   //!!!! 현재 요청할 유저 아이디 넣기
-  const uid = "useruser1";
+  const uid = "useruser5";
   const { data, mutate, error } = useSWR(`user/${uid}`, Fetcher);
 
   const loading = !data && !error;
@@ -14,9 +14,9 @@ const useUser = () => {
   return {
     loading,
     loggedOut,
-    // user: data ? data.data.userInfo : data, // -> runtimeerror
+    user: data ? data.data.userInfo : data, // -> runtimeerror
     // @ 최종로직
-    user: loading ? "" : data.data.userInfo,
+    // user: loading ? "" : data.data.userInfo,
     mutate,
     /* 그외 참고할 데이터
     @ 꽃가게 더미데이터
