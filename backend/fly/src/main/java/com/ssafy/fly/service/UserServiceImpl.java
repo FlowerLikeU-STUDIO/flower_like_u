@@ -486,11 +486,13 @@ public class UserServiceImpl implements UserService {
             result.put("userInfo", userInfo);
         } else if (store != null) {
             List<Boolean> holidays = new ArrayList<>();
-            StringTokenizer st = new StringTokenizer(store.getHolidays(), ",");
-            while(st.hasMoreTokens()) {
-                String weekday = st.nextToken();
-                if("true".equals(weekday)) holidays.add(true);
-                else holidays.add(false);
+            if(store.getHolidays() != null) {
+                StringTokenizer st = new StringTokenizer(store.getHolidays(), ",");
+                while(st.hasMoreTokens()) {
+                    String weekday = st.nextToken();
+                    if("true".equals(weekday)) holidays.add(true);
+                    else holidays.add(false);
+                }
             }
 
             UserInfoRes.ForStore userInfo = UserInfoRes.ForStore.builder()
