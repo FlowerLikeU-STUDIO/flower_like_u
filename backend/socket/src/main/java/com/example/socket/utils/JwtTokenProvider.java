@@ -1,4 +1,4 @@
-package com.ssafy.fly.common.util;
+package com.example.socket.utils;
 
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -57,8 +57,7 @@ public class JwtTokenProvider {
 
     // Request의 Header에서 token 값을 가져옵니다. "Authorization" : "TOKEN값'
     public String resolveToken(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        return token == null ? null : token.split(" ")[1];
+        return request.getHeader("Authorization");
     }
 
     // 토큰의 유효성 + 만료일자 확인

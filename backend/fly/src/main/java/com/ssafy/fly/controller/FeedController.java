@@ -15,7 +15,7 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
-@CrossOrigin(origins = "*", allowedHeaders = "Authorization")
+//@CrossOrigin(origins = "*", allowedHeaders = "Authorization")
 @RestController
 @RequestMapping("/feed")
 public class FeedController {
