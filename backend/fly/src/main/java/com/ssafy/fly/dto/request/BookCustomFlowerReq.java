@@ -8,7 +8,6 @@ import java.util.Date;
 @Data
 @Builder
 public class BookCustomFlowerReq {
-    private String consumerId;
     private Long storeId;
     private String flowerId;
     private Date dueDate;

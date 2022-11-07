@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   package: null,
   size: null,
+  wrapper_color: null,
+  ribbon_color: null,
   flowers: null,
   current_flower: null,
   current_location: null,
@@ -27,6 +29,12 @@ const customSlice = createSlice({
     makeCurrentLocation: (state, action) => {
       return { ...state, current_location: action.payload };
     },
+    selectWrapperColor: (state, action) => {
+      return { ...state, wrapper_color: action.payload };
+    },
+    selectRibbonColor: (state, action) => {
+      return { ...state, ribbon_color: action.payload };
+    },
   },
 });
 
@@ -37,4 +45,6 @@ export const {
   makeFlowerList,
   makeCurrentFlower,
   makeCurrentLocation,
+  selectWrapperColor,
+  selectRibbonColor,
 } = customSlice.actions;

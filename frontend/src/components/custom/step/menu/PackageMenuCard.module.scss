@@ -8,7 +8,7 @@
 
 .menu_card_wrapper {
   @include flexDiv(row, center, flex-start);
-  gap: 1rem;
+  gap: 1.5rem;
   width: 95%;
   height: 6rem;
   background-color: $white;
@@ -16,8 +16,14 @@
   border-radius: 0.25rem;
   box-shadow: $shadow400;
   cursor: pointer;
-  padding: 0.5rem 1rem 0.5rem 1rem;
+  padding: 0.5rem 1rem 0.5rem 2rem;
   white-space: pre-line;
+}
+
+.color_circle {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 100rem;
 }
 
 .letter_wrapper {

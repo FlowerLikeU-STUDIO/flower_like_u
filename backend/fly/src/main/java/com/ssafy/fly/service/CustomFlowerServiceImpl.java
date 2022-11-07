@@ -36,13 +36,13 @@ public class CustomFlowerServiceImpl implements CustomFlowerService {
         this.customFlowerMongoRepository = customFlowerMongoRepository;
     }
 
+    // 1. 커스텀 꽃다발 정보 등록
     @Override
     public Map<String, Object> saveCustomFlower(CustomFlowerRegReq customFlowerRegReq, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
-        String userId = principal.getName();
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(userId, false);
+        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
 
         if (consumer == null) {
             message = "잘못된 토큰 정보입니다.";
@@ -99,6 +99,7 @@ public class CustomFlowerServiceImpl implements CustomFlowerService {
         return result;
     }
 
+    // 2. 커스텀 꽃다발 목록 조회
     @Override
     public Map<String, Object> getCustomFlowerList(int pageNo, int size, Principal principal) {
         Map<String, Object> result = new HashMap<>();
@@ -114,35 +115,97 @@ public class CustomFlowerServiceImpl implements CustomFlowerService {
         }
 
         Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size);
-        pageable = PageRequest.of(pageNo, FEED_PAEG_SIZE);
         Page<CustomFlowerEntity> resultList = customFlowerRepository.findAllByConsumerId(consumer, pageable);
 
-        if(resultList.getSize() > 0) {
-            Map<String, Object> success = new HashMap<>();
+        if(resultList.getContent().size() > 0) {
+            result.put("result", true);
             result.put("maxPage", resultList.getTotalPages());
             result.put("list", resultList.getContent());
-            return result;
         } else {
-            return null;
+            message = "표시할 페이지가 존재하지 않습니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
         }
+        return result;
     }
 
+    // 3. 커스텀 꽃다발 상세 정보 조회
     @Override
     public Map<String, Object> getCustomFlowerDetails(String flowerId, Principal principal) {
+        Map<String, Object> result = new HashMap<>();
+        String message = "";
+
+        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
+        if (consumer == null) {
+            message = "잘못된 토큰 정보입니다.";
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
         CustomFlowerEntity basicInfo = customFlowerRepository.findByDesignIdAndRemoval(flowerId, false);
+        if(!basicInfo.getConsumerId().getUserId().equals(principal.getName())) {
+            message = "잘못된 토큰 정보입니다.";
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
         CustomFlowerDocument detailInfo = customFlowerMongoRepository.findById(flowerId).orElse(null);
 
-        if(basicInfo == null || detailInfo == null) return null;
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("basics", basicInfo);
-        result.put("details", detailInfo);
+        if(basicInfo == null || detailInfo == null) {
+            message = "존재하지 않는 커스텀 꽃다발 아이디(String Type) 입니다.";
+            result.put("result", false);
+            result.put("message", message);
+        } else {
+            result.put("result", true);
+            result.put("basics", basicInfo);
+            result.put("details", detailInfo);
+        }
 
         return result;
     }
 
+    // 4. 커스텀 꽃다발 정보 삭제(작업 우선 순위가 낮아 추후 구현)
     @Override
     public Map<String, Object> removeCustomFlower(String flowerId, Principal principal) {
-        return null;
+        Map<String, Object> result = new HashMap<>();
+        String message = "";
+
+        CustomFlowerEntity customFlower = customFlowerRepository.findByDesignIdAndRemoval(flowerId, false);
+        if(customFlower == null) {
+            message = "존재하지 않는 커스텀 꽃다발 아이디(String Type) 입니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
+        if (consumer == null) {
+            message = "잘못된 토큰 정보입니다.";
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        if(!customFlower.getConsumerId().getUserId().equals(principal.getName())) {
+            message = "삭제 권한이 없는 계정입니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        if(customFlowerRepository.CustomFlowerRemove(flowerId) > 0) {
+            customFlowerMongoRepository.deleteById(flowerId);
+            result.put("result", true);
+        } else {
+            message = "서버 문제로 데이터 삭제에 실패하였습니다.";
+            result.put("result", false);
+        }
+        result.put("message", message);
+        return result;
     }
 }

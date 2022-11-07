@@ -3,7 +3,6 @@ package com.ssafy.fly.dto.response;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -11,6 +10,7 @@ import java.util.List;
 @SuperBuilder
 public class UserInfoRes {
     private String type;
+    private Long userPk;
     private String userId;
     private String name;
     private String email;

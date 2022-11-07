@@ -12,6 +12,11 @@ const FlowerMenuCard = (props) => {
   // 드래그 앤 드롭
   //* 드래그를 시작할 때 current_flower에 드래그로 잡은 꽃의 인덱스를 넣어줍니다.
   const onDragStart = (e) => {
+    //* 드래그가 되고 있는 이미지는 반투명하게 처리 (카드 안)
+    const whichFlower = e.target;
+    whichFlower.style.opacity = "0.3";
+    //* 이미지를 잡는 곳을 중앙으로 설정
+    e.dataTransfer.setDragImage(whichFlower, 42, 42);
     dispatch(makeCurrentFlower(e.currentTarget.dataset.position));
   };
 
@@ -32,6 +37,8 @@ const FlowerMenuCard = (props) => {
 
   //* 드래그를 끝내고 드롭했을 때
   const onDragEnd = (e) => {
+    const whichFlower = e.target;
+    whichFlower.style.opacity = "1";
     if (current_location !== null) {
       //* 새로운 꽃 리스트로 업데이트합니다.
       upDateFlowerList();
