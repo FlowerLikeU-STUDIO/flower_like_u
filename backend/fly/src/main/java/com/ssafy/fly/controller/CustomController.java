@@ -78,17 +78,34 @@ public class CustomController {
                                                                           Principal principal) {
         System.out.println("[GET] /custom/detail/{flowerId} " + flowerId);
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> data = customFlowerService.getCustomFlowerDetails(flowerId, principal);
+        Map<String, Object> result = customFlowerService.getCustomFlowerDetails(flowerId, principal);
 
-        if (data != null) {
+        if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
-            response.put("flowerInfo", data);
+            response.put("flowerInfo", result);
         } else {
             response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 4. 커스텀 꽃다발 정보 삭제(작업 우선 순위가 낮아 추후 구현)
+    @DeleteMapping("/{flowerId}")
+    public ResponseEntity<Map<String, Object>> removeCumstomFlowerInfo(@PathVariable String flowerId,
+                                                                             Principal principal) {
+        System.out.println("[DELETE] /custom/{flowerId} " + flowerId);
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = customFlowerService.removeCustomFlower(flowerId, principal);
+
+        if ((boolean) result.get("result")) {
+            response.put("result", resultMessageSet.SUCCESS);
+        } else {
+            response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
         }
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
-    // 4. 커스텀 꽃다발 정보 삭제(작업 우선 순위가 낮아 추후 구현)
 }

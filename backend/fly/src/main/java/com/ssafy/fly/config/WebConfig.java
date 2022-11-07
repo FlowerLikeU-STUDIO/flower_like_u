@@ -14,7 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowedMethods("*")
                 .allowedHeaders("X-AUTH-TOKEN", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
-                .exposedHeaders("Content-Disposition", "X-AUTH-TOKEN", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
+                .exposedHeaders("Content-Disposition", "jwt-token", "X-AUTH-TOKEN", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
                 .allowCredentials(false).maxAge(3000);
     }
 }

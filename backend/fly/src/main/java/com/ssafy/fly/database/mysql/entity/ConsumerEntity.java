@@ -1,7 +1,10 @@
 package com.ssafy.fly.database.mysql.entity;
 
 import com.ssafy.fly.database.mysql.enumtype.UserType;
+import jdk.nashorn.internal.runtime.logging.Logger;
 import lombok.*;
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

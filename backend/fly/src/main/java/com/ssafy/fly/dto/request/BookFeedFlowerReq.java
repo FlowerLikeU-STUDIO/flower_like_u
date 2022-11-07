@@ -8,9 +8,8 @@ import java.util.Date;
 @Data
 @Builder
 public class BookFeedFlowerReq {
-    private String consumerId;
     private Long storeId;
     private Long feedId;
-    private Date dueDate;
     private String request;
+    private Date dueDate;
 }

@@ -194,7 +194,7 @@ public class FeedServiceImpl implements FeedService {
             return result;
         }
 
-        if(!feed.getStoreId().getUserId().equals(store.getUserId())) {
+        if(!feed.getStoreId().getUserId().equals(principal.getName())) {
             message = "삭제 권한이 없는 계정입니다.";
             System.out.println(message);
             result.put("result", false);
@@ -206,7 +206,7 @@ public class FeedServiceImpl implements FeedService {
             result.put("result", true);
         } else {
             message = "서버 문제로 데이터 삭제에 실패하였습니다.";
-            result.put("result", true);
+            result.put("result", false);
         }
         result.put("message", message);
         return result;
