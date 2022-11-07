@@ -23,14 +23,22 @@
   box-shadow: $shadow600;
 }
 
-.custom {
+.custom_place {
   @include flexDiv;
   width: 30rem;
   height: 30rem;
-  background-image: url("/custom/wrapper.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  &.bouquet {
+    background-image: url("/custom/bouquet.png");
+  }
+  &.vase {
+    background-image: url("/custom/vase.png");
+  }
+  &.ballon {
+    background-image: url("/custom/ballon.png");
+  }
 }
 
 .custom_info_wrapper {
@@ -52,44 +60,4 @@
 .custom_info_size {
   @include font(0.95rem, 500, $gray);
   width: 80%;
-}
-
-.circle_wrapper {
-  position: relative;
-}
-
-.circle_1 {
-  position: relative;
-  width: 7rem;
-  height: 7rem;
-  background-color: $white 0.3;
-  // border: 1px solid $mainPrimary;
-  border-radius: 100rem;
-  top: 2rem;
-  left: 2rem;
-  transform: rotate(30deg);
-}
-
-.circle_2 {
-  position: relative;
-  width: 7rem;
-  height: 7rem;
-  background-color: $white 0.3;
-  // border: 1px solid $mainPrimary;
-  border-radius: 100rem;
-  top: -3rem;
-  left: -1rem;
-  transform: rotate(-10deg);
-}
-
-.circle_3 {
-  position: relative;
-  width: 7rem;
-  height: 7rem;
-  background-color: $white 0.3;
-  // border: 1px solid $mainPrimary;
-  border-radius: 100rem;
-  top: -8rem;
-  left: 1.5rem;
-  transform: rotate(20deg);
 }

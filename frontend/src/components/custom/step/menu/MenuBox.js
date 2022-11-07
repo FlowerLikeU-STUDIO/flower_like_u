@@ -4,7 +4,7 @@ import { wrapper, ribbon, flower } from "./MenuContents";
 import styles from "./MenuBox.module.scss";
 
 const MenuBox = (props) => {
-  const tabList = [wrapper, ribbon, flower];
+  const tabList = [flower, wrapper, ribbon];
   const tab = tabList[props.tab];
 
   if (tab !== flower) {
@@ -14,7 +14,7 @@ const MenuBox = (props) => {
           {tab.map((color, index) => (
             <PackageMenuCard
               key={tab[index].color}
-              img={"/custom/custom_background.png"}
+              hex={tab[index].hex}
               title={tab[index].title}
               contents={tab[index].contents}
               name={tab[index].color}
