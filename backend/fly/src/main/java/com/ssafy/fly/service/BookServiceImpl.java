@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.*;
 
 @Service("bookService")
@@ -50,18 +51,18 @@ public class BookServiceImpl implements BookService {
 
     // 1. 꽃다발 예약(커스텀 꽃다발)
     @Override
-    public Map<String, Object> registCustomFlowerBookInfo(BookCustomFlowerReq bookCustomFlowerReq) {
+    public Map<String, Object> registCustomFlowerBookInfo(BookCustomFlowerReq bookCustomFlowerReq, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
-        String consumerId = bookCustomFlowerReq.getConsumerId();
+        String consumerId = principal.getName();
         Long storeId = bookCustomFlowerReq.getStoreId();
         String flowerId = bookCustomFlowerReq.getFlowerId();
         Date dueDate = bookCustomFlowerReq.getDueDate();
 
         ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(consumerId, false);
         if (consumer == null) {
-            message = "존재하지 않는 구매자 계정입니다.";
+            message = "잘못된 토큰 정보입니다.";
             System.out.println(message);
             result.put("result", false);
             result.put("message", message);
@@ -80,6 +81,14 @@ public class BookServiceImpl implements BookService {
         CustomFlowerEntity flowerBasicInfo = customFlowerRepository.findByDesignIdAndRemoval(flowerId, false);
         if (flowerBasicInfo == null) {
             message = "존재하지 않는 커스텀 꽃다발 아이디입니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        if (!flowerBasicInfo.getConsumerId().getUserId().equals(principal.getName())) {
+            message = "접근할 수 없는 커스텀 꽃다발 정보입니다.";
             System.out.println(message);
             result.put("result", false);
             result.put("message", message);
@@ -114,18 +123,18 @@ public class BookServiceImpl implements BookService {
 
     // 2. 꽃다발 예약(피드)
     @Override
-    public Map<String, Object> registFeedFlowerBookInfo(BookFeedFlowerReq bookFeedFlowerReq) {
+    public Map<String, Object> registFeedFlowerBookInfo(BookFeedFlowerReq bookFeedFlowerReq, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
-        String consumerId = bookFeedFlowerReq.getConsumerId();
+        String consumerId = principal.getName();
         Long storeId = bookFeedFlowerReq.getStoreId();
         Long feedId = bookFeedFlowerReq.getFeedId();
         Date dueDate = bookFeedFlowerReq.getDueDate();
 
         ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(consumerId, false);
         if (consumer == null) {
-            message = "존재하지 않는 구매자 계정입니다.";
+            message = "잘못된 토큰 정보입니다.";
             System.out.println(message);
             result.put("result", false);
             result.put("message", message);
@@ -144,6 +153,14 @@ public class BookServiceImpl implements BookService {
         FeedEntity feed = feedRepository.findByIdAndRemoval(feedId, false);
         if (feed == null) {
             message = "존재하지 않는 피드 아이디입니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        if (storeId != feed.getStoreId().getId()) {
+            message = "잘못된 요청입니다.";
             System.out.println(message);
             result.put("result", false);
             result.put("message", message);
@@ -169,7 +186,7 @@ public class BookServiceImpl implements BookService {
 
     // 3. 예약 상태 변경
     @Override
-    public Map<String, Object> updateBookState(Long bookId) {
+    public Map<String, Object> updateBookState(Long bookId, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
@@ -182,12 +199,25 @@ public class BookServiceImpl implements BookService {
             return result;
         }
 
+        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
+        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
+        if (consumer == null && store == null) {
+            message = "잘못된 토큰 정보입니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
         BookState newState = null;
-        if (BookState.WAITED.equals(bookInfo.getState())) newState = BookState.INPROGRESS;
-        else if (BookState.INPROGRESS.equals(bookInfo.getState())) newState = BookState.RECIPT;
-        else if (BookState.RECIPT.equals(bookInfo.getState())) newState = BookState.DONE;
+        if (BookState.WAITED.equals(bookInfo.getState())
+                && store != null
+                && store.getId() == bookInfo.getStoreId().getId()) newState = BookState.INPROGRESS;
+        else if (BookState.INPROGRESS.equals(bookInfo.getState())
+                && consumer != null
+                && consumer.getId() == bookInfo.getConsumerId().getId()) newState = BookState.RECIPT;
         else {
-            message = "잘못된 예약 상태가 존재합니다.";
+            message = "잘못된 요청이거나, 요청을 더 이상 받을 수 없습니다.";
             System.out.println(message);
             result.put("result", false);
             result.put("message", message);
@@ -207,15 +237,15 @@ public class BookServiceImpl implements BookService {
 
     // 4. 예약 목록 조회
     @Override
-    public Map<String, Object> getBookInfoList(String userId, int pageNo, int size, String filter) {
+    public Map<String, Object> getBookInfoList(int pageNo, int size, String filter, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(userId, false);
-        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(userId, false);
+        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
+        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
 
         if (consumer == null && store == null) {
-            message = "존재하지 않는 계정입니다.";
+            message = "잘못된 토큰 정보입니다.";
             System.out.println(message);
             result.put("result", false);
             result.put("message", message);
@@ -235,11 +265,11 @@ public class BookServiceImpl implements BookService {
                 searchList = bookRepository.getConsumerDoneList(consumer, pageable);
             }
 
-            if (searchList != null && searchList.getSize() > 0) {
+            if (searchList != null && searchList.getContent().size() > 0) {
                 List<BookListRes.BookElementForConsumer> resultList = new ArrayList<>();
                 for (BookEntity curEntity : searchList) {
                     String image = "";
-                    if(BookType.CUSTOM.equals(curEntity.getType())) {
+                    if (BookType.CUSTOM.equals(curEntity.getType())) {
                         image = curEntity.getCustomId().getImage();
                     } else {
                         image = curEntity.getFeedId().getImages().get(0).getImage();
@@ -275,11 +305,11 @@ public class BookServiceImpl implements BookService {
                 searchList = bookRepository.getStoreDoneList(store, pageable);
             }
 
-            if (searchList != null && searchList.getSize() > 0) {
+            if (searchList != null && searchList.getContent().size() > 0) {
                 List<BookListRes.BookElementForStore> resultList = new ArrayList<>();
                 for (BookEntity curEntity : searchList) {
                     String image = "";
-                    if(BookType.CUSTOM.equals(curEntity.getType())) {
+                    if (BookType.CUSTOM.equals(curEntity.getType())) {
                         image = curEntity.getCustomId().getImage();
                     } else {
                         image = curEntity.getFeedId().getImages().get(0).getImage();

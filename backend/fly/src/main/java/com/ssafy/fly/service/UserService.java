@@ -2,6 +2,7 @@ package com.ssafy.fly.service;
 
 import com.ssafy.fly.dto.request.*;
 
+import java.security.Principal;
 import java.util.Map;
 
 public interface UserService {
@@ -10,10 +11,10 @@ public interface UserService {
     public Map<String, Object> findID(FindIdReq findIdReq);
     public Map<String, Object> issueTemporaryPassword(FindPwdReq findPwdReq);
     public boolean checkNicknameDuplication(String inputNickname);
-    public Map<String, Object> updateUserInfo(ChangeInfoReq changeInfoReq);
-    public Map<String, Object> updateIntroduction(ChangeIntroductionReq changeIntroductionReq);
-    public Map<String, Object> updatePassword(ChangePwdReq changePwdReq);
-    public Map<String, Object> updateProfileImage(ChangeProfileReq changeProfileReq);
-    public Map<String, Object> deleteUser(WithdrawReq withdrawReq);
-    public Map<String, Object> findUserInfo(String userId);
+    public Map<String, Object> updateUserInfo(ChangeInfoReq changeInfoReq, Principal principal);
+    public Map<String, Object> updateIntroduction(String introduction, Principal principal);
+    public Map<String, Object> updatePassword(ChangePwdReq changePwdReq, Principal principal);
+    public Map<String, Object> updateProfileImage(String image, Principal principal);
+    public Map<String, Object> deleteUser(String password, Principal principal);
+    public Map<String, Object> findUserInfo(Principal principal);
 }

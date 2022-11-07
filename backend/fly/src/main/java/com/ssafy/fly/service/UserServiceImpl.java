@@ -18,9 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.security.Principal;
+import java.util.*;
 
 @Service("userService")
 @Transactional
@@ -84,6 +83,16 @@ public class UserServiceImpl implements UserService {
         // 비밀번호 유효성 검사(알파벳 + 숫자 + 특수문자 조합 8자 이상 16자 이하)
         if (!validationChecker.pwdValidationCheck(registerReq.getPassword())) {
             message = "올바른 비밀번호 형식이 아닙니다. 알파벳 + 숫자 + 특수문자 조합 8~16자를 입력해주세요.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        ConsumerEntity consumer = consumerRepository.findFirstByUserId(registerReq.getUserId());
+        StoreEntity store = storeRepository.findFirstByUserId(registerReq.getUserId());
+        if(consumer != null || store != null) {
+            message = "이미 사용 중인 아이디입니다.";
             System.out.println(message);
             result.put("result", false);
             result.put("message", message);
@@ -227,11 +236,11 @@ public class UserServiceImpl implements UserService {
 
     // 6. 회원 정보 수정
     @Override
-    public Map<String, Object> updateUserInfo(ChangeInfoReq changeInfoReq) {
+    public Map<String, Object> updateUserInfo(ChangeInfoReq changeInfoReq, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
-        String userId = changeInfoReq.getUserId();
+        String userId = principal.getName();
 
         // 구매자와 판매자 테이블에서 (아이디, 비밀번호, 미탈퇴자)로 탐색
         ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(userId, false);
@@ -244,27 +253,57 @@ public class UserServiceImpl implements UserService {
             return result;
         }
 
-        int success = -1;
         if (consumer != null) {
             String nickname = changeInfoReq.getNickname();
             String zipCode = changeInfoReq.getAddress().getZipCode();
             String street = changeInfoReq.getAddress().getStreet();
             String details = changeInfoReq.getAddress().getDetails();
             String sigunguCode = changeInfoReq.getAddress().getSigunguCode();
-            success = consumerRepository.updateConsumerInfo(userId, nickname, zipCode, street, details, sigunguCode);
+            if(consumerRepository.updateConsumerInfo(userId, nickname, zipCode, street, details, sigunguCode) > 0) {
+                result.put("result", true);
+            } else {
+                message = "서버 문제로 요청 작업을 완료하지 못하였습니다.";
+                result.put("result", false);
+                result.put("message", message);
+            }
         } else if (store != null) {
             String storeName = changeInfoReq.getStore();
             String zipCode = changeInfoReq.getAddress().getZipCode();
             String street = changeInfoReq.getAddress().getStreet();
             String details = changeInfoReq.getAddress().getDetails();
             String sigunguCode = changeInfoReq.getAddress().getSigunguCode();
-            String holidays = changeInfoReq.getHolidays().toString().replaceAll("[\\[\\]]", "");
-            success = storeRepository.updateStoreInfo(userId, storeName, zipCode, street, details, sigunguCode, holidays);
+            String holidays = changeInfoReq.getHolidays().toString().replaceAll("[\\[\\]\\ ]", "");
+            if(storeRepository.updateStoreInfo(userId, storeName, zipCode, street, details, sigunguCode, holidays) > 0) {
+                result.put("result", true);
+            } else {
+                message = "서버 문제로 요청 작업을 완료하지 못하였습니다.";
+                result.put("result", false);
+                result.put("message", message);
+            }
         } else {
-            success = -1;
+            message = "수정 권한이 없는 계정입니다.";
+            result.put("result", false);
+            result.put("message", message);
         }
 
-        if (success > 0) {
+        return result;
+    }
+
+    // 7. 소개글 수정(판매자)
+    @Override
+    public Map<String, Object> updateIntroduction(String introduction, Principal principal) {
+        Map<String, Object> result = new HashMap<>();
+        String message = "";
+
+        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
+        if(store == null) {
+            message = "잘못된 토큰 정보입니다.";
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        if (storeRepository.updateIntroduction(principal.getName(), introduction) > 0) {
             result.put("result", true);
         } else {
             message = "서버 문제로 요청 작업을 완료하지 못하였습니다.";
@@ -275,33 +314,13 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    // 7. 소개글 수정(판매자)
-    @Override
-    public Map<String, Object> updateIntroduction(ChangeIntroductionReq changeIntroductionReq) {
-        Map<String, Object> result = new HashMap<>();
-        String message = "";
-
-        String userId = changeIntroductionReq.getUserId();
-        String introduction = changeIntroductionReq.getIntroduction();
-
-        if (storeRepository.updateIntroduction(userId, introduction) > 0) {
-            result.put("result", true);
-        } else {
-            message = "존재하지 않는 회원입니다.";
-            result.put("result", false);
-            result.put("message", message);
-        }
-
-        return result;
-    }
-
     // 8. 비밀번호 변경
     @Override
-    public Map<String, Object> updatePassword(ChangePwdReq changePwdReq) {
+    public Map<String, Object> updatePassword(ChangePwdReq changePwdReq, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
-        String userId = changePwdReq.getUserId();
+        String userId = principal.getName();
         String curPwd = changePwdReq.getCurPwd();
         String newPwd = changePwdReq.getNewPwd();
         String newPwd2 = changePwdReq.getNewPwd2();
@@ -327,7 +346,7 @@ public class UserServiceImpl implements UserService {
         StoreEntity store = storeRepository.findByUserIdAndWithdrawal(userId, false);
 
         if (consumer == null && store == null) {
-            message = "입력과 일치하는 회원의 정보가 없습니다.";
+            message = "잘못된 토큰 정보입니다.";
             result.put("result", false);
             result.put("message", message);
             return result;
@@ -343,6 +362,7 @@ public class UserServiceImpl implements UserService {
             success = -1;
         }
 
+        // 틀린 비밀번호에 대한 에러 메시지가 없음
         if (success > 0) {
             result.put("result", true);
         } else {
@@ -356,18 +376,17 @@ public class UserServiceImpl implements UserService {
 
     // 9. 프로필 이미지 변경
     @Override
-    public Map<String, Object> updateProfileImage(ChangeProfileReq changeProfileReq) {
+    public Map<String, Object> updateProfileImage(String image, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
-        String userId = changeProfileReq.getUserId();
-        String image = changeProfileReq.getImage();
+        String userId = principal.getName();
 
         ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(userId, false);
         StoreEntity store = storeRepository.findByUserIdAndWithdrawal(userId, false);
 
         if (consumer == null && store == null) {
-            message = "입력과 일치하는 회원의 정보가 없습니다.";
+            message = "잘못된 토큰 정보입니다.";
             result.put("result", false);
             result.put("message", message);
             return result;
@@ -375,13 +394,9 @@ public class UserServiceImpl implements UserService {
 
         // Database에서 프로필 이미지 업데이트
         int success;
-        if (consumer != null) {
-            success = consumerRepository.updateProfileImage(userId, image);
-        } else {
-            success = storeRepository.updateProfileImage(userId, image);
-        }
-
-        if (success > 0) {
+        if (consumer != null && consumerRepository.updateProfileImage(userId, image) > 0) {
+            result.put("result", true);
+        } else if(store != null && storeRepository.updateProfileImage(userId, image) > 0){
             result.put("result", true);
         } else {
             message = "서버 문제로 요청 작업을 완료하지 못하였습니다.";
@@ -394,18 +409,17 @@ public class UserServiceImpl implements UserService {
 
     // 10. 회원 탈퇴
     @Override
-    public Map<String, Object> deleteUser(WithdrawReq withdrawReq) {
+    public Map<String, Object> deleteUser(String password, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
-        String userId = withdrawReq.getUserId();
-        String password = withdrawReq.getPassword();
+        String userId = principal.getName();
 
         ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(userId, false);
         StoreEntity store = storeRepository.findByUserIdAndWithdrawal(userId, false);
 
         if (consumer == null && store == null) {
-            message = "입력과 일치하는 회원의 정보가 없습니다.";
+            message = "잘못된 토큰 정보입니다.";
             result.put("result", false);
             result.put("message", message);
             return result;
@@ -417,12 +431,18 @@ public class UserServiceImpl implements UserService {
             success = consumerRepository.accountWithdraw(userId);
         } else if (store != null && passwordEncoder.matches(password, store.getPassword())) {
             success = storeRepository.accountWithdraw(userId);
+        } else {
+            success = -2;
         }
 
         if (success > 0) {
             result.put("result", true);
         } else {
-            message = "서버 문제로 요청 작업을 완료하지 못하였습니다.";
+            if(success == -1) {
+                message = "서버 문제로 요청 작업을 완료하지 못하였습니다.";
+            } else if(success == -2) {
+                message = "비밀번호가 일치하지 않습니다.";
+            }
             result.put("result", false);
             result.put("message", message);
         }
@@ -432,15 +452,15 @@ public class UserServiceImpl implements UserService {
 
     // 11. 회원 정보 조회
     @Override
-    public Map<String, Object> findUserInfo(String userId) {
+    public Map<String, Object> findUserInfo(Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(userId, false);
-        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(userId, false);
+        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
+        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
 
         if (consumer == null && store == null) {
-            message = "입력과 일치하는 회원의 정보가 없습니다.";
+            message = "잘못된 토큰 정보입니다.";
             result.put("result", false);
             result.put("message", message);
             return result;
@@ -449,6 +469,7 @@ public class UserServiceImpl implements UserService {
         if (consumer != null) {
             UserInfoRes.ForConsumer userInfo = UserInfoRes.ForConsumer.builder()
                     .type(consumer.getType().toString().toLowerCase())
+                    .userPk(consumer.getId())
                     .userId(consumer.getUserId())
                     .name(consumer.getName())
                     .nickname(consumer.getNickname())
@@ -464,16 +485,27 @@ public class UserServiceImpl implements UserService {
             result.put("result", true);
             result.put("userInfo", userInfo);
         } else if (store != null) {
+            List<Boolean> holidays = new ArrayList<>();
+            StringTokenizer st = new StringTokenizer(store.getHolidays(), ",");
+            while(st.hasMoreTokens()) {
+                String weekday = st.nextToken();
+                if("true".equals(weekday)) holidays.add(true);
+                else holidays.add(false);
+            }
+
             UserInfoRes.ForStore userInfo = UserInfoRes.ForStore.builder()
                     .type(store.getType().toString().toLowerCase())
+                    .userPk(store.getId())
                     .userId(store.getUserId())
                     .name(store.getName())
                     .email(store.getEmail())
                     .storeName(store.getStore())
                     .license(store.getLicense())
                     .profile(store.getProfile())
+                    .holidays(holidays)
                     .feedNum(0)
                     .rating(4.35)
+                    .introduction(store.getBio())
                     .address(UserInfoRes.Address.builder()
                             .zipCode(store.getZipCode())
                             .street(store.getStreet())

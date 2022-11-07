@@ -22,6 +22,8 @@ public interface ConsumerRepository extends JpaRepository<ConsumerEntity, Long> 
 
     public ConsumerEntity findByNickname(String nickname);
 
+    public ConsumerEntity findByNicknameAndWithdrawal(String nickname, boolean isDeleted);
+
     public ConsumerEntity findByUserIdAndWithdrawal(String userId, boolean isDeleted);
 
     @Modifying

@@ -2,13 +2,13 @@ package com.ssafy.fly.controller;
 
 import com.ssafy.fly.common.util.ResultMessageSet;
 import com.ssafy.fly.dto.request.*;
-import com.ssafy.fly.dto.response.UserInfoRes;
 import com.ssafy.fly.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -116,11 +116,12 @@ public class UserController {
 
     // 6. 회원 정보 수정
     @PutMapping()
-    public ResponseEntity<Map<String, Object>> changeInfo(@RequestBody ChangeInfoReq changeInfoReq) {
+    public ResponseEntity<Map<String, Object>> changeInfo(@RequestBody ChangeInfoReq changeInfoReq,
+                                                          Principal principal) {
         System.out.println("[PUT] - /user " + changeInfoReq);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = userService.updateUserInfo(changeInfoReq);
+        Map<String, Object> result = userService.updateUserInfo(changeInfoReq, principal);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -134,11 +135,12 @@ public class UserController {
 
     // 7. 소개글 수정(판매자)
     @PutMapping("/introduction")
-    public ResponseEntity<Map<String, Object>> changeStoreIntroduction(@RequestBody ChangeIntroductionReq changeIntroductionReq) {
+    public ResponseEntity<Map<String, Object>> changeStoreIntroduction(@RequestBody Map<String, Object> changeIntroductionReq,
+                                                                       Principal principal) {
         System.out.println("[PUT] - /user/introduction " + changeIntroductionReq);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = userService.updateIntroduction(changeIntroductionReq);
+        Map<String, Object> result = userService.updateIntroduction(changeIntroductionReq.get("introduction").toString(), principal);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -152,11 +154,12 @@ public class UserController {
 
     // 8. 비밀번호 변경
     @PutMapping("/changePassword")
-    public ResponseEntity<Map<String, Object>> changePassword(@RequestBody ChangePwdReq changePwdReq) {
+    public ResponseEntity<Map<String, Object>> changePassword(@RequestBody ChangePwdReq changePwdReq,
+                                                              Principal principal) {
         System.out.println("[PUT] - /user/changePassword " + changePwdReq);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = userService.updatePassword(changePwdReq);
+        Map<String, Object> result = userService.updatePassword(changePwdReq, principal);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -170,11 +173,12 @@ public class UserController {
 
     // 9. 프로필 이미지 변경
     @PutMapping("/changeImg")
-    public ResponseEntity<Map<String, Object>> updateMemberProfileImage(@RequestBody ChangeProfileReq changeProfileReq) {
+    public ResponseEntity<Map<String, Object>> updateMemberProfileImage(@RequestBody Map<String, Object> changeProfileReq,
+                                                                        Principal principal) {
         System.out.println("[PUT] - /user/changeImg " + changeProfileReq);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = userService.updateProfileImage(changeProfileReq);
+        Map<String, Object> result = userService.updateProfileImage(changeProfileReq.get("image").toString(), principal);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -188,11 +192,12 @@ public class UserController {
 
     // 10. 회원 탈퇴
     @DeleteMapping()
-    public ResponseEntity<Map<String, Object>> withdrawFromMember(@RequestBody WithdrawReq withdrawReq) {
+    public ResponseEntity<Map<String, Object>> withdrawFromMember(@RequestBody Map<String, Object> withdrawReq,
+                                                                  Principal principal) {
         System.out.println("[DELETE] - /user " + withdrawReq);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = userService.deleteUser(withdrawReq);
+        Map<String, Object> result = userService.deleteUser(withdrawReq.get("password").toString(), principal);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -205,12 +210,12 @@ public class UserController {
     }
 
     // 11. 회원 정보 조회
-    @GetMapping("/{userId}")
-    public ResponseEntity<Map<String, Object>> getUserInfo(@PathVariable String userId) {
-        System.out.println("[GET] - /member/{userId}");
+    @GetMapping()
+    public ResponseEntity<Map<String, Object>> getUserInfo(Principal principal) {
+        System.out.println("[GET] - /member");
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = userService.findUserInfo(userId);
+        Map<String, Object> result = userService.findUserInfo(principal);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
