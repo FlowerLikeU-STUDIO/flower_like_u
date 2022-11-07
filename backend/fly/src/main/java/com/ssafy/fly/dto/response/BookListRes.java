@@ -33,7 +33,10 @@ public class BookListRes {
     @Data
     @SuperBuilder
     public static class BookElementForAll extends BookListRes {
+        private String consumerId;
+        private Long storeId;
         private String consumerName;
         private String storeName;
+        private boolean hasReview;
     }
 }
