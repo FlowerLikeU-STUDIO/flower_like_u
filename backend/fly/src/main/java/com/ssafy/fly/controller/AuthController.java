@@ -1,4 +1,4 @@
-package com.ssafy.fly.config.controller;
+package com.ssafy.fly.controller;
 
 import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.common.util.JwtTokenProvider;

@@ -1,4 +1,4 @@
-package com.ssafy.fly.config.controller;
+package com.ssafy.fly.controller;
 
 import com.ssafy.fly.database.mysql.entity.ReviewEntity;
 import com.ssafy.fly.dto.request.ReviewPostReqDto;
