@@ -8,6 +8,13 @@
 .main__wrapper {
   max-width: 62.5rem;
   margin: 1rem auto;
+  padding: 1rem 1rem;
+}
+
+.main__div__wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .main__div {
@@ -19,18 +26,37 @@
   }
 }
 
-.line {
-  width: 100%;
-  border-bottom: solid 0.125rem $white350;
-  margin: 3rem auto;
-}
-
 .sub__div {
   display: flex;
   flex-direction: column;
   max-width: 50rem;
   width: 100%;
   gap: 0.5rem;
+}
+
+.btn__wrapper {
+  position: absolute;
+  right: 5%;
+  bottom: -10%;
+}
+
+@mixin button-color($bgcolor, $color) {
+  background-color: $bgcolor;
+  color: $color;
+}
+
+.primary900 {
+  @include button-color($primary900, $white);
+}
+
+.primary_disable {
+  @include button-color($primary300p, $white);
+}
+
+.line {
+  width: 100%;
+  border-bottom: solid 0.125rem $white350;
+  margin: 3rem auto;
 }
 
 .title__p {
@@ -46,15 +72,22 @@
 
 .flower__detail {
   @include flexDiv("row", "center", "start");
+  @include respond-to("tablet-portrait-only") {
+    flex-direction: column;
+  }
 }
 
 .flower__detail__title {
   @include font(1.25rem, bold, $primary600p);
+  margin-bottom: 1rem;
 }
 
 .flower__detail_sub {
   margin-left: 3rem;
   @include font(1.25rem, normal, $mainParagraph, 1.8rem);
+  @include respond-to("tablet-portrait-only") {
+    margin: 2rem 0rem;
+  }
 }
 
 .flower__img {
@@ -65,5 +98,6 @@
 }
 
 .flower__info {
+  display: flex;
   @include font(1.3rem, normal, $mainParagraph);
 }
