@@ -1,14 +1,14 @@
 import MyHeader from "@/components/mypage/MyHeader";
 import MyWrapper from "@/components/common/MyWrapper";
-import ResDetail from "@/components/mypage/ResDetail";
+import CustomDetailCard from "@/components/common/CustomDetailCard";
 
-const ReservationDetail = () => {
+const DesignDetail = () => {
   return (
     <MyWrapper>
       <MyHeader />
-      <ResDetail />
+      <CustomDetailCard />
     </MyWrapper>
   );
 };
 
-export default ReservationDetail;
+export default DesignDetail;

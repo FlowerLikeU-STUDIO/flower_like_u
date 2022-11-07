@@ -1,13 +1,14 @@
 import MyHeader from "@/components/mypage/MyHeader";
 import MyWrapper from "@/components/common/MyWrapper";
+import ResDetail from "@/components/mypage/ResDetail";
 
-const CustomerDesign = () => {
+const OrderDetail = () => {
   return (
     <MyWrapper>
       <MyHeader />
-      <div>CustomerDesign</div>
+      <ResDetail />
     </MyWrapper>
   );
 };
 
-export default CustomerDesign;
+export default OrderDetail;
