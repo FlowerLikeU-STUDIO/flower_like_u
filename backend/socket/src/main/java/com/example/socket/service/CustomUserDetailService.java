@@ -27,11 +27,10 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        Optional<Consumer> optConsumer = consumerRepository.findByUserId(username);
+        Optional<Consumer> optConsumer = consumerRepository.findById(Long.parseLong(username));
         if (optConsumer.isPresent())
             return optConsumer.get();
-        Optional<Store> optStore = storeRepository.findByUserId(username);
+        Optional<Store> optStore = storeRepository.findById(Long.parseLong(username));
         if (optStore.isPresent())
             return optStore.get();
         throw new IllegalArgumentException("해당 사용자가 없습니다");

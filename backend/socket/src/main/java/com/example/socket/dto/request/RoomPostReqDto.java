@@ -6,6 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RoomPostReqDto {
-    private Long storeId;
-    private Long consumerId;
+    private Long opponent;
 }
