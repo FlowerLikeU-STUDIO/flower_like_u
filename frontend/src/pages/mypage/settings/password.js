@@ -18,13 +18,6 @@ const ModifyPassword = () => {
   const [pw2, setPw2] = useState("");
   const [sameMsg, setSameMsg] = useState("");
 
-  const data = {
-    userId: user.userId,
-    curPwd: curPw,
-    newPwd: pw1,
-    newpwd2: pw2,
-  };
-
   // *패스워드 일치여부 확인 후 반영
   const pwdCheck = (e) => {
     const value = e.target.value;
@@ -39,6 +32,12 @@ const ModifyPassword = () => {
 
   const submitPassword = async (e) => {
     e.preventDefault();
+    const data = {
+      userId: user.userId,
+      curPwd: curPw,
+      newPwd: pw1,
+      newpwd2: pw2,
+    };
     if (isModify === false) {
       setIsModify(!isModify);
       return;
@@ -56,7 +55,9 @@ const ModifyPassword = () => {
       alert("같은 비밀번호로 변경할 수 없습니다.");
       return;
     }
-    const res = await Axios.put("auth/changePassword", data).then((res) => res.data);
+    const res = await Axios.put("auth/changePassword", data).then(
+      (res) => res.data
+    );
     if (res.result === "success") {
       setIsModify(!isModify);
       setCurPw("");
