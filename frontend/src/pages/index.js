@@ -1,10 +1,6 @@
 import Image from "next/image";
 import styled from "styled-components";
-import Circle from "../components/Circle";
-
-const HomeWrapper = styled.div`
-  position: relative;
-`;
+import styles from "./index.module.scss";
 
 const HomeFlower = styled.div`
   position: absolute;
@@ -14,7 +10,6 @@ const HomeFlower = styled.div`
   top: ${(props) => props.top};
   width: ${(props) => props.width};
   height: ${(props) => props.height};
-  z-index: -1;
 
   &.left {
     @media all and (max-width: 1024px) {
@@ -87,8 +82,7 @@ const HomeTitleWrapper = styled.div`
 `;
 const Home = () => {
   return (
-    <HomeWrapper>
-      <Circle />
+    <main className={styles.main_wrapper}>
       <HomeTitleWrapper>
         <h1>너를 닮은 꽃</h1>
       </HomeTitleWrapper>
@@ -111,7 +105,7 @@ const Home = () => {
           <div>4번애용</div>
         </div>
       </Section>
-    </HomeWrapper>
+    </main>
   );
 };
 

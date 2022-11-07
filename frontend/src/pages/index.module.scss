@@ -1,0 +1,9 @@
+.main_wrapper {
+  width: 100%;
+  min-height: 100vh;
+  padding: 4rem 0rem 0rem;
+
+  @media screen and (min-width: 1350px) {
+    padding: 4rem 0rem 0rem;
+  }
+}
