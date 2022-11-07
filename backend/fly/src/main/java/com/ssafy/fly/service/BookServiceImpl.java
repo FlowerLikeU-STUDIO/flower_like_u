@@ -347,13 +347,30 @@ public class BookServiceImpl implements BookService {
 
     // 5. 예약 목록 상세 조회(커스텀, 피드)
     @Override
-    public Map<String, Object> getDetailBookInfo(Long bookId) {
+    public Map<String, Object> getDetailBookInfo(Long bookId, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
         BookEntity book = bookRepository.findById(bookId).orElse(null);
+        if (book == null) {
+            message = "예약 아이디와 일치하는 정보가 없습니다. 예약 아이디를 확인해주세요.";
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
 
-        if (book != null) {
+        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
+        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
+        if (consumer == null && store == null) {
+            message = "잘못된 토큰 정보입니다.";
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        if ((consumer != null && principal.getName().equals(book.getConsumerId().getUserId()))
+                || (store != null && principal.getName().equals(book.getStoreId().getUserId()))) {
+
             Map<String, Object> bookInfo = new HashMap<>();
 
             if (BookType.CUSTOM.equals(book.getType())) {
@@ -368,6 +385,9 @@ public class BookServiceImpl implements BookService {
                         .state(book.getState().toString().toLowerCase())
                         .consumerName(book.getConsumerId().getName())
                         .storeName(book.getStoreId().getStore())
+                        .consumerId(book.getConsumerId().getUserId())
+                        .storeId(book.getStoreId().getId())
+                        .hasReview(false)
                         .build();
                 CustomFlowerDocument detailInfo = customFlowerMongoRepository.findById(designId).orElse(null);
 
@@ -384,6 +404,9 @@ public class BookServiceImpl implements BookService {
                         .state(book.getState().toString().toLowerCase())
                         .consumerName(book.getConsumerId().getName())
                         .storeName(book.getStoreId().getStore())
+                        .consumerId(book.getConsumerId().getUserId())
+                        .storeId(book.getStoreId().getId())
+                        .hasReview(false)
                         .build();
                 bookInfo.put("basics", basicInfo);
             }
@@ -391,28 +414,49 @@ public class BookServiceImpl implements BookService {
             result.put("bookInfo", bookInfo);
             result.put("result", true);
         } else {
-            message = "예약 아이디와 일치하는 정보가 없습니다. 예약 아이디를 확인해주세요.";
+            message = "잘못된 접근입니다.";
             result.put("result", false);
+            result.put("message", message);
         }
 
-        result.put("message", message);
         return result;
     }
 
     // 6. 예약 취소
     @Override
-    public Map<String, Object> deleteBookInfo(Long bookId) {
+    public Map<String, Object> deleteBookInfo(Long bookId, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
-        if (bookRepository.findById(bookId).orElse(null) == null) {
-            message = "예약 아이디와 일치하는 정보가 없습니다. 예약 아이디를 확인해주세요.";
+        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
+        if(consumer == null) {
+            message = "잘못된 토큰 정보입니다.";
             result.put("result", false);
-        } else {
-            bookRepository.deleteById(bookId);
-            result.put("result", true);
+            result.put("message", message);
+            return result;
         }
 
+        BookEntity book = bookRepository.findById(bookId).orElse(null);
+        if(book == null) {
+            message = "예약 아이디와 일치하는 정보가 없습니다. 예약 아이디를 확인해주세요.";
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        if(principal.getName().equals(book.getConsumerId().getUserId())) {
+            if(book.getState().equals(BookState.WAITED)) {
+                bookRepository.deleteById(bookId);
+                result.put("result", true);
+            } else {
+                message = "이미 제작이 진행되고 있어 취소할 수 없습니다.";
+                result.put("result", false);
+            }
+        } else {
+            message = "접근 권한이 없습니다.";
+            result.put("result", false);
+        }
+        
         result.put("message", message);
         return result;
     }
