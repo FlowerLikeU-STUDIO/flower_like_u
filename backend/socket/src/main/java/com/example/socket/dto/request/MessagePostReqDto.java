@@ -10,8 +10,8 @@ import java.util.List;
 public class MessagePostReqDto {
     private String content;
     private List<String> imgSrc;
+    private Long opponent;
+    private String direction;
     private Long storeId;
     private Long consumerId;
-    private String direction;
-
 }

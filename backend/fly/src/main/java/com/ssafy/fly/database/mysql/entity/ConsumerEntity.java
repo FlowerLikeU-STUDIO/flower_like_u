@@ -1,5 +1,6 @@
 package com.ssafy.fly.database.mysql.entity;
 
+import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.database.mysql.enumtype.UserType;
 import jdk.nashorn.internal.runtime.logging.Logger;
 import lombok.*;
@@ -23,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString(exclude = {"customFlowers", "reviews", "books"})
-public class ConsumerEntity extends BaseEntity implements UserDetails {
+public class ConsumerEntity extends BaseEntity implements CustomUserDetail {
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     UserType type;
@@ -89,7 +90,11 @@ public class ConsumerEntity extends BaseEntity implements UserDetails {
 
         return authorities;
     }
+    @Override
+    public Long getUserPk() {return super.getId();}
 
+    @Override
+    public String getUserType() { return "CONSUMER";}
     @Override
     public String getPassword() {
         return password;
