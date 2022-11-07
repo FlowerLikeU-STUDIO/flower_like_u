@@ -12,9 +12,12 @@ public class WebConfig implements WebMvcConfigurer {
         //WebMvcConfigurer.super.addCorsMappings(registry);
         registry.addMapping("/**")
                 .allowedOrigins("*")
+                .allowedOriginPatterns("*")
+                .allowedHeaders("*")
                 .allowedMethods("*")
-                .allowedHeaders("X-AUTH-TOKEN", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
-                .exposedHeaders("Content-Disposition", "jwt-token", "X-AUTH-TOKEN", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
-                .allowCredentials(false).maxAge(3000);
+                .exposedHeaders("*")
+                //.allowedHeaders("X-AUTH-TOKEN", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
+                //.exposedHeaders("Content-Disposition", "jwt-token", "X-AUTH-TOKEN", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
+                .allowCredentials(true).maxAge(3000);
     }
 }
