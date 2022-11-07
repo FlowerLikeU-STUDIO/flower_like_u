@@ -1,9 +1,9 @@
-import MySetting from "@/components/auth/MySetting";
+import MySetting from "@/components/mypage/MySetting";
 import useUser from "@/hooks/useUser";
 import { useState } from "react";
 import styles from "./password.module.scss";
 import classnames from "classnames";
-import MyPwInput from "@/components/auth/MyPwInput";
+import MyPwInput from "@/components/mypage/MyPwInput";
 import Axios from "@/api/axios";
 import { useRouter } from "next/router";
 

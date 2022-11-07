@@ -1,4 +1,4 @@
-import MySetting from "@/components/auth/MySetting";
+import MySetting from "@/components/mypage/MySetting";
 import Button from "@/components/common/Button";
 import useUser from "@/hooks/useUser";
 

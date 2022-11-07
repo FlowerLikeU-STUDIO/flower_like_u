@@ -1,4 +1,4 @@
-import MyHeader from "@/components/common/MyHeader";
+import MyHeader from "@/components/mypage/MyHeader";
 import MyWrapper from "@/components/common/MyWrapper";
 
 const CustomerOrderList = () => {

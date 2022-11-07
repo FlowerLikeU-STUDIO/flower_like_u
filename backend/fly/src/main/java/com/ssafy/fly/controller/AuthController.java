@@ -1,7 +1,10 @@
 package com.ssafy.fly.controller;
 
 import com.ssafy.fly.common.util.JwtTokenProvider;
+import com.ssafy.fly.common.util.ResultMessageSet;
+import com.ssafy.fly.dto.request.EmailAuthenticationReq;
 import com.ssafy.fly.dto.request.LoginReq;
+import com.ssafy.fly.service.AuthService;
 import com.ssafy.fly.service.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,25 +19,40 @@ import java.util.*;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
+    private final AuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailService customUserDetailService;
     private final PasswordEncoder passwordEncoder;
+    private final ResultMessageSet resultMessageSet;
     @Autowired
-    public AuthController(JwtTokenProvider jwtTokenProvider, CustomUserDetailService customUserDetailService, PasswordEncoder passwordEncoder) {
+    public AuthController(AuthService authService,
+                          JwtTokenProvider jwtTokenProvider,
+                          CustomUserDetailService customUserDetailService,
+                          PasswordEncoder passwordEncoder,
+                          ResultMessageSet resultMessageSet) {
+        this.authService = authService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.customUserDetailService = customUserDetailService;
         this.passwordEncoder = passwordEncoder;
+        this.resultMessageSet = resultMessageSet;
     }
+    @PostMapping("/email")
+    public ResponseEntity<Map<String, Object>> emailAuthentication(@RequestBody Map<String, Object> emailAuthReq) {
+        System.out.println("[GET] - /auth/email " + emailAuthReq.get("email"));
 
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = authService.authenticateByEmail(emailAuthReq.get("email").toString());
 
-    @GetMapping("/test/{text}")
-    public ResponseEntity<Map<String, Object>> test(@PathVariable String text) {
-        System.out.println("[GET] - /auth/test" + text);
+        if((boolean) result.get("result")) {
+             response.put("result", resultMessageSet.SUCCESS);
+             response.put("authCode", result.get("authCode"));
+        } else {
+            response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
+        }
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("param", text);
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/login")
@@ -43,10 +61,11 @@ public class AuthController {
 
         Map<String, Object> result = new HashMap<>();
         UserDetails userDetails = customUserDetailService.loadUserByUsername(loginReq.getUserId());
-        if (passwordEncoder.matches(loginReq.getPassword(),userDetails.getPassword())) {
+        if (passwordEncoder.matches(loginReq.getPassword(), userDetails.getPassword())) {
             List<String> lst = new ArrayList<>();
             lst.add("USER");
-            result.put("response", jwtTokenProvider.createToken(userDetails.getUsername(), lst));
+            result.put("result", resultMessageSet.SUCCESS);
+            result.put("accessToken", jwtTokenProvider.createToken(userDetails.getUsername(), lst));
             return new ResponseEntity<>(result, HttpStatus.OK);
             // 요청 header "Authorization : [토큰]"
         }

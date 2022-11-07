@@ -1,0 +1,11 @@
+.auto_height_imagewrapper {
+  width: 100%;
+  & > span {
+    position: unset !important;
+    & .auto_image {
+      object-fit: contain !important;
+      position: relative !important;
+      height: auto !important;
+    }
+  }
+}

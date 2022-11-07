@@ -12,10 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,15 +41,14 @@ public class FeedServiceImpl implements FeedService {
 
     // 1. 피드 등록
     @Override
-    public Map<String, Object> saveNewFeed(RegisterFeedReq registerFeedReq) {
+    public Map<String, Object> saveNewFeed(RegisterFeedReq registerFeedReq, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
-        String storeId = registerFeedReq.getStoreId();
-        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(storeId, false);
+        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
 
         if (store == null) {
-            message = "존재하지 않는 아이디입니다.";
+            message = "잘못된 토큰 정보입니다.";
             System.out.println(message);
             result.put("result", false);
             result.put("message", message);
@@ -83,13 +83,13 @@ public class FeedServiceImpl implements FeedService {
 
     // 2. 피드 목록 조회
     @Override
-    public Map<String, Object> getFeedList(String userId, Long storeId, int pageNo, int size) {
+    public Map<String, Object> getFeedList(Long storeId, int pageNo, int size, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
         StoreEntity store = null;
         // 판매자가 본인 피드 목록을 조회하는 경우
-        if(storeId == null) store = storeRepository.findByUserIdAndWithdrawal(userId, false);
+        if(storeId == null) store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
         // 구매자가 판매자 피드 목록을 조회하는 경우
         else store = storeRepository.findById(storeId).orElse(null);
 
@@ -132,7 +132,7 @@ public class FeedServiceImpl implements FeedService {
 
     // 3. 피드 상세 조회
     @Override
-    public Map<String, Object> getFeedDetailInfo(Long feedId) {
+    public Map<String, Object> getFeedDetailInfo(Long feedId, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
@@ -166,13 +166,13 @@ public class FeedServiceImpl implements FeedService {
 
     // 4. 피드 수정
     @Override
-    public Map<String, Object> updateFeedInfo() {
+    public Map<String, Object> updateFeedInfo(Principal principal) {
         return null;
     }
 
     // 5. 피드 삭제
     @Override
-    public Map<String, Object> deleteFeedInfo(Long feedId) {
+    public Map<String, Object> deleteFeedInfo(Long feedId, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
@@ -185,11 +185,28 @@ public class FeedServiceImpl implements FeedService {
             return result;
         }
 
+        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
+        if(store == null) {
+            message = "존재하지 않는 계정 입니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        if(!feed.getStoreId().getUserId().equals(principal.getName())) {
+            message = "삭제 권한이 없는 계정입니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
         if(feedRepository.feedRemove(feedId) > 0) {
             result.put("result", true);
         } else {
             message = "서버 문제로 데이터 삭제에 실패하였습니다.";
-            result.put("result", true);
+            result.put("result", false);
         }
         result.put("message", message);
         return result;

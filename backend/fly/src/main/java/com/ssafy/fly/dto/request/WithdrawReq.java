@@ -6,6 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class WithdrawReq {
-    private String userId;
     private String password;
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,11 +30,12 @@ public class BookController {
 
     // 1. 꽃다발 예약(커스텀 꽃다발)
     @PostMapping("/custom")
-    public ResponseEntity<Map<String, Object>> bookCustomizedFlower(@RequestBody BookCustomFlowerReq bookCustomFlowerReq) {
+    public ResponseEntity<Map<String, Object>> bookCustomizedFlower(@RequestBody BookCustomFlowerReq bookCustomFlowerReq,
+                                                                    Principal principal) {
         System.out.println("[POST] - /book/custom " + bookCustomFlowerReq);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = bookService.registCustomFlowerBookInfo(bookCustomFlowerReq);
+        Map<String, Object> result = bookService.registCustomFlowerBookInfo(bookCustomFlowerReq, principal);
 
         if((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -47,11 +49,12 @@ public class BookController {
 
     // 2. 꽃다발 예약(피드)
     @PostMapping("/feed")
-    public ResponseEntity<Map<String, Object>> bookFeedFlower(@RequestBody BookFeedFlowerReq bookFeedFlower) {
+    public ResponseEntity<Map<String, Object>> bookFeedFlower(@RequestBody BookFeedFlowerReq bookFeedFlower,
+                                                              Principal principal) {
         System.out.println("[POST] - /book/feed " + bookFeedFlower);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = bookService.registFeedFlowerBookInfo(bookFeedFlower);
+        Map<String, Object> result = bookService.registFeedFlowerBookInfo(bookFeedFlower, principal);
 
         if((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -65,11 +68,12 @@ public class BookController {
 
     // 3. 예약 상태 변경
     @PutMapping("/{bookId}")
-    public ResponseEntity<Map<String, Object>> updateBookState(@PathVariable Long bookId) {
+    public ResponseEntity<Map<String, Object>> updateBookState(@PathVariable Long bookId,
+                                                               Principal principal) {
         System.out.println("[PUT] - /book/{bookId} " + bookId);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = bookService.updateBookState(bookId);
+        Map<String, Object> result = bookService.updateBookState(bookId, principal);
 
         if((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -82,15 +86,15 @@ public class BookController {
     }
 
     // 4. 예약 목록 조회
-    @GetMapping("/list/{userId}")
-    public ResponseEntity<Map<String, Object>> getBookInfoList(@PathVariable String userId,
-                                                               @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
+    @GetMapping()
+    public ResponseEntity<Map<String, Object>> getBookInfoList(@RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
                                                                @RequestParam(value = "size", required = false, defaultValue = "10") int size,
-                                                               @RequestParam(value = "filter", required = false, defaultValue = "") String filter) {
-        System.out.println("[GET] - /book/list/{userId} " + userId);
+                                                               @RequestParam(value = "filter", required = false, defaultValue = "") String filter,
+                                                               Principal principal) {
+        System.out.println("[GET] - /book " + principal.getName());
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = bookService.getBookInfoList(userId, pageNo, size, filter);
+        Map<String, Object> result = bookService.getBookInfoList(pageNo, size, filter, principal);
 
         if((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
