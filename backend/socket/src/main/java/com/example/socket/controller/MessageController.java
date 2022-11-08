@@ -60,8 +60,9 @@ public class MessageController {
 
     @GetMapping("/chatting/message/{address}")
     public BaseResponseDto<List<Message>> getMessageList(@PathVariable("address") String address) {
-
+        System.out.println("[controller]");
         List<Message> messageList = messageService.getList(address);
+        System.out.println("[service]");
         return new BaseResponseDto<>("success", messageList);
     }
 
