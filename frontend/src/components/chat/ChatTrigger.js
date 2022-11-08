@@ -36,12 +36,12 @@ const ChatButton = styled.button``;
 const ChatTrigger = ({ onClick, hidden }) => {
   return (
     <ChatTriggerWrapper hidden={hidden}>
-      <ChatButton>
+      <ChatButton onClick={() => onClick(true)} aria-label={"너닮꽃 너닮톡"}>
         <Image
           src={"/chatting.png"}
           width={"38px"}
           height={"38px"}
-          onClick={() => onClick(true)}
+          alt={"너닮꽃 채팅"}
         />
       </ChatButton>
     </ChatTriggerWrapper>
