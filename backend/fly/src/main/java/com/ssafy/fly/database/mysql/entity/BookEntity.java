@@ -6,7 +6,9 @@ import com.ssafy.fly.database.mysql.enumtype.BookType;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "book")
@@ -54,4 +56,8 @@ public class BookEntity extends BaseEntity {
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     private BookType type;
+
+    @OneToMany(mappedBy = "bookId")
+    @Builder.Default
+    private List<ReviewEntity> review = new ArrayList<>();;
 }

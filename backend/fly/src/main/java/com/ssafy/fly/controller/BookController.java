@@ -109,11 +109,12 @@ public class BookController {
 
     // 5. 예약 목록 상세 조회(커스텀, 피드)
     @GetMapping("/detail/{bookId}")
-    public ResponseEntity<Map<String, Object>> getDetailReservationInfo(@PathVariable Long bookId) {
+    public ResponseEntity<Map<String, Object>> getDetailReservationInfo(@PathVariable Long bookId,
+                                                                        Principal principal) {
         System.out.println("[GET] - /book/detail/{bookId} " + bookId);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = bookService.getDetailBookInfo(bookId);
+        Map<String, Object> result = bookService.getDetailBookInfo(bookId, principal);
 
         if((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -128,10 +129,11 @@ public class BookController {
 
     // 6. 예약 취소
     @DeleteMapping("/{bookId}")
-    public ResponseEntity<Map<String, Object>> cancelReservation(@PathVariable Long bookId) {
+    public ResponseEntity<Map<String, Object>> cancelReservation(@PathVariable Long bookId,
+                                                                 Principal principal) {
         System.out.println("[DELETE] - /book/{bookId} " + bookId);
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = bookService.deleteBookInfo(bookId);
+        Map<String, Object> result = bookService.deleteBookInfo(bookId, principal);
 
         if((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);

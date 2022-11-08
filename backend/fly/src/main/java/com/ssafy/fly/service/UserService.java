@@ -17,4 +17,5 @@ public interface UserService {
     public Map<String, Object> updateProfileImage(String image, Principal principal);
     public Map<String, Object> deleteUser(String password, Principal principal);
     public Map<String, Object> findUserInfo(Principal principal);
+    public Map<String, Object> findStoreInfo(Long storeId);
 }

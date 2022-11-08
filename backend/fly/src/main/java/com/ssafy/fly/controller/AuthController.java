@@ -66,7 +66,7 @@ public class AuthController {
             List<String> lst = new ArrayList<>();
             lst.add(customUserDetail.getUserType());
             result.put("result", resultMessageSet.SUCCESS);
-            result.put("response", jwtTokenProvider.createToken(customUserDetail.getUserPk(), lst));
+            result.put("accessToken", jwtTokenProvider.createToken(customUserDetail.getUserPk(), lst));
             return new ResponseEntity<>(result, HttpStatus.OK);
             // 요청 header "Authorization : [토큰]"
         }

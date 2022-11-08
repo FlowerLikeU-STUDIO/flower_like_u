@@ -75,7 +75,7 @@ const ModifyAuth = () => {
         address: addr.street + addr.detail, //!addr로 변경할 것.
       };
       // !user/ -> user
-      const res = await Axios.put("user/", newData).then((res) => res.data);
+      const res = await Axios.put("user", newData).then((res) => res.data);
       if (res.result === "success") {
         mutate();
         setIsModify(false);
