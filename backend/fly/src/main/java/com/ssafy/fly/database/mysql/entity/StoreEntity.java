@@ -88,11 +88,6 @@ public class StoreEntity extends BaseEntity implements CustomUserDetail {
     private List<FeedEntity> feeds = new ArrayList<>();
 
     @Override
-    public Long getUserPk() {return super.getId();}
-
-    @Override
-    public String getUserType() { return "STORE";}
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
@@ -100,6 +95,12 @@ public class StoreEntity extends BaseEntity implements CustomUserDetail {
 
         return authorities;
     }
+
+    @Override
+    public Long getUserPk() {return super.getId();}
+
+    @Override
+    public String getUserType() { return "STORE";}
 
     @Override
     public String getPassword() {
