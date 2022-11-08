@@ -1,5 +1,6 @@
 package com.ssafy.fly.common.util;
 
+import com.ssafy.fly.service.CustomUserDetailService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +23,7 @@ public class JwtTokenProvider {
     // 토큰 유효시간 5일
     private long tokenValidTime = 5 * 24 * 60 * 60 * 1000L;
 
-    private final UserDetailsService userDetailsService;
+    private final CustomUserDetailService customUserDetailService;
 
     // 객체 초기화, secretKey를 Base64로 인코딩한다.
     @PostConstruct
@@ -46,7 +47,7 @@ public class JwtTokenProvider {
 
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
+        UserDetails userDetails = customUserDetailService.loadUserByUsername(JwtConverter.getUserPk(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 

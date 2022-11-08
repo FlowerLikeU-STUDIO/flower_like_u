@@ -1,9 +1,13 @@
 package com.ssafy.fly.controller;
 
+import com.ssafy.fly.common.util.CustomMap;
+import com.ssafy.fly.common.util.FlowerMap;
 import com.ssafy.fly.common.util.ResultMessageSet;
+import com.ssafy.fly.common.vo.FlowerVo;
 import com.ssafy.fly.database.mongodb.repository.CustomFlowerMongoRepository;
 import com.ssafy.fly.dto.request.CustomFlowerRegReq;
 import com.ssafy.fly.service.CustomFlowerService;
+import com.ssafy.fly.service.HarmonyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -12,8 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 //@CrossOrigin(origins = "*")
 @RestController
@@ -22,13 +26,14 @@ public class CustomController {
 
     private final CustomFlowerService customFlowerService;
     private final ResultMessageSet resultMessageSet;
-
+    private final HarmonyService harmonyService;
     @Autowired
-    public CustomController(CustomFlowerService customFlowerService,
-                            ResultMessageSet resultMessageSet) {
+    public CustomController(CustomFlowerService customFlowerService, ResultMessageSet resultMessageSet, HarmonyService harmonyService) {
         this.customFlowerService = customFlowerService;
         this.resultMessageSet = resultMessageSet;
+        this.harmonyService = harmonyService;
     }
+
 
     // 1. 커스텀 꽃다발 정보 등록
     @PostMapping()
@@ -107,5 +112,46 @@ public class CustomController {
         }
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/recommend/{size}")
+    public ResponseEntity<List<FlowerVo>> getRecommend(@PathVariable int size) {
+        String[] arr = new String[size];
+        Map<Integer, List<Integer>> map = CustomMap.ofMap(size);
+        Queue<Integer> queue = new LinkedList<>();
+
+        while (true) {
+            List<Integer> isNull = new ArrayList<>();
+            for (int i = 0; i < size; i++)
+                if (arr[i] == null) isNull.add(i);
+
+            if (isNull.size() == 0) break;
+            int idx = (int) Math.floor(Math.random() * 7);
+            int position = (int) Math.floor(Math.random() * isNull.size());
+            arr[isNull.get(position)] = CustomMap.color[idx];
+            queue.add(position);
+            while (queue.size() > 0) {
+                int node = queue.poll();
+                if (arr[node] == null) break;
+                while (true) {
+                    List<Integer> filterLst = map.get(node).stream().filter((x) -> {
+                        return arr[x] == null;
+                    }).collect(Collectors.toList());
+                    if (filterLst.size() == 0) break;
+                    int nextIdx = (int) Math.floor(Math.random() * filterLst.size());
+                    if (arr[filterLst.get(nextIdx)] == null) {
+                        arr[filterLst.get(nextIdx)] = harmonyService.getColor(arr[node]);
+                        queue.add(filterLst.get(nextIdx));
+                        break;
+                    }
+                }
+            }
+        }
+        Map<String, FlowerVo[]> flowerMap = FlowerMap.ofMap();
+        List<FlowerVo> flowerVoList = Arrays.stream(arr).map(color -> {
+            int idxTmp = (int) Math.floor(Math.random() * flowerMap.get(color).length);
+            return flowerMap.get(color)[idxTmp];
+        }).collect(Collectors.toList());
+        return new ResponseEntity<>(flowerVoList,HttpStatus.OK);
     }
 }
