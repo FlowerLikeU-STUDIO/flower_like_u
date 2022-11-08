@@ -31,7 +31,7 @@ public class MessageController {
     }
 
 
-    @PostMapping("chatting")
+    @PostMapping("/chatting")
     public BaseResponseDto<String> createMessage(@RequestHeader(value = "Authorization") String jwt, @RequestBody MessagePostReqDto messagePostReqDto) {
         JwtUserInfo jwtUserInfo = JwtConverter.getUserPk(jwt);
         Long storeId;
@@ -51,21 +51,22 @@ public class MessageController {
         return new BaseResponseDto<>("success",id);
     }
 
-    @GetMapping("chatting/room/list")
+    @GetMapping("/chatting/room/list")
     public BaseResponseDto<List<Room>> getRoomList(@RequestHeader(value = "Authorization") String jwt) {
         JwtUserInfo jwtUserInfo = JwtConverter.getUserPk(jwt);
+        System.out.println(jwtUserInfo.getSub());
+        System.out.println(jwtUserInfo.getRole());
         List<Room> roomList = roomService.getList(jwtUserInfo.getRole(), Long.parseLong(jwtUserInfo.getSub()));
         return new BaseResponseDto<>("success", roomList);
     }
 
-    @GetMapping("chatting/message/{address}")
+    @GetMapping("/chatting/message/{address}")
     public BaseResponseDto<List<Message>> getMessageList(@PathVariable("address") String address) {
-
         List<Message> messageList = messageService.getList(address);
         return new BaseResponseDto<>("success", messageList);
     }
 
-    @GetMapping("chatting/{id}")
+    @GetMapping("/chatting/{id}")
     public BaseResponseDto<String> getImgSrc(@PathVariable("id") String id) {
         return new BaseResponseDto<>("success",messageService.getImgSrc(id));
     }

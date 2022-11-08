@@ -90,6 +90,7 @@ public class ConsumerEntity extends BaseEntity implements CustomUserDetail {
 
         return authorities;
     }
+
     @Override
     public Long getUserPk() {return super.getId();}
 

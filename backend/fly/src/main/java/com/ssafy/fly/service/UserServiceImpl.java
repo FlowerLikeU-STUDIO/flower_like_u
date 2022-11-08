@@ -7,13 +7,17 @@ import com.ssafy.fly.database.mysql.entity.ConsumerEntity;
 import com.ssafy.fly.database.mysql.entity.StoreEntity;
 import com.ssafy.fly.database.mysql.enumtype.UserType;
 import com.ssafy.fly.database.mysql.repository.ConsumerRepository;
+import com.ssafy.fly.database.mysql.repository.FeedRepository;
+import com.ssafy.fly.database.mysql.repository.ReviewRepository;
 import com.ssafy.fly.database.mysql.repository.StoreRepository;
 import com.ssafy.fly.dto.request.*;
-import com.ssafy.fly.dto.response.ConsumerInfoRes;
 import com.ssafy.fly.dto.response.MailRes;
 import com.ssafy.fly.dto.response.StoreInfoRes;
 import com.ssafy.fly.dto.response.UserInfoRes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,24 +31,33 @@ public class UserServiceImpl implements UserService {
 
     private final ConsumerRepository consumerRepository;
     private final StoreRepository storeRepository;
+    private final FeedRepository feedRepository;
+    private final ReviewRepository reviewRepository;
     private final ValidationChecker validationChecker;
     private final RandomStringGenerator randomStringGenerator;
     private final FlyMailSender flyMailSender;
     private final PasswordEncoder passwordEncoder;
+    private final ReviewService reviewService;
 
     @Autowired
     public UserServiceImpl(ConsumerRepository consumerRepository,
                            StoreRepository storeRepository,
+                           FeedRepository feedRepository,
+                           ReviewRepository reviewRepository,
                            ValidationChecker validationChecker,
                            RandomStringGenerator randomStringGenerator,
                            FlyMailSender flyMailSender,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder,
+                           ReviewService reviewService) {
         this.consumerRepository = consumerRepository;
         this.storeRepository = storeRepository;
+        this.feedRepository = feedRepository;
+        this.reviewRepository = reviewRepository;
         this.validationChecker = validationChecker;
         this.randomStringGenerator = randomStringGenerator;
         this.flyMailSender = flyMailSender;
         this.passwordEncoder = passwordEncoder;
+        this.reviewService = reviewService;
     }
 
     // 1. 아이디 중복 검사
@@ -91,7 +104,7 @@ public class UserServiceImpl implements UserService {
 
         ConsumerEntity consumer = consumerRepository.findFirstByUserId(registerReq.getUserId());
         StoreEntity store = storeRepository.findFirstByUserId(registerReq.getUserId());
-        if(consumer != null || store != null) {
+        if (consumer != null || store != null) {
             message = "이미 사용 중인 아이디입니다.";
             System.out.println(message);
             result.put("result", false);
@@ -259,7 +272,7 @@ public class UserServiceImpl implements UserService {
             String street = changeInfoReq.getAddress().getStreet();
             String details = changeInfoReq.getAddress().getDetails();
             String sigunguCode = changeInfoReq.getAddress().getSigunguCode();
-            if(consumerRepository.updateConsumerInfo(userId, nickname, zipCode, street, details, sigunguCode) > 0) {
+            if (consumerRepository.updateConsumerInfo(userId, nickname, zipCode, street, details, sigunguCode) > 0) {
                 result.put("result", true);
             } else {
                 message = "서버 문제로 요청 작업을 완료하지 못하였습니다.";
@@ -273,7 +286,7 @@ public class UserServiceImpl implements UserService {
             String details = changeInfoReq.getAddress().getDetails();
             String sigunguCode = changeInfoReq.getAddress().getSigunguCode();
             String holidays = changeInfoReq.getHolidays().toString().replaceAll("[\\[\\]\\ ]", "");
-            if(storeRepository.updateStoreInfo(userId, storeName, zipCode, street, details, sigunguCode, holidays) > 0) {
+            if (storeRepository.updateStoreInfo(userId, storeName, zipCode, street, details, sigunguCode, holidays) > 0) {
                 result.put("result", true);
             } else {
                 message = "서버 문제로 요청 작업을 완료하지 못하였습니다.";
@@ -296,7 +309,7 @@ public class UserServiceImpl implements UserService {
         String message = "";
 
         StoreEntity store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-        if(store == null) {
+        if (store == null) {
             message = "잘못된 토큰 정보입니다.";
             result.put("result", false);
             result.put("message", message);
@@ -396,7 +409,7 @@ public class UserServiceImpl implements UserService {
         int success;
         if (consumer != null && consumerRepository.updateProfileImage(userId, image) > 0) {
             result.put("result", true);
-        } else if(store != null && storeRepository.updateProfileImage(userId, image) > 0){
+        } else if (store != null && storeRepository.updateProfileImage(userId, image) > 0) {
             result.put("result", true);
         } else {
             message = "서버 문제로 요청 작업을 완료하지 못하였습니다.";
@@ -438,9 +451,9 @@ public class UserServiceImpl implements UserService {
         if (success > 0) {
             result.put("result", true);
         } else {
-            if(success == -1) {
+            if (success == -1) {
                 message = "서버 문제로 요청 작업을 완료하지 못하였습니다.";
-            } else if(success == -2) {
+            } else if (success == -2) {
                 message = "비밀번호가 일치하지 않습니다.";
             }
             result.put("result", false);
@@ -486,11 +499,11 @@ public class UserServiceImpl implements UserService {
             result.put("userInfo", userInfo);
         } else if (store != null) {
             List<Boolean> holidays = new ArrayList<>();
-            if(store.getHolidays() != null) {
+            if (store.getHolidays() != null) {
                 StringTokenizer st = new StringTokenizer(store.getHolidays(), ",");
-                while(st.hasMoreTokens()) {
+                while (st.hasMoreTokens()) {
                     String weekday = st.nextToken();
-                    if("true".equals(weekday)) holidays.add(true);
+                    if ("true".equals(weekday)) holidays.add(true);
                     else holidays.add(false);
                 }
             }
@@ -522,6 +535,74 @@ public class UserServiceImpl implements UserService {
             result.put("result", false);
             result.put("message", message);
         }
+        return result;
+    }
+
+    // 12. 꽃가게 프로필 정보 조회
+    @Override
+    public Map<String, Object> findStoreInfo(Long storeId) {
+        Map<String, Object> result = new HashMap<>();
+        String message = "";
+
+        StoreEntity store = storeRepository.findByIdAndWithdrawal(storeId, false);
+        if (store == null) {
+            message = "존재하지 않는 판매자 아이디(Long Type) 입니다.";
+            System.out.println(message);
+            result.put("message", message);
+            result.put("result", false);
+            return result;
+        }
+
+        StoreInfoRes.ForDetails storeInfo = StoreInfoRes.ForDetails.builder()
+                .name(store.getName())
+                .email(store.getEmail())
+                .storeName(store.getStore())
+                .address(String.format("%s %s", store.getStreet(), store.getDetailAddr()))
+                .profile(store.getProfile())
+                .feedNum(feedRepository.findAllByStoreIdAndRemoval(store, false).size())
+                .introduction(store.getBio())
+                .rating(reviewService.getRating(store.getId()))
+                .build();
+        System.out.println(reviewService.getRating(store.getId()));
+
+        result.put("result", true);
+        result.put("storeInfo", storeInfo);
+
+        return result;
+    }
+
+    // 13. 판매자 목록 조회
+    @Override
+    public Map<String, Object> findStoreList(int pageNo, int size, String sido, String sigungu, String storeName) {
+        Map<String, Object> result = new HashMap<>();
+        String message = "";
+
+        Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size);
+        Page<StoreEntity> searchList = storeRepository.findAll(pageable);
+        Map<String, Object> info = new HashMap<>();
+
+        if(!searchList.isEmpty()) {
+            List<StoreInfoRes.ForList> resultList = new ArrayList<>();
+            for(StoreEntity curEntity : searchList) {
+                StoreInfoRes.ForList storeInfo = StoreInfoRes.ForList.builder()
+                        .storeId(curEntity.getId())
+                        .storeName(curEntity.getStore())
+                        .profile(curEntity.getProfile())
+                        .rating(reviewService.getRating(curEntity.getId()))
+                        .address(String.format("%s %s", curEntity.getStreet(), curEntity.getDetailAddr()).trim())
+                        .build();
+                resultList.add(storeInfo);
+            }
+            info.put("maxPage", searchList.getTotalPages());
+            info.put("list", resultList);
+            result.put("result", true);
+            result.put("info", info);
+        } else {
+            message = "존재하지 않는 페이지입니다.";
+            result.put("result", false);
+            result.put("message", message);
+        }
+
         return result;
     }
 }

@@ -15,7 +15,7 @@ public interface RoomService {
 
     public Optional<Room> getOptRoom(Long storeId, Long consumerId);
 
-    public void updateAdd(Long storeId, Long consumerId, String latestMessage, String userType);
+    public void updateAdd(String id, String latestMessage, String userType);
 
     public void resetCnt(RoomCntPutReqDto roomCntPutReqDto);
 }

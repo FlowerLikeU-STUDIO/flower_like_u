@@ -25,7 +25,7 @@ public class RoomServiceImpl implements RoomService{
 
     public List<Room> getList(String userType, Long id) {
         List<Room> RoomList;
-        if (userType.equals("consumer"))
+        if (userType.equals("CONSUMER"))
             RoomList = roomRepository.findAllByConsumerId(id);
         else
             RoomList = roomRepository.findAllByStoreId(id);
@@ -45,8 +45,8 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Transactional
-    public void updateAdd(Long storeId, Long consumerId, String latestMessage, String userType) {
-        Room room = roomRepository.findByStoreIdAndConsumerId(storeId,consumerId).orElseThrow(new Supplier<IllegalArgumentException>() {
+    public void updateAdd(String id, String latestMessage, String userType) {
+        Room room = roomRepository.findById(id).orElseThrow(new Supplier<IllegalArgumentException>() {
             @Override
             public IllegalArgumentException get() {
                 return new IllegalArgumentException("해당 방이 없습니다.");
@@ -69,18 +69,18 @@ public class RoomServiceImpl implements RoomService{
 
     @Transactional
     public void resetCnt(RoomCntPutReqDto roomCntPutReqDto) {
-        Room room = roomRepository.findByStoreIdAndConsumerId(roomCntPutReqDto.getStoreId(),roomCntPutReqDto.getConsumerId()).orElseThrow(new Supplier<IllegalArgumentException>() {
+        Room room = roomRepository.findById(roomCntPutReqDto.getId()).orElseThrow(new Supplier<IllegalArgumentException>() {
             @Override
             public IllegalArgumentException get() {
                 return new IllegalArgumentException("해당 방이 없습니다.");
             }
         });
         try {
-            if (roomCntPutReqDto.getUserType().equals("store")) {
+            if (roomCntPutReqDto.getUserType().equals("store"))
                 room.setStoreNotReadCnt(0);
-            } else {
+            else
                 room.setConsumerNotReadCnt(0);
-            }
+
             roomRepository.save(room);
         } catch (Exception e) {
             throw new IllegalArgumentException("카운트 갱신에 실패했습니다.");

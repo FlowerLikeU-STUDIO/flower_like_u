@@ -23,7 +23,7 @@ public class RoomController {
         this.roomService = roomService;
     }
 
-    @PostMapping("chatting/room")
+    @PostMapping("/chatting/room")
     public BaseResponseDto<RoomOnlyAddressResDto> createRoom(@RequestHeader(value = "Authorization") String jwt, @RequestBody RoomPostReqDto roomPostReqDto) {
         JwtUserInfo jwtUserInfo = JwtConverter.getUserPk(jwt);
         Long storeId;
@@ -39,7 +39,7 @@ public class RoomController {
         return new BaseResponseDto<>("success", new RoomOnlyAddressResDto(address));
     }
 
-    @GetMapping("chatting/room/{opponent}")
+    @GetMapping("/chatting/room/{opponent}")
     public BaseResponseDto<RoomNoLatestMessageResDto> getRoom(@RequestHeader(value = "Authorization") String jwt, @PathVariable("opponent") Long opponent) {
         JwtUserInfo jwtUserInfo = JwtConverter.getUserPk(jwt);
         Long storeId;
@@ -63,41 +63,25 @@ public class RoomController {
         }
     }
 
-    @PutMapping("chatting/room")
+    @PutMapping("/chatting/room")
     public OnlyMessageResponseDto updateAdd(@RequestHeader(value = "Authorization") String jwt, @RequestBody RoomPutReqDto roomPutReqDto) {
         JwtUserInfo jwtUserInfo = JwtConverter.getUserPk(jwt);
-        Long storeId;
-        Long consumerId;
         String userType;
-        if (jwtUserInfo.getRole().equals("CONSUMER")) {
-            consumerId = Long.parseLong(jwtUserInfo.getSub());
-            storeId = roomPutReqDto.getOpponent();
+        if (jwtUserInfo.getRole().equals("CONSUMER"))
             userType = "store";
-        } else {
-            consumerId = roomPutReqDto.getOpponent();
-            storeId = Long.parseLong(jwtUserInfo.getSub());
+        else
             userType = "consumer";
-        }
-        roomService.updateAdd(storeId,consumerId,roomPutReqDto.getLatestMessage(),userType);
+        roomService.updateAdd(roomPutReqDto.getId(),roomPutReqDto.getLatestMessage(),userType);
         return new OnlyMessageResponseDto("success");
     }
 
-    @PutMapping("chatting/room/cnt")
+    @PutMapping("/chatting/room/cnt")
     public OnlyMessageResponseDto resetCnt(@RequestHeader(value = "Authorization") String jwt, @RequestBody RoomCntPutReqDto roomCntPutReqDto) {
         JwtUserInfo jwtUserInfo = JwtConverter.getUserPk(jwt);
-        Long storeId;
-        Long consumerId;
-        if (jwtUserInfo.getRole().equals("CONSUMER")) {
-            consumerId = Long.parseLong(jwtUserInfo.getSub());
-            storeId = roomCntPutReqDto.getOpponent();
+        if (jwtUserInfo.getRole().equals("CONSUMER"))
             roomCntPutReqDto.setUserType("consumer");
-        } else {
-            consumerId = roomCntPutReqDto.getOpponent();
-            storeId = Long.parseLong(jwtUserInfo.getSub());
+        else
             roomCntPutReqDto.setUserType("store");
-        }
-        roomCntPutReqDto.setConsumerId(consumerId);
-        roomCntPutReqDto.setStoreId(storeId);
         roomService.resetCnt(roomCntPutReqDto);
         return new OnlyMessageResponseDto("success");
     }
