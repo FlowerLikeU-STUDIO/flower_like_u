@@ -12,6 +12,21 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <title>너닮꽃</title>
       </Head>
+      <meta
+        name="naver-site-verification"
+        content="718acb83cbb6640321ea131f1052fd20194a9ea1"
+      />
+      <meta
+        name="description"
+        content={
+          "너닮꽃 | 너를 닮은 꽃 여러분만의 커스텀 꽃다발을 제작하고 사랑하는 이에게 선물해보세요."
+        }
+      />
+      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      <meta property="og:title" content={"너닮꽃 | 너를 닮은 꽃"} />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={"https://www.flowerlikeu.com/"} />
+
       <QueryClientProvider client={queryClient}>
         <Layout>
           <Component {...pageProps} />
