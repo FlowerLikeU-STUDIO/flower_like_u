@@ -1,25 +1,33 @@
 package com.ssafy.fly.dto.response;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
+import net.bytebuddy.implementation.bind.annotation.Super;
 
 import java.util.Date;
 
 @Data
 @ToString(exclude = "profile")
-@Builder
+@SuperBuilder
 public class StoreInfoRes {
-    //private String type;
-    //private String userId;
-    private String name;
-    private String email;
     private String storeName;
-    //private String license;
     private String address;
     private String profile;
-    private int feedNum;
-    private String introduction;
     private double rating;
-    //private Date regDate;
+
+    @Data
+    @SuperBuilder
+    public static class ForDetails extends StoreInfoRes {
+        private String name;
+        private String email;
+        private int feedNum;
+        private String introduction;
+    }
+
+    @Data
+    @SuperBuilder
+    public static class ForList extends StoreInfoRes {
+        private Long storeId;
+    }
 }
