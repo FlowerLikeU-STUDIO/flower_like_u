@@ -11,11 +11,13 @@ import com.ssafy.fly.database.mysql.repository.FeedRepository;
 import com.ssafy.fly.database.mysql.repository.ReviewRepository;
 import com.ssafy.fly.database.mysql.repository.StoreRepository;
 import com.ssafy.fly.dto.request.*;
-import com.ssafy.fly.dto.response.ConsumerInfoRes;
 import com.ssafy.fly.dto.response.MailRes;
 import com.ssafy.fly.dto.response.StoreInfoRes;
 import com.ssafy.fly.dto.response.UserInfoRes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -551,7 +553,7 @@ public class UserServiceImpl implements UserService {
             return result;
         }
 
-        StoreInfoRes storeInfo = StoreInfoRes.builder()
+        StoreInfoRes.ForDetails storeInfo = StoreInfoRes.ForDetails.builder()
                 .name(store.getName())
                 .email(store.getEmail())
                 .storeName(store.getStore())
@@ -565,6 +567,41 @@ public class UserServiceImpl implements UserService {
 
         result.put("result", true);
         result.put("storeInfo", storeInfo);
+
+        return result;
+    }
+
+    // 13. 판매자 목록 조회
+    @Override
+    public Map<String, Object> findStoreList(int pageNo, int size, String sido, String sigungu, String storeName) {
+        Map<String, Object> result = new HashMap<>();
+        String message = "";
+
+        Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size);
+        Page<StoreEntity> searchList = storeRepository.findAll(pageable);
+        Map<String, Object> info = new HashMap<>();
+
+        if(!searchList.isEmpty()) {
+            List<StoreInfoRes.ForList> resultList = new ArrayList<>();
+            for(StoreEntity curEntity : searchList) {
+                StoreInfoRes.ForList storeInfo = StoreInfoRes.ForList.builder()
+                        .storeId(curEntity.getId())
+                        .storeName(curEntity.getStore())
+                        .profile(curEntity.getProfile())
+                        .rating(reviewService.getRating(curEntity.getId()))
+                        .address(String.format("%s %s", curEntity.getStreet(), curEntity.getDetailAddr()).trim())
+                        .build();
+                resultList.add(storeInfo);
+            }
+            info.put("maxPage", searchList.getTotalPages());
+            info.put("list", resultList);
+            result.put("result", true);
+            result.put("info", info);
+        } else {
+            message = "존재하지 않는 페이지입니다.";
+            result.put("result", false);
+            result.put("message", message);
+        }
 
         return result;
     }

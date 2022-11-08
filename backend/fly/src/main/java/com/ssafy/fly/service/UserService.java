@@ -18,4 +18,5 @@ public interface UserService {
     public Map<String, Object> deleteUser(String password, Principal principal);
     public Map<String, Object> findUserInfo(Principal principal);
     public Map<String, Object> findStoreInfo(Long storeId);
+    public Map<String, Object> findStoreList(int pageNo, int size, String sido, String sigungu, String storeName);
 }

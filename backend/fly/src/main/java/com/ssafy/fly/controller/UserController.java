@@ -228,7 +228,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 11. 회원 정보 조회
+    // 12. 꽃가게 프로필 정보 조회
     @GetMapping("/store/{storeId}")
     public ResponseEntity<Map<String, Object>> getStoreInfo(@PathVariable Long storeId) {
         System.out.println("[GET] - /user/store " + storeId);
@@ -239,6 +239,30 @@ public class UserController {
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
             response.put("storeInfo", result.get("storeInfo"));
+        } else {
+            response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 13. 판매자 목록 조회
+    @GetMapping("/stores")
+    public ResponseEntity<Map<String, Object>> getStoreList(@RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
+                                                            @RequestParam(value = "size", required = false, defaultValue = "8") int size,
+                                                            @RequestParam(value = "sd", required = false, defaultValue = "전체") String sido,
+                                                            @RequestParam(value = "sgg", required = false, defaultValue = "전체") String sigungu,
+                                                            @RequestParam(value = "sn", required = false, defaultValue = "전체") String storeName) {
+        System.out.println("[GET] - /user/store ");
+        System.out.println(String.format("[Page] %d\n[Size] %d\n[SI-DO] %s\n[SI-GUN-GU] %s\n[STORENAME] %s\n", pageNo, size, sido, sigungu, storeName));
+
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = userService.findStoreList(pageNo, size, sido, sigungu, storeName);
+
+        if ((boolean) result.get("result")) {
+            response.put("result", resultMessageSet.SUCCESS);
+            response.put("storeInfo", result.get("info"));
         } else {
             response.put("result", resultMessageSet.FAIL);
             response.put("message", result.get("message"));
