@@ -160,6 +160,6 @@ public class ReviewServiceImpl implements ReviewService {
         });
         List<ReviewEntity> ratingList = reviewRepository.findAllByStoreId(storeEntity);
         int length = ratingList.size();
-        return ratingList.stream().map(ReviewEntity::getRating).reduce(0.0, Double::sum) / length;
+        return length == 0 ? 0 : ratingList.stream().map(ReviewEntity::getRating).reduce(0.0, Double::sum) / length;
     }
 }

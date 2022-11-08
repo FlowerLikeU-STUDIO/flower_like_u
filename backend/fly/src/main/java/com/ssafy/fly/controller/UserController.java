@@ -212,7 +212,7 @@ public class UserController {
     // 11. 회원 정보 조회
     @GetMapping()
     public ResponseEntity<Map<String, Object>> getUserInfo(Principal principal) {
-        System.out.println("[GET] - /member");
+        System.out.println("[GET] - /user");
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.findUserInfo(principal);
@@ -222,18 +222,28 @@ public class UserController {
             response.put("userInfo", result.get("userInfo"));
         } else {
             response.put("result", resultMessageSet.FAIL);
+            response.put("result", result.get("message"));
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // JWT 적용 후 사용자 본인 프로필 조회
-//    @GetMapping()
-//    public ResponseEntity<Map<String, Object>> getAccountInfo(HttpServletRequest request) {
-//        System.out.println("GET TEST");
-//        System.out.println(request.getHeader("Authorization"));
-//        Map<String, Object> result = new HashMap<>();
-//
-//        return new ResponseEntity<>(result, HttpStatus.OK);
-//    }
+    // 11. 회원 정보 조회
+    @GetMapping("/store/{storeId}")
+    public ResponseEntity<Map<String, Object>> getStoreInfo(@PathVariable Long storeId) {
+        System.out.println("[GET] - /user/store " + storeId);
+
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = userService.findStoreInfo(storeId);
+
+        if ((boolean) result.get("result")) {
+            response.put("result", resultMessageSet.SUCCESS);
+            response.put("storeInfo", result.get("storeInfo"));
+        } else {
+            response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
