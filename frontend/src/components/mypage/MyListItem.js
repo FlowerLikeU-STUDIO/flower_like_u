@@ -6,7 +6,7 @@ const MyListItem = (props) => {
   const router = useRouter();
   const curPath = router.pathname.split("/mypage/")[1];
   const onClick = () => {
-    router.replace(`/mypage/${curPath}/${props.bookId}`);
+    router.push(`/mypage/${curPath}/${props.bookId}`);
   };
 
   return (
