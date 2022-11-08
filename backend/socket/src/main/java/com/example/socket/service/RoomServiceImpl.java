@@ -25,7 +25,7 @@ public class RoomServiceImpl implements RoomService{
 
     public List<Room> getList(String userType, Long id) {
         List<Room> RoomList;
-        if (userType.equals("consumer"))
+        if (userType.equals("CONSUMER"))
             RoomList = roomRepository.findAllByConsumerId(id);
         else
             RoomList = roomRepository.findAllByStoreId(id);
