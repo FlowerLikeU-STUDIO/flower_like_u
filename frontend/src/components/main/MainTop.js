@@ -22,8 +22,8 @@ const MainTop = () => {
         <div className={styles.top_contents_wrapper}>
           <h1 className={styles.main_title}>너를 닮은 꽃</h1>
         </div>
-        <div className={styles.card_bouquet_wrapper}>
-          <div className={cx("card_wrapper", "right_align")}>
+        <section className={styles.card_bouquet_wrapper}>
+          <section className={cx("card_wrapper", "right_align")}>
             <article className={styles.card}>
               <div className={styles.main_icon}>
                 <FlowerImg src="/home/1.png" alt={"너닯꽃 아이콘 1"} />
@@ -36,16 +36,19 @@ const MainTop = () => {
               </div>
               <span className={styles.card_content}>{iconContent[1]}</span>
             </article>
-          </div>
+          </section>
           <div className={styles.bouquet_wrapper}>
             <div className={styles.main_bouquet}>
-              <FlowerImg src={"/custom/bouquet/4.png"} alt={"너닯꽃 bouquet"} />
-              <button className={styles.arrow_box} onClick={() => router.push("/custom")}>
+              <FlowerImg src={"/home/bouquet.png"} alt={"너닯꽃 bouquet"} />
+              <button
+                className={styles.arrow_box}
+                onClick={() => router.push("/custom")}
+              >
                 커스텀하러 가기
               </button>
             </div>
           </div>
-          <div className={cx("card_wrapper", "left_align")}>
+          <section className={cx("card_wrapper", "left_align")}>
             <article className={styles.card}>
               <div className={styles.main_icon}>
                 <FlowerImg src="/home/3.png" alt={"너닯꽃 아이콘 3"} />
@@ -58,8 +61,8 @@ const MainTop = () => {
               </div>
               <span className={styles.card_content}>{iconContent[3]}</span>
             </article>
-          </div>
-        </div>
+          </section>
+        </section>
       </div>
     </section>
   );
