@@ -8,27 +8,27 @@ const FlowerLikeUs = () => {
       <div className={styles.us_wrapper}>
         <article className={styles.us_card}>
           <FlowerImg src="/custom/flower/blue_gypsophila.png" alt={"너닯꽃"} />
-          <p>강민성</p>
+          <h1>강민성</h1>
         </article>
         <article className={styles.us_card}>
           <FlowerImg src="/custom/flower/blue_gypsophila.png" alt={"너닯꽃"} />
-          <p>박다빈</p>
+          <h1>박다빈</h1>
         </article>
         <article className={styles.us_card}>
           <FlowerImg src="/custom/flower/blue_gypsophila.png" alt={"너닯꽃"} />
-          <p>박수근</p>
+          <h1>박수근</h1>
         </article>
         <article className={styles.us_card}>
           <FlowerImg src="/custom/flower/blue_gypsophila.png" alt={"너닯꽃"} />
-          <p>성유지</p>
+          <h1>성유지</h1>
         </article>
         <article className={styles.us_card}>
           <FlowerImg src="/custom/flower/blue_gypsophila.png" alt={"너닯꽃"} />
-          <p>이민우</p>
+          <h1>이민우</h1>
         </article>
         <article className={styles.us_card}>
           <FlowerImg src="/custom/flower/blue_gypsophila.png" alt={"너닯꽃"} />
-          <p>최수연</p>
+          <h1>최수연</h1>
         </article>
       </div>
     </section>

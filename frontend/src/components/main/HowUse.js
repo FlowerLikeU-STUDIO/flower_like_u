@@ -14,8 +14,8 @@ const HowUse = () => {
   return (
     <section className={styles.howuse_wrapper}>
       <h1 className={styles.howuse_title}>너닮꽃이 뭔가요?</h1>
-      <div className={styles.howuse_contents_wrapper}>
-        <div className={styles.article_wrapper}>
+      <section className={styles.howuse_contents_wrapper}>
+        <section className={styles.article_wrapper}>
           <h2 className={styles.howuse_subtitle}>꽃을 사고 싶어요!</h2>
           <article className={styles.content_img_wrapper}>
             <div className={styles.howuse_icon}>
@@ -35,8 +35,8 @@ const HowUse = () => {
             </div>
             <span className={styles.howuse_content}>{howuseContent[2]}</span>
           </article>
-        </div>
-        <div className={styles.article_wrapper}>
+        </section>
+        <section className={styles.article_wrapper}>
           <h2 className={styles.howuse_subtitle}>꽃을 팔고 싶어요!</h2>
           <article className={styles.content_img_wrapper}>
             <div className={styles.howuse_icon}>
@@ -56,8 +56,8 @@ const HowUse = () => {
             </div>
             <span className={styles.howuse_content}>{howuseContent[5]}</span>
           </article>
-        </div>
-      </div>
+        </section>
+      </section>
     </section>
   );
 };
