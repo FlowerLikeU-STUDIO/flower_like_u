@@ -12,9 +12,9 @@ public class JwtConverter {
         String[] payload = new String(decoder.decode(chunks[1])).split(":");
         JwtUserInfo jwtUserInfo = new JwtUserInfo();
         String sub = payload[1].split(",")[0];
-        jwtUserInfo.setSub(sub.substring(1,sub.length() - 1));
+        jwtUserInfo.setSub(sub.substring(1, sub.length() - 1));
         String role = payload[2].split("]")[0];
-        jwtUserInfo.setRole(role.substring(2,role.length() - 1));
+        jwtUserInfo.setRole(role.substring(2, role.length() - 1));
         return jwtUserInfo;
     }
 }
