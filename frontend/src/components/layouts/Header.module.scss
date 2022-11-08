@@ -8,6 +8,7 @@
   padding: 1.5rem 2rem;
   max-width: 1680px;
   z-index: 1;
+  box-shadow: $shadow500;
   &.opacity {
     opacity: 1;
   }
@@ -16,10 +17,26 @@
   }
 }
 
+.menu_wrapper {
+  @include flexDiv;
+  gap: 3rem;
+  margin: 2rem;
+}
+
+.header_title {
+  @include font(1.5rem, 300, $primary900);
+  &:hover {
+    @include font(1.5rem, 300, $mainPrimary);
+  }
+}
+
 .header_anchor {
-  margin: 0.625rem;
-  color: $primary900;
+  @include font(1rem, 500, $mainParagraph);
+  // transition: all 0.2s linear;
   cursor: pointer;
+  &:hover {
+    @include font(1rem, 500, $gray100);
+  }
 }
 
 .logout_button {
