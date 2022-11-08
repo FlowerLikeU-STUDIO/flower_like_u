@@ -54,15 +54,15 @@ public class MessageController {
     @GetMapping("/chatting/room/list")
     public BaseResponseDto<List<Room>> getRoomList(@RequestHeader(value = "Authorization") String jwt) {
         JwtUserInfo jwtUserInfo = JwtConverter.getUserPk(jwt);
+        System.out.println(jwtUserInfo.getSub());
+        System.out.println(jwtUserInfo.getRole());
         List<Room> roomList = roomService.getList(jwtUserInfo.getRole(), Long.parseLong(jwtUserInfo.getSub()));
         return new BaseResponseDto<>("success", roomList);
     }
 
     @GetMapping("/chatting/message/{address}")
     public BaseResponseDto<List<Message>> getMessageList(@PathVariable("address") String address) {
-        System.out.println("[controller]");
         List<Message> messageList = messageService.getList(address);
-        System.out.println("[service]");
         return new BaseResponseDto<>("success", messageList);
     }
 
