@@ -1,0 +1,48 @@
+.popular_wrapper {
+  @include flexDiv(column);
+  gap: 3rem;
+}
+
+.popular_title {
+  @include font(2.25rem, 500, $primary900);
+  padding: 10rem 0rem 3rem 0rem;
+}
+
+.florist_wrapper {
+  @include flexDiv(row);
+  gap: 4rem;
+}
+
+.florist_card {
+  @include flexDiv(column, center, space-between);
+  width: 16rem;
+  height: 14rem;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 0.5rem;
+  padding: 0rem 0rem 1rem 0rem;
+  box-shadow: $shadow500;
+  transition: all 0.5s linear;
+  &:hover {
+    transform: scale(1.02);
+    background-color: rgba(255, 255, 255, 1);
+  }
+}
+
+.card_img {
+  width: 16rem;
+  height: 8rem;
+  background-color: $white;
+  border-radius: 0.5rem 0.5rem 0rem 0rem;
+}
+
+.florist_name {
+  @include font(1.1rem, 600);
+  width: 80%;
+  padding-top: 1rem;
+}
+
+.florist_address {
+  @include font(0.9rem, 500, $mainParagraph);
+  width: 80%;
+  padding-bottom: 1rem;
+}

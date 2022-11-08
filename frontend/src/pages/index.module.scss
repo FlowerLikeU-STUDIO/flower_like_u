@@ -1,0 +1,59 @@
+.main_wrapper {
+  width: 100%;
+  min-height: 100vh;
+  padding: 4rem 0rem 0rem;
+
+  @media screen and (min-width: 1350px) {
+    padding: 4rem 0rem 0rem;
+  }
+}
+
+.top_circle_wrapper {
+  @include flexDiv;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 100rem;
+  background-color: $ivory300;
+  z-index: -1;
+  transition: all 1.5s linear;
+  &.top {
+    position: absolute;
+    width: 140rem;
+    height: 140rem;
+    top: -105rem;
+  }
+  &.first {
+    top: 50rem;
+    left: -7rem;
+    width: 25rem;
+    height: 25rem;
+    background-color: $ivory400;
+  }
+  &.second {
+    top: 63rem;
+    left: 10rem;
+    width: 15rem;
+    height: 15rem;
+  }
+  &.third {
+    top: 90rem;
+    right: -7rem;
+    width: 25rem;
+    height: 25rem;
+  }
+  &.fourth {
+    top: 150rem;
+    right: -7rem;
+    width: 25rem;
+    height: 25rem;
+    background-color: $ivory400;
+  }
+  &.fifth {
+    top: 147rem;
+    right: 10rem;
+    width: 15rem;
+    height: 15rem;
+  }
+}
