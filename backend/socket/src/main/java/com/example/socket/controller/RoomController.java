@@ -23,7 +23,7 @@ public class RoomController {
         this.roomService = roomService;
     }
 
-    @PostMapping("chatting/room")
+    @PostMapping("/chatting/room")
     public BaseResponseDto<RoomOnlyAddressResDto> createRoom(@RequestHeader(value = "Authorization") String jwt, @RequestBody RoomPostReqDto roomPostReqDto) {
         JwtUserInfo jwtUserInfo = JwtConverter.getUserPk(jwt);
         Long storeId;
@@ -39,7 +39,7 @@ public class RoomController {
         return new BaseResponseDto<>("success", new RoomOnlyAddressResDto(address));
     }
 
-    @GetMapping("chatting/room/{opponent}")
+    @GetMapping("/chatting/room/{opponent}")
     public BaseResponseDto<RoomNoLatestMessageResDto> getRoom(@RequestHeader(value = "Authorization") String jwt, @PathVariable("opponent") Long opponent) {
         JwtUserInfo jwtUserInfo = JwtConverter.getUserPk(jwt);
         Long storeId;
@@ -63,7 +63,7 @@ public class RoomController {
         }
     }
 
-    @PutMapping("chatting/room")
+    @PutMapping("/chatting/room")
     public OnlyMessageResponseDto updateAdd(@RequestHeader(value = "Authorization") String jwt, @RequestBody RoomPutReqDto roomPutReqDto) {
         JwtUserInfo jwtUserInfo = JwtConverter.getUserPk(jwt);
         Long storeId;
@@ -82,7 +82,7 @@ public class RoomController {
         return new OnlyMessageResponseDto("success");
     }
 
-    @PutMapping("chatting/room/cnt")
+    @PutMapping("/chatting/room/cnt")
     public OnlyMessageResponseDto resetCnt(@RequestHeader(value = "Authorization") String jwt, @RequestBody RoomCntPutReqDto roomCntPutReqDto) {
         JwtUserInfo jwtUserInfo = JwtConverter.getUserPk(jwt);
         Long storeId;
