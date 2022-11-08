@@ -8,6 +8,5 @@ import org.bson.types.ObjectId;
 @Setter
 public class RoomPutReqDto {
     private String id;
-    private Long opponent;
     private String latestMessage;
 }
