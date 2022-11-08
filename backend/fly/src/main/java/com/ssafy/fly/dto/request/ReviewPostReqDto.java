@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReviewPostReqDto {
-    private Long consumerId;
     private Long storeId;
+    private Long bookId;
     private String content;
     private Double rating;
 }
