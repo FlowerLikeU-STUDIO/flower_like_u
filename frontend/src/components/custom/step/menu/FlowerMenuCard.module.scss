@@ -1,3 +1,9 @@
+.riri {
+  width: 5rem;
+  height: 5rem;
+  @include flexDiv;
+}
+
 .menu_image {
   object-fit: contain;
   cursor: -webkit-grab;
@@ -7,7 +13,8 @@
 }
 
 .menu_card_wrapper {
-  @include flexDiv(row, center, flex-start);
+  display: grid;
+  grid-template-columns: 0.4fr 1fr;
   gap: 1rem;
   width: 95%;
   height: 6rem;
@@ -30,5 +37,6 @@
 }
 
 .menu_contents {
-  @include font(0.8rem, 400, $gray);
+  @include font(0.8rem, 400, $gray, 130%);
+  word-break: keep-all;
 }
