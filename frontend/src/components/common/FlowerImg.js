@@ -10,6 +10,7 @@ const FlowerImg = ({ ...props }) => {
         className={styles.auto_image}
         src={props.src || "/auth/flowerNone.png"}
         alt={props.alt || "너닮꽃 이미지"}
+        priority={props.alt === "너닯꽃 bouquet" ? true : false}
       />
     </div>
   );
