@@ -7,6 +7,9 @@ import CustomMenu from "./menu/CustomMenu";
 import classNames from "classnames/bind";
 import { packageContent } from "./StepContents";
 import CustomPlace from "./customplace/CustomPlace";
+import html2canvas from "html2canvas";
+import { saveAs } from "file-saver";
+import InitialButton from "../common/InitialButton";
 
 const BuoquetCustom = () => {
   const cx = classNames.bind(styles);
@@ -22,6 +25,13 @@ const BuoquetCustom = () => {
     dispatch(selectSize(null));
   };
 
+  const onDownloadButton = () => {
+    const capture = document.querySelector("#capture");
+    html2canvas(capture).then((canvas) => {
+      saveAs(canvas.toDataURL("image/jpg"), "image.jpg");
+    });
+  };
+
   return (
     <>
       <main className={styles.custom_wrapper}>
@@ -29,13 +39,17 @@ const BuoquetCustom = () => {
           <div className={styles.recommend_menu}>추천</div>
           <div className={styles.recommend_menu}>추천</div>
           <div className={styles.recommend_menu}>추천</div>
-          <div className={styles.recommend_menu}>추천</div>
+          <InitialButton />
+          <button className={styles.save_button} onClick={() => onDownloadButton()}>
+            저장
+          </button>
         </aside>
         <div
           className={cx("custom_place", packageKind)}
           style={{
             backgroundColor: packageColor,
           }}
+          id="capture"
         >
           <CustomPlace />
         </div>
