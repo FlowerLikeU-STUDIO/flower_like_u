@@ -18,6 +18,8 @@ const MenuBox = (props) => {
               name={tab[index].name}
               description={tab[index].description}
               color={tab[index].color}
+              tab={props.tab}
+              index={index}
             />
           ))}
         </div>
@@ -32,7 +34,7 @@ const MenuBox = (props) => {
               key={`${tab[index].name}_${tab[index].color}`}
               img={`/custom/flower/${tab[index].color}_${tab[index].name}.png`}
               title={tab[index].title}
-              description={tab[index].description}
+              language={tab[index].language}
               index={index}
             />
           ))}

@@ -35,6 +35,7 @@
 }
 
 .custom_place {
+  position: relative;
   @include flexDiv;
   width: 30rem;
   height: 30rem;
@@ -50,6 +51,16 @@
   &.ballon {
     background-image: url("/custom/ballon.png");
   }
+}
+
+.ribbon_cover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  @include flexDiv;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .custom_info_wrapper {
