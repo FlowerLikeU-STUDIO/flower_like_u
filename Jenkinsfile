@@ -6,9 +6,7 @@ pipeline {
             steps {
                 sh """
                     docker stop fly_be
-                    docker rm fly_be
                     docker stop fly_fe
-                    docker rm fly_fe
                 """
             }
         }
