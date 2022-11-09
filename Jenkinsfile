@@ -10,7 +10,7 @@ pipeline {
         // }
         stage('Frontend Dockerizing') {
             steps {
-                sh "docker rmi martinflower/fly:fly_fe"
+                // sh "docker rmi martinflower/fly:fly_fe"
                 dir('./frontend'){
                     sh "docker build -t martinflower/fly:fly_fe ."
                 }
@@ -18,7 +18,7 @@ pipeline {
         }
         stage('Backend Dockerizing') {
             steps {
-                sh "docker rmi martinflower/fly:fly_be"
+                // sh "docker rmi martinflower/fly:fly_be"
                 dir('./backend/fly'){
                     sh "pwd"
                     sh "chmod 777 gradlew"
