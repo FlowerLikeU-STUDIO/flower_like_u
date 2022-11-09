@@ -159,7 +159,7 @@ public class BookServiceImpl implements BookService {
             return result;
         }
 
-        if (storeId != feed.getStoreId().getId()) {
+        if (storeId.equals(feed.getStoreId().getId())) {
             message = "잘못된 요청입니다.";
             System.out.println(message);
             result.put("result", false);
