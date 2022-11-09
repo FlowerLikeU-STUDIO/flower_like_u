@@ -3,12 +3,12 @@ pipeline {
 
     stages {
         stage('Init') {
-            // steps {
-            //     sh """
-            //         docker stop fly_be
-            //         docker stop fly_fe
-            //     """
-            // }
+            steps {
+                // sh """
+                //     docker stop fly_be
+                //     docker stop fly_fe
+                // """
+            }
         }
         stage('Frontend Dockerizing') {
             steps {
