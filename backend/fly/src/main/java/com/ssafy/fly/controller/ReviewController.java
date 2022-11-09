@@ -1,7 +1,6 @@
 package com.ssafy.fly.controller;
 
 import com.ssafy.fly.common.util.ResultMessageSet;
-import com.ssafy.fly.database.mysql.entity.ReviewEntity;
 import com.ssafy.fly.dto.request.ReviewPostReqDto;
 import com.ssafy.fly.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
