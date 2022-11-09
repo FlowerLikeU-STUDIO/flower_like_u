@@ -2,7 +2,6 @@ package com.ssafy.fly.service;
 
 import com.ssafy.fly.common.util.FlyMailSender;
 import com.ssafy.fly.common.util.RandomStringGenerator;
-import com.ssafy.fly.dto.request.EmailAuthenticationReq;
 import com.ssafy.fly.dto.response.MailRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,6 @@
 package com.ssafy.fly.service;
 
 import com.ssafy.fly.common.util.CustomUserDetail;
-import com.ssafy.fly.common.util.JwtConverter;
 import com.ssafy.fly.common.vo.JwtUserInfo;
 import com.ssafy.fly.database.mysql.entity.ConsumerEntity;
 import com.ssafy.fly.database.mysql.entity.StoreEntity;

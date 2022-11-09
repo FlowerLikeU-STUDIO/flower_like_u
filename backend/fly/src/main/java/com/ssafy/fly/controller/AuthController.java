@@ -3,14 +3,12 @@ package com.ssafy.fly.controller;
 import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.common.util.JwtTokenProvider;
 import com.ssafy.fly.common.util.ResultMessageSet;
-import com.ssafy.fly.dto.request.EmailAuthenticationReq;
 import com.ssafy.fly.dto.request.LoginReq;
 import com.ssafy.fly.service.AuthService;
 import com.ssafy.fly.service.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
