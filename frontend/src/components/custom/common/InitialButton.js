@@ -6,12 +6,16 @@ const InitialButton = () => {
   const dispatch = useDispatch();
   const flowerList = useSelector((state) => state.custom.flowers);
   const flowerInitialHandler = () => {
-    const newFlowerList = flowerList.fill(0);
+    const copyOfFlowerList = [...flowerList];
+    const newFlowerList = copyOfFlowerList.fill(0);
     dispatch(makeFlowerList(newFlowerList));
   };
 
   return (
-    <button className={styles.initial_button} onClick={() => flowerInitialHandler()}>
+    <button
+      className={styles.initial_button}
+      onClick={() => flowerInitialHandler()}
+    >
       초기화
     </button>
   );
