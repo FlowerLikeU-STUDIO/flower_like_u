@@ -1,0 +1,9 @@
+.initial_button {
+  @include flexDiv;
+  width: 3rem;
+  height: 3rem;
+  background-color: $white200;
+  border-radius: 100rem;
+  box-shadow: $shadow600;
+  @include font(0.8rem, 600, $mainParagraph);
+}
