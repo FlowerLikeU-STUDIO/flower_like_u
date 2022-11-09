@@ -1,6 +1,7 @@
 package com.ssafy.fly.service;
 
 import com.ssafy.fly.common.util.DateConvertor;
+import com.ssafy.fly.common.util.entity.*;
 import com.ssafy.fly.database.mongodb.document.CustomFlowerDocument;
 import com.ssafy.fly.database.mongodb.repository.CustomFlowerMongoRepository;
 import com.ssafy.fly.database.mysql.entity.*;
@@ -159,7 +160,9 @@ public class BookServiceImpl implements BookService {
             return result;
         }
 
-        if (storeId.equals(feed.getStoreId().getId())) {
+        System.out.printf("[ID LOG] : %d %d\n", storeId, feed.getStoreId().getId());
+
+        if (!storeId.equals(feed.getStoreId().getId())) {
             message = "잘못된 요청입니다.";
             System.out.println(message);
             result.put("result", false);
