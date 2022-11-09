@@ -11,10 +11,7 @@ const PackageMenuCard = (props) => {
   };
 
   return (
-    <div
-      className={styles.menu_card_wrapper}
-      onClick={() => wrapperColorHandler()}
-    >
+    <div className={styles.menu_card_wrapper} onClick={() => wrapperColorHandler()}>
       <div
         className={styles.color_circle}
         style={{
@@ -22,8 +19,8 @@ const PackageMenuCard = (props) => {
         }}
       />
       <div className={styles.letter_wrapper}>
-        <h1 className={styles.menu_title}>{props.title}</h1>
-        <span className={styles.menu_contents}>{props.contents}</span>
+        <h1 className={styles.menu_title}>{props.name}</h1>
+        <span className={styles.menu_contents}>{props.description}</span>
       </div>
     </div>
   );
