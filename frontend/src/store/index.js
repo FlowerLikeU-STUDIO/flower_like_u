@@ -2,16 +2,33 @@ import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import rootReducer from "./reducers";
 
-const createStore = () => {
-  const store = configureStore({
-    reducer: rootReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
-    devTools: true,
-  });
+import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
+import storageSession from "redux-persist/lib/storage/session";
 
-  return store;
+// * session storage
+const persistConfig = {
+  key: "root",
+  storage: storageSession,
+  version: 1,
+  whitelist: ["custom"],
 };
 
-const wrapper = createWrapper(createStore);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export default wrapper;
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(),
+  devTools: true,
+});
+
+const setUpStore = (context) => store;
+const makeStore = (context) => setUpStore(context);
+
+export const persistor = persistStore(store);
+
+export const wrapper = createWrapper(makeStore);
