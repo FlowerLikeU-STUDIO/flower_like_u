@@ -5,7 +5,7 @@ pipeline {
         stage('Init') {
             steps {
                 sh """
-                    docker stop fly_be
+                    docker stop fl  y_be
                     docker stop fly_fe
                 """
             }
@@ -16,6 +16,7 @@ pipeline {
                 dir('./frontend'){
                     sh "docker build -t martinflower/fly:fly_fe ."
                 }
+                sh "docker run --rm -d --name fly_fe -p 3000:3000 martinflower/fly:fly_fe"
             }
         }
         stage('Backend Dockerizing') {
@@ -27,6 +28,7 @@ pipeline {
                     sh "./gradlew clean build"
                     sh "docker build -t martinflower/fly:fly_be ."
                 }
+                sh "docker run --rm -d --name fly_be -p 8080:8080 martinflower/fly:fly_be"
             }
         }
         stage('Publish') {
@@ -39,10 +41,10 @@ pipeline {
         }
         stage('Deploy') {             
             steps {
-                sh "docker pull martinflower/fly:fly_be"
-                sh "docker run --rm -d --name fly_be -p 8080:8080 martinflower/fly:fly_be"
-                sh "docker pull martinflower/fly:fly_fe"
-                sh "docker run --rm -d --name fly_fe -p 3000:3000 martinflower/fly:fly_fe"
+                // sh "docker pull martinflower/fly:fly_be"
+                // sh "docker run --rm -d --name fly_be -p 8080:8080 martinflower/fly:fly_be"
+                // sh "docker pull martinflower/fly:fly_fe"
+                // sh "docker run --rm -d --name fly_fe -p 3000:3000 martinflower/fly:fly_fe"
 
             }
         }
