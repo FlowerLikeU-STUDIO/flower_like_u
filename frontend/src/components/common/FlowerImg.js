@@ -5,7 +5,13 @@ import styles from "./FlowerImg.module.scss";
 const FlowerImg = ({ ...props }) => {
   return (
     <div className={styles.auto_height_imagewrapper}>
-      <Image layout="fill" className={styles.auto_image} src={props.src || "/auth/flowerNone.png"} />
+      <Image
+        layout="fill"
+        className={styles.auto_image}
+        src={props.src || "/auth/flowerNone.png"}
+        alt={props.alt || "너닮꽃 이미지"}
+        priority={props.alt === "너닯꽃 bouquet" ? true : false}
+      />
     </div>
   );
 };

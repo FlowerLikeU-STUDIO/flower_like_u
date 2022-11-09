@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styled from "styled-components";
-import Circle from "@/components/Circle";
+import Circle from "@/components/main/Circle";
 
 const HomeWrapper = styled.div`
   position: relative;

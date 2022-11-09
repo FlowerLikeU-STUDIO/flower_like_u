@@ -1,0 +1,48 @@
+.howuse_wrapper {
+  @include flexDiv(column);
+  padding-top: 10rem;
+  width: 100%;
+}
+
+.howuse_title {
+  @include font(2.25rem, 500, $primary900);
+  padding-bottom: 6rem;
+}
+
+.howuse_subtitle {
+  @include font(1.5rem, 600, $mainParagraph);
+}
+
+.howuse_contents_wrapper {
+  @include flexDiv(row);
+  gap: 4rem;
+}
+
+.article_wrapper {
+  @include flexDiv(column);
+  gap: 4rem;
+}
+
+.content_img_wrapper {
+  @include flexDiv(column);
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 1rem;
+  padding: 2rem;
+  gap: 2rem;
+  transition: all 0.5s linear;
+  &:hover {
+    transform: scale(1.02);
+    background-color: rgba(255, 255, 255, 1);
+  }
+}
+
+.howuse_icon {
+  width: 12rem;
+  height: 8rem;
+}
+
+.howuse_content {
+  @include font(0.9rem, 500, $gray300, 160%);
+  white-space: pre-line;
+  text-align: center;
+}

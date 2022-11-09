@@ -41,12 +41,16 @@ const Header = () => {
 
   return (
     <header
-      className={!headerStatus ? cx("header_wrapper", "opacity") : cx("header_wrapper", "nonopacity")}
+      className={
+        !headerStatus
+          ? cx("header_wrapper", "opacity")
+          : cx("header_wrapper", "nonopacity")
+      }
       id="header"
     >
-      <div>
+      <div className={styles.menu_wrapper}>
         <Link href="/">
-          <a className={styles.header_anchor}>너 닮 꽃</a>
+          <a className={styles.header_title}>너를 닮은 꽃</a>
         </Link>
         <Link href="/florist">
           <a className={styles.header_anchor}>플로리스트</a>
@@ -59,14 +63,14 @@ const Header = () => {
         {isLogin ? (
           <UserHeaderItem />
         ) : (
-          <>
+          <div className={styles.menu_wrapper}>
             <Link href="/auth/login">
               <a className={styles.header_anchor}>로그인</a>
             </Link>
             <Link href="/auth/signup">
               <a className={styles.header_anchor}>회원가입</a>
             </Link>
-          </>
+          </div>
         )}
       </div>
     </header>
