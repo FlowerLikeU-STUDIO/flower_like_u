@@ -11,7 +11,6 @@ import com.ssafy.fly.database.mysql.repository.FeedRepository;
 import com.ssafy.fly.database.mysql.repository.ReviewRepository;
 import com.ssafy.fly.database.mysql.repository.StoreRepository;
 import com.ssafy.fly.dto.request.*;
-import com.ssafy.fly.dto.response.ConsumerInfoRes;
 import com.ssafy.fly.dto.response.MailRes;
 import com.ssafy.fly.dto.response.StoreInfoRes;
 import com.ssafy.fly.dto.response.UserInfoRes;
