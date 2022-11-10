@@ -72,6 +72,7 @@ const CustomPlace = () => {
           onDragLeave={onDragLeave}
           onDrop={onDrop}
           data-position={index}
+          key={index}
         >
           <Image
             height={300}

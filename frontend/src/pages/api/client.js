@@ -27,9 +27,7 @@ client.interceptors.response.use(
       // refreshToken을 이용하여 accessToken을 재요청하는 로직을 작성하고 토큰을 갱신한다.
       const originalRequest = error.config;
       // 토큰 재요청
-      const response = await client
-        .get("auth/refreshToken")
-        .then((response) => response);
+      const response = await client.get("auth/refreshToken").then((response) => response);
       // 기존의 세션 아이템 삭제
       sessionStorage.removeItem("ACCESS_TOKEN");
       // sessionStorage.removeItem("REFRESH_TOKEN");
@@ -45,3 +43,5 @@ client.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const Fetcher = (url) => client.get(url).then((res) => res.data);

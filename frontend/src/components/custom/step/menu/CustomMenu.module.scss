@@ -21,8 +21,12 @@
 
 .tabbar_button {
   height: 2.25rem;
+  width: 4.5rem;
 }
 
 .tabbar_menu {
   @include font(1rem, 400, $mainParagraph);
+  &:hover {
+    @include font(1rem, 500, $mainPrimary);
+  }
 }
