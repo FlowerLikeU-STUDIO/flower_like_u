@@ -1,0 +1,16 @@
+.background {
+  padding: 4rem;
+}
+
+.image {
+  width: 10rem;
+  height: 10rem;
+  background-color: $mainDanger;
+}
+
+.button {
+  @include font(1rem, 500, $white);
+  width: 3rem;
+  height: 2rem;
+  background-color: black;
+}

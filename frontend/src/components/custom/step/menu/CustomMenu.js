@@ -21,10 +21,7 @@ const CustomMenu = () => {
     <section className={styles.custom_menu_wrapper}>
       <div className={styles.tabbar_wrapper}>
         {tabMenu.map((title, index) => (
-          <button
-            className={styles.tabbar_button}
-            onClick={() => tabHandler(index)}
-          >
+          <button key={title} className={styles.tabbar_button} onClick={() => tabHandler(index)}>
             <p className={styles.tabbar_menu}>{title}</p>
           </button>
         ))}
