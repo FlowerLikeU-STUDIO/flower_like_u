@@ -1,5 +1,6 @@
 package com.ssafy.fly.common.util;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
 public class CustomMap {
