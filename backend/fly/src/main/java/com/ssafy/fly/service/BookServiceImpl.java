@@ -10,6 +10,7 @@ import com.ssafy.fly.database.mysql.repository.*;
 import com.ssafy.fly.dto.request.BookCustomFlowerReq;
 import com.ssafy.fly.dto.request.BookFeedFlowerReq;
 import com.ssafy.fly.dto.response.BookListRes;
+import com.ssafy.fly.dto.response.CustomDetailRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -391,7 +392,15 @@ public class BookServiceImpl implements BookService {
                         .storeId(book.getStoreId().getId())
                         .hasReview(false)
                         .build();
-                CustomFlowerDocument detailInfo = customFlowerMongoRepository.findById(designId).orElse(null);
+                CustomFlowerDocument customInfo = customFlowerMongoRepository.findById(designId).orElse(null);
+
+                CustomDetailRes detailInfo = CustomDetailRes.builder()
+                        .type(customInfo.getType())
+                        .wrapper(customInfo.getWrapper())
+                        .ribbon(customInfo.getRibbon())
+                        .size(customInfo.getSize())
+                        .flowers(customInfo.cntFlowerNumber())
+                        .build();
 
                 bookInfo.put("basics", basicInfo);
                 bookInfo.put("details", detailInfo);
@@ -431,7 +440,7 @@ public class BookServiceImpl implements BookService {
         String message = "";
 
         ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-        if(consumer == null) {
+        if (consumer == null) {
             message = "잘못된 토큰 정보입니다.";
             result.put("result", false);
             result.put("message", message);
@@ -439,15 +448,15 @@ public class BookServiceImpl implements BookService {
         }
 
         BookEntity book = bookRepository.findById(bookId).orElse(null);
-        if(book == null) {
+        if (book == null) {
             message = "예약 아이디와 일치하는 정보가 없습니다. 예약 아이디를 확인해주세요.";
             result.put("result", false);
             result.put("message", message);
             return result;
         }
 
-        if(principal.getName().equals(book.getConsumerId().getUserId())) {
-            if(book.getState().equals(BookState.WAITED)) {
+        if (principal.getName().equals(book.getConsumerId().getUserId())) {
+            if (book.getState().equals(BookState.WAITED)) {
                 bookRepository.deleteById(bookId);
                 result.put("result", true);
             } else {
