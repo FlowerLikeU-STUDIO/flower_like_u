@@ -53,7 +53,7 @@ public class StoreEntity extends BaseEntity implements CustomUserDetail {
     @Column(name = "street", length = 50, nullable = false)
     private String street;
 
-    @Column(name = "detail_addr", length = 50, nullable = false)
+    @Column(name = "detail_addr", length = 50, nullable = true)
     private String detailAddr;
 
     @Column(name = "sigungu_code", length = 5, nullable = false)
