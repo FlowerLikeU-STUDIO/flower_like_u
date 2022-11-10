@@ -20,27 +20,9 @@ public class CustomFlowerDocument {
     @JsonIgnore
     private String id;
 
-    private Packing packing;
+    private String type;
+    private String wrapper;
+    private String ribbon;
     private String size;
-    private List<Flowers> flowers;
-    private int price;
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    public static class Packing {
-        private String material;
-        private String color;
-    }
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    public static class Flowers {
-        private String name;
-        private int cnt;
-        private List<String> color;
-    }
+    private List<String> flowers;
 }
