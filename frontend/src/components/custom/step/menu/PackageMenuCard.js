@@ -14,23 +14,16 @@ const PackageMenuCard = (props) => {
 
   //* 리본을 변경하는 함수
   const ribbonHandler = () => {
-    console.log("ribbon");
     dispatch(selectRibbonColor(props.index));
   };
 
   return (
     <div
       className={styles.menu_card_wrapper}
-      onClick={
-        props.tab === 1 ? () => wrapperColorHandler() : () => ribbonHandler()
-      }
+      onClick={props.tab === 1 ? () => wrapperColorHandler() : () => ribbonHandler()}
     >
       <div
-        className={
-          props.tab === 1
-            ? cx("color_circle", "package")
-            : cx("color_circle", "ribbon")
-        }
+        className={props.tab === 1 ? cx("color_circle", "package") : cx("color_circle", "ribbon")}
         style={
           props.tab === 1
             ? {
