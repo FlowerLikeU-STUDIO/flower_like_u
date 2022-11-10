@@ -11,7 +11,7 @@ const Axios = axios.create({
 
 // useSWR에서 Fetcher import
 // 커스텀해서 사용할 시, Axios import
-export const Fetcher = async (url) => await Axios.get(url).then((res) => res);
+// export const Fetcher = async (url) => await Axios.get(url).then((res) => res);
 export default Axios;
 
 /*
