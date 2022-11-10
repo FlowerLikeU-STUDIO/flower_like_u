@@ -12,7 +12,7 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        show_sql: true
+        show_sql: false # true
         format_sql : false
   servlet:
     multipart:
@@ -26,5 +26,5 @@ logging:
     org.hibernate:
       type:
         descriptor:
-          sql: trace
+          sql: debug # trace
       SQL: debug

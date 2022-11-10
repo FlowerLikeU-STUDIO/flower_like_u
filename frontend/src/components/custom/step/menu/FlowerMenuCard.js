@@ -1,12 +1,18 @@
 import Image from "next/image";
 import styles from "./FlowerMenuCard.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { makeFlowerList, makeCurrentFlower, makeCurrentLocation } from "@/store/reducers/custom";
+import {
+  makeFlowerList,
+  makeCurrentFlower,
+  makeCurrentLocation,
+} from "@/store/reducers/custom";
 
 //* img, title, contents
 const FlowerMenuCard = (props) => {
   const dispatch = useDispatch();
-  const current_location = useSelector((state) => state.custom.current_location);
+  const current_location = useSelector(
+    (state) => state.custom.current_location
+  );
   const flowerList = useSelector((state) => state.custom.flowers);
 
   // 드래그 앤 드롭
@@ -53,19 +59,22 @@ const FlowerMenuCard = (props) => {
 
   return (
     <div className={styles.menu_card_wrapper}>
-      <Image
-        src={props.img}
-        className={styles.menu_image}
-        width={88}
-        height={88}
-        draggable={true}
-        data-position={props.index}
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
-      ></Image>
+      <div className={styles.riri}>
+        <Image
+          src={props.img}
+          className={styles.menu_image}
+          width={200}
+          height={200}
+          draggable={true}
+          data-position={props.index}
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+        ></Image>
+      </div>
+
       <div className={styles.letter_wrapper}>
         <h1 className={styles.menu_title}>{props.title}</h1>
-        <span className={styles.menu_contents}>{props.contents}</span>
+        <span className={styles.menu_contents}>{props.language}</span>
       </div>
     </div>
   );

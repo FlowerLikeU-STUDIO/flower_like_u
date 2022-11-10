@@ -16,14 +16,25 @@
   border-radius: 0.25rem;
   box-shadow: $shadow400;
   cursor: pointer;
-  padding: 0.5rem 1rem 0.5rem 2rem;
+  padding: 0.5rem 1rem 0.5rem 1.2rem;
   white-space: pre-line;
 }
 
 .color_circle {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 100rem;
+  &.package {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 100rem;
+  }
+  &.ribbon {
+    width: 4rem;
+    height: 4rem;
+    background-repeat: no-repeat;
+    background-size: 150px;
+    background-position: 55% 90%;
+    border-radius: 100rem;
+    background-color: $white200;
+  }
 }
 
 .letter_wrapper {

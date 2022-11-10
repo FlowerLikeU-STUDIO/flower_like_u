@@ -11,25 +11,9 @@ import java.util.List;
 @Builder
 public class CustomFlowerRegReq {
     private String image;
-    private Packing packing;
+    private String type;
+    private Long wrapperId;
+    private Long ribbonId;
     private String size;
-    private List<Flowers> flowers;
-    private int price;
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Packing {
-        private String material;
-        private String color;
-    }
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Flowers {
-        private String name;
-        private int cnt;
-        private List<String> color;
-    }
+    private List<Long> flowers;
 }
