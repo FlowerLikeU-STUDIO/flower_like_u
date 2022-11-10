@@ -238,28 +238,12 @@ public class CustomFlowerServiceImpl implements CustomFlowerService {
             return result;
         }
 
-        int flowerNum = customInfo.getFlowers().size();
-        Map<String, Integer> unitCnt = new HashMap<>();
-        for (int i = 0; i < flowerNum; i++) {
-            String flowerName = customInfo.getFlowers().get(i);
-            if(unitCnt.containsKey(flowerName)) {
-                unitCnt.put(flowerName, unitCnt.get(flowerName) + 1);
-            } else {
-                unitCnt.put(flowerName, 1);
-            }
-        }
-
-        List<String> flowers = new ArrayList<>();
-        for(Map.Entry<String, Integer> entry : unitCnt.entrySet()) {
-            flowers.add(String.format("%s %d송이", entry.getKey(), entry.getValue()));
-        }
-
         CustomDetailRes detailInfo = CustomDetailRes.builder()
                 .type(customInfo.getType())
                 .wrapper(customInfo.getWrapper())
                 .ribbon(customInfo.getRibbon())
                 .size(customInfo.getSize())
-                .flowers(flowers)
+                .flowers(customInfo.cntFlowerNumber())
                 .build();
         
         result.put("result", true);
