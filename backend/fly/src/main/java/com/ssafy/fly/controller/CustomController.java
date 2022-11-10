@@ -113,6 +113,16 @@ public class CustomController {
 
     @GetMapping("/recommend/{size}")
     public ResponseEntity<List<FlowerVo>> getRecommend(@PathVariable int size) {
+        Map<String, FlowerVo[]> flowerMap = FlowerMap.ofMap();
+        if (size == 0) {
+            int idx = (int) Math.floor(Math.random() * 7);
+            FlowerVo[] flowerVos = flowerMap.get(harmonyService.getColor(CustomMap.color[idx]));
+            int idxTmp = (int) Math.floor(Math.random() * flowerVos.length);
+            FlowerVo flowerVo = flowerVos[idxTmp];
+            List<FlowerVo> flowerVoLst = new ArrayList<>();
+            flowerVoLst.add(flowerVo);
+            return new ResponseEntity<>(flowerVoLst,HttpStatus.OK);
+        }
         String[] arr = new String[size];
         Map<Integer, List<Integer>> map = CustomMap.ofMap(size);
         Queue<Integer> queue = new LinkedList<>();
@@ -144,7 +154,7 @@ public class CustomController {
                 }
             }
         }
-        Map<String, FlowerVo[]> flowerMap = FlowerMap.ofMap();
+
         List<FlowerVo> flowerVoList = Arrays.stream(arr).map(color -> {
             int idxTmp = (int) Math.floor(Math.random() * flowerMap.get(color).length);
             return flowerMap.get(color)[idxTmp];
