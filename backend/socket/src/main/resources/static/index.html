@@ -3,6 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+    li {
+      list-style: none;
+    }
+
+    img {
+      width: 200px;
+      height: 200px;
+    }
+
+    .real-upload {
+      display: none;
+    }
+
+    .upload {
+      width: 200px;
+      height: 200px;
+      background-color: antiquewhite;
+    }
+
+    .image-preview {
+      width: 1300px;
+      height: 200px;
+      background-color: aquamarine;
+      display: flex;
+      gap: 20px;
+    }
+  </style>
 </head>
 <body>
 <div>userType</div>
@@ -10,6 +38,7 @@
 <div>userId</div>
 <input type="text" id = 'room'>
 <button>간이 로그인</button>
+<div></div>
 <div id="isLogin" style="display : none">
     <div>receiverId</div>
     <input type="text" id = 'receiverId'>
@@ -26,8 +55,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
+        function createElement(e, file) {
+          const img = document.createElement('img');
+          img.setAttribute('src', e.target.result);
+          img.setAttribute('data-file', file.name);
+          img.setAttribute('style', 'display: block')
+          return img;
+        }
         // 메세지를 수신할 때 동작하는 함수 messageType에 따라 동작이 분기된다.
-        function onMessageReceived(payload) {
+        async function onMessageReceived(payload) {
             let message = JSON.parse(payload.body);
             /*
                 누군가가 처음으로 어떤 사람과 채팅을 시작했을 때 messageType은 'START'로 전송된다.
@@ -37,7 +73,7 @@
                 let ctnr = document.createElement("div");
                 let latest = document.createElement("div")
                 latest.setAttribute('style','width : 270px; border : 1px solid black')
-                latest.setAttribute('id', "latest" + String(message.address.timestamp))
+                latest.setAttribute('id', "latest" + String(message.address))
                 latest.innerText = message.content
                 let enterChat = document.createElement('button')
                 enterChat.innerText = '채팅방 입장'
@@ -45,14 +81,15 @@
                 closeChat.innerText = '채팅방 나가기'
                 ctnr.setAttribute('style', 'display: inline-block')
                 let roomName = document.createElement('p')
-                roomName.innerText = "Address : " + message.address.timestamp + "(consumerId : " + message.consumerId + ", storeId : " + message.storeId + ")"
+                roomName.innerText = "Address : " + message.address + "(consumerId : " + message.consumerId + ", storeId : " + message.storeId + ")"
                 let chatArea = document.createElement('div')
                 chatArea.setAttribute('style', "display: none")
-                chatArea.setAttribute('id', 'area' + String(message.address.timestamp))
+                chatArea.setAttribute('id', 'area' + String(message.address))
                 let input = document.createElement('input')
-                input.setAttribute('id', "id" + String(message.address.timestamp))
+                input.setAttribute('id', "id" + String(message.address))
                 let button = document.createElement('button')
                 button.innerText = '메세지 보내기'
+                let imgArea = document.createElement('div')
                 let inputWrpr = document.createElement('div')
                 inputWrpr.setAttribute('style','display : none')
                 let receiveId = message.consumerId
@@ -69,24 +106,44 @@
                 }
 
                 closeChat.addEventListener('click',() => {
-                    document.querySelector('#area' + String(message.address.timestamp)).setAttribute('style','display : none')
-                    document.querySelector('#area' + String(message.address.timestamp) + '+ div').setAttribute('style','display : none')
+                    document.querySelector('#area' + String(message.address)).setAttribute('style','display : none')
+                    document.querySelector('#area' + String(message.address) + '+ div').setAttribute('style','display : none')
 
                 })
                 enterChat.addEventListener('click',() => {
-                    if (!alreadyLoaded.includes(message.address.timestamp)) {
-                        axios.get('http://localhost:8080/api/chatting/' + message.storeId + '/' + message.consumerId).then(r => {
-                            for (let j = 0; j < r.data.response.length; j++) {
-                                let divTmp = document.createElement('div')
-                                divTmp.innerText = r.data.response[j].content
-                                if (document.querySelector('#userType').value === r.data.response[j].direction) divTmp.setAttribute('style','text-align : end')
-                                document.querySelector('#area' + message.address.timestamp).appendChild(divTmp)
-                            }
-                        })
-                        alreadyLoaded.push(message.address.timestamp)
+                    if (!alreadyLoaded.includes(message.address)) {
+                        axios.get('http://localhost:8080/api/chatting/message' + message.address).then(async r => {
+                          function imgLoad(img,direction) {
+                              return new Promise(resolve => {
+                                if (img != "") {
+                                    let imgSrcs = img.split('`')
+                                    for (let imgSrc of imgSrcs) {
+
+                                      let imgCtnr = document.createElement('div')
+                                      let imgTmp = document.createElement('img')
+                                      imgTmp.src = imgSrc
+                                      if (document.querySelector('#userType').value === direction) imgCtnr.setAttribute('style','display: flex; justify-content : end')
+                                      imgCtnr.appendChild(imgTmp)
+                                      document.querySelector('#area' + message.address).appendChild(imgCtnr)
+                                    }
+                                  }
+                                  resolve("resolve")
+                                  }
+                              )
+                          }
+
+                          for (let j = 0; j < r.data.response.length; j++) {
+                              await imgLoad(r.data.response[j].imgSrc,r.data.response[j].direction)
+                              let divTmp = document.createElement('div')
+                              divTmp.innerText = r.data.response[j].content
+                              if (document.querySelector('#userType').value === r.data.response[j].direction) divTmp.setAttribute('style','text-align : end')
+                              document.querySelector('#area' + message.address).appendChild(divTmp)
+                          }
+                      })
+                      alreadyLoaded.push(message.address)
                     }
-                    document.querySelector('#area' + String(message.address.timestamp)).setAttribute('style','width : 300px; height : 300px; border : 1px solid black')
-                    document.querySelector('#area' + String(message.address.timestamp) + '+ div').setAttribute('style','display : block')
+                    document.querySelector('#area' + String(message.address)).setAttribute('style','width : 300px; height : 300px; border : 1px solid black')
+                    document.querySelector('#area' + String(message.address) + '+ div').setAttribute('style','display : block')
                     axios.put('http://localhost:8080/api/chatting/room/cnt',{
                       'storeId' : message.storeId,
                       'consumerId' : message.consumerId,
@@ -94,39 +151,99 @@
                       'method' : "reset"
                     })
 
-                    document.querySelector('#notRead' + message.address.timestamp).innerText = 0
+                    document.querySelector('#notRead' + message.address).innerText = 0
                 })
                 let notRead = document.createElement("div")
                 notRead.setAttribute('style','width : 30px; border : 1px solid black')
-                notRead.setAttribute('id', 'notRead' + message.address.timestamp)
+                notRead.setAttribute('id', 'notRead' + message.address)
                 notRead.innerText = 0
+
+                let imgInput = document.createElement("input")
+
+                imgInput.setAttribute('type','file')
+                imgInput.setAttribute('class','real-upload')
+                imgInput.setAttribute('accept','image/*')
+                imgInput.setAttribute('multiple','multiple')
+                imgInput.setAttribute('style','display : none')
+
+                let imgInputScope = document.createElement("div")
+                imgInputScope.setAttribute('class','upload')
+
+                imgInputScope.addEventListener('click',() => {imgInput.click()})
+                imgInput.addEventListener('change',(e) => {
+                    const uploadFiles = [];
+                    const files = e.currentTarget.files;
+
+                    [...files].forEach(file => {
+                        uploadFiles.push(file);
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                          const preview = createElement(e, file);
+                          imgArea.appendChild(preview);
+                        };
+                        reader.readAsDataURL(file);
+                    })
+                })
 
                 // 메세지 보내기 버튼을 누르면 socket 메세지를 총 두 번 보낸다. 상대방에게 한 번(상대방의 소켓 주소로), 자신에게 한 번(자신 소켓 주소로)
                 button.addEventListener('click',() => {
+                    let imgSrcLst = []
+                    imgArea.childNodes.forEach((child) => {
+                        imgSrcLst.push(child.src)
+                        let imgCtnr = document.createElement('div')
+                        let imgTmp = document.createElement('img')
+                        imgTmp.src = child.src
+                        imgCtnr.setAttribute('style','display: flex; justify-content : end')
+                        imgCtnr.appendChild(imgTmp)
+                        document.querySelector('#area' + message.address).appendChild(imgCtnr)
+                    })
                     let divTmp = document.createElement('div')
-                    divTmp.innerText = document.querySelector('#id' + String(message.address.timestamp)).value
+                    divTmp.innerText = document.querySelector('#id' + String(message.address)).value
                     divTmp.setAttribute('style','text-align : end')
-                    document.querySelector('#area' + message.address.timestamp).appendChild(divTmp)
-
-                    // stompClient의 send 메서드는 사용하는 프레임워크마다 구조가 달라서 한 번 더 확인해야한다.
-                    // 상대방에게 보는 거는 messageType을 'RECEIVE'로 자신에게 보내는 것은 'SEND'로 보낸다.
-                    // 여기서 address는 상대방과 나만의 채팅방 id를 의미한다.
-                    stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
+                    document.querySelector('#area' + message.address).appendChild(divTmp)
+                    if (imgSrcLst.length === 0) {
+                      stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
                           {},
                           JSON.stringify({
-                            content : document.querySelector('#id' + String(message.address.timestamp)).value,
+                            content : document.querySelector('#id' + String(message.address)).value,
                             address : message.address,
-                            messageType : 'RECEIVE'
+                            messageType : 'RECEIVE',
+                            storeId : message.storeId,
+                            consumerId : message.consumerId,
                         })
-                    )
+                      )
 
+                    }
                     // 메세지를 MongoDB에 저장한다. 'direction'을 통해 보낸 사람이 누구인지 명시한다.
                     // 메세지 등록이 성공하면 해당 채팅방에 대한 최근 메세지 수정 요청을 보내고 element value도 수정한다.
                     axios.post('http://localhost:8080/api/chatting',{
-                        'content' : document.querySelector('#id' + String(message.address.timestamp)).value,
+                        'content' : document.querySelector('#id' + String(message.address)).value,
                         'storeId' : message.storeId,
                         'consumerId' : message.consumerId,
-                        'direction' : document.querySelector('#userType').value
+                        'direction' : document.querySelector('#userType').value,
+                        'imgSrc' : imgSrcLst
+                    }).then(async r => {
+                      if (document.querySelector('#id' + String(message.address)).value != '')
+                        document.querySelector('#latest' + String(message.address)).innerText = document.querySelector('#id' + String(message.address)).value
+                      else
+                        document.querySelector('#latest' + String(message.address)).innerText = "사진"
+                      if (imgSrcLst.length > 0) {
+                          await stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
+                              {},
+                              JSON.stringify({
+                                content : document.querySelector('#id' + String(message.address)).value,
+                                address : message.address,
+                                messageType : 'RECEIVE',
+                                storeId : message.storeId,
+                                consumerId : message.consumerId,
+                                imgSrc : r.data.response
+                            })
+                          )
+                          while ( imgArea.hasChildNodes() ) {
+                            imgArea.removeChild( imgArea.firstChild );
+                          }
+                      }
+                      document.querySelector('#id' + String(message.address)).value = ''
                     })
 
                     axios.put('http://localhost:8080/api/chatting/room', {
@@ -134,11 +251,7 @@
                         'storeId' : message.storeId,
                         'consumerId' : message.consumerId,
                         'userType' : receiveType,
-                        'latestMessage' : document.querySelector('#id' + String(message.address.timestamp)).value
-                    }).then(r => {
-
-                        document.querySelector('#latest' + String(message.address.timestamp)).innerText = document.querySelector('#id' + String(message.address.timestamp)).value
-                        document.querySelector('#id' + String(message.address.timestamp)).value = ''
+                        'latestMessage' : document.querySelector('#id' + String(message.address)).value
                     })
                 })
                 ctnr.appendChild(roomName)
@@ -150,6 +263,9 @@
                 inputWrpr.appendChild(input)
                 inputWrpr.appendChild(button)
                 ctnr.appendChild(inputWrpr)
+                ctnr.appendChild(imgArea)
+                ctnr.appendChild(imgInput)
+                ctnr.appendChild(imgInputScope)
                 document.querySelector('#chatList').appendChild(ctnr)
                 chatLst.push(message.address)
             }
@@ -157,26 +273,47 @@
             // 해당 메세지에 대한 element를 채팅방에 추가한다.
             // 최근 메세지에 대한 element value를 수정한다.
             else if (message.messageType != 'JOIN' && message.messageType != 'LEAVE') {
-                if (document.querySelector('#area' + message.address.timestamp).style.display != 'none') {
-                    let divTmp = document.createElement('div')
-                    divTmp.innerText = message.content
-                    document.querySelector('#area' + message.address.timestamp).appendChild(divTmp)
-                    let receiveType = 'consumer'
-                    if (document.querySelector('#userType').value === 'consumer')
-                        receiveType = 'store'
-                    let sendType = 'consumer'
-                    if (receiveType === 'consumer')
-                        sendType = 'store'
-                    axios.put('http://localhost:8080/api/chatting/room/cnt',{
-                      'storeId' : message.storeId,
-                      'consumerId' : message.consumerId,
-                      'userType' : sendType,
-                      'method' : "reset"
-                    })
-                } else {
-                    document.querySelector('#notRead' + message.address.timestamp).innerText = parseInt(document.querySelector('#notRead' + message.address.timestamp).innerText) + 1
+                if (document.querySelector('#area' + message.address).style.display === 'none') {
+                  let receiveType = 'consumer'
+                  if (document.querySelector('#userType').value === 'consumer')
+                      receiveType = 'store'
+                  let sendType = 'consumer'
+                  if (receiveType === 'consumer')
+                      sendType = 'store'
+                  document.querySelector('#notRead' + message.address).innerText = parseInt(document.querySelector('#notRead' + message.address).innerText) + 1
                 }
-                document.querySelector('#latest' + message.address.timestamp).innerText = message.content
+                if (alreadyLoaded.includes(message.address)) {
+                    let tmp = [message.content]
+                    if (message.imgSrc != null) {
+                        axios.get("http://localhost:8080/api/chatting/" + message.imgSrc).then(res => {
+                          tmp = res.data.response.split('`')
+                          tmp.push(message.content)
+                          for (let t = 0; t < tmp.length; t++) {
+                              if (t < tmp.length - 1) {
+                                let imgTmp = document.createElement('img')
+                                imgTmp.src = tmp[t]
+                                document.querySelector('#area' + message.address).appendChild(imgTmp)
+                              } else {
+                                if (tmp[t] != '') {
+                                  let divTmp = document.createElement('div')
+                                  divTmp.innerText = message.content
+                                  document.querySelector('#area' + message.address).appendChild(divTmp)
+                                }
+                              }
+                          }
+                        })
+                    } else {
+                        let divTmp = document.createElement('div')
+                        divTmp.innerText = message.content
+                        document.querySelector('#area' + message.address).appendChild(divTmp)
+                    }
+
+                }
+                if (message.content != '') {
+                    document.querySelector('#latest' + message.address).innerText = message.content
+                } else {
+                  document.querySelector('#latest' + message.address).innerText = '사진'
+                }
             }
         }
 
@@ -212,11 +349,11 @@
                 document.querySelector('#userType').value + '/' + document.querySelector('#room').value
                 ).then(res => {
                     for (let i = 0; i < res.data.response.length; i++) {
-                        alreadyStart.push(res.data.response[i].id.timestamp)
+                        alreadyStart.push(res.data.response[i].id)
                         let ctnr = document.createElement("div");
                         let latest = document.createElement("div")
                         latest.setAttribute('style','width : 270px; border : 1px solid black')
-                        latest.setAttribute('id', "latest" + String(res.data.response[i].id.timestamp))
+                        latest.setAttribute('id', "latest" + String(res.data.response[i].id))
                         latest.innerText = res.data.response[i].latestMessage
                         let enterChat = document.createElement('button')
                         enterChat.innerText = '채팅방 입장'
@@ -224,14 +361,16 @@
                         closeChat.innerText = '채팅방 나가기'
                         ctnr.setAttribute('style', 'display: inline-block')
                         let roomName = document.createElement('p')
-                        roomName.innerText = "Address : " + res.data.response[i].id.timestamp + "(consumerId : " + res.data.response[i].consumerId + ", storeId : " + res.data.response[i].storeId + ")"
+                        roomName.innerText = "Address : " + res.data.response[i].id + "(consumerId : " + res.data.response[i].consumerId + ", storeId : " + res.data.response[i].storeId + ")"
                         let chatArea = document.createElement('div')
                         chatArea.setAttribute('style', "display: none")
-                        chatArea.setAttribute('id', 'area' + String(res.data.response[i].id.timestamp))
+                        chatArea.setAttribute('id', 'area' + String(res.data.response[i].id))
                         let input = document.createElement('input')
-                        input.setAttribute('id', "id" + String(res.data.response[i].id.timestamp))
+                        input.setAttribute('id', "id" + String(res.data.response[i].id))
                         let button = document.createElement('button')
                         button.innerText = '메세지 보내기'
+                        let imgArea = document.createElement('div')
+
                         let inputWrpr = document.createElement('div')
                         inputWrpr.setAttribute('style','display : none')
                         let receiveId = res.data.response[i].consumerId
@@ -247,24 +386,44 @@
                             sendId = res.data.response[i].storeId
                         }
                         closeChat.addEventListener('click',() => {
-                            document.querySelector('#area' + String(res.data.response[i].id.timestamp)).setAttribute('style','display : none')
-                            document.querySelector('#area' + String(res.data.response[i].id.timestamp) + '+ div').setAttribute('style','display : none')
+                            document.querySelector('#area' + String(res.data.response[i].id)).setAttribute('style','display : none')
+                            document.querySelector('#area' + String(res.data.response[i].id) + '+ div').setAttribute('style','display : none')
 
                         })
-                        enterChat.addEventListener('click',() => {
-                            if (!alreadyLoaded.includes(res.data.response[i].id.timestamp)) {
-                                axios.get('http://localhost:8080/api/chatting/' + res.data.response[i].storeId + '/' + res.data.response[i].consumerId).then(r => {
+                        enterChat.addEventListener('click', () => {
+                            if (!alreadyLoaded.includes(res.data.response[i].id)) {
+                                axios.get('http://localhost:8080/api/chatting/message' + res.data.response[i].id).then(async r => {
+                                    function imgLoad(img,direction) {
+                                        return new Promise(resolve => {
+                                          if (img != "") {
+                                              let imgSrcs = img.split('`')
+                                              for (let imgSrc of imgSrcs) {
+
+                                                let imgCtnr = document.createElement('div')
+                                                let imgTmp = document.createElement('img')
+                                                imgTmp.src = imgSrc
+                                                if (document.querySelector('#userType').value === direction) imgCtnr.setAttribute('style','display: flex; justify-content : end')
+                                                imgCtnr.appendChild(imgTmp)
+                                                document.querySelector('#area' + res.data.response[i].id).appendChild(imgCtnr)
+                                              }
+                                            }
+                                            resolve("resolve")
+                                            }
+                                        )
+                                    }
+
                                     for (let j = 0; j < r.data.response.length; j++) {
+                                        await imgLoad(r.data.response[j].imgSrc, r.data.response[j].direction)
                                         let divTmp = document.createElement('div')
                                         divTmp.innerText = r.data.response[j].content
                                         if (document.querySelector('#userType').value === r.data.response[j].direction) divTmp.setAttribute('style','text-align : end')
-                                        document.querySelector('#area' + res.data.response[i].id.timestamp).appendChild(divTmp)
+                                        document.querySelector('#area' + res.data.response[i].id).appendChild(divTmp)
                                     }
                                 })
-                                alreadyLoaded.push(res.data.response[i].id.timestamp)
+                                alreadyLoaded.push(res.data.response[i].id)
                             }
-                            document.querySelector('#area' + String(res.data.response[i].id.timestamp)).setAttribute('style','width : 300px; height : 300px; border : 1px solid black')
-                            document.querySelector('#area' + String(res.data.response[i].id.timestamp) + '+ div').setAttribute('style','display : block')
+                            document.querySelector('#area' + String(res.data.response[i].id)).setAttribute('style','width : 300px; height : 300px; border : 1px solid black')
+                            document.querySelector('#area' + String(res.data.response[i].id) + '+ div').setAttribute('style','display : block')
                             axios.put('http://localhost:8080/api/chatting/room/cnt',{
                               'storeId' : res.data.response[i].storeId,
                               'consumerId' : res.data.response[i].consumerId,
@@ -272,54 +431,131 @@
                               'method' : "reset"
                             })
 
-                            document.querySelector('#notRead' + res.data.response[i].id.timestamp).innerText = 0
+                            document.querySelector('#notRead' + res.data.response[i].id).innerText = 0
                         })
 
                         let notRead = document.createElement("div")
                         notRead.setAttribute('style','width : 30px; border : 1px solid black')
-                        notRead.setAttribute('id', 'notRead' + res.data.response[i].id.timestamp)
+                        notRead.setAttribute('id', 'notRead' + res.data.response[i].id)
                         if (sendType === 'consumer')
                             notRead.innerText = res.data.response[i].consumerNotReadCnt
                         else
                             notRead.innerText = res.data.response[i].storeNotReadCnt
-                        // 메세지 보내기 버튼을 누르면 socket 메세지를 보낸다. 상대방에게 한 번(상대방의 소켓 주소로)
-                        button.addEventListener('click',() => {
-                            let divTmp = document.createElement('div')
-                            divTmp.innerText = document.querySelector('#id' + String(res.data.response[i].id.timestamp)).value
-                            divTmp.setAttribute('style','text-align : end')
-                            document.querySelector('#area' + res.data.response[i].id.timestamp).appendChild(divTmp)
-                            // 메세지를 MongoDB에 저장한다. 'direction'을 통해 보낸 사람이 누구인지 명시한다.
-                            // 메세지 등록이 성공하면 해당 채팅방에 대한 최근 메세지 수정 요청을 보내고 element value도 수정한다.
 
+                        let imgInput = document.createElement("input")
 
-                            stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
-                                  {},
-                                  JSON.stringify({
-                                    content : document.querySelector('#id' + String(res.data.response[i].id.timestamp)).value,
-                                    address : res.data.response[i].id,
-                                    messageType : 'RECEIVE',
-                                    storeId : res.data.response[i].storeId,
-                                    consumerId : res.data.response[i].consumerId
-                                })
-                            )
-                            // stompClient의 send 메서드는 사용하는 프레임워크마다 구조가 달라서 한 번 더 확인해야한다.
-                            // 여기서 address는 상대방과 나만의 채팅방 id를 의미한다.
-                            axios.post('http://localhost:8080/api/chatting',{
-                                'content' : document.querySelector('#id' + String(res.data.response[i].id.timestamp)).value,
-                                'storeId' : res.data.response[i].storeId,
-                                'consumerId' : res.data.response[i].consumerId,
-                                'direction' : document.querySelector('#userType').value
+                        imgInput.setAttribute('type','file')
+                        imgInput.setAttribute('class','real-upload')
+                        imgInput.setAttribute('accept','image/*')
+                        imgInput.setAttribute('multiple','multiple')
+                        imgInput.setAttribute('style','display : none')
+
+                        let imgInputScope = document.createElement("div")
+                        imgInputScope.setAttribute('class','upload')
+
+                        imgInputScope.addEventListener('click',() => {imgInput.click()})
+                        imgInput.addEventListener('change',(e) => {
+                            const uploadFiles = [];
+                            const files = e.currentTarget.files;
+
+                            [...files].forEach(file => {
+                                uploadFiles.push(file);
+                                const reader = new FileReader();
+                                reader.onload = (e) => {
+                                  const preview = createElement(e, file);
+                                  imgArea.appendChild(preview);
+                                };
+                                reader.readAsDataURL(file);
                             })
-                            axios.put('http://localhost:8080/api/chatting/room', {
-                              'id' : res.data.response[i].id,
-                              'storeId' : res.data.response[i].storeId,
-                              'consumerId' : res.data.response[i].consumerId,
-                              'latestMessage' : document.querySelector('#id' + String(res.data.response[i].id.timestamp)).value,
-                              'userType' : receiveType
-                            }).then(r => {
-                              document.querySelector('#latest' + String(res.data.response[i].id.timestamp)).innerText = document.querySelector('#id' + String(res.data.response[i].id.timestamp)).value
-                              document.querySelector('#id' + String(res.data.response[i].id.timestamp)).value = ''
-                          })
+                        })
+
+                        // 메세지 보내기 버튼을 누르면 socket 메세지를 보낸다. 상대방에게 한 번(상대방의 소켓 주소로)
+                        button.addEventListener('click', async () => {
+                            if (imgArea.childNodes.length > 0 || document.querySelector('#id' + String(res.data.response[i].id)).value != '') {
+
+                                // 메세지를 MongoDB에 저장한다. 'direction'을 통해 보낸 사람이 누구인지 명시한다.
+                                // 메세지 등록이 성공하면 해당 채팅방에 대한 최근 메세지 수정 요청을 보내고 element value도 수정한다.
+                                let imgSrcLst = []
+                                imgArea.childNodes.forEach((child) => {
+                                    imgSrcLst.push(child.src)
+                                    let imgCtnr = document.createElement('div')
+                                    let imgTmp = document.createElement('img')
+                                    imgTmp.src = child.src
+                                    imgCtnr.setAttribute('style','display: flex; justify-content : end')
+                                    imgCtnr.appendChild(imgTmp)
+                                    document.querySelector('#area' + res.data.response[i].id).appendChild(imgCtnr)
+
+                                })
+
+                                let divTmp = document.createElement('div')
+                                divTmp.innerText = document.querySelector('#id' + String(res.data.response[i].id)).value
+                                divTmp.setAttribute('style','text-align : end')
+                                document.querySelector('#area' + res.data.response[i].id).appendChild(divTmp)
+
+                                if (imgSrcLst.length === 0) {
+                                    stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
+                                        {},
+                                        JSON.stringify({
+                                          content : document.querySelector('#id' + String(res.data.response[i].id)).value,
+                                          address : res.data.response[i].id,
+                                          messageType : 'RECEIVE',
+                                          storeId : res.data.response[i].storeId,
+                                          consumerId : res.data.response[i].consumerId,
+                                      })
+                                    )
+
+                                  }
+
+                                // stompClient의 send 메서드는 사용하는 프레임워크마다 구조가 달라서 한 번 더 확인해야한다.
+                                // 여기서 address는 상대방과 나만의 채팅방 id를 의미한다.
+                                console.log({
+                                    'content' : document.querySelector('#id' + String(res.data.response[i].id)).value,
+                                    'storeId' : res.data.response[i].storeId,
+                                    'consumerId' : res.data.response[i].consumerId,
+                                    'direction' : document.querySelector('#userType').value,
+                                    'imgSrc' : imgSrcLst
+                                })
+                                axios.post('http://localhost:8080/api/chatting',{
+                                    'content' : document.querySelector('#id' + String(res.data.response[i].id)).value,
+                                    'storeId' : res.data.response[i].storeId,
+                                    'consumerId' : res.data.response[i].consumerId,
+                                    'direction' : document.querySelector('#userType').value,
+                                    'imgSrc' : imgSrcLst
+                                }).then(async r => {
+                                    if (document.querySelector('#id' + String(res.data.response[i].id)).value != "")
+                                        document.querySelector('#latest' + String(res.data.response[i].id)).innerText = document.querySelector('#id' + String(res.data.response[i].id)).value
+                                    else
+                                        document.querySelector('#latest' + String(res.data.response[i].id)).innerText = "사진"
+                                    if (imgSrcLst.length > 0) {
+                                      await stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
+                                          {},
+                                          JSON.stringify({
+                                            content : document.querySelector('#id' + String(res.data.response[i].id)).value,
+                                            address : res.data.response[i].id,
+                                            messageType : 'RECEIVE',
+                                            storeId : res.data.response[i].storeId,
+                                            consumerId : res.data.response[i].consumerId,
+                                            imgSrc : r.data.response
+                                        })
+                                      )
+
+                                      while ( imgArea.hasChildNodes() ) {
+                                        imgArea.removeChild( imgArea.firstChild );
+                                      }
+                                    }
+
+                                    document.querySelector('#id' + String(res.data.response[i].id)).value = ''
+                                })
+                                axios.put('http://localhost:8080/api/chatting/room', {
+                                  'id' : res.data.response[i].id,
+                                  'storeId' : res.data.response[i].storeId,
+                                  'consumerId' : res.data.response[i].consumerId,
+                                  'latestMessage' : document.querySelector('#id' + String(res.data.response[i].id)).value,
+                                  'userType' : receiveType
+                                }).then(res => {
+                                console.log(res)
+                                })
+                            }
                         })
                         ctnr.appendChild(roomName)
                         ctnr.appendChild(latest)
@@ -327,9 +563,13 @@
                         ctnr.appendChild(enterChat)
                         ctnr.appendChild(closeChat)
                         ctnr.appendChild(chatArea)
+
                         inputWrpr.appendChild(input)
                         inputWrpr.appendChild(button)
                         ctnr.appendChild(inputWrpr)
+                        ctnr.appendChild(imgArea)
+                        ctnr.appendChild(imgInput)
+                        ctnr.appendChild(imgInputScope)
                         document.querySelector('#chatList').appendChild(ctnr)
                         chatLst.push(res.data.response[i].id)
                     }
@@ -353,7 +593,7 @@
                 // 이미 채팅을 한 적이 있는 경우 새로 채팅방을 만드는 것을 방지한다.
 
                 for (let i = 0; i < chatLst.length; i++) {
-                    if (chatLst[i].timestamp === res.data.response.id.timestamp && chatLst[i].date === res.data.response.id.date)
+                    if (chatLst[i] === res.data.response.id)
                         isContains = true
                 }
 
@@ -362,9 +602,9 @@
                     let latest = document.createElement("div")
                     let notRead = document.createElement("div")
                     notRead.setAttribute('style','width : 30px; border : 1px solid black')
-                    notRead.setAttribute('id', 'notRead' + res.data.response.id.timestamp)
+                    notRead.setAttribute('id', 'notRead' + res.data.response.id)
                     latest.setAttribute('style','width : 270px; border : 1px solid black')
-                    latest.setAttribute('id', "latest" + String(res.data.response.id.timestamp))
+                    latest.setAttribute('id', "latest" + String(res.data.response.id))
                     latest.innerText = res.data.response.latestMessage
                     let enterChat = document.createElement('button')
                     enterChat.innerText = '채팅방 입장'
@@ -372,14 +612,15 @@
                     closeChat.innerText = '채팅방 나가기'
                     ctnr.setAttribute('style', 'display: inline-block')
                     let roomName = document.createElement('p')
-                    roomName.innerText = "Address : " + res.data.response.id.timestamp + "(consumerId : " + res.data.response.consumerId + ", storeId : " + res.data.response.storeId + ")"
+                    roomName.innerText = "Address : " + res.data.response.id + "(consumerId : " + res.data.response.consumerId + ", storeId : " + res.data.response.storeId + ")"
                     let chatArea = document.createElement('div')
                     chatArea.setAttribute('style', "display: none")
-                    chatArea.setAttribute('id', 'area' + String(res.data.response.id.timestamp))
+                    chatArea.setAttribute('id', 'area' + String(res.data.response.id))
                     let input = document.createElement('input')
-                    input.setAttribute('id', "id" + String(res.data.response.id.timestamp))
+                    input.setAttribute('id', "id" + String(res.data.response.id))
                     let button = document.createElement('button')
                     button.innerText = '메세지 보내기'
+                    let imgArea = document.createElement('div')
                     let inputWrpr = document.createElement('div')
                     inputWrpr.setAttribute('style','display : none')
                     let receiveId = res.data.response.consumerId
@@ -394,25 +635,74 @@
                         sendType = 'store'
                         sendId = res.data.response.storeId
                     }
+
+                    let imgInput = document.createElement("input")
+
+                    imgInput.setAttribute('type','file')
+                    imgInput.setAttribute('class','real-upload')
+                    imgInput.setAttribute('accept','image/*')
+                    imgInput.setAttribute('multiple','multiple')
+                    imgInput.setAttribute('style','display : none')
+
+                    let imgInputScope = document.createElement("div")
+                    imgInputScope.setAttribute('class','upload')
+
+                    imgInputScope.addEventListener('click',() => {imgInput.click()})
+                    imgInput.addEventListener('change',(e) => {
+                        const uploadFiles = [];
+                        const files = e.currentTarget.files;
+
+                        [...files].forEach(file => {
+                            uploadFiles.push(file);
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                              const preview = createElement(e, file);
+                              imgArea.appendChild(preview);
+                              console.log(imgArea)
+                            };
+                            reader.readAsDataURL(file);
+                        })
+                    })
+
                     closeChat.addEventListener('click',() => {
-                        document.querySelector('#area' + String(res.data.response.id.timestamp)).setAttribute('style','display : none')
-                        document.querySelector('#area' + String(res.data.response.id.timestamp) + '+ div').setAttribute('style','display : none')
+                        document.querySelector('#area' + String(res.data.response.id)).setAttribute('style','display : none')
+                        document.querySelector('#area' + String(res.data.response.id) + '+ div').setAttribute('style','display : none')
 
                     })
                     enterChat.addEventListener('click',() => {
-                        if (!alreadyLoaded.includes(res.data.response.id.timestamp)) {
-                            axios.get('http://localhost:8080/api/chatting/' + res.data.response.storeId + '/' + res.data.response.consumerId).then(r => {
-                                for (let j = 0; j < r.data.response.length; j++) {
-                                    let divTmp = document.createElement('div')
-                                    divTmp.innerText = r.data.response[j].content
-                                    if (document.querySelector('#userType').value === r.data.response[j].direction) divTmp.setAttribute('style','text-align : end')
-                                    document.querySelector('#area' + res.data.response.id.timestamp).appendChild(divTmp)
-                                }
-                            })
-                            alreadyLoaded.push(res.data.response.id.timestamp)
+                        if (!alreadyLoaded.includes(res.data.response.id)) {
+                          axios.get('http://localhost:8080/api/chatting/message' + res.data.response.id).then(async r => {
+                              function imgLoad(img,direction) {
+                                  return new Promise(resolve => {
+                                    if (img != "") {
+                                        let imgSrcs = img.split('`')
+                                        for (let imgSrc of imgSrcs) {
+
+                                          let imgCtnr = document.createElement('div')
+                                          let imgTmp = document.createElement('img')
+                                          imgTmp.src = imgSrc
+                                          if (document.querySelector('#userType').value === direction) imgCtnr.setAttribute('style','display: flex; justify-content : end')
+                                          imgCtnr.appendChild(imgTmp)
+                                          document.querySelector('#area' + res.data.response.id).appendChild(imgCtnr)
+                                        }
+                                      }
+                                      resolve("resolve")
+                                      }
+                                  )
+                              }
+
+                              for (let j = 0; j < r.data.response.length; j++) {
+                                  await imgLoad(r.data.response[j].imgSrc, r.data.response[j].direction)
+                                  let divTmp = document.createElement('div')
+                                  divTmp.innerText = r.data.response[j].content
+                                  if (document.querySelector('#userType').value === r.data.response[j].direction) divTmp.setAttribute('style','text-align : end')
+                                  document.querySelector('#area' + res.data.response.id).appendChild(divTmp)
+                              }
+                          })
+                          alreadyLoaded.push(res.data.response.id)
                         }
-                        document.querySelector('#area' + String(res.data.response.id.timestamp)).setAttribute('style','width : 300px; height : 300px; border : 1px solid black')
-                        document.querySelector('#area' + String(res.data.response.id.timestamp) + '+ div').setAttribute('style','display : block')
+                        document.querySelector('#area' + String(res.data.response.id)).setAttribute('style','width : 300px; height : 300px; border : 1px solid black')
+                        document.querySelector('#area' + String(res.data.response.id) + '+ div').setAttribute('style','display : block')
                         axios.put('http://localhost:8080/api/chatting/room/cnt',{
                           'storeId' : res.data.response.storeId,
                           'consumerId' : res.data.response.consumerId,
@@ -420,7 +710,7 @@
                           'method' : "reset"
                         })
 
-                        document.querySelector('#notRead' + res.data.response.id.timestamp).innerText = 0
+                        document.querySelector('#notRead' + res.data.response.id).innerText = 0
                     })
 
                     button.addEventListener('click',async () => {
@@ -428,7 +718,7 @@
                         // alreadyStart 배열을 통해 저장을 해 버튼이 처음 눌렀을 때 한번만 동작하게 한다.
                         function startCheck() {
                             return new Promise((resolve) => {
-                                if(!alreadyStart.includes(res.data.response.id.timestamp)) {
+                                if(!alreadyStart.includes(res.data.response.id)) {
                                     stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
                                         {},
                                         JSON.stringify({
@@ -438,32 +728,70 @@
                                             consumerId : res.data.response.consumerId
                                         })
                                     )
-                                    alreadyStart.push(res.data.response.id.timestamp)
+                                    alreadyStart.push(res.data.response.id)
                                 }
                                 resolve('resolve')
                             })
                         }
                         await startCheck()
 
-                        stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
-                              {},
-                              JSON.stringify({
-                                content : document.querySelector('#id' + String(res.data.response.id.timestamp)).value,
-                                address : res.data.response.id,
-                                messageType : 'RECEIVE'
-                            })
-                        )
+                        let imgSrcLst = []
+                        imgArea.childNodes.forEach((child) => {
+                            imgSrcLst.push(child.src)
+                            let imgCtnr = document.createElement('div')
+                            let imgTmp = document.createElement('img')
+                            imgTmp.src = child.src
+                            imgCtnr.setAttribute('style','display: flex; justify-content : end')
+                            imgCtnr.appendChild(imgTmp)
+                            document.querySelector('#area' + res.data.response.id).appendChild(imgCtnr)
+                        })
 
                         let divTmp = document.createElement('div')
-                        divTmp.innerText = document.querySelector('#id' + String(res.data.response.id.timestamp)).value
+                        divTmp.innerText = document.querySelector('#id' + String(res.data.response.id)).value
                         divTmp.setAttribute('style','text-align : end')
-                        document.querySelector('#area' + res.data.response.id.timestamp).appendChild(divTmp)
+                        document.querySelector('#area' + res.data.response.id).appendChild(divTmp)
+
+                        if (imgSrcLst.length === 0) {
+                          await stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
+                              {},
+                              JSON.stringify({
+                                content : document.querySelector('#id' + String(res.data.response.id)).value,
+                                address : res.data.response.id,
+                                messageType : 'RECEIVE',
+                                storeId : res.data.response.storeId,
+                                consumerId : res.data.response.consumerId,
+                            })
+                          )
+                        }
 
                         axios.post('http://localhost:8080/api/chatting',{
-                            'content' : document.querySelector('#id' + String(res.data.response.id.timestamp)).value,
+                            'content' : document.querySelector('#id' + String(res.data.response.id)).value,
                             'storeId' : res.data.response.storeId,
                             'consumerId' : res.data.response.consumerId,
-                            'direction' : document.querySelector('#userType').value
+                            'direction' : document.querySelector('#userType').value,
+                            'imgSrc' : imgSrcLst
+                        }).then(r => {
+                            if (document.querySelector('#id' + String(res.data.response.id)).value != "")
+                                document.querySelector('#latest' + String(res.data.response.id)).innerText = document.querySelector('#id' + String(res.data.response.id)).value
+                            else
+                                document.querySelector('#latest' + String(res.data.response.id)).innerText = "사진"
+                            if (imgSrcLst.length > 0) {
+                              stompClient.send("/topic/public/" + receiveType + '/' + receiveId ,
+                                  {},
+                                  JSON.stringify({
+                                    content : document.querySelector('#id' + String(res.data.response.id)).value,
+                                    address : res.data.response.id,
+                                    messageType : 'RECEIVE',
+                                    storeId : res.data.response.storeId,
+                                    consumerId : res.data.response.consumerId,
+                                    imgSrc : r.data.response
+                                })
+                              )
+                              while ( imgArea.hasChildNodes() ) {
+                                imgArea.removeChild( imgArea.firstChild );
+                              }
+                            }
+                            document.querySelector('#id' + String(res.data.response.id)).value = ''
                         })
 
                         axios.put('http://localhost:8080/api/chatting/room', {
@@ -471,10 +799,7 @@
                             'storeId' : res.data.response.storeId,
                             'consumerId' : res.data.response.consumerId,
                             'userType' : receiveType,
-                            'latestMessage' : document.querySelector('#id' + String(res.data.response.id.timestamp)).value
-                        }).then(r => {
-                            document.querySelector('#latest' + String(res.data.response.id.timestamp)).innerText = document.querySelector('#id' + String(res.data.response.id.timestamp)).value
-                            document.querySelector('#id' + String(res.data.response.id.timestamp)).value = ''
+                            'latestMessage' : document.querySelector('#id' + String(res.data.response.id)).value
                         })
                     })
                     ctnr.appendChild(roomName)
@@ -486,6 +811,9 @@
                     inputWrpr.appendChild(input)
                     inputWrpr.appendChild(button)
                     ctnr.appendChild(inputWrpr)
+                    ctnr.appendChild(imgArea)
+                    ctnr.appendChild(imgInput)
+                    ctnr.appendChild(imgInputScope)
                     document.querySelector('#chatList').appendChild(ctnr)
                     chatLst.push(res.data.response.id)
                 }

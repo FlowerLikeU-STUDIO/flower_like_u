@@ -1,0 +1,42 @@
+.riri {
+  width: 5rem;
+  height: 5rem;
+  @include flexDiv;
+}
+
+.menu_image {
+  object-fit: contain;
+  cursor: -webkit-grab;
+  cursor: grab;
+  z-index: 1000;
+  position: absolute;
+}
+
+.menu_card_wrapper {
+  display: grid;
+  grid-template-columns: 0.4fr 1fr;
+  gap: 1rem;
+  width: 95%;
+  height: 6rem;
+  background-color: $white;
+  margin: 0.2rem 0rem 1rem 0.1rem;
+  border-radius: 0.25rem;
+  box-shadow: $shadow400;
+  cursor: pointer;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  white-space: pre-line;
+}
+
+.letter_wrapper {
+  @include flexDiv(column, flex-start);
+  gap: 0.5rem;
+}
+
+.menu_title {
+  @include font();
+}
+
+.menu_contents {
+  @include font(0.8rem, 400, $gray, 130%);
+  word-break: keep-all;
+}

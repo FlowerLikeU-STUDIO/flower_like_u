@@ -7,6 +7,7 @@ import useInput from "../../hooks/useInput";
 import FailsAlert from "../../lib/FailAlert";
 import SuccessAlert from "../../lib/SuccessAlert";
 import { mutate } from "swr";
+import { client } from "../api/client";
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -95,12 +96,15 @@ const Login = () => {
       FailsAlert("로그인 정보를 정확히 입력해 주세요.");
       return;
     }
-    const { data, status } = await axios
-      .get("https://jsonplaceholder.typicode.com/users/1")
+    const { data, status } = await client
+      .post("auth/login", {
+        userId: loginInfo.userId,
+        password: loginInfo.password,
+      })
       .then((response) => response);
+
     if (status === 200) {
-      window.sessionStorage.setItem("ACCESS_TOKEN", "test.jwt.token");
-      window.sessionStorage.setItem("REFRESH_TOKEN", "test.refresh.token");
+      window.sessionStorage.setItem("ACCESS_TOKEN", data.accessToken);
       SuccessAlert("로그인 되었습니다.");
       mutate("logIn", true);
       router.push("/");
@@ -110,7 +114,6 @@ const Login = () => {
     <LoginWrapper>
       <LoginContent>
         <LoginContentLeft>
-          로그인
           <Image src="/auth/happyBtte.jpeg" width={180} height={230} />
         </LoginContentLeft>
         <LoginContentRight>
@@ -135,17 +138,17 @@ const Login = () => {
             bgColor={"#96C62B"}
             color={"#fff"}
             padding={"12px 20px"}
-            margin={"20px 0 0 0"}
+            margin={"20px 0 20px 0"}
           >
             로그인
           </LoginButton>
-          <SocialButton width={"70%"} margin={"20px 0 0 0"}>
+          {/* <SocialButton width={"70%"} margin={"20px 0 0 0"}>
             <Image
               src={"/auth/kakao_login_medium.png"}
               width={175}
               height={40}
             />
-          </SocialButton>
+          </SocialButton> */}
           <div>계정이 없으신가요?</div>
         </LoginContentRight>
       </LoginContent>

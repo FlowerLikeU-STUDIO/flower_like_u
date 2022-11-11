@@ -1,0 +1,6 @@
+.package_wrapper {
+  @include flexDiv(row, center, space-between);
+  padding-top: 5rem;
+  gap: 2rem;
+  width: 58rem;
+}

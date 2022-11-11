@@ -1,0 +1,79 @@
+@mixin hoverButton {
+  transition: all 0.5s linear;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.01);
+  }
+  &:hover::after {
+    top: 0;
+    height: 100%;
+  }
+  &:active {
+    top: 0.125px;
+  }
+  &:after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    border-radius: 0.3rem;
+    background-color: $lightGradient;
+    background-image: $lightGradient;
+    opacity: 0.3;
+    box-shadow: -7px -7px 20px 0px #fff9, -4px -4px 5px 0px #fff9,
+      7px 7px 20px 0px #0002, 4px 4px 5px 0px #0001;
+    transition: all 0.5s ease;
+  }
+}
+
+.custom_div {
+  @include flexDiv(column, center, center);
+  box-shadow: $shadow600;
+  border-radius: 0.25rem;
+  background-color: $white 0.8;
+  color: $mainParagraph;
+  padding: 2rem 0.6rem 2rem 0.6rem;
+  gap: 0.25rem;
+  white-space: pre-line;
+  text-align: center;
+  height: 20rem;
+  &.small {
+    @include hoverButton();
+    width: 11.25rem;
+    & > p {
+      @include font(1.5rem);
+    }
+    & > span {
+      @include font;
+      color: $gray;
+      word-break: keep-all;
+    }
+  }
+  &.medium {
+    @include hoverButton();
+    width: 15rem;
+    & > p {
+      @include font(1.5rem);
+    }
+    & > span {
+      @include font;
+      word-break: keep-all;
+    }
+  }
+}
+
+.custom_img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.card_line {
+  width: 60%;
+  border: 0.5px solid $primary300p;
+  margin: 0.5rem 0rem 0.8rem 0rem;
+  opacity: 0.5;
+}

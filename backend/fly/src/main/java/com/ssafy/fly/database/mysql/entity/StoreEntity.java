@@ -1,10 +1,16 @@
 package com.ssafy.fly.database.mysql.entity;
 
+import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.database.mysql.enumtype.UserType;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "store")
@@ -13,9 +19,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
-public class StoreEntity extends BaseEntity {
-    @Column(name = "type", nullable = false)
+@ToString(exclude = {"reviews", "books", "feeds"})
+public class StoreEntity extends BaseEntity implements CustomUserDetail {
+    @Column(name = "type", length = 10, nullable = false)
     @Enumerated(EnumType.STRING)
     UserType type;
 
@@ -41,13 +47,21 @@ public class StoreEntity extends BaseEntity {
     @Lob
     private String profile;
 
-    @Column(name = "address", length = 200, nullable = false)
-    private String address;
+    @Column(name = "zipcode", length = 5, nullable = false)
+    private String zipCode;
 
-    // 휴일은 나중에 작업
-//    @Column(name = "holidays", nullable = true)
-//    private String holidays;
-//
+    @Column(name = "street", length = 50, nullable = false)
+    private String street;
+
+    @Column(name = "detail_addr", length = 50, nullable = true)
+    private String detailAddr;
+
+    @Column(name = "sigungu_code", length = 5, nullable = false)
+    private String sigunguCode;
+
+    @Column(name = "holidays", nullable = true)
+    private String holidays;
+
     @Column(name = "bio", length = 300, nullable = true)
     private String bio;
 
@@ -57,4 +71,63 @@ public class StoreEntity extends BaseEntity {
 
     @Column(name = "withdrawal")
     private boolean withdrawal;
+
+    // store와 review 테이블의 1:N 관계 매핑
+    @OneToMany(mappedBy = "storeId")
+    @Builder.Default
+    private List<ReviewEntity> reviews = new ArrayList<>();
+
+    // store와 review 테이블의 1:N 관계 매핑
+    @OneToMany(mappedBy = "storeId")
+    @Builder.Default
+    private List<BookEntity> books = new ArrayList<>();
+
+    @OneToMany(mappedBy = "storeId")
+    @Builder.Default
+    private List<FeedEntity> feeds = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        authorities.add(new SimpleGrantedAuthority("USER"));
+
+        return authorities;
+    }
+
+    @Override
+    public Long getUserPk() {return super.getId();}
+
+    @Override
+    public String getUserType() { return "STORE";}
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return userId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

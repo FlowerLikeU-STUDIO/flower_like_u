@@ -1,0 +1,94 @@
+.save_button {
+  @include font(1rem, 500, $white);
+  @include flexDiv;
+  width: 3rem;
+  height: 3rem;
+  background-color: $ivory500;
+  border-radius: 100rem;
+  box-shadow: $shadow600;
+}
+
+.go_save_page {
+  @include font();
+  @include flexDiv;
+  background-color: $white;
+  border-radius: 0.25rem;
+  border: 1px solid $primary800;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+}
+
+.text {
+  @include font(3rem, 700, $ivory500);
+  @include flexDiv;
+}
+
+.custom_wrapper {
+  @include flexDiv(row, flex-end, flex-end);
+  padding-top: 1.5rem;
+  gap: 2rem;
+}
+
+.recommend_wrapper {
+  @include flexDiv(column, flex-end, flex-end);
+  gap: 2rem;
+  padding-bottom: 1rem;
+}
+
+.recommend_menu {
+  @include flexDiv;
+  width: 3rem;
+  height: 3rem;
+  background-color: $ivory500;
+  border-radius: 100rem;
+  box-shadow: $shadow600;
+}
+
+.custom_place {
+  position: relative;
+  @include flexDiv;
+  width: 30rem;
+  height: 30rem;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  &.bouquet {
+    background-image: url("/custom/bouquet.png");
+  }
+  &.vase {
+    background-image: url("/custom/vase.png");
+  }
+  &.ballon {
+    background-image: url("/custom/ballon.png");
+  }
+}
+
+.ribbon_cover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  @include flexDiv;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.custom_info_wrapper {
+  @include flexDiv(column);
+  width: 10rem;
+  height: 13rem;
+  background-color: $ivory400;
+  border-radius: 0.25rem;
+  box-shadow: $shadow600;
+  padding-bottom: 1rem;
+  gap: 0.5rem;
+}
+
+.custom_info_package {
+  @include font(1rem, 700);
+  width: 80%;
+}
+
+.custom_info_size {
+  @include font(0.95rem, 500, $gray);
+  width: 80%;
+}

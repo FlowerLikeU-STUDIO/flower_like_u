@@ -1,0 +1,44 @@
+.main__div {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  max-width: 62.5rem;
+  margin: 1rem auto;
+  @include respond-to("tablet-portrait-only") {
+    flex-direction: column;
+  }
+  cursor: pointer;
+}
+
+.line {
+  width: 100%;
+  border-bottom: solid 0.125rem $white350;
+  margin: auto;
+}
+
+.sub__div {
+  display: flex;
+  flex-direction: column;
+  max-width: 50rem;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+.title__p {
+  @include font(1.5rem, 500, $mainParagraph);
+  @include respond-to("tablet-portrait-only") {
+    @include font(1.25rem, 500, $mainParagraph);
+  }
+}
+
+.sub__p {
+  @include font(1.125rem, normal, $mainParagraph, 1.5rem);
+}
+
+.res__cancel {
+  margin-right: -4rem;
+  width: 7.5rem;
+  max-width: fit-content;
+  background-color: $primary900;
+  @include font(1rem, 500, $white100);
+}

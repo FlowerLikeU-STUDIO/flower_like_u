@@ -1,7 +1,9 @@
 package com.ssafy.fly.dto.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -14,5 +16,15 @@ public class RegisterReq {
     private String email;
     private String store;
     private String license;
-    private String address;
+    private Address address;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Address {
+        private String zipCode;
+        private String street;
+        private String details;
+        private String sigunguCode;
+    }
 }

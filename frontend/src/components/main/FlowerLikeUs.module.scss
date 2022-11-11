@@ -1,0 +1,26 @@
+.likeus_wrapper {
+  @include flexDiv(column);
+  width: 100%;
+  min-height: 100vh;
+}
+
+.likeus_title {
+  @include font(2.25rem, 500, $primary900);
+  padding-bottom: 6rem;
+}
+
+.us_wrapper {
+  @include flexDiv();
+  gap: 4rem;
+}
+
+.us_card {
+  @include flexDiv(column);
+  height: 12rem;
+  width: 10rem;
+  gap: 1rem;
+  background-color: $white100;
+  border-radius: 1rem;
+  box-shadow: $shadow500;
+  padding: 2rem;
+}

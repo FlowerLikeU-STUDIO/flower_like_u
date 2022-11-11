@@ -1,32 +1,43 @@
 package com.ssafy.fly.database.mysql.repository;
 
 import com.ssafy.fly.database.mysql.entity.StoreEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
     public StoreEntity findFirstByUserId(String inputId);
 
+    public Optional<StoreEntity> findByUserId(String userId);
     public StoreEntity findByNameAndEmailAndWithdrawal(String name, String email, boolean isDeleted);
 
     public StoreEntity findByUserIdAndNameAndEmailAndWithdrawal(String userId, String name, String email, boolean isDeleted);
 
-    public StoreEntity findByUserIdAndPasswordAndWithdrawal(String userId, String password, boolean isDeleted);
-
     public StoreEntity findByUserIdAndWithdrawal(String userId, boolean isDeleted);
+
+    public StoreEntity findByIdAndWithdrawal(Long storeId, boolean isDeleted);
+
+    public Page<StoreEntity> findBySigunguCodeStartsWithAndWithdrawal(String sidoCode, boolean isDeleted, Pageable pageable);
 
     @Modifying
     @Transactional
     @Query("UPDATE StoreEntity as s " +
-            "SET s.store = :store, s.address = :address " +
+            "SET s.store = :store, s.zipCode = :zipCode, s.street = :street, " +
+            "s.detailAddr = :details, s.sigunguCode = :sigunguCode, s.holidays = :holidays " +
             "WHERE s.userId = :userId")
     public int updateStoreInfo(@Param("userId") String userId,
                                @Param("store") String storeName,
-                               @Param("address") String address);
+                               @Param("zipCode") String zipCode,
+                               @Param("street") String street,
+                               @Param("details") String details,
+                               @Param("sigunguCode") String sigunguCode,
+                               @Param("holidays") String holidays);
 
     @Modifying
     @Transactional
@@ -56,7 +67,6 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
     @Transactional
     @Query("UPDATE StoreEntity as s " +
             "SET s.withdrawal = true " +
-            "WHERE s.userId = :userId And s.password = :password")
-    public int accountWithdraw(@Param("userId") String userId,
-                               @Param("password") String password);
+            "WHERE s.userId = :userId")
+    public int accountWithdraw(@Param("userId") String userId);
 }

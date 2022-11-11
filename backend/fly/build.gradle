@@ -19,17 +19,23 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // Spring Security
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.7.2'
+    /* Java Mail         */ implementation 'org.springframework.boot:spring-boot-starter-mail'
+    /* Spring Data JPA   */ implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    /* Spring Validation */ implementation 'org.springframework.boot:spring-boot-starter-validation'
+    /* MongoDB           */ implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    /* Spring Security   */ implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    /* JWT */
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
 }
 
 tasks.named('test') {

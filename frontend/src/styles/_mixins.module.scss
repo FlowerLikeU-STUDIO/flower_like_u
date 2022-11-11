@@ -1,7 +1,7 @@
 // font
 //* 인수를 넘기지 않으면 기본값으로 설정됩니다.
 //TODO @include 이름(인수) 형식으로 사용
-@mixin font($size: 1rem, $weight: 500, $color: #2a2a2a, $height: 150%) {
+@mixin font($size: 1rem, $weight: 500, $color: #2a2a2a, $height: 100%) {
   font-size: $size;
   font-weight: $weight;
   color: $color;
@@ -29,4 +29,30 @@
   justify-content: center;
   align-items: center;
   align-content: center;
+  @content;
+}
+
+// 반응형
+//* ex) @include respond-to("tablet-portrait-only") {height: 100px; width: 100px;}
+@mixin respond-to($name) {
+  @if map-has-key($breakpoints, $name) {
+    // media only (all-모든기기) &&  map-get (변수, 키값)
+    @media only all and #{inspect(map-get($breakpoints, $name))} {
+      @content;
+    }
+  } @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. Please make sure it is defined in `$breakpoints` map.";
+  }
+}
+
+// defaultlayout
+//* 페이지에 기본으로 적용되는 패딩이 적용된 디폴트 레이아웃입니다.
+@mixin defaultLayout {
+  width: 100%;
+  min-height: 100vh;
+  padding: 4rem 1rem 1rem;
+
+  @media screen and (min-width: 1350px) {
+    padding: 4rem 6rem 1rem;
+  }
 }

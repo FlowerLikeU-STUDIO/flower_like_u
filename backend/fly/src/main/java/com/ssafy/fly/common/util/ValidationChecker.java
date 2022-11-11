@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class ValidationChecker {
 
     public boolean idValidationCheck(String inputId) {
-        return inputId.matches("^[a-zA-Z0-9]{8,16}$");
+        return inputId.matches("^.*(?=^.{8,16}$)(?=.*\\d)(?=.*[a-zA-Z]).*$");
         //return inputId.length() <= 16 && validationCheck(inputId, 8);
     }
 

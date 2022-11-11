@@ -1,0 +1,51 @@
+.menu_image {
+  object-fit: contain;
+  cursor: -webkit-grab;
+  cursor: grab;
+  z-index: 1000;
+  position: absolute;
+}
+
+.menu_card_wrapper {
+  @include flexDiv(row, center, flex-start);
+  gap: 1.5rem;
+  width: 95%;
+  height: 6rem;
+  background-color: $white;
+  margin: 0.2rem 0rem 1rem 0.1rem;
+  border-radius: 0.25rem;
+  box-shadow: $shadow400;
+  cursor: pointer;
+  padding: 0.5rem 1rem 0.5rem 1.2rem;
+  white-space: pre-line;
+}
+
+.color_circle {
+  &.package {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 100rem;
+  }
+  &.ribbon {
+    width: 4rem;
+    height: 4rem;
+    background-repeat: no-repeat;
+    background-size: 150px;
+    background-position: 55% 90%;
+    border-radius: 100rem;
+    background-color: $white200;
+  }
+}
+
+.letter_wrapper {
+  @include flexDiv(column, flex-start);
+  gap: 0.5rem;
+}
+
+.menu_title {
+  @include font();
+}
+
+.menu_contents {
+  @include font(0.8rem, 400, $gray);
+}

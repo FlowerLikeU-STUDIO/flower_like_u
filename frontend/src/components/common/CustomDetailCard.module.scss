@@ -1,0 +1,67 @@
+.card__wrapper {
+  max-width: 62.5rem;
+  width: 100%;
+  box-shadow: $shadow600;
+  margin: 1rem auto;
+  padding: 1rem 1rem;
+  @include flexDiv(row, center, space-around);
+  gap: 1rem;
+}
+
+.flower__img {
+  width: 35%;
+}
+
+.main__div__wrapper {
+  // position: relative;
+  width: 50%;
+  @include flexDiv(column, center, stretch);
+}
+
+.sub__div__wrapper {
+  @include flexDiv(column, center, center);
+  width: 100%;
+  margin: 1rem;
+}
+
+.main__p {
+  color: $primary900;
+}
+
+.sub__p {
+  @include font(1rem, normal, $mainParagraph);
+  margin-top: 0.5rem;
+}
+
+.line {
+  width: 80%;
+  height: 1px;
+  margin: 1rem;
+  background-color: $primary400p;
+}
+
+.description {
+  @include font(1rem, normal, $mainParagraph, 1.5rem);
+  margin-bottom: 1rem;
+}
+
+.btn__group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  // grid-template-rows: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.btn {
+  font-size: 1rem;
+  border-radius: 0.3rem;
+  border: 1px solid $mainPrimary;
+  padding: 0.5rem 0.8rem;
+  width: 100%;
+  background-color: white;
+  color: $mainPrimary;
+  &.green {
+    background-color: $mainPrimary;
+    color: white;
+  }
+}

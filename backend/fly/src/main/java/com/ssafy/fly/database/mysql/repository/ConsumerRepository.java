@@ -8,10 +8,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Repository
 public interface ConsumerRepository extends JpaRepository<ConsumerEntity, Long> {
     public ConsumerEntity findFirstByUserId(String inputId);
+
+    public Optional<ConsumerEntity> findByUserId(String userId);
 
     public ConsumerEntity findByNameAndEmailAndWithdrawal(String name, String email, boolean isDeleted);
 
@@ -19,18 +22,21 @@ public interface ConsumerRepository extends JpaRepository<ConsumerEntity, Long> 
 
     public ConsumerEntity findByNickname(String nickname);
 
-    public ConsumerEntity findByUserIdAndPasswordAndWithdrawal(String userId, String password, boolean isDeleted);
+    public ConsumerEntity findByNicknameAndWithdrawal(String nickname, boolean isDeleted);
 
     public ConsumerEntity findByUserIdAndWithdrawal(String userId, boolean isDeleted);
 
     @Modifying
     @Transactional
     @Query("UPDATE ConsumerEntity as c " +
-            "SET c.nickname = :nickname, c.address = :address " +
+            "SET c.nickname = :nickname, c.zipCode = :zipCode, c.street = :street, c.detailAddr = :details, c.sigunguCode = :sigunguCode " +
             "WHERE c.userId = :userId")
     public int updateConsumerInfo(@Param("userId") String userId,
                                   @Param("nickname") String nickname,
-                                  @Param("address") String address);
+                                  @Param("zipCode") String zipCode,
+                                  @Param("street") String street,
+                                  @Param("details") String details,
+                                  @Param("sigunguCode") String sigunguCode);
 
     @Modifying
     @Transactional
@@ -52,7 +58,6 @@ public interface ConsumerRepository extends JpaRepository<ConsumerEntity, Long> 
     @Transactional
     @Query("UPDATE ConsumerEntity as c " +
             "SET c.withdrawal = true " +
-            "WHERE c.userId = :userId And c.password = :password")
-    public int accountWithdraw(@Param("userId") String userId,
-                               @Param("password") String password);
+            "WHERE c.userId = :userId")
+    public int accountWithdraw(@Param("userId") String userId);
 }
