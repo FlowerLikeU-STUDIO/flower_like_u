@@ -251,14 +251,15 @@ public class UserController {
     @GetMapping("/stores")
     public ResponseEntity<Map<String, Object>> getStoreList(@RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
                                                             @RequestParam(value = "size", required = false, defaultValue = "8") int size,
+                                                            @RequestParam(value = "sort", required = false, defaultValue = "reg") String sort,
                                                             @RequestParam(value = "sd", required = false, defaultValue = "전체") String sido,
                                                             @RequestParam(value = "sgg", required = false, defaultValue = "전체") String sigungu,
-                                                            @RequestParam(value = "sn", required = false, defaultValue = "전체") String storeName) {
+                                                            @RequestParam(value = "sn", required = false, defaultValue = "") String storeName) {
         System.out.println("[GET] - /user/store ");
-        System.out.println(String.format("[Page] %d\n[Size] %d\n[SI-DO] %s\n[SI-GUN-GU] %s\n[STORENAME] %s\n", pageNo, size, sido, sigungu, storeName));
+        System.out.println(String.format("[Page] %d\n[Size] %d\n[Sort] %s\n[SI-DO] %s\n[SI-GUN-GU] %s\n[STORENAME] %s\n", pageNo, size, sort, sido, sigungu, storeName));
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = userService.findStoreList(pageNo, size, sido, sigungu, storeName);
+        Map<String, Object> result = userService.findStoreList(pageNo, size, sort, sido, sigungu, storeName);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);

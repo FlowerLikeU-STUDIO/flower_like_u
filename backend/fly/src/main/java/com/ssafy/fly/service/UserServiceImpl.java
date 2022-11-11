@@ -4,12 +4,10 @@ import com.ssafy.fly.common.util.FlyMailSender;
 import com.ssafy.fly.common.util.RandomStringGenerator;
 import com.ssafy.fly.common.util.ValidationChecker;
 import com.ssafy.fly.database.mysql.entity.ConsumerEntity;
+import com.ssafy.fly.database.mysql.entity.RegionEntity;
 import com.ssafy.fly.database.mysql.entity.StoreEntity;
 import com.ssafy.fly.database.mysql.enumtype.UserType;
-import com.ssafy.fly.database.mysql.repository.ConsumerRepository;
-import com.ssafy.fly.database.mysql.repository.FeedRepository;
-import com.ssafy.fly.database.mysql.repository.ReviewRepository;
-import com.ssafy.fly.database.mysql.repository.StoreRepository;
+import com.ssafy.fly.database.mysql.repository.*;
 import com.ssafy.fly.dto.request.*;
 import com.ssafy.fly.dto.response.MailRes;
 import com.ssafy.fly.dto.response.StoreInfoRes;
@@ -18,9 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.plaf.synth.Region;
 import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.*;
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     private final ConsumerRepository consumerRepository;
     private final StoreRepository storeRepository;
     private final FeedRepository feedRepository;
-    private final ReviewRepository reviewRepository;
+    private final RegionRepository regionRepository;
     private final ValidationChecker validationChecker;
     private final RandomStringGenerator randomStringGenerator;
     private final FlyMailSender flyMailSender;
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(ConsumerRepository consumerRepository,
                            StoreRepository storeRepository,
                            FeedRepository feedRepository,
-                           ReviewRepository reviewRepository,
+                           RegionRepository regionRepository,
                            ValidationChecker validationChecker,
                            RandomStringGenerator randomStringGenerator,
                            FlyMailSender flyMailSender,
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         this.consumerRepository = consumerRepository;
         this.storeRepository = storeRepository;
         this.feedRepository = feedRepository;
-        this.reviewRepository = reviewRepository;
+        this.regionRepository = regionRepository;
         this.validationChecker = validationChecker;
         this.randomStringGenerator = randomStringGenerator;
         this.flyMailSender = flyMailSender;
@@ -571,14 +571,44 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    // 13. 판매자 목록 조회
+    // 13. 판매자 목록 조회       // 0, 8, id, 전체, 전체, 전체
     @Override
-    public Map<String, Object> findStoreList(int pageNo, int size, String sido, String sigungu, String storeName) {
+    public Map<String, Object> findStoreList(int pageNo, int size, String sort, String sido, String sigungu, String storeName) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
-        Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size);
-        Page<StoreEntity> searchList = storeRepository.findAll(pageable);
+        String sortKey = "";
+        if("reg".equals(sort)) sortKey = "id";
+        else if("order".equals(sort)) sortKey = "totalOrder";
+        else if("rating".equals(sort)) sortKey = "rating";
+        else {
+            message = "입력 가능한 정렬 기준이 아닙니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size, Sort.by(sortKey).descending());
+
+        Page<StoreEntity> searchList = null;
+        if("전체".equals(sido) && "전체".equals(sigungu)) {
+            searchList = storeRepository.findAllByStoreContainsAndWithdrawal(storeName, false, pageable);
+        } else if(!"전체".equals(sido) && "전체".equals(sigungu)) {
+            String sidoCode = regionRepository.findAllBySido(sido).get(0).getSidoCode();
+            searchList = storeRepository.findAllByStoreContainsAndWithdrawalAndSigunguCodeStartsWith(storeName, false, sidoCode, pageable);
+        } else if(!"전체".equals(sido) && !"전체".equals(sigungu)) {
+            RegionEntity searchRegion = regionRepository.findBySidoAndSigungu(sido, sigungu);
+            String fullCode = searchRegion.getSidoCode() + searchRegion.getSigunguCode();
+            searchList = storeRepository.findAllByStoreContainsAndWithdrawalAndSigunguCodeEquals(storeName, false, fullCode, pageable);
+        } else {
+            message = "잘못된 파라미터 입력입니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
         Map<String, Object> info = new HashMap<>();
 
         if(!searchList.isEmpty()) {
