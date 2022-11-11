@@ -29,15 +29,14 @@ const RandomFlower = () => {
     setRandomState(true);
     const flowerList = customOption.flowers;
     const copyOfFlowerList = [...flowerList];
-    console.log(flowerData);
     copyOfFlowerList.map((flower, index) => (copyOfFlowerList[index] = flowerData[index].id));
     dispatch(makeFlowerList(copyOfFlowerList));
     //* 꽃다발, 꽃풍선일 때에는 포장지, 리본 랜덤 생성
     if (customOption.package === 0) {
-      dispatch(selectWrapperColor(wrapper[wrapperRandomNum].hex));
+      dispatch(selectWrapperColor(wrapper[wrapperRandomNum].id));
       dispatch(selectRibbonColor(ribbonRandomNum));
     } else if (customOption.package === 2) {
-      dispatch(selectWrapperColor(wrapper[wrapperRandomNum].hex));
+      dispatch(selectWrapperColor(wrapper[wrapperRandomNum].id));
     }
     mutate();
     setRandomState(false);
