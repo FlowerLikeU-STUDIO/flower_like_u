@@ -56,15 +56,15 @@
   width: 100%;
   box-shadow: $shadow600;
   margin: 1rem auto;
-  padding: 1rem 1rem;
+  padding: 2rem 2rem;
   background-color: $white;
   border-radius: 0.25rem;
   border: 1px solid $primary500;
-  gap: 4rem;
 }
 
 .flower__img {
-  width: 35%;
+  @include flexDiv;
+  width: 50%;
 }
 
 .flower_contents_wrapper {
