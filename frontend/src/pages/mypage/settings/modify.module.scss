@@ -115,3 +115,20 @@
   background-color: $primary300p;
   @include font(1rem, bold, $white100);
 }
+
+.rest__btn {
+  @include font(1rem, normal, $mainButton);
+  border: 0.12rem solid $mainPrimary;
+  margin-left: 0.4rem;
+  padding: 0.2rem;
+  border-radius: 50%;
+}
+
+.is_rest__btn {
+  @include font(1.125rem, normal, $white100);
+  border: 1px solid $red400;
+  background-color: $red400;
+  margin-left: 0.4rem;
+  padding: 0.2rem;
+  border-radius: 50%;
+}
