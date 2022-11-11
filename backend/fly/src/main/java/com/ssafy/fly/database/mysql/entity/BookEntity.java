@@ -38,6 +38,10 @@ public class BookEntity extends BaseEntity {
     @JsonIgnore
     private FeedEntity feedId;
 
+    // 예약 번호
+//    @Column(name = "book_num", length = 10, nullable = false)
+//    private String bookNum;
+
     @Column(name = "book_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date bookDate;
@@ -49,15 +53,15 @@ public class BookEntity extends BaseEntity {
     @Column(name = "request", nullable = true)
     private String request;
 
-    @Column(name = "state", nullable = false)
+    @Column(name = "state", length = 10, nullable = false)
     @Enumerated(EnumType.STRING)
     private BookState state;
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", length = 10, nullable = false)
     @Enumerated(EnumType.STRING)
     private BookType type;
 
-    @OneToMany(mappedBy = "bookId")
+    @OneToOne(mappedBy = "bookId")
     @Builder.Default
-    private List<ReviewEntity> review = new ArrayList<>();;
+    private ReviewEntity review = null;
 }
