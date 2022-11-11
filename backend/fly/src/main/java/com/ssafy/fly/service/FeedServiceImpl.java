@@ -82,15 +82,11 @@ public class FeedServiceImpl implements FeedService {
 
     // 2. 피드 목록 조회
     @Override
-    public Map<String, Object> getFeedList(Long storeId, int pageNo, int size, Principal principal) {
+    public Map<String, Object> getFeedList(Long storeId, int pageNo, int size) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
-        StoreEntity store = null;
-        // 판매자가 본인 피드 목록을 조회하는 경우
-        if(storeId == null) store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-        // 구매자가 판매자 피드 목록을 조회하는 경우
-        else store = storeRepository.findById(storeId).orElse(null);
+        StoreEntity store = storeRepository.findById(storeId).orElse(null);
 
         if(store == null) {
             message = "존재하지 않는 판매자 아이디입니다.";
@@ -131,7 +127,7 @@ public class FeedServiceImpl implements FeedService {
 
     // 3. 피드 상세 조회
     @Override
-    public Map<String, Object> getFeedDetailInfo(Long feedId, Principal principal) {
+    public Map<String, Object> getFeedDetailInfo(Long feedId) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
