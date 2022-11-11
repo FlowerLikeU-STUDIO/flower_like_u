@@ -30,6 +30,7 @@ const RandomFlower = () => {
 
   //* state를 true로 변경해서 api 호출, 랜덤 값을 store에 업데이트
   const onHandleRandom = () => {
+    if (!flowerData) return;
     setRandomState(true);
     const flowerList = customOption.flowers;
     const copyOfFlowerList = [...flowerList];
