@@ -3,6 +3,7 @@ package com.ssafy.fly.database.mysql.entity;
 import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.database.mysql.enumtype.UserType;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -69,7 +70,8 @@ public class StoreEntity extends BaseEntity implements CustomUserDetail {
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDate;
 
-    @Column(name = "withdrawal")
+    @Column(name = "withdrawal", nullable = true)
+    @ColumnDefault("false")
     private boolean withdrawal;
 
     // store와 review 테이블의 1:N 관계 매핑

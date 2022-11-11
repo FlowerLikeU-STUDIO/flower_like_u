@@ -1,6 +1,7 @@
 package com.ssafy.fly.service;
 
 import com.ssafy.fly.common.util.FlyMailSender;
+import com.ssafy.fly.common.util.RandomNicknameMaker;
 import com.ssafy.fly.common.util.RandomStringGenerator;
 import com.ssafy.fly.common.util.ValidationChecker;
 import com.ssafy.fly.database.mysql.entity.ConsumerEntity;
@@ -119,7 +120,7 @@ public class UserServiceImpl implements UserService {
                     .userId(registerReq.getUserId())
                     .password(passwordEncoder.encode(registerReq.getPassword()))
                     .name(registerReq.getName())
-                    .nickname("랜덤닉네임")
+                    .nickname(RandomNicknameMaker.getNickname())
                     .email(registerReq.getEmail())
                     .regDate(new Date())
                     .withdrawal(false)
