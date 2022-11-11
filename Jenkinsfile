@@ -18,7 +18,7 @@ pipeline {
         // }
         stage('Backend Dockerizing') {
             steps {
-                sh "docker rmi martinflower/fly:fly_be"
+                // sh "docker rmi martinflower/fly:fly_be"
                 dir('./backend/fly'){
                     sh "pwd"
                     sh "chmod 777 gradlew"
