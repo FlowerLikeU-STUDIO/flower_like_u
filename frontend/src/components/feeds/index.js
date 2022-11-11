@@ -84,8 +84,15 @@ const Feed = ({ storeId }) => {
     <>
       {isOpen ? (
         <>
-          <Modal children={<FeedReservation feed={targetFeed} />} />
-          {/* <Modal children={<FeedRegister />} /> */}
+          <Modal
+            children={
+              targetFeed !== "" ? (
+                <FeedReservation feedId={targetFeed} />
+              ) : (
+                <></>
+              )
+            }
+          />
         </>
       ) : (
         <></>
@@ -138,16 +145,3 @@ const FeedItem = ({ feed, index, onClick }) => {
 
 Feed.Item = React.memo(FeedItem, areEqual);
 export default Feed;
-
-// feedList.map((feeds, index) => (
-//   <FeedListWrapper>
-//     {feeds.map((feed) => (
-//       <Feed.Item
-//         feed={feed}
-//         index={index}
-//         key={index}
-//         onClick={onHandleOpen}
-//       />
-//     ))}
-//   </FeedListWrapper>
-// ))
