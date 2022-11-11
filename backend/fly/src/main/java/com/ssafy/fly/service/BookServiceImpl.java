@@ -391,7 +391,7 @@ public class BookServiceImpl implements BookService {
                         .storeName(book.getStoreId().getStore())
                         .consumerId(book.getConsumerId().getUserId())
                         .storeId(book.getStoreId().getId())
-                        .hasReview(false)
+                        .reviewId(book.getReview() != null ? book.getReview().getId() : null)
                         .build();
                 CustomFlowerDocument customInfo = customFlowerMongoRepository.findById(designId).orElse(null);
 
@@ -418,7 +418,7 @@ public class BookServiceImpl implements BookService {
                         .storeName(book.getStoreId().getStore())
                         .consumerId(book.getConsumerId().getUserId())
                         .storeId(book.getStoreId().getId())
-                        .hasReview(false)
+                        .reviewId(book.getReview().getId())
                         .build();
                 bookInfo.put("basics", basicInfo);
             }

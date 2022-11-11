@@ -16,6 +16,7 @@ public class BookListRes {
     private Date bookDate;
     private Date dueDate;
     private String state;
+    private Long reviewId;
 
     @Data
     @SuperBuilder
@@ -37,6 +38,5 @@ public class BookListRes {
         private Long storeId;
         private String consumerName;
         private String storeName;
-        private boolean hasReview;
     }
 }
