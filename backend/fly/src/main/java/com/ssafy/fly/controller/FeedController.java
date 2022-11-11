@@ -47,15 +47,14 @@ public class FeedController {
     }
 
     // 2. 피드 목록 조회
-    @GetMapping(value = {"", "/{storeId}"})
+    @GetMapping(value = "/{storeId}")
     public ResponseEntity<Map<String, Object>> getFeedList(@PathVariable(required = false) Long storeId,
                                                            @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
-                                                           @RequestParam(value = "size", required = false, defaultValue = "9") int size,
-                                                           Principal principal) {
-        System.out.println("[GET] /feed " + storeId);
+                                                           @RequestParam(value = "size", required = false, defaultValue = "9") int size) {
+        System.out.println("[GET] /feed/{storeId}  " + storeId);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = feedService.getFeedList(storeId, pageNo, size, principal);
+        Map<String, Object> result = feedService.getFeedList(storeId, pageNo, size);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -70,12 +69,11 @@ public class FeedController {
 
     // 3. 피드 상세 조회
     @GetMapping("/detail/{feedId}")
-    public ResponseEntity<Map<String, Object>> getFeedDetailInfo(@PathVariable Long feedId,
-                                                                 Principal principal) {
+    public ResponseEntity<Map<String, Object>> getFeedDetailInfo(@PathVariable Long feedId) {
         System.out.println("[GET] /feed/{feedId} " + feedId);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = feedService.getFeedDetailInfo(feedId, principal);
+        Map<String, Object> result = feedService.getFeedDetailInfo(feedId);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);

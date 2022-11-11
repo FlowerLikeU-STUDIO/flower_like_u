@@ -21,7 +21,7 @@ import java.util.List;
 @Builder
 @ToString(exclude = {"reviews", "books", "feeds"})
 public class StoreEntity extends BaseEntity implements CustomUserDetail {
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", length = 10, nullable = false)
     @Enumerated(EnumType.STRING)
     UserType type;
 

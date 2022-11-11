@@ -1,6 +1,8 @@
 package com.ssafy.fly.database.mysql.repository;
 
 import com.ssafy.fly.database.mysql.entity.StoreEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,6 +22,8 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
     public StoreEntity findByUserIdAndWithdrawal(String userId, boolean isDeleted);
 
     public StoreEntity findByIdAndWithdrawal(Long storeId, boolean isDeleted);
+
+    public Page<StoreEntity> findBySigunguCodeStartsWithAndWithdrawal(String sidoCode, boolean isDeleted, Pageable pageable);
 
     @Modifying
     @Transactional

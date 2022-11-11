@@ -1,10 +1,10 @@
-import Axios from "@/api/axios";
 import MySetting from "@/components/mypage/MySetting";
 import GetRoadAdr from "@/components/common/GetRoad";
 import useUser from "@/hooks/useUser";
 import classnames from "classnames";
 import { useEffect, useState } from "react";
 import styles from "./modify.module.scss";
+import { client } from "@/pages/api/client";
 
 const ModifyAuth = () => {
   const cx = classnames.bind(styles);
@@ -15,7 +15,10 @@ const ModifyAuth = () => {
   // 상점명
   const [newStoreName, setNewStoreName] = useState("");
   // 주소 입력
-  const [addr, setAddr] = useState({ zipCode: "", street: "", detail: "", sigunguCode: "" });
+  const [addr, setAddr] = useState({ zipCode: "", street: "", details: "", sigunguCode: "" });
+  // 휴무일
+  const restDay = ["일", "월", "화", "수", "목", "금", "토"];
+  const [submitRestDay, setSubmitDay] = useState([false, false, false, false, false, false, false]);
 
   const inputStoreName = (e) => {
     const inputV = e.target.value;
@@ -25,6 +28,13 @@ const ModifyAuth = () => {
       setNewStoreName(newStoreName.slice(0, 50));
       alert("상점명은 50자 이하로 제한됩니다.");
     }
+  };
+
+  const setRestDay = (e) => {
+    e.preventDefault();
+    let copyOfSubmitRestDay = [...submitRestDay];
+    copyOfSubmitRestDay[e.target.value] = !copyOfSubmitRestDay[e.target.value];
+    setSubmitDay(copyOfSubmitRestDay);
   };
 
   const dataSubmit = async (e) => {
@@ -42,49 +52,32 @@ const ModifyAuth = () => {
         return;
       }
       const newData = {
-        type: user.type,
-        userId: user.userId,
         store: newStoreName,
-        address: addr.street + addr.detail, //!addr로 변경할 것.
-        // holidays:
+        address: addr,
+        holidays: submitRestDay,
       };
+      console.log(newData);
 
-      /**
-      //! 추후 holidays 로직 추가 예정( - 백엔드 미완성)
-      {
-          "type" : "store",
-          "userId" : "ssafyb209",
-          "store" : "flowershop",
-          "address" : {
-              "zipCode" : "20312",
-              "street" : "대전광역시 유성구 xx로",
-              "details" : "OO빌딩 104호",
-              "sigunguCode" : "12345",
-          },
-          "holidays" : [
-              {"idx" : "0", "val" : true},
-              {"idx" : "1", "val" : false},
-              {"idx" : "2", "val" : false},
-              {"idx" : "3", "val" : false},
-              {"idx" : "4", "val" : false},
-              {"idx" : "5", "val" : false},
-              {"idx" : "6", "val" : true}
-          ]
-      }
-      */
-
-      // !user/ -> user
-      const res = await Axios.put("user/", newData).then((res) => res.data);
+      const res = await client.put("user", newData).then((res) => res.data);
+      console.log(res);
       if (res.result === "success") {
         mutate();
+        alert("성공적으로 수정되었습니다.");
         setIsModify(false);
       }
     }
   };
 
+  const setModiTrue = (e) => {
+    e.preventDefault();
+    setIsModify(true);
+  };
+
   useEffect(() => {
+    console.log(user);
     if (user) {
       setNewStoreName(newStoreName || user.storeName || "");
+      setSubmitDay(user.holidays || [false, false, false, false, false, false, false]);
     }
   }, [user]);
 
@@ -115,6 +108,22 @@ const ModifyAuth = () => {
                 />
               </li>
             </div>
+            <label htmlFor="storeRest" className={styles.label}>
+              휴무일 지정
+            </label>
+            <ul className={styles.list__tag}>
+              {restDay.map((rest, idx) => (
+                <button
+                  key={idx}
+                  className={!submitRestDay[idx] ? styles.rest__btn : styles.is_rest__btn}
+                  disabled={!isModify}
+                  onClick={setRestDay}
+                  value={idx}
+                >
+                  {rest}
+                </button>
+              ))}
+            </ul>
             <label htmlFor="addr" className={styles.label}>
               주소
             </label>
@@ -126,7 +135,7 @@ const ModifyAuth = () => {
                   id="addr"
                   className={styles.text__box}
                   name="주소"
-                  value={user.address || ""}
+                  value={user.address.street + user.address.details || ""}
                   disabled={!isModify}
                 />
               )}
@@ -153,7 +162,7 @@ const ModifyAuth = () => {
                 [styles.edit__falsebtn]: isModify,
                 [styles.edit__truebtn]: !isModify,
               })}
-              onClick={dataSubmit}
+              onClick={!isModify ? setModiTrue : dataSubmit}
             >
               {!isModify ? "수정" : "완료"}
             </button>

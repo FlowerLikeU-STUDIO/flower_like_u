@@ -50,17 +50,16 @@ public class ReviewController {
 
 
     // 2. 리뷰 목록 조회
-    @GetMapping(value = {"", "/{storeId}"})
+    @GetMapping(value = "/{storeId}")
     public ResponseEntity<Map<String,Object>> getList(@PathVariable(required = false) Long storeId,
                                                       @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
-                                                      @RequestParam(value = "size", required = false, defaultValue = "10") int size,
-                                                      Principal principal) {
-        System.out.println("[GET] - /review " + storeId);
+                                                      @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+        System.out.println("[GET] - /review/{storeId} " + storeId);
 
         Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size, Sort.by("id").descending());
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = reviewService.getList(storeId, pageable, principal);
+        Map<String, Object> result = reviewService.getList(storeId, pageable);
 
         if((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -73,4 +72,22 @@ public class ReviewController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    // 3. 리뷰 내용 조회
+    @GetMapping("/detail/{reviewId}")
+    public ResponseEntity<Map<String, Object>> getReviewInfo(@PathVariable Long reviewId,
+                                                             Principal principal) {
+        System.out.println("[GET] - /review/{reviewId} " + reviewId);
+
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> result = reviewService.getReviewInfo(reviewId, principal);
+
+        if((boolean) result.get("result")) {
+            response.put("result", resultMessageSet.SUCCESS);
+            response.put("reviewInfo", result.get("reviewInfo"));
+        } else {
+            response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
