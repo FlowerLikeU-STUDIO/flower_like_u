@@ -18,6 +18,7 @@ const ProfileImage = (props) => {
           className={styles.profile_img}
           width={360}
           height={360}
+          alt="profileImg"
         />
       </div>
     </div>
