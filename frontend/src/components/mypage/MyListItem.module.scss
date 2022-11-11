@@ -34,3 +34,11 @@
 .sub__p {
   @include font(1.125rem, normal, $mainParagraph, 1.5rem);
 }
+
+.res__cancel {
+  margin-right: -4rem;
+  width: 7.5rem;
+  max-width: fit-content;
+  background-color: $primary900;
+  @include font(1rem, 500, $white100);
+}
