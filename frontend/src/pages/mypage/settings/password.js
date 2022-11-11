@@ -4,8 +4,9 @@ import { useState } from "react";
 import styles from "./password.module.scss";
 import classnames from "classnames";
 import MyPwInput from "@/components/mypage/MyPwInput";
-import Axios from "@/api/axios";
 import { useRouter } from "next/router";
+import { client } from "@/pages/api/client";
+import SuccessAlert from "@/lib/SuccessAlert";
 
 const ModifyPassword = () => {
   const cx = classnames.bind(styles);
@@ -55,9 +56,7 @@ const ModifyPassword = () => {
       alert("같은 비밀번호로 변경할 수 없습니다.");
       return;
     }
-    const res = await Axios.put("auth/changePassword", data).then(
-      (res) => res.data
-    );
+    const res = await client.put("auth/changePassword", data).then((res) => res.data);
     if (res.result === "success") {
       setIsModify(!isModify);
       setCurPw("");
@@ -65,9 +64,11 @@ const ModifyPassword = () => {
       setPw2("");
       setSameMsg("");
       setIsModify(false);
-      alert("비밀번호 변경에 성공하였습니다. 로그인 페이지로 이동합니다.");
-      router.push("/auth/login");
-      // !! 추후 token 초기화 로직 추가할것.
+      mutate("logIn", null);
+      window.sessionStorage.removeItem("ACCESS_TOKEN");
+      window.sessionStorage.removeItem("REFRESH_TOKEN");
+      SuccessAlert("비밀번호 변경에 성공하였습니다. 로그인 페이지로 이동합니다.");
+      router.replace("/auth/login");
     } else {
       alert("비밀번호가 변경에 실패하였습니다.");
       return;

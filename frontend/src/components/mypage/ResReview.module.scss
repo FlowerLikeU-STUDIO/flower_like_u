@@ -1,0 +1,44 @@
+.wrapper {
+  @include flexDiv(column, center, center);
+  width: 23rem;
+  height: 12rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.text__wrapper {
+  margin-right: auto;
+}
+
+.fixed__close {
+  position: absolute;
+  top: 1%;
+  right: 1%;
+}
+
+.text__area {
+  width: 100%;
+  height: 100%;
+  background: #eeeeee;
+  outline: none;
+  padding: 10px;
+  font-family: Pretendard-Regular;
+  font-size: 1rem;
+  resize: none;
+}
+
+.btn {
+  position: absolute;
+  bottom: -1.5rem;
+  right: 0%;
+}
+
+//rating
+.rating__wrapper {
+  @include flexDiv(row, center, flex-start);
+  margin-bottom: 0.3rem;
+}
+
+.rating span {
+  color: $red400;
+}
