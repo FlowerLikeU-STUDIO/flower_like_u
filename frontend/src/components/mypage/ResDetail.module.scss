@@ -38,19 +38,16 @@
   position: absolute;
   right: 5%;
   bottom: -10%;
+  @include flexDiv;
+  gap: 0.4rem;
+  @include respond-to("tablet-portrait-only") {
+    bottom: -15%;
+  }
 }
 
 @mixin button-color($bgcolor, $color) {
   background-color: $bgcolor;
   color: $color;
-}
-
-.primary900 {
-  @include button-color($primary900, $white);
-}
-
-.primary_disable {
-  @include button-color($primary300p, $white);
 }
 
 .line {
