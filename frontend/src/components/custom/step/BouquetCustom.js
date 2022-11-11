@@ -21,7 +21,6 @@ const BuoquetCustom = () => {
   const router = useRouter();
   const { data: isLogin } = useSWR("logIn", storage);
   const customOption = useSelector((state) => state.custom);
-  console.log(customOption);
   //* 유저가 선택한 패키지 종류
   const packageKind = packageContent.engtitle[customOption.package];
 
@@ -148,20 +147,26 @@ const BuoquetCustom = () => {
           </div>
         </div>
         <div className={styles.custom_info_wrapper}>
-          <p className={styles.custom_info_package}>
-            {SizeContent[customOption.package].kotitle} 커스텀
-          </p>
-          <p className={styles.custom_info_size}>
-            {SizeContent[customOption.package].title[customOption.size]} 사이즈
-          </p>
-          <button
-            className={styles.go_save_page}
-            onClick={
-              isLogin ? () => onSaveCustomInfo() : () => notUserSaveCustom()
-            }
-          >
-            완성!
-          </button>
+          <div className={styles.info_sub_wrapper}>
+            <p className={styles.custom_info_size}>
+              {SizeContent[customOption.package].title[customOption.size]}{" "}
+              사이즈
+            </p>
+            <p className={styles.custom_info_package}>
+              {SizeContent[customOption.package].kotitle} 커스텀
+            </p>
+          </div>
+          <div className={styles.info_sub_wrapper}>
+            <button className={styles.go_save_page}>커스텀 방법</button>
+            <button
+              className={styles.go_save_page}
+              onClick={
+                isLogin ? () => onSaveCustomInfo() : () => notUserSaveCustom()
+              }
+            >
+              완성했어요!
+            </button>
+          </div>
         </div>
         <CustomMenu />
       </main>
