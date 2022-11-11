@@ -26,7 +26,7 @@ const GetRoadAdr = ({ adr, setAdr }) => {
         // *상세주소 추가로직
         // document.getElementById("sample4_detailAddress").value = extraRoadAddr;
         // !저장 로직
-        setAdr({ zipCode: data.zonecode, street: roadAddr, detail: roadDetail, sigunguCode: data.sigunguCode });
+        setAdr({ zipCode: data.zonecode, street: roadAddr, details: roadDetail, sigunguCode: data.sigunguCode });
       },
     }).open();
   }
@@ -39,7 +39,7 @@ const GetRoadAdr = ({ adr, setAdr }) => {
       return;
     }
     setRoadDetail(value);
-    setAdr({ ...adr, detail: value });
+    setAdr({ ...adr, details: value });
   };
 
   return (
@@ -55,6 +55,7 @@ const GetRoadAdr = ({ adr, setAdr }) => {
         placeholder="상세주소를 입력해주세요."
         onChange={getDetail}
         value={roadDetail}
+        autoComplete="off"
       />
     </div>
   );

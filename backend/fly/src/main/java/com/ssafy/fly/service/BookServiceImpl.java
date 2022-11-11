@@ -10,10 +10,12 @@ import com.ssafy.fly.database.mysql.repository.*;
 import com.ssafy.fly.dto.request.BookCustomFlowerReq;
 import com.ssafy.fly.dto.request.BookFeedFlowerReq;
 import com.ssafy.fly.dto.response.BookListRes;
+import com.ssafy.fly.dto.response.CustomDetailRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -159,7 +161,9 @@ public class BookServiceImpl implements BookService {
             return result;
         }
 
-        if (storeId.equals(feed.getStoreId().getId())) {
+        System.out.printf("[ID LOG] : %d %d\n", storeId, feed.getStoreId().getId());
+
+        if (!storeId.equals(feed.getStoreId().getId())) {
             message = "잘못된 요청입니다.";
             System.out.println(message);
             result.put("result", false);
@@ -252,7 +256,7 @@ public class BookServiceImpl implements BookService {
             return result;
         }
 
-        Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size);
+        Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size, Sort.by("id").descending());
         Page<BookEntity> searchList = null;
 
         Map<String, Object> info = new HashMap<>();
@@ -387,9 +391,17 @@ public class BookServiceImpl implements BookService {
                         .storeName(book.getStoreId().getStore())
                         .consumerId(book.getConsumerId().getUserId())
                         .storeId(book.getStoreId().getId())
-                        .hasReview(false)
+                        .reviewId(book.getReview() != null ? book.getReview().getId() : null)
                         .build();
-                CustomFlowerDocument detailInfo = customFlowerMongoRepository.findById(designId).orElse(null);
+                CustomFlowerDocument customInfo = customFlowerMongoRepository.findById(designId).orElse(null);
+
+                CustomDetailRes detailInfo = CustomDetailRes.builder()
+                        .type(customInfo.getType())
+                        .wrapper(customInfo.getWrapper())
+                        .ribbon(customInfo.getRibbon())
+                        .size(customInfo.getSize())
+                        .flowers(customInfo.cntFlowerNumber())
+                        .build();
 
                 bookInfo.put("basics", basicInfo);
                 bookInfo.put("details", detailInfo);
@@ -406,7 +418,7 @@ public class BookServiceImpl implements BookService {
                         .storeName(book.getStoreId().getStore())
                         .consumerId(book.getConsumerId().getUserId())
                         .storeId(book.getStoreId().getId())
-                        .hasReview(false)
+                        .reviewId(book.getReview().getId())
                         .build();
                 bookInfo.put("basics", basicInfo);
             }
@@ -429,7 +441,7 @@ public class BookServiceImpl implements BookService {
         String message = "";
 
         ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-        if(consumer == null) {
+        if (consumer == null) {
             message = "잘못된 토큰 정보입니다.";
             result.put("result", false);
             result.put("message", message);
@@ -437,15 +449,15 @@ public class BookServiceImpl implements BookService {
         }
 
         BookEntity book = bookRepository.findById(bookId).orElse(null);
-        if(book == null) {
+        if (book == null) {
             message = "예약 아이디와 일치하는 정보가 없습니다. 예약 아이디를 확인해주세요.";
             result.put("result", false);
             result.put("message", message);
             return result;
         }
 
-        if(principal.getName().equals(book.getConsumerId().getUserId())) {
-            if(book.getState().equals(BookState.WAITED)) {
+        if (principal.getName().equals(book.getConsumerId().getUserId())) {
+            if (book.getState().equals(BookState.WAITED)) {
                 bookRepository.deleteById(bookId);
                 result.put("result", true);
             } else {

@@ -1,3 +1,14 @@
+.save_button {
+  position: absolute;
+  bottom: 3rem;
+  left: 10rem;
+  width: 6rem;
+  height: 2rem;
+  @include font(1rem, 500, $white);
+  background-color: $ivory700;
+  border-radius: 3rem;
+}
+
 .circle_wrapper {
   position: relative;
   &.xs {

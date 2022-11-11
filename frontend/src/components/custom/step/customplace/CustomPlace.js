@@ -9,7 +9,6 @@ const CustomPlace = () => {
   const cx = classNames.bind(styles);
   const dispatch = useDispatch();
   const customOption = useSelector((state) => state.custom);
-  console.log(customOption.current_location);
 
   //* 현재 유저가 커스텀한 꽃 정보가 담겨있습니다.
   //* console.log(`${flower[flowerList[0]].color}_${flower[flowerList[0]].name}`)
@@ -73,6 +72,7 @@ const CustomPlace = () => {
           onDragLeave={onDragLeave}
           onDrop={onDrop}
           data-position={index}
+          key={index}
         >
           <Image
             height={300}

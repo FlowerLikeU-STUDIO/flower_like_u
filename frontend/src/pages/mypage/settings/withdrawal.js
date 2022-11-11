@@ -1,14 +1,14 @@
-import Axios from "@/api/axios";
 import MySetting from "@/components/mypage/MySetting";
-import useUser from "@/hooks/useUser";
+import { client } from "@/pages/api/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import styles from "./withdrawal.module.scss";
+import { mutate } from "swr";
+import SuccessAlert from "@/lib/SuccessAlert";
 
 const WithDrawal = () => {
   const [pwd, setPwd] = useState("");
   const router = useRouter();
-  const { user } = useUser();
   const setInput = (e) => {
     const value = e.target.value;
     setPwd(value);
@@ -17,19 +17,22 @@ const WithDrawal = () => {
   const authWithDrawal = async (e) => {
     e.preventDefault();
     const data = {
-      userId: user.userId,
       password: pwd,
     };
-    const res = await Axios.delete("auth", data).then((res) => res.data);
+    const res = await client.delete("user", { data: data }).then((res) => res.data);
     if (res.result === "success") {
       alert("성공적으로 탈퇴되었습니다.");
-      // !! 추후 token 초기화 로직 추가할것.
-      router.push("/");
+      window.sessionStorage.removeItem("ACCESS_TOKEN");
+      window.sessionStorage.removeItem("REFRESH_TOKEN");
+      mutate("logIn", null);
+      SuccessAlert("로그아웃 되었습니다.");
+      router.replace("/");
     } else {
       alert("회원탈퇴에 실패하였습니다. 비밀번호를 다시 확인해주세요");
       return;
     }
   };
+
   return (
     <MySetting>
       <label htmlFor="password" className={styles.label}>

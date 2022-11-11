@@ -11,8 +11,6 @@ const useUser = () => {
   return {
     loading,
     loggedOut,
-    // @ 최종로직
-    // user: loading ? "" : data.data.userInfo,
     user: data ? data.userInfo : data,
     mutate,
   };

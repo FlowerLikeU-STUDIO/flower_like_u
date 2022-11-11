@@ -5,7 +5,7 @@ import Link from "next/link";
 import React from "react";
 
 const HeaderItem = ({ ...props }) => {
-  console.log(props.isMyPage); // mypage에선 props.isMyPage=true
+  // console.log(props.isMyPage); // mypage에선 props.isMyPage=true
 
   return (
     <div className={styles.header__main}>
