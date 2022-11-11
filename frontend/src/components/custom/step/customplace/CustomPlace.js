@@ -64,23 +64,29 @@ const CustomPlace = () => {
 
   return (
     <div className={cx("circle_wrapper", currentSize, currentPackage)}>
-      {flowerList.map((title, index) => (
-        <div
-          className={cx(`circle_${index + 1}`, currentSize, currentPackage)}
-          onDragEnter={onDragEnter}
-          onDragOver={onDragOver}
-          onDragLeave={onDragLeave}
-          onDrop={onDrop}
-          data-position={index}
-          key={index}
-        >
-          <Image
-            height={300}
-            width={300}
-            src={`/custom/flower/${flower[flowerList[index]].color}_${flower[flowerList[index]].name}.png`}
-          />
-        </div>
-      ))}
+      {flowerList ? (
+        flowerList.map((title, index) => (
+          <div
+            className={cx(`circle_${index + 1}`, currentSize, currentPackage)}
+            onDragEnter={onDragEnter}
+            onDragOver={onDragOver}
+            onDragLeave={onDragLeave}
+            onDrop={onDrop}
+            data-position={index}
+            key={index}
+          >
+            <Image
+              height={300}
+              width={300}
+              src={`/custom/flower/${flower[flowerList[index]].color}_${
+                flower[flowerList[index]].name
+              }.png`}
+            />
+          </div>
+        ))
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
