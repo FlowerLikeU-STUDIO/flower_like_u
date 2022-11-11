@@ -23,6 +23,7 @@ const RandomFlower = () => {
   //* hook
   const { randomFlower } = useCustom();
   const { flowerData, mutate } = randomFlower(size, randomState);
+  console.log(flowerData);
 
   //* state를 true로 변경해서 api 호출, 랜덤 값을 store에 업데이트
   const onHandleRandom = () => {

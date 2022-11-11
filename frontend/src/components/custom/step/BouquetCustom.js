@@ -7,7 +7,6 @@ import classNames from "classnames/bind";
 import CustomPlace from "./customplace/CustomPlace";
 import InitialButton from "../common/InitialButton";
 import html2canvas from "html2canvas";
-import { saveAs } from "file-saver";
 import RandomFlower from "./recommend/RandomFlower";
 import { wrapper } from "./menu/MenuContents";
 import FailAlert from "@/lib/FailAlert";
@@ -34,14 +33,6 @@ const BuoquetCustom = () => {
 
   //* 유저가 선택한 리본 종류
   const ribbonOption = customOption.ribbon_color;
-
-  //* 사진 저장 버튼
-  const onDownloadButton = () => {
-    const capture = document.querySelector("#capture");
-    html2canvas(capture).then((canvas) => {
-      saveAs(canvas.toDataURL("image/jpg"), "image.jpg");
-    });
-  };
 
   //* 완성해서 서버에 이미지랑 데이터 보내기
   const onSaveCustomInfo = () => {
@@ -109,11 +100,8 @@ const BuoquetCustom = () => {
       <main className={styles.custom_wrapper}>
         <aside className={styles.recommend_wrapper}>
           <RandomFlower />
-          <div className={styles.recommend_menu}>추천</div>
+          {/* <div className={styles.recommend_menu}>추천</div> */}
           <InitialButton />
-          <button className={styles.save_button} onClick={() => onDownloadButton()}>
-            저장
-          </button>
         </aside>
         <div
           className={cx("custom_place", packageKind)}
@@ -136,7 +124,7 @@ const BuoquetCustom = () => {
           <p className={styles.custom_info_size}>{SizeContent[customOption.package].title[customOption.size]} 사이즈</p>
           <button className={styles.go_save_page}>
             <Link href="/custom/save">
-              <div onClick={isLogin ? () => onSaveCustomInfo() : () => console.log("이동해라!")}>완성!</div>
+              <div onClick={isLogin ? () => onSaveCustomInfo() : () => console.log("완성")}>완성!</div>
             </Link>
           </button>
         </div>
