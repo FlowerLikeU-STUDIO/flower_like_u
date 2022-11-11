@@ -10,7 +10,7 @@ import com.ssafy.fly.database.mysql.repository.ConsumerRepository;
 import com.ssafy.fly.database.mysql.repository.ReviewRepository;
 import com.ssafy.fly.database.mysql.repository.StoreRepository;
 import com.ssafy.fly.dto.request.ReviewPostReqDto;
-import com.ssafy.fly.dto.response.ReviewListRes;
+import com.ssafy.fly.dto.response.ReviewInfoRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,17 +39,12 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
 
-    public Map<String, Object> getList(Long storeId, Pageable pageable, Principal principal) {
+    public Map<String, Object> getList(Long storeId, Pageable pageable) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
-        StoreEntity store = null;
-        // 판매자가 본인 후기 목록을 조회하는 경우
-        if(storeId == null) store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-        // 구매자가 판매자 후기 목록을 조회하는 경우
-        else store = storeRepository.findById(storeId).orElse(null);
-
-        if(store == null) {
+        StoreEntity store = storeRepository.findById(storeId).orElse(null);
+        if (store == null) {
             message = "존재하지 않는 판매자 아이디입니다.";
             System.out.println(message);
             result.put("result", false);
@@ -59,10 +54,10 @@ public class ReviewServiceImpl implements ReviewService {
 
         Page<ReviewEntity> searchList = reviewRepository.findByStoreId(store, pageable);
 
-        if(searchList.getContent().size() > 0) {
-            List<ReviewListRes> resultList = new ArrayList<>();
-            for(ReviewEntity curEntity : searchList) {
-                ReviewListRes reviewInfo = ReviewListRes.builder()
+        if (searchList.getContent().size() > 0) {
+            List<ReviewInfoRes> resultList = new ArrayList<>();
+            for (ReviewEntity curEntity : searchList) {
+                ReviewInfoRes reviewInfo = ReviewInfoRes.builder()
                         .reviewId(curEntity.getId())
                         .writer(curEntity.getConsumerId().getName())
                         .content(curEntity.getContent())
@@ -148,6 +143,49 @@ public class ReviewServiceImpl implements ReviewService {
             result.put("result", false);
         }
 
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getReviewInfo(Long reviewId, Principal principal) {
+        Map<String, Object> result = new HashMap<>();
+        String message = "";
+
+        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
+        if (consumer == null) {
+            message = "잘못된 토큰 정보입니다.";
+            System.out.println(message);
+            result.put("message", message);
+            result.put("result", false);
+            return result;
+        }
+
+        ReviewEntity review = reviewRepository.findById(reviewId).orElse(null);
+        if (review == null) {
+            message = "존재하지 않는 리뷰 아이디(Long Type) 입니다.";
+            System.out.println(message);
+            result.put("message", message);
+            result.put("result", false);
+            return result;
+        }
+
+        if(!principal.getName().equals(review.getConsumerId().getUserId())){
+            message = "잘못된 접근입니다.";
+            System.out.println(message);
+            result.put("message", message);
+            result.put("result", false);
+            return result;
+        }
+
+        ReviewInfoRes reviewInfo = ReviewInfoRes.builder()
+                .reviewId(review.getId())
+                .writer(review.getConsumerId().getName())
+                .content(review.getContent())
+                .rating(review.getRating())
+                .build();
+
+        result.put("result", true);
+        result.put("reviewInfo", reviewInfo);
         return result;
     }
 

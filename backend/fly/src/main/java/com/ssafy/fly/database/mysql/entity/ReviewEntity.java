@@ -25,7 +25,7 @@ public class ReviewEntity extends BaseEntity {
     @JsonIgnore
     private ConsumerEntity consumerId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "book_id")
     @JsonIgnore
     private BookEntity bookId;
