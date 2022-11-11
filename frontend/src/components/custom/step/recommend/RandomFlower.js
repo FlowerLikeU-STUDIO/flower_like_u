@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import useCustom from "@/hooks/useCustom";
 import { useState } from "react";
 import { wrapper } from "../menu/MenuContents";
-import { makeFlowerList, selectWrapperColor, selectRibbonColor } from "@/store/reducers/custom";
+import {
+  makeFlowerList,
+  selectWrapperColor,
+  selectRibbonColor,
+} from "@/store/reducers/custom";
 
 const RandomFlower = () => {
   const dispatch = useDispatch();
@@ -23,14 +27,15 @@ const RandomFlower = () => {
   //* hook
   const { randomFlower } = useCustom();
   const { flowerData, mutate } = randomFlower(size, randomState);
-  console.log(flowerData);
 
   //* state를 true로 변경해서 api 호출, 랜덤 값을 store에 업데이트
   const onHandleRandom = () => {
     setRandomState(true);
     const flowerList = customOption.flowers;
     const copyOfFlowerList = [...flowerList];
-    copyOfFlowerList.map((flower, index) => (copyOfFlowerList[index] = flowerData[index].id));
+    copyOfFlowerList.map(
+      (flower, index) => (copyOfFlowerList[index] = flowerData[index].id)
+    );
     dispatch(makeFlowerList(copyOfFlowerList));
     //* 꽃다발, 꽃풍선일 때에는 포장지, 리본 랜덤 생성
     if (customOption.package === 0) {
