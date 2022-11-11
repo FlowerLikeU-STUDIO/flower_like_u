@@ -81,6 +81,14 @@
     @include button-color($mainPrimary, $white);
   }
 
+  &.primary900 {
+    @include button-color($primary900, $white);
+  }
+
+  &.primary300p {
+    @include button-color($primary300p, $white);
+  }
+
   &.white {
     @include button-color($white, $mainPrimary);
   }
