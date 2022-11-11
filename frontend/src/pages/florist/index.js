@@ -4,7 +4,6 @@ import { useState } from "react";
 import { regionKey, regionMap } from "@/lib/utils/addressList";
 import FlowerImg from "@/components/common/FlowerImg";
 import { Rating } from "@mui/material";
-import FloristProfile from "./[fid]";
 import { useRouter } from "next/router";
 
 const FloristList = () => {
@@ -25,6 +24,7 @@ const FloristList = () => {
     const value = e.target.value;
     if (!value) return;
     setSelectSido(value);
+    setSelectSigungu("전체");
     setSelectedArr(regionMap[value]);
   };
 
