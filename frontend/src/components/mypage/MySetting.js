@@ -4,7 +4,7 @@ import useUser from "@/hooks/useUser";
 import styles from "./MySetting.module.scss";
 import classnames from "classnames/bind";
 import { useEffect, useState } from "react";
-import Axios from "@/api/axios";
+import { client } from "@/pages/api/client";
 
 const MyPageSettings = ({ children }) => {
   const cx = classnames.bind(styles);
@@ -40,7 +40,7 @@ const MyPageSettings = ({ children }) => {
       userId: user.userId,
       image: res,
     };
-    const axiosRes = await Axios.put("user/changeImg", data).then((res) => res.data);
+    const axiosRes = await client.put("user/changeImg", data).then((res) => res.data);
     if (axiosRes.result === "success") {
       alert("이미지가 성공적으로 변경되었습니다.");
       mutate();

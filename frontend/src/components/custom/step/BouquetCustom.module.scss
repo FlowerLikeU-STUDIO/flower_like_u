@@ -8,6 +8,15 @@
   box-shadow: $shadow600;
 }
 
+.go_save_page {
+  @include font();
+  @include flexDiv;
+  background-color: $white;
+  border-radius: 0.25rem;
+  border: 1px solid $primary800;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+}
+
 .text {
   @include font(3rem, 700, $ivory500);
   @include flexDiv;

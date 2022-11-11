@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { selectPackage } from "@/store/reducers/custom";
 import { useRouter } from "next/router";
 import styles from "./CustomBackButton.module.scss";

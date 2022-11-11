@@ -2,6 +2,7 @@ import styles from "./PackageMenuCard.module.scss";
 import { selectWrapperColor, selectRibbonColor } from "@/store/reducers/custom";
 import { useDispatch } from "react-redux";
 import classNames from "classnames/bind";
+import { wrapper } from "./MenuContents";
 
 const PackageMenuCard = (props) => {
   const dispatch = useDispatch();
@@ -9,7 +10,7 @@ const PackageMenuCard = (props) => {
 
   //* 포장지 색깔을 변경하는 함수
   const wrapperColorHandler = () => {
-    dispatch(selectWrapperColor(props.hex));
+    dispatch(selectWrapperColor(props.index));
   };
 
   //* 리본을 변경하는 함수
@@ -27,7 +28,7 @@ const PackageMenuCard = (props) => {
         style={
           props.tab === 1
             ? {
-                backgroundColor: `${props.hex}`,
+                backgroundColor: `${wrapper[props.index].hex}`,
               }
             : {
                 backgroundImage: `url('/custom/ribbon/${props.index}.png')`,

@@ -1,19 +1,76 @@
 import Image from "next/image";
 import styled from "styled-components";
 import { ButtonWrapper } from "./ContentForm";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const DetailWrapper = styled.div`
   width: 50%;
   height: 100%;
   position: relative;
+  &.slider_wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   &.contents {
     padding: 60px 20px 20px 20px;
   }
-  &.slider {
+  &.slider_wrapper {
+    justify-content: center;
+    align-items: center;
+  }
+  & div.slick-slider {
+    width: 100%;
+    height: 95%;
+  }
+  & div.slick-list {
+    height: 100%;
+  }
+  & div.slick-track {
+    height: 100%;
+  }
+  & button.slick-prev {
+    left: 4px;
+    z-index: 10;
+    box-shadow: 0px 1px 4px #d6d6d6;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: #dddddd;
+  }
+  & button.slick-next {
+    right: 4px;
+    z-index: 10;
+    box-shadow: 0px 1px 4px #d6d6d6;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #dddddd;
+  }
+
+  & div.slick-slide > div {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+  }
+  & div.slick-slide > div img {
+    max-width: 400px;
+    max-height: 400px;
+  }
+  & ul.slick-dots {
+    bottom: -17px;
   }
 `;
 
@@ -47,19 +104,6 @@ export const ReservationButton = styled.button`
   }
 `;
 
-const SlideWrapper = styled.div`
-  position: relative;
-  width: 300px;
-  height: 300px;
-  /* overflow: hidden; */
-`;
-
-const SlideInnerWrapper = styled.div`
-  width: 1500px;
-  height: 300px;
-  position: absolute;
-`;
-
 const IMAGE_LIST = [
   "/feedTest/btte1.jpeg",
   "/feedTest/btte2.jpeg",
@@ -67,28 +111,36 @@ const IMAGE_LIST = [
   "/feedTest/btte4.jpeg",
   "/feedTest/btte5.jpeg",
 ];
+
+const settings = {
+  dots: true,
+  fade: false,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+};
 const FeedDetail = ({ feed, onClick }) => {
   return (
     <>
-      <DetailWrapper className="slider">
-        <Image src={"/feedTest/btte1.jpeg"} layout="fill" objectFit="contain" />
-        {/* <SlideWrapper className="slide">
-          <SlideInnerWrapper className="slide-inner">
-            {IMAGE_LIST.map((src) => (
-              <Image src={src} layout="fill" objectFit="contain" />
-            ))}
-          </SlideInnerWrapper>
-        </SlideWrapper> */}
+      <DetailWrapper className="slider_wrapper">
+        <Slider {...settings}>
+          {feed.image.map((item, idx) => (
+            <Image
+              src={item}
+              width={400}
+              height={400}
+              key={idx}
+              objectFit={"contain"}
+            />
+          ))}
+        </Slider>
       </DetailWrapper>
       <DetailWrapper className="contents">
-        <FeedTitleWrapper>{"너닮 꽃 다발"}</FeedTitleWrapper>
-        <FeedCostWrapper>{"18,000원"}</FeedCostWrapper>
+        <FeedTitleWrapper>{feed.name}</FeedTitleWrapper>
+        <FeedCostWrapper>{`${feed.price} 원`}</FeedCostWrapper>
         <FeedContentsWrapper>
-          <p>
-            {
-              "편안한 색감의 꽃다발을 준비해봤어요.\n집에서 보관하기 쉽게 컵에 담긴 꽃다발이랍니다.\n\n보라색과 파란색상의 조합은 보는이의 마음을\n편안하게 해준다고 하네요⭐️\n소중한 사람에게 선물해보세요🐶"
-            }
-          </p>
+          <p>{feed.content}</p>
         </FeedContentsWrapper>
         <ReservationButton
           onClick={() => onClick("reservation")}

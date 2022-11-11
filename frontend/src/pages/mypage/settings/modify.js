@@ -1,17 +1,15 @@
-import Axios from "@/api/axios";
 import MySetting from "@/components/mypage/MySetting";
 import GetRoadAdr from "@/components/common/GetRoad";
-import useModifyUser from "@/hooks/useModifyUser";
 import useUser from "@/hooks/useUser";
 import classnames from "classnames";
 import { useEffect, useState } from "react";
 import styles from "./modify.module.scss";
+import { client } from "@/pages/api/client";
 
 const ModifyAuth = () => {
   const cx = classnames.bind(styles);
   // useSWR
   const { user, mutate } = useUser();
-  const { nickNameCheck } = useModifyUser();
   // 수정여부
   const [isModify, setIsModify] = useState(false);
   // 닉네임
@@ -19,7 +17,7 @@ const ModifyAuth = () => {
   // 닉네임 중복체크
   const [isNickname, setIsNickname] = useState(true);
   // 주소 입력
-  const [addr, setAddr] = useState({ zipCode: "", street: "", detail: "", sigunguCode: "" });
+  const [addr, setAddr] = useState({ zipCode: "", street: "", details: "", sigunguCode: "" });
 
   const inputNickname = (e) => {
     const inputV = e.target.value;
@@ -35,14 +33,13 @@ const ModifyAuth = () => {
     }
   };
 
-  const { nicknameRes } = nickNameCheck(newNick);
-
-  const checkNickName = (e) => {
+  const checkNickName = async (e) => {
     e.preventDefault();
     if (newNick === user.nickname) {
       return;
     }
-    if (nicknameRes.data.result === "nonDuplicated") {
+    const nicknameRes = await client.get(`user/chkNickname/${newNick}`).then((res) => res.data.result);
+    if (nicknameRes === "nonDuplicated") {
       setIsNickname(true);
       alert("사용가능한 닉네임입니다.");
     } else {
@@ -51,35 +48,36 @@ const ModifyAuth = () => {
     }
   };
 
+  const setModiTrue = (e) => {
+    e.preventDefault();
+    setIsModify(true);
+  };
+
   const dataSubmit = async (e) => {
     e.preventDefault();
-    if (isModify === false) setIsModify(true);
     if (!isNickname) {
       alert("닉네임 중복확인이 필요합니다.");
       return;
     }
-
-    if (isModify === true) {
-      if (!newNick) {
-        alert("닉네임을 설정해주세요");
-        return;
-      }
-      if (!addr.street) {
-        alert("주소를 입력해주세요");
-        return;
-      }
-      const newData = {
-        type: user.type,
-        userId: user.userId,
-        nickname: newNick,
-        address: addr.street + addr.detail, //!addr로 변경할 것.
-      };
-      // !user/ -> user
-      const res = await Axios.put("user", newData).then((res) => res.data);
-      if (res.result === "success") {
-        mutate();
-        setIsModify(false);
-      }
+    if (!newNick) {
+      alert("닉네임을 설정해주세요");
+      return;
+    }
+    if (addr.street === "") {
+      alert("주소를 입력해주세요");
+      return;
+    }
+    const newData = {
+      type: user.type,
+      userId: user.userId,
+      nickname: newNick,
+      address: addr,
+    };
+    const res = await client.put("user", newData).then((res) => res.data);
+    if (res.result === "success") {
+      alert("성공적으로 수정되었습니다.");
+      setIsModify(false);
+      mutate();
     }
   };
 
@@ -136,7 +134,7 @@ const ModifyAuth = () => {
                   id="addr"
                   className={styles.text__box}
                   name="주소"
-                  value={user.address || ""}
+                  value={user.address.street + user.address.details || ""}
                   disabled={!isModify}
                 />
               )}
@@ -163,7 +161,7 @@ const ModifyAuth = () => {
                 [styles.edit__falsebtn]: isModify,
                 [styles.edit__truebtn]: !isModify,
               })}
-              onClick={dataSubmit}
+              onClick={!isModify ? setModiTrue : dataSubmit}
             >
               {!isModify ? "수정" : "완료"}
             </button>

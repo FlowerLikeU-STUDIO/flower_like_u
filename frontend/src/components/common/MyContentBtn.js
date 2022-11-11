@@ -1,10 +1,9 @@
 import styles from "./MyContentBtn.module.scss";
 import Button from "@/components/common/Button";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 const MyContentBtn = ({ props }) => {
-  const pagePath = { consumer: ["reservation", "order", "design"], seller: ["feeds", "reviews", "order-manage"] };
+  const pagePath = { consumer: ["reservation", "order", "design"], store: ["feeds", "reviews", "order-manage"] };
   if (!props) return;
   const path = pagePath[props];
   const router = useRouter();
