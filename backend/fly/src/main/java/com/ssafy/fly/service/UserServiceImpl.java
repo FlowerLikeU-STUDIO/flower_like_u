@@ -1,5 +1,6 @@
 package com.ssafy.fly.service;
 
+import com.ssafy.fly.common.util.DecimalFormatter;
 import com.ssafy.fly.common.util.FlyMailSender;
 import com.ssafy.fly.common.util.RandomStringGenerator;
 import com.ssafy.fly.common.util.ValidationChecker;
@@ -20,7 +21,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.plaf.synth.Region;
 import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.*;
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     private final RandomStringGenerator randomStringGenerator;
     private final FlyMailSender flyMailSender;
     private final PasswordEncoder passwordEncoder;
-    private final ReviewService reviewService;
+    private final DecimalFormatter decimalFormatter;
 
     @Autowired
     public UserServiceImpl(ConsumerRepository consumerRepository,
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
                            RandomStringGenerator randomStringGenerator,
                            FlyMailSender flyMailSender,
                            PasswordEncoder passwordEncoder,
-                           ReviewService reviewService) {
+                           DecimalFormatter decimalFormatter) {
         this.consumerRepository = consumerRepository;
         this.storeRepository = storeRepository;
         this.feedRepository = feedRepository;
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
         this.randomStringGenerator = randomStringGenerator;
         this.flyMailSender = flyMailSender;
         this.passwordEncoder = passwordEncoder;
-        this.reviewService = reviewService;
+        this.decimalFormatter = decimalFormatter;
     }
 
     // 1. 아이디 중복 검사
@@ -518,8 +518,8 @@ public class UserServiceImpl implements UserService {
                     .license(store.getLicense())
                     .profile(store.getProfile())
                     .holidays(holidays)
-                    .feedNum(0)
-                    .rating(4.35)
+                    .feedNum(store.getTotalFeed())
+                    .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating()))
                     .introduction(store.getBio())
                     .address(UserInfoRes.Address.builder()
                             .zipCode(store.getZipCode())
@@ -559,11 +559,10 @@ public class UserServiceImpl implements UserService {
                 .storeName(store.getStore())
                 .address(String.format("%s %s", store.getStreet(), store.getDetailAddr()))
                 .profile(store.getProfile())
-                .feedNum(feedRepository.findAllByStoreIdAndRemoval(store, false).size())
+                .feedNum(store.getTotalFeed())
                 .introduction(store.getBio())
-                .rating(reviewService.getRating(store.getId()))
+                .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating()))
                 .build();
-        System.out.println(reviewService.getRating(store.getId()));
 
         result.put("result", true);
         result.put("storeInfo", storeInfo);
@@ -571,7 +570,7 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    // 13. 판매자 목록 조회       // 0, 8, id, 전체, 전체, 전체
+    // 13. 판매자 목록 조회
     @Override
     public Map<String, Object> findStoreList(int pageNo, int size, String sort, String sido, String sigungu, String storeName) {
         Map<String, Object> result = new HashMap<>();
@@ -618,7 +617,7 @@ public class UserServiceImpl implements UserService {
                         .storeId(curEntity.getId())
                         .storeName(curEntity.getStore())
                         .profile(curEntity.getProfile())
-                        .rating(reviewService.getRating(curEntity.getId()))
+                        .rating(decimalFormatter.roundToTwoDecimalPlaces(curEntity.getRating() == null ? 0 : curEntity.getRating()))
                         .address(String.format("%s %s", curEntity.getStreet(), curEntity.getDetailAddr()).trim())
                         .build();
                 resultList.add(storeInfo);
