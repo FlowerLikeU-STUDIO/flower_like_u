@@ -1,4 +1,4 @@
-import styles from "./RecommendModal.module.scss";
+import styles from "./LanguageModal.module.scss";
 import { flower } from "../../menu/MenuContents";
 import FlowerImg from "@/components/common/FlowerImg";
 import { useDispatch, useSelector } from "react-redux";

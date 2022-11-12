@@ -1,6 +1,6 @@
 import styles from "./FlowerLanguage.module.scss";
 import { useState } from "react";
-import LanguageModal from "./RecommendModal";
+import LanguageModal from "./LanguageModal";
 
 const FlowerLanguage = () => {
   // 모달창 노출 여부 state
