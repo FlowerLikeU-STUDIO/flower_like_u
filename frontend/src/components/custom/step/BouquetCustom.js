@@ -1,19 +1,24 @@
 import styles from "./BouquetCustom.module.scss";
-import { useSelector } from "react-redux";
-import { SizeContent, packageContent } from "./StepContents";
-import CustomMenu from "./menu/CustomMenu";
 import classNames from "classnames/bind";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+// 컨텐츠
+import { SizeContent, packageContent } from "./StepContents";
+import { wrapper } from "./menu/MenuContents";
+// 컴포넌트
+import CustomMenu from "./menu/CustomMenu";
 import CustomPlace from "./customplace/CustomPlace";
 import InitialButton from "../common/InitialButton";
-import html2canvas from "html2canvas";
 import RandomFlower from "./recommend/RandomFlower";
-import { wrapper } from "./menu/MenuContents";
 import FailAlert from "@/lib/FailAlert";
-import { mutate } from "swr";
-import { client } from "@/pages/api/client";
+import FlowerLanguage from "./recommend/Language/FlowerLanguage";
+// 로그인 여부
 import useSWR from "swr";
 import storage from "@/lib/utils/storage";
-import { useRouter } from "next/router";
+// 꽃다발 저장
+import { mutate } from "swr";
+import html2canvas from "html2canvas";
+import { client } from "@/pages/api/client";
 
 const BuoquetCustom = () => {
   const cx = classNames.bind(styles);
@@ -125,8 +130,8 @@ const BuoquetCustom = () => {
     <>
       <main className={styles.custom_wrapper}>
         <aside className={styles.recommend_wrapper}>
+          <FlowerLanguage />
           <RandomFlower />
-          {/* <div className={styles.recommend_menu}>추천</div> */}
           <InitialButton />
         </aside>
         <div
