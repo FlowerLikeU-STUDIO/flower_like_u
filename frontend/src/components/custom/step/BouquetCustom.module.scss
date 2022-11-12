@@ -8,15 +8,6 @@
   box-shadow: $shadow600;
 }
 
-.go_save_page {
-  @include font();
-  @include flexDiv;
-  background-color: $white;
-  border-radius: 0.25rem;
-  border: 1px solid $primary800;
-  padding: 0.5rem 1rem 0.5rem 1rem;
-}
-
 .text {
   @include font(3rem, 700, $ivory500);
   @include flexDiv;
@@ -73,22 +64,42 @@
 }
 
 .custom_info_wrapper {
-  @include flexDiv(column);
+  @include flexDiv(column, center, space-around);
   width: 10rem;
   height: 13rem;
   background-color: $ivory400;
   border-radius: 0.25rem;
   box-shadow: $shadow600;
-  padding-bottom: 1rem;
+}
+
+.info_sub_wrapper {
+  @include flexDiv(column);
+  width: 100%;
   gap: 0.5rem;
 }
 
 .custom_info_package {
-  @include font(1rem, 700);
+  @include font(1rem, 500, $ivory600p);
   width: 80%;
 }
 
 .custom_info_size {
-  @include font(0.95rem, 500, $gray);
+  @include font(1rem, 500, $ivory600p);
   width: 80%;
+}
+
+.go_save_page {
+  @include font(0.9rem, 400, $ivory500p);
+  @include flexDiv;
+  background-color: $white;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+  width: 85%;
+  padding: 0.6rem;
+  transition: 0.2s linear;
+  border: solid $ivory500 1px;
 }

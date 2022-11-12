@@ -3,9 +3,12 @@ import classNames from "classnames/bind";
 import { useSelector } from "react-redux";
 import { packageContent } from "@/components/custom/step/StepContents";
 import CustomPlace from "@/components/custom/step/customplace/CustomPlace";
-import { wrapper, ribbon, flower } from "@/components/custom/step/menu/MenuContents";
+import {
+  wrapper,
+  ribbon,
+  flower,
+} from "@/components/custom/step/menu/MenuContents";
 import { saveAs } from "file-saver";
-import Link from "next/link";
 import { useDispatch } from "react-redux";
 import {
   selectPackage,
@@ -14,11 +17,15 @@ import {
   selectWrapperColor,
   selectRibbonColor,
 } from "@/store/reducers/custom";
+import { useRouter } from "next/router";
+import useKakao from "@/hooks/useKakao";
 
 const CustomSave = () => {
   const cx = classNames.bind(styles);
   const dispatch = useDispatch();
   const customOption = useSelector((state) => state.custom);
+  const router = useRouter();
+  const { kakaoShare } = useKakao();
 
   //* 유저가 선택한 패키지 종류
   const packageKind = packageContent.engtitle[customOption.package];
@@ -45,6 +52,27 @@ const CustomSave = () => {
     });
   };
 
+  //* 카카오톡 공유하기
+  function dataURLtoFile(dataurl, filename) {
+    var arr = dataurl.split(","),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+  }
+  const onShareKakao = () => {
+    const capture = document.querySelector("#kakao_image");
+    html2canvas(capture).then((canvas) => {
+      let myImg = canvas.toDataURL("image/jpg");
+      let file = dataURLtoFile(myImg, "kakao.png");
+      kakaoShare(file);
+    });
+  };
+
   //* 모든 값 초기화
   const sizeHandler = () => {
     dispatch(selectPackage(null));
@@ -54,16 +82,31 @@ const CustomSave = () => {
     dispatch(selectRibbonColor(null));
   };
 
+  //* 메인 페이지로 이동 전에 초기화되어서 에러가 발생하는 것을 방지
+  const timer = () => setTimeout(() => sizeHandler(), 200);
+
+  //* 꽃 이름 : 꽃 송이수 출력을 위한 로직
+  let flowerInfo = {};
+  if (customOption.flowers) {
+    const copyOfFlowers = [...customOption.flowers];
+    copyOfFlowers.map((flowerNumber, index) => {
+      if (!flowerInfo[flowerNumber]) {
+        flowerInfo[flowerNumber] = 1;
+      } else if (flowerInfo[flowerNumber]) {
+        flowerInfo[flowerNumber]++;
+      }
+    });
+  }
+
   return (
     <main className={styles.save_background}>
-      <section className={styles.card__wrapper}>
-        <div className={styles.flower__img}>
+      <section className={styles.card__wrapper} id="capture">
+        <div className={styles.flower__img} id="kakao_image">
           <div
             className={cx("custom_place", packageKind)}
             style={{
               backgroundColor: packageColor,
             }}
-            id="capture"
           >
             <div
               className={styles.ribbon_cover}
@@ -75,31 +118,54 @@ const CustomSave = () => {
             </div>
           </div>
         </div>
-        <article className={styles.main__div__wrapper}>
-          <div className={styles.sub__div__wrapper}>
-            <h1 className={styles.main__p}>
-              {bunchList[customOption.size]}송이 {packageContent.title[customOption.package]}
+        <article className={styles.flower_contents_wrapper}>
+          <div className={styles.contents_subwrapper}>
+            <h1 className={styles.card_title}>
+              {bunchList[customOption.size]}송이{" "}
+              {packageContent.title[customOption.package]}
             </h1>
-            <p className={styles.sub__p}>
-              {packageContent.title[customOption.package]} | {ribbon[ribbonOption].name}
-            </p>
+            {customOption.package === 0 ? (
+              <p className={styles.sub_title}>
+                {wrapper[customOption.wrapper_color].name} |{" "}
+                {ribbon[ribbonOption].name}
+              </p>
+            ) : customOption.package === 2 ? (
+              <p className={styles.sub_title}>
+                {wrapper[customOption.wrapper_color].name}
+              </p>
+            ) : (
+              <></>
+            )}
             <p className={styles.line}></p>
-            <p className={styles.description}>
-              {customOption.flowers.map((flowerNumber, index) => (
-                <p key={index}>{flower[flowerNumber].title}</p>
+            <div className={styles.description_wrapper}>
+              {Object.entries(flowerInfo).map(([key, value]) => (
+                <>
+                  <span className={styles.description}>
+                    {flower[Number(key)].title}&nbsp;&nbsp;
+                    {value}송이
+                  </span>
+                </>
               ))}
-            </p>
+            </div>
           </div>
           <div className={styles.btn__group}>
             <button className={styles.btn} onClick={() => onDownloadButton()}>
               사진으로 저장하기
             </button>
-            <button className={styles.btn}>
-              <Link href="/">메인으로 돌아가기</Link>
+            <button
+              className={styles.btn}
+              onClick={() => {
+                router.push("/");
+                timer();
+              }}
+            >
+              메인으로 돌아가기
             </button>
             {/* <button className={styles.btn}>주문하러 가기</button>
-            <button className={styles.btn}>내 디자인 보러가기</button>
-            <button className={styles.btn}>카카오톡 공유하기</button> */}
+            <button className={styles.btn}>내 디자인 보러가기</button> */}
+            <button className={styles.btn} onClick={() => onShareKakao()}>
+              카카오톡 공유하기
+            </button>
           </div>
         </article>
       </section>
