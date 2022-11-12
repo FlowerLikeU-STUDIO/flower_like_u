@@ -11,7 +11,8 @@ import CustomPlace from "./customplace/CustomPlace";
 import InitialButton from "../common/InitialButton";
 import RandomFlower from "./recommend/RandomFlower";
 import FailAlert from "@/lib/FailAlert";
-import FlowerLanguage from "./recommend/Language/FlowerLanguage";
+import FlowerLanguage from "./recommend/language/FlowerLanguage";
+import FlowerSituation from "./recommend/situation/FlowerSituation";
 // 로그인 여부
 import useSWR from "swr";
 import storage from "@/lib/utils/storage";
@@ -130,6 +131,7 @@ const BuoquetCustom = () => {
     <>
       <main className={styles.custom_wrapper}>
         <aside className={styles.recommend_wrapper}>
+          <FlowerSituation />
           <FlowerLanguage />
           <RandomFlower />
           <InitialButton />
