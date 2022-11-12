@@ -1,5 +1,4 @@
 import styles from "./BouquetCustom.module.scss";
-import Link from "next/link";
 import { useSelector } from "react-redux";
 import { SizeContent, packageContent } from "./StepContents";
 import CustomMenu from "./menu/CustomMenu";
