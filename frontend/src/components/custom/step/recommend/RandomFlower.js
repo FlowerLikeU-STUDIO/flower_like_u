@@ -1,7 +1,7 @@
 import styles from "./RandomFlower.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import useCustom from "@/hooks/useCustom";
-import { useState } from "react";
+// import useCustom from "@/hooks/useCustom";
+// import { useState } from "react";
 import { wrapper } from "../menu/MenuContents";
 import {
   makeFlowerList,
@@ -37,7 +37,6 @@ const RandomFlower = () => {
       .get(`custom/recommend/${size}`)
       .then((res) => res.data);
     if (res) {
-      console.log(res);
       const flowerList = customOption.flowers;
       const copyOfFlowerList = [...flowerList];
       copyOfFlowerList.map(
@@ -51,8 +50,6 @@ const RandomFlower = () => {
       } else if (customOption.package === 2) {
         dispatch(selectWrapperColor(wrapper[wrapperRandomNum].id));
       }
-    } else {
-      alert("실패");
     }
   };
 
