@@ -1,8 +1,8 @@
-import styles from "./FlowerLanguage.module.scss";
+import styles from "./SituationButton.module.scss";
 import { useState } from "react";
-import LanguageModal from "./RecommendModal";
+import CustomModal from "@/components/custom/common/CustomModal";
 
-const FlowerLanguage = () => {
+const SituationButton = () => {
   // 모달창 노출 여부 state
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -14,11 +14,11 @@ const FlowerLanguage = () => {
   return (
     <div>
       <button className={styles.recommend_menu} onClick={showModal}>
-        꽃말
+        레시피
       </button>
-      {modalOpen && <LanguageModal setModalOpen={setModalOpen} />}
+      {modalOpen && <CustomModal setModalOpen={setModalOpen} id={2} />}
     </div>
   );
 };
 
-export default FlowerLanguage;
+export default SituationButton;

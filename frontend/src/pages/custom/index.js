@@ -1,7 +1,17 @@
 import styles from "./index.module.scss";
 import Button from "@/components/common/Button";
+import CustomModal from "@/components/custom/common/CustomModal";
+import { useState } from "react";
 
 const Custom = () => {
+  // 모달창 노출 여부 state
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // 모달창 노출
+  const showModal = () => {
+    setModalOpen(!modalOpen);
+  };
+
   return (
     <main className={styles.custom_background}>
       <section className={styles.button_letter_wrapper}>
@@ -24,10 +34,10 @@ const Custom = () => {
               내 커스텀 사용하기
             </Button>
           </div>
-          {/* 커스텀 방법이 나오는 모달 창 띄우기 */}
-          <Button size="custom_large" color="white">
+          <Button size="custom_large" color="white" onClick={showModal}>
             커스텀하는 방법 알아보기
           </Button>
+          {modalOpen && <CustomModal setModalOpen={setModalOpen} id={3} />}
         </div>
       </section>
     </main>

@@ -44,7 +44,6 @@ const CustomPlace = () => {
     const whichCircle = e.target;
     whichCircle.style.borderRadius = "100rem";
     whichCircle.style.backgroundColor = "rgba(221, 255, 146, 0.6)";
-    whichCircle.style.border = "1px solid rgba(190, 235, 88, 1)";
   };
 
   //* 꽃다발의 꽃 위치 영역에서 꽃이 떠날 때 실행하는 함수
@@ -55,7 +54,6 @@ const CustomPlace = () => {
     //* 표시된 영역을 없애줍니다.
     const whichCircle = e.target;
     whichCircle.style.backgroundColor = "rgba(221, 255, 146, 0)";
-    whichCircle.style.border = "1px solid rgba(190, 235, 88, 0)";
   };
 
   const onDrop = (e) => {
@@ -64,7 +62,6 @@ const CustomPlace = () => {
     //* 표시된 영역을 없애줍니다.
     const whichCircle = e.target;
     whichCircle.style.backgroundColor = "rgba(221, 255, 146, 0)";
-    whichCircle.style.border = "1px solid rgba(190, 235, 88, 0)";
   };
 
   return (

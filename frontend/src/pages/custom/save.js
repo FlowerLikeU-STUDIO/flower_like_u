@@ -152,6 +152,11 @@ const CustomSave = () => {
             <button className={styles.btn} onClick={() => onDownloadButton()}>
               사진으로 저장하기
             </button>
+            {/* <button className={styles.btn}>주문하러 가기</button>
+            <button className={styles.btn}>내 디자인 보러가기</button> */}
+            <button className={styles.btn} onClick={() => onShareKakao()}>
+              카카오톡 공유하기
+            </button>
             <button
               className={styles.btn}
               onClick={() => {
@@ -159,12 +164,7 @@ const CustomSave = () => {
                 timer();
               }}
             >
-              메인으로 돌아가기
-            </button>
-            {/* <button className={styles.btn}>주문하러 가기</button>
-            <button className={styles.btn}>내 디자인 보러가기</button> */}
-            <button className={styles.btn} onClick={() => onShareKakao()}>
-              카카오톡 공유하기
+              초기화하고 메인으로 돌아가기
             </button>
           </div>
         </article>
