@@ -1,0 +1,146 @@
+/* 모달창을 화면 중앙. 최상단에 노출 */
+.container {
+  /* 모달창 크기 */
+  width: 62.5rem;
+  height: 38rem;
+
+  /* 최상단 위치 */
+  z-index: 9999;
+
+  /* 중앙 배치 */
+  /* top, bottom, left, right 는 브라우저 기준으로 작동한다. */
+  /* translate는 본인의 크기 기준으로 작동한다. */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* 모달창 디자인 */
+  background-color: $white100;
+  box-shadow: $shadow700;
+  border-radius: 8px;
+  border: 1px solid $primary400;
+  padding: 3rem 0rem;
+}
+
+.container {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
+
+/* 모달창 내부 X버튼 */
+.close {
+  position: absolute;
+  @include flexDiv;
+  right: 1rem;
+  top: 1rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100rem;
+  &:hover {
+    background-color: $white300;
+  }
+  & > span {
+    @include font(1.3rem, 400, $gray);
+  }
+}
+
+.contents_wrapper {
+  @include flexDiv(column);
+  gap: 2rem;
+}
+
+.title {
+  @include font(1.7rem, 500, $primary800);
+}
+
+.card_wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  width: 90%;
+  height: 29rem;
+  gap: 3rem;
+  padding: 1.5rem 3rem 3rem 3rem;
+  overflow-y: auto;
+}
+
+.card_wrapper::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.card_wrapper::-webkit-scrollbar-thumb {
+  background-color: $primary400;
+  border-radius: 1rem;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+
+.card_wrapper::-webkit-scrollbar-track {
+  background-color: $primary300p;
+  border-radius: 1rem;
+  box-shadow: inset 0px 0px 5px white;
+}
+
+.card {
+  @include flexDiv(column, center, space-between);
+  width: 10rem;
+  height: 15rem;
+  border-radius: 0.25rem;
+  box-shadow: $shadow500;
+  background-color: $white300;
+  padding: 0.5rem 1rem 1.5rem 1rem;
+}
+
+.img_wrapper {
+  width: 6rem;
+  height: 6rem;
+}
+
+.card_content_wrapper {
+  @include flexDiv(column, center, center);
+  height: 40%;
+  text-align: center;
+  width: 100%;
+  gap: 0.5rem;
+  & > h1 {
+    @include font(1rem, 600);
+  }
+  & > h2 {
+    @include font(0.9rem, 500, $primary600p, 130%);
+    word-break: keep-all;
+  }
+}
+
+@mixin button-color($color, $font_color: $mainButton) {
+  background: $color;
+  color: $font_color;
+  &:hover {
+    background: lighten($color, 10%);
+  }
+  &:active {
+    background: darken($color, 10%);
+  }
+}
+
+.card_button {
+  @include button-color($mainPrimary);
+  @include font(0.9rem, 500, $white200);
+  letter-spacing: 0.15rem;
+  width: 70%;
+  border-radius: 0.2rem;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  transition: 0.2s linear;
+  padding: 0.3rem;
+}
+
+.button_wrapper {
+  @include flexDiv;
+  width: 100%;
+}
