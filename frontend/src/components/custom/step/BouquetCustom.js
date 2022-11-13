@@ -12,7 +12,7 @@ import CustomPlace from "./customplace/CustomPlace";
 import InitialButton from "../common/InitialButton";
 import RandomFlower from "./recommend/RandomFlower";
 import FailAlert from "@/lib/FailAlert";
-import LanguageButton from "./recommend/language/LanguageButton";
+import LanguageButton from "./recommend/flower_language/LanguageButton";
 import SituationButton from "./recommend/situation/SituationButton";
 import CustomModal from "../common/CustomModal";
 // 로그인 여부

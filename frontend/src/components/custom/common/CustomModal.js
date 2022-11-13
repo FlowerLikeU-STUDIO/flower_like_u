@@ -1,5 +1,5 @@
 import styles from "./CustomModal.module.scss";
-import LanguageContents from "../step/recommend/language/LanguageContents";
+import LanguageContents from "../step/recommend/flower_language/LanguageContents";
 import SituationContents from "../step/recommend/situation/SituationContents";
 import HowCustomize from "../HowCustomize";
 import { useRef, useEffect } from "react";
