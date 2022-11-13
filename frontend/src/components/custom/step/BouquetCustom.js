@@ -2,6 +2,7 @@ import styles from "./BouquetCustom.module.scss";
 import classNames from "classnames/bind";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { useState } from "react";
 // 컨텐츠
 import { SizeContent, packageContent } from "./StepContents";
 import { wrapper } from "./menu/MenuContents";
@@ -11,8 +12,9 @@ import CustomPlace from "./customplace/CustomPlace";
 import InitialButton from "../common/InitialButton";
 import RandomFlower from "./recommend/RandomFlower";
 import FailAlert from "@/lib/FailAlert";
-import FlowerLanguage from "./recommend/language/FlowerLanguage";
-import FlowerSituation from "./recommend/situation/FlowerSituation";
+import LanguageButton from "./recommend/language/LanguageButton";
+import SituationButton from "./recommend/situation/SituationButton";
+import CustomModal from "../common/CustomModal";
 // 로그인 여부
 import useSWR from "swr";
 import storage from "@/lib/utils/storage";
@@ -127,12 +129,20 @@ const BuoquetCustom = () => {
     router.push("/custom/save");
   };
 
+  // 모달창 노출 여부 state
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // 모달창 노출
+  const showModal = () => {
+    setModalOpen(!modalOpen);
+  };
+
   return (
     <>
       <main className={styles.custom_wrapper}>
         <aside className={styles.recommend_wrapper}>
-          <FlowerSituation />
-          <FlowerLanguage />
+          <SituationButton />
+          <LanguageButton />
           <RandomFlower />
           <InitialButton />
         </aside>
@@ -163,7 +173,10 @@ const BuoquetCustom = () => {
             </p>
           </div>
           <div className={styles.info_sub_wrapper}>
-            <button className={styles.go_save_page}>커스텀 방법</button>
+            <button className={styles.go_save_page} onClick={showModal}>
+              커스텀 방법
+            </button>
+            {modalOpen && <CustomModal setModalOpen={setModalOpen} id={3} />}
             <button
               className={styles.go_save_page}
               onClick={
