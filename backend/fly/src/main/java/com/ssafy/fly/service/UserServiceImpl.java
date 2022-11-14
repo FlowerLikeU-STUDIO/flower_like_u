@@ -5,6 +5,7 @@ import com.ssafy.fly.common.util.FlyMailSender;
 import com.ssafy.fly.common.util.RandomNicknameMaker;
 import com.ssafy.fly.common.util.RandomStringGenerator;
 import com.ssafy.fly.common.util.ValidationChecker;
+import com.ssafy.fly.common.vo.KakaoUserInfo;
 import com.ssafy.fly.database.mysql.entity.ConsumerEntity;
 import com.ssafy.fly.database.mysql.entity.RegionEntity;
 import com.ssafy.fly.database.mysql.entity.StoreEntity;
@@ -564,7 +565,7 @@ public class UserServiceImpl implements UserService {
                 .profile(store.getProfile())
                 .feedNum(store.getTotalFeed())
                 .introduction(store.getBio())
-                .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating()))
+                .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating() == null ? 0 : store.getRating()))
                 .build();
 
         result.put("result", true);
@@ -638,5 +639,21 @@ public class UserServiceImpl implements UserService {
         }
 
         return result;
+    }
+
+    // 14. 카카오 간편 로그인 회원 등록
+    @Override
+    public void saveKakaoMember(KakaoUserInfo kakaoUserInfo) {
+        ConsumerEntity newMember = ConsumerEntity.builder()
+                .type(UserType.CONSUMER)
+                .userId(kakaoUserInfo.getEmail())
+                .password("")
+                .name(kakaoUserInfo.getNickname())
+                .nickname(kakaoUserInfo.getNickname())
+                .email(kakaoUserInfo.getEmail())
+                .regDate(new Date())
+                .withdrawal(false)
+                .build();
+        consumerRepository.save(newMember);
     }
 }
