@@ -25,7 +25,7 @@ public class ConsumerEntity extends BaseEntity implements CustomUserDetail {
     @Enumerated(EnumType.STRING)
     UserType type;
 
-    @Column(name = "user_id", length = 16, nullable = false)
+    @Column(name = "user_id", length = 50, nullable = false)
     private String userId;
 
     @Column(name = "password", length = 100, nullable = false)
