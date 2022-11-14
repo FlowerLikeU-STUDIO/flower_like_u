@@ -5,7 +5,6 @@ const useDesign = () => {
   const desginList = (currentPage) => {
     const { data, error, mutate } = useSWR(currentPage ? `custom?page=${currentPage}&size=4` : null, Fetcher);
     const loading = !data && !error;
-    console.log(data);
 
     return {
       loading,

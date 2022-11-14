@@ -87,7 +87,7 @@ const Feed = ({ storeId }) => {
           <Modal
             children={
               targetFeed !== "" ? (
-                <FeedReservation feedId={targetFeed} />
+                <FeedReservation feedId={targetFeed} storeId={storeId} />
               ) : (
                 <></>
               )
