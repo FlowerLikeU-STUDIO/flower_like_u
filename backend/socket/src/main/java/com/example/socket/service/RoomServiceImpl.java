@@ -33,6 +33,10 @@ public class RoomServiceImpl implements RoomService{
             roomNoLatestMessageResDto.setId(room.getId());
             roomNoLatestMessageResDto.setConsumerId(room.getConsumerId());
             roomNoLatestMessageResDto.setStoreId(room.getStoreId());
+            roomNoLatestMessageResDto.setLatestMessage(room.getLatestMessage());
+            roomNoLatestMessageResDto.setUuid(room.getUuid());
+            roomNoLatestMessageResDto.setConsumerNotReadCnt(room.getConsumerNotReadCnt());
+            roomNoLatestMessageResDto.setStoreNotReadCnt(room.getStoreNotReadCnt());
             User user;
             if (userType.equals("CONSUMER"))
                 user = userService.getUser("STORE", room.getStoreId());
@@ -54,9 +58,9 @@ public class RoomServiceImpl implements RoomService{
         return getRoomNoLatest(RoomList,userType);
     }
 
-    public String create(Long storeId, Long consumerId) {
+    public Room create(Long storeId, Long consumerId) {
         try {
-            return roomRepository.save(new Room(storeId,consumerId)).getId();
+            return roomRepository.save(new Room(storeId,consumerId));
         } catch (Exception e) {
             throw new IllegalArgumentException("방 생성에 실패했습니다.");
         }
@@ -67,7 +71,7 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Transactional
-    public void updateAdd(String id, String latestMessage, String userType) {
+    public void updateAdd(String id, String latestMessage, String userType, String uuid) {
         Room room = roomRepository.findById(id).orElseThrow(new Supplier<IllegalArgumentException>() {
             @Override
             public IllegalArgumentException get() {
@@ -78,6 +82,7 @@ public class RoomServiceImpl implements RoomService{
             room.setLatestMessage("사진");
         else
             room.setLatestMessage(latestMessage);
+        room.setUuid(uuid);
         if (userType.equals("store"))
             room.setStoreNotReadCnt(room.getStoreNotReadCnt() + 1);
         else
