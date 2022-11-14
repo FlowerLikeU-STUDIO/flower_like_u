@@ -6,6 +6,7 @@ import com.ssafy.fly.common.util.ResultMessageSet;
 import com.ssafy.fly.common.vo.FlowerVo;
 import com.ssafy.fly.dto.request.CustomFlowerRegReq;
 import com.ssafy.fly.service.CustomFlowerService;
+import com.ssafy.fly.service.HarmonyFlowerService;
 import com.ssafy.fly.service.HarmonyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,13 +25,14 @@ public class CustomController {
     private final CustomFlowerService customFlowerService;
     private final ResultMessageSet resultMessageSet;
     private final HarmonyService harmonyService;
+    private final HarmonyFlowerService harmonyFlowerService;
     @Autowired
-    public CustomController(CustomFlowerService customFlowerService, ResultMessageSet resultMessageSet, HarmonyService harmonyService) {
+    public CustomController(CustomFlowerService customFlowerService, ResultMessageSet resultMessageSet, HarmonyService harmonyService, HarmonyFlowerService harmonyFlowerService) {
         this.customFlowerService = customFlowerService;
         this.resultMessageSet = resultMessageSet;
         this.harmonyService = harmonyService;
+        this.harmonyFlowerService = harmonyFlowerService;
     }
-
 
     // 1. 커스텀 꽃다발 정보 등록
     @PostMapping()
@@ -44,6 +46,10 @@ public class CustomController {
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
+            List<String> colorLst = customFlowerRegReq.getFlowers().stream().map(flower -> {
+                return FlowerMap.idxToColor[flower.intValue()];
+            }).collect(Collectors.toList());
+            harmonyFlowerService.create(colorLst);
         } else {
             response.put("result", resultMessageSet.FAIL);
             response.put("message", result.get("message"));

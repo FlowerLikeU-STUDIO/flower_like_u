@@ -74,6 +74,12 @@ public class StoreEntity extends BaseEntity implements CustomUserDetail {
     @ColumnDefault("false")
     private boolean withdrawal;
 
+    @Column(name = "latitude", nullable = false)
+    private Double latitude;
+
+    @Column(name = "longitude", nullable = false)
+    private Double longitude;
+
     // store와 review 테이블의 1:N 관계 매핑
     @OneToMany(mappedBy = "storeId")
     @Builder.Default

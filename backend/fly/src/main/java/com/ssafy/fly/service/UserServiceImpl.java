@@ -153,6 +153,8 @@ public class UserServiceImpl implements UserService {
                     .sigunguCode(registerReq.getAddress().getSigunguCode())
                     .regDate(new Date())
                     .withdrawal(false)
+                    .latitude(registerReq.getAddress().getLatitude())
+                    .longitude(registerReq.getAddress().getLongitude())
                     .build();
             storeRepository.save(newMember);
         }
@@ -591,6 +593,8 @@ public class UserServiceImpl implements UserService {
                         .profile(curEntity.getProfile())
                         .rating(reviewService.getRating(curEntity.getId()))
                         .address(String.format("%s %s", curEntity.getStreet(), curEntity.getDetailAddr()).trim())
+                        .latitude(curEntity.getLatitude())
+                        .longitude(curEntity.getLongitude())
                         .build();
                 resultList.add(storeInfo);
             }
