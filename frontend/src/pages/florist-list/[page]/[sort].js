@@ -299,19 +299,19 @@ export async function getStaticProps({ params }) {
   const page = params.page;
   const sort = params.sort;
 
-  try {
-    const response = await axios.get(`${BASE_URL}user/stores?page=${page}&size=#&sd=2&sgg=&sn=&sort=${sort}`);
-    const data = response.data.storeInfo;
-    return {
-      props: {
-        floristData: data.list,
-        maxPage: data.maxPage,
-      },
-      // revalidate: 10, // seconds
-    };
-  } catch (err) {
-    console.log(err);
+  const response = await axios.get(`${BASE_URL}user/stores?page=${page}&size=#&sd=2&sgg=&sn=&sort=${sort}`);
+
+  if (!response) {
+    return { notFound: true };
   }
+  const data = response.data.storeInfo;
+  return {
+    props: {
+      floristData: data.list,
+      maxPage: data.maxPage,
+    },
+    revalidate: 10, // seconds
+  };
 }
 
 export async function getStaticPaths() {
@@ -319,11 +319,8 @@ export async function getStaticPaths() {
     fallback: true,
     paths: [
       { params: { page: "1", sort: "reg" } },
-      { params: { page: "2", sort: "reg" } },
       { params: { page: "1", sort: "rating" } },
-      { params: { page: "2", sort: "rating" } },
       { params: { page: "1", sort: "order" } },
-      { params: { page: "2", sort: "order" } },
     ],
   };
 }
