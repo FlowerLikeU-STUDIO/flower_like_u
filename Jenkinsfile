@@ -8,14 +8,6 @@ pipeline {
                 sh "docker stop fly_fe"
             }
         }
-        stage('Frontend Dockerizing') {
-            steps {
-                sh "docker rmi martinflower/fly:fly_fe"
-                dir('./frontend'){
-                    sh "docker build -t martinflower/fly:fly_fe ."
-                }
-            }
-        }
         stage('Backend Dockerizing') {
             steps {
                 sh "docker rmi martinflower/fly:fly_be"
@@ -27,21 +19,45 @@ pipeline {
                 }
             }
         }
-        stage('Publish') {
+        stage('Backend : Publish & Deploy') {
             steps {
                 sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
                 sh "docker push martinflower/fly:fly_be"
-                sh "docker push martinflower/fly:fly_fe"
-                sh "pwd"
-            }
-        }
-        stage('Deploy') {             
-            steps {
                 sh "docker pull martinflower/fly:fly_be"
                 sh "docker run --rm -d --name fly_be -p 8080:8080 martinflower/fly:fly_be"
+            }
+        }
+        stage('Frontend Dockerizing') {
+            steps {
+                sh "docker rmi martinflower/fly:fly_fe"
+                dir('./frontend'){
+                    sh "docker build -t martinflower/fly:fly_fe ."
+                }
+            }
+        }
+        stage('Frontend : Publish & Deploy') {
+            steps {
+                sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
+                sh "docker push martinflower/fly:fly_fe"
                 sh "docker pull martinflower/fly:fly_fe"
                 sh "docker run --rm -d --name fly_fe -p 3000:3000 martinflower/fly:fly_fe"
             }
         }
+        // stage('Publish') {
+        //     steps {
+        //         sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
+        //         sh "docker push martinflower/fly:fly_be"
+        //         sh "docker push martinflower/fly:fly_fe"
+        //         sh "pwd"
+        //     }
+        // }
+        // stage('Deploy') {             
+        //     steps {
+        //         sh "docker pull martinflower/fly:fly_be"
+        //         sh "docker run --rm -d --name fly_be -p 8080:8080 martinflower/fly:fly_be"
+        //         sh "docker pull martinflower/fly:fly_fe"
+        //         sh "docker run --rm -d --name fly_fe -p 3000:3000 martinflower/fly:fly_fe"
+        //     }
+        // }
     }
 }
