@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "https://k7b209.q.ssafy.io/api/";
+export const BASE_URL = "https://k7b209.q.ssafy.io/api/";
 // const BASE_URL = "http://k7b209.q.ssafy.io:8080/api/";
 export const client = axios.create({
   baseURL: BASE_URL,

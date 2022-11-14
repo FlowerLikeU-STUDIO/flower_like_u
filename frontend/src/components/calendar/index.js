@@ -99,7 +99,7 @@ const getDayColor = (date) => {
     date.getDay();
   }
 };
-const Calendar = ({ choiceDay, setChoiceDay }) => {
+const Calendar = ({ choiceDay, setChoiceDay, setReservationDate }) => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
   const [dayOfTheWeek, calendarBody] = useCalendar("ENG", year, month);
@@ -125,9 +125,13 @@ const Calendar = ({ choiceDay, setChoiceDay }) => {
 
   const onChoiceDay = (e) => {
     const choiceDay = e.currentTarget.textContent;
-    if (choiceDay === "" || choiceDay < new Date().getDay()) {
+    if (choiceDay === "" || e.currentTarget.className.includes("past")) {
       return;
     }
+    const choiceDate =
+      year + "-" + (month + 1) + "-" + choiceDay.padStart(2, 0);
+    setReservationDate(choiceDate);
+    console.log(choiceDate);
     setChoiceDay(choiceDay);
   };
 
