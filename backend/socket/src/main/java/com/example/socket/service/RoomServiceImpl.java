@@ -1,7 +1,9 @@
 package com.example.socket.service;
 
 import com.example.socket.document.Room;
+import com.example.socket.domain.User;
 import com.example.socket.dto.request.RoomCntPutReqDto;
+import com.example.socket.dto.response.RoomNoLatestMessageResDto;
 import com.example.socket.repository.RoomRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,24 +14,44 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Service
 public class RoomServiceImpl implements RoomService{
 
     private final RoomRepository roomRepository;
-
+    private final UserService userService;
     @Autowired
-    public RoomServiceImpl(RoomRepository roomRepository) {
+    public RoomServiceImpl(RoomRepository roomRepository, UserService userService) {
         this.roomRepository = roomRepository;
+        this.userService = userService;
     }
 
-    public List<Room> getList(String userType, Long id) {
+    private List<RoomNoLatestMessageResDto> getRoomNoLatest(List<Room> roomLst, String userType) {
+        return roomLst.stream().map(room -> {
+            RoomNoLatestMessageResDto roomNoLatestMessageResDto = new RoomNoLatestMessageResDto();
+            roomNoLatestMessageResDto.setId(room.getId());
+            roomNoLatestMessageResDto.setConsumerId(room.getConsumerId());
+            roomNoLatestMessageResDto.setStoreId(room.getStoreId());
+            User user;
+            if (userType.equals("CONSUMER"))
+                user = userService.getUser("STORE", room.getStoreId());
+            else
+                user = userService.getUser("CONSUMER", room.getConsumerId());
+            roomNoLatestMessageResDto.setImgSrc(user.getImgSrc());
+            roomNoLatestMessageResDto.setName(user.getName());
+            return roomNoLatestMessageResDto;
+        }).collect(Collectors.toList());
+    }
+
+    public List<RoomNoLatestMessageResDto> getList(String userType, Long id) {
         List<Room> RoomList;
-        if (userType.equals("CONSUMER"))
+        if (userType.equals("CONSUMER")) {
             RoomList = roomRepository.findAllByConsumerId(id);
+        }
         else
             RoomList = roomRepository.findAllByStoreId(id);
-        return RoomList;
+        return getRoomNoLatest(RoomList,userType);
     }
 
     public String create(Long storeId, Long consumerId) {
