@@ -264,9 +264,9 @@ public class BookServiceImpl implements BookService {
         if (consumer != null) {
             // 필터에 따라 리스트 검색
             if ("order".equals(filter)) {
-                searchList = bookRepository.getConsumerOrderList(consumer.getId(), pageable);
+                searchList = bookRepository.getConsumerOrderList(consumer, pageable);
             } else if ("done".equals(filter)) {
-                searchList = bookRepository.getConsumerDoneList(consumer.getId(), pageable);
+                searchList = bookRepository.getConsumerDoneList(consumer, pageable);
             }
 
             if (searchList != null && searchList.getContent().size() > 0) {
@@ -302,11 +302,11 @@ public class BookServiceImpl implements BookService {
         } else if (store != null) {
             // 필터에 따라 리스트 검색
             if ("book".equals(filter)) {
-                searchList = bookRepository.getStoreBookList(store.getId(), pageable);
+                searchList = bookRepository.getStoreBookList(store, pageable);
             } else if ("progress".equals(filter)) {
-                searchList = bookRepository.getStoreProgressList(store.getId(), pageable);
+                searchList = bookRepository.getStoreProgressList(store, pageable);
             } else if ("done".equals(filter)) {
-                searchList = bookRepository.getStoreDoneList(store.getId(), pageable);
+                searchList = bookRepository.getStoreDoneList(store, pageable);
             }
 
             if (searchList != null && searchList.getContent().size() > 0) {
