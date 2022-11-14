@@ -84,15 +84,7 @@ const Feed = ({ storeId }) => {
     <>
       {isOpen ? (
         <>
-          <Modal
-            children={
-              targetFeed !== "" ? (
-                <FeedReservation feedId={targetFeed} />
-              ) : (
-                <></>
-              )
-            }
-          />
+          <Modal children={targetFeed !== "" ? <FeedReservation feedId={targetFeed} /> : <></>} />
         </>
       ) : (
         <></>
@@ -105,11 +97,7 @@ const Feed = ({ storeId }) => {
                 <Feed.Item
                   feed={feed}
                   index={index}
-                  key={
-                    (Number.MAX_SAFE_INTEGER & feed.feedId)
-                      .toString(2)
-                      .padStart(53, 0) + feed.name
-                  }
+                  key={(Number.MAX_SAFE_INTEGER & feed.feedId).toString(2).padStart(53, 0) + feed.name}
                   onClick={onHandleOpen}
                 />
               ))}
@@ -125,20 +113,13 @@ const Feed = ({ storeId }) => {
 };
 
 const areEqual = (prevProps, nextProps) => {
-  parseInt(prevProps.feed.feedId) === parseInt(nextProps.feed.feedId)
-    ? true
-    : false;
+  parseInt(prevProps.feed.feedId) === parseInt(nextProps.feed.feedId) ? true : false;
 };
 
 const FeedItem = ({ feed, index, onClick }) => {
   return (
     <FeedItemWrapper key={feed.feedId + feed.title}>
-      <Image
-        src={feed.image}
-        width={300}
-        height={300}
-        onClick={() => onClick(feed)}
-      />
+      <Image src={feed.image} width={300} height={300} onClick={() => onClick(feed)} />
     </FeedItemWrapper>
   );
 };
