@@ -2,6 +2,7 @@ package com.example.socket.service;
 
 import com.example.socket.document.Room;
 import com.example.socket.dto.request.RoomCntPutReqDto;
+import com.example.socket.dto.response.RoomNoLatestMessageResDto;
 import org.bson.types.ObjectId;
 
 import java.math.BigInteger;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RoomService {
-    public List<Room> getList(String userType, Long id);
+    public List<RoomNoLatestMessageResDto> getList(String userType, Long id);
 
     public String create(Long storeId, Long consumerId);
 
