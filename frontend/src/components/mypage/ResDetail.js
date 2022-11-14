@@ -17,7 +17,7 @@ const ResDetail = () => {
   const router = useRouter();
   const currentRoute = router.pathname.split("/")[2];
   const { resDetail } = useRes();
-  const { basics, details, mutate } = resDetail({ userId: router.query.rid || router.query.oid });
+  const { basics, details, mutate } = resDetail({ bookId: router.query.rid || router.query.oid });
 
   const resCancel = async () => {
     if (window.confirm("예약을 취소하시겠습니까?")) {
