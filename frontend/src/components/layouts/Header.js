@@ -5,10 +5,20 @@ import UserHeaderItem from "./UserHeaderItem";
 import styles from "./Header.module.scss";
 import classNames from "classnames/bind";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 const Header = () => {
   const cx = classNames.bind(styles);
   const { data: isLogin } = useSWR("logIn", storage);
+
+  // * 플로리스트 목록에서 네브바 클릭시 페이지 새로고침
+  const router = useRouter();
+
+  const clickFlorist = () => {
+    if (router.query.page) {
+      window.location.reload();
+    }
+  };
 
   //* 헤더 opacity 조정을 위한 State
   const [scrollY, setScrollY] = useState(0);
@@ -41,19 +51,17 @@ const Header = () => {
 
   return (
     <header
-      className={
-        !headerStatus
-          ? cx("header_wrapper", "opacity")
-          : cx("header_wrapper", "nonopacity")
-      }
+      className={!headerStatus ? cx("header_wrapper", "opacity") : cx("header_wrapper", "nonopacity")}
       id="header"
     >
       <div className={styles.menu_wrapper}>
         <Link href="/">
           <a className={styles.header_title}>너를 닮은 꽃</a>
         </Link>
-        <Link href="/florist">
-          <a className={styles.header_anchor}>플로리스트</a>
+        <Link href="/florist-list/1/reg">
+          <a className={styles.header_anchor} onClick={clickFlorist}>
+            플로리스트
+          </a>
         </Link>
         <Link href="/custom">
           <a className={styles.header_anchor}>꽃다발커스텀</a>
