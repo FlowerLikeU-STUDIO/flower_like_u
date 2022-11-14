@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import { flower } from "../menu/MenuContents";
 import classNames from "classnames/bind";
+import { useState } from "react";
 
 const CustomPlace = () => {
   const cx = classNames.bind(styles);
@@ -24,42 +25,43 @@ const CustomPlace = () => {
   const currentPackage = packageList[customOption.package];
 
   //드래그 앤 드롭
+  //* current_location을 업데이트하기 위한 state
+  const [currentLocation, setCurrentLocation] = useState();
+
   //* 꽃다발의 꽃 위치 영역 안에 꽃이 들어올 때 실행하는 함수
   //* current_location에 꽃 위치를 넣어줍니다.
-  const onDragEnter = (e) => {
-    e.preventDefault();
-    dispatch(makeCurrentLocation(e.currentTarget.dataset.position));
-  };
+  // const onDragEnter = (e) => {
+  //   e.preventDefault();
+  //   dispatch(makeCurrentLocation(e.currentTarget.dataset.position));
+  // };
 
   //* 꽃다발의 꽃 위치 영역 위에 꽃이 있을 때 실행하는 함수
   //* current_location에 꽃 위치를 넣어줍니다.
   const onDragOver = (e) => {
     e.preventDefault();
-    dispatch(makeCurrentLocation(e.currentTarget.dataset.position));
+    setCurrentLocation(e.currentTarget.dataset.position);
     //* 어느 영역 위에 있는지 표시해 줍니다.
     const whichCircle = e.target;
     whichCircle.style.borderRadius = "100rem";
     whichCircle.style.backgroundColor = "rgba(221, 255, 146, 0.6)";
-    whichCircle.style.border = "1px solid rgba(190, 235, 88, 1)";
   };
 
   //* 꽃다발의 꽃 위치 영역에서 꽃이 떠날 때 실행하는 함수
   //* current_location을 초기화해줍니다.
   const onDragLeave = (e) => {
     e.preventDefault();
-    dispatch(makeCurrentLocation(null));
+    setCurrentLocation(null);
     //* 표시된 영역을 없애줍니다.
     const whichCircle = e.target;
     whichCircle.style.backgroundColor = "rgba(221, 255, 146, 0)";
-    whichCircle.style.border = "1px solid rgba(190, 235, 88, 0)";
   };
 
   const onDrop = (e) => {
     e.preventDefault();
+    dispatch(makeCurrentLocation(currentLocation));
     //* 표시된 영역을 없애줍니다.
     const whichCircle = e.target;
     whichCircle.style.backgroundColor = "rgba(221, 255, 146, 0)";
-    whichCircle.style.border = "1px solid rgba(190, 235, 88, 0)";
   };
 
   return (
@@ -68,7 +70,7 @@ const CustomPlace = () => {
         flowerList.map((title, index) => (
           <div
             className={cx(`circle_${index + 1}`, currentSize, currentPackage)}
-            onDragEnter={onDragEnter}
+            // onDragEnter={onDragEnter}
             onDragOver={onDragOver}
             onDragLeave={onDragLeave}
             onDrop={onDrop}

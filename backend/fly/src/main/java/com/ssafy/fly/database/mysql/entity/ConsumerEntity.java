@@ -34,7 +34,7 @@ public class ConsumerEntity extends BaseEntity implements CustomUserDetail {
     @Column(name = "name", length = 30, nullable = false)
     private String name;
 
-    @Column(name = "nickname", length = 10, nullable = false)
+    @Column(name = "nickname", length = 30, nullable = false)
     private String nickname;
 
     @Column(name = "email", length = 50, nullable = false)

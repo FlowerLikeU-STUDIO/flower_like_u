@@ -1,0 +1,8 @@
+.contents_wrapper {
+  @include flexDiv(column);
+  gap: 2rem;
+}
+
+.title {
+  @include font(1.7rem, 500, $primary800);
+}

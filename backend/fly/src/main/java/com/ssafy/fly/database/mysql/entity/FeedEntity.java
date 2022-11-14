@@ -27,7 +27,7 @@ public class FeedEntity extends BaseEntity {
     @Column(name = "price", nullable = false)
     private int price;
 
-    @Column(name = "content", length = 300, nullable = false)
+    @Column(name = "content", length = 1000, nullable = false)
     private String content;
 
     @Column(name = "removal", nullable = false)

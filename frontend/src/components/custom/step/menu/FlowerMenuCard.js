@@ -74,7 +74,7 @@ const FlowerMenuCard = (props) => {
 
       <div className={styles.letter_wrapper}>
         <h1 className={styles.menu_title}>{props.title}</h1>
-        <span className={styles.menu_contents}>{props.language}</span>
+        <span className={styles.menu_contents}>{props.description}</span>
       </div>
     </div>
   );

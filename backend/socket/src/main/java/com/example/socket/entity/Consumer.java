@@ -47,8 +47,17 @@ public class Consumer implements UserDetails {
     @Lob
     private String profile;
 
-    @Column(name = "address", length = 200, nullable = true)
-    private String address;
+    @Column(name = "zipcode", length = 5, nullable = true)
+    private String zipCode;
+
+    @Column(name = "street", length = 50, nullable = true)
+    private String street;
+
+    @Column(name = "detail_addr", length = 50, nullable = true)
+    private String detailAddr;
+
+    @Column(name = "sigungu_code", length = 5, nullable = true)
+    private String sigunguCode;
 
     @Column(name = "reg_date", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)

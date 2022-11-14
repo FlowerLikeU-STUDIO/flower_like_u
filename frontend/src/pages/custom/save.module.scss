@@ -1,10 +1,11 @@
 .save_background {
+  @include flexDiv;
   width: 100%;
   min-height: 100vh;
-  padding: 8rem 0rem 0rem;
+  padding: 4rem 0rem 0rem;
 
   @media screen and (min-width: 1350px) {
-    padding: 8rem 0rem 0rem;
+    padding: 4rem 0rem 0rem;
   }
   background: linear-gradient(
       to top,
@@ -111,6 +112,20 @@
 }
 
 .btn {
+  font-size: 1rem;
+  border-radius: 0.3rem;
+  border: 1px solid $mainPrimary;
+  padding: 0.5rem 0.8rem;
+  width: 100%;
+  background-color: white;
+  color: $mainPrimary;
+  &.green {
+    background-color: $mainPrimary;
+    color: white;
+  }
+}
+
+.tomain_btn {
   font-size: 1rem;
   border-radius: 0.3rem;
   border: 1px solid $mainPrimary;

@@ -21,13 +21,12 @@ const useKakao = () => {
             description: "당신만의 꽃다발 커스텀 서비스",
             imageUrl: res.infos.original.url,
             link: {
-              webUrl: "http://localhost:3000",
+              webUrl: "https://www.flowerlikeu.com",
             },
           },
           itemContent: {
             profileText: "너닮꽃",
-            profileImageUrl:
-              "https://k.kakaocdn.net/14/dn/btrQT5YaLXE/GxgonMU9ncpkIOKilk9F1K/o.jpg",
+            profileImageUrl: "https://k.kakaocdn.net/14/dn/btrQT5YaLXE/GxgonMU9ncpkIOKilk9F1K/o.jpg",
           },
           buttons: [
             {

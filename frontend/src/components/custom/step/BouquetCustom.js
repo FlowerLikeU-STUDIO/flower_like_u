@@ -1,20 +1,27 @@
 import styles from "./BouquetCustom.module.scss";
-import Link from "next/link";
-import { useSelector } from "react-redux";
-import { SizeContent, packageContent } from "./StepContents";
-import CustomMenu from "./menu/CustomMenu";
 import classNames from "classnames/bind";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { useState } from "react";
+// 컨텐츠
+import { SizeContent, packageContent } from "./StepContents";
+import { wrapper } from "./menu/MenuContents";
+// 컴포넌트
+import CustomMenu from "./menu/CustomMenu";
 import CustomPlace from "./customplace/CustomPlace";
 import InitialButton from "../common/InitialButton";
-import html2canvas from "html2canvas";
 import RandomFlower from "./recommend/RandomFlower";
-import { wrapper } from "./menu/MenuContents";
 import FailAlert from "@/lib/FailAlert";
-import { mutate } from "swr";
-import { client } from "@/pages/api/client";
+import LanguageButton from "./recommend/flower_language/LanguageButton";
+import SituationButton from "./recommend/situation/SituationButton";
+import CustomModal from "../common/CustomModal";
+// 로그인 여부
 import useSWR from "swr";
 import storage from "@/lib/utils/storage";
-import { useRouter } from "next/router";
+// 꽃다발 저장
+import { mutate } from "swr";
+import html2canvas from "html2canvas";
+import { client } from "@/pages/api/client";
 
 const BuoquetCustom = () => {
   const cx = classNames.bind(styles);
@@ -122,12 +129,21 @@ const BuoquetCustom = () => {
     router.push("/custom/save");
   };
 
+  // 모달창 노출 여부 state
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // 모달창 노출
+  const showModal = () => {
+    setModalOpen(!modalOpen);
+  };
+
   return (
     <>
       <main className={styles.custom_wrapper}>
         <aside className={styles.recommend_wrapper}>
+          <SituationButton />
+          <LanguageButton />
           <RandomFlower />
-          {/* <div className={styles.recommend_menu}>추천</div> */}
           <InitialButton />
         </aside>
         <div
@@ -157,7 +173,10 @@ const BuoquetCustom = () => {
             </p>
           </div>
           <div className={styles.info_sub_wrapper}>
-            <button className={styles.go_save_page}>커스텀 방법</button>
+            <button className={styles.go_save_page} onClick={showModal}>
+              커스텀 방법
+            </button>
+            {modalOpen && <CustomModal setModalOpen={setModalOpen} id={3} />}
             <button
               className={styles.go_save_page}
               onClick={
