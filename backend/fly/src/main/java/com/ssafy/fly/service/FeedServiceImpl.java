@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -96,7 +97,7 @@ public class FeedServiceImpl implements FeedService {
             return result;
         }
 
-        Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size);
+        Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size, Sort.by("id").descending());
         Page<FeedEntity> searchList = feedRepository.findByStoreIdAndRemoval(store, false, pageable);
         Map<String, Object> info = new HashMap<>();
 

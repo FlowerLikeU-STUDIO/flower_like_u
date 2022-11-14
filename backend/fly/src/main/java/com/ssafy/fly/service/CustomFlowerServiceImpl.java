@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
@@ -192,7 +193,7 @@ public class CustomFlowerServiceImpl implements CustomFlowerService {
             return result;
         }
 
-        Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size);
+        Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size, Sort.by("id").descending());
         Page<CustomFlowerEntity> resultList = customFlowerRepository.findAllByConsumerId(consumer, pageable);
 
         if (resultList.getContent().size() > 0) {

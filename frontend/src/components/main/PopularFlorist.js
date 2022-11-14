@@ -1,7 +1,15 @@
 import styles from "./PopularFlorist.module.scss";
 import FlowerImg from "../common/FlowerImg";
+import { client } from "@/pages/api/client";
 
 const PopularFlorist = () => {
+  //* 필요한 params 넣어서 api 요청 필요
+  const getPopular = async () => {
+    const res = await client.get(`user/stores`).then((res) => res.data);
+    if (res) {
+      console.log(res);
+    }
+  };
   return (
     <section className={styles.popular_wrapper}>
       <h1 className={styles.popular_title}>인기 플로리스트</h1>

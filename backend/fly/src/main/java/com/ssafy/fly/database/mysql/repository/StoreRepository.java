@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -23,7 +24,11 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
 
     public StoreEntity findByIdAndWithdrawal(Long storeId, boolean isDeleted);
 
-    public Page<StoreEntity> findBySigunguCodeStartsWithAndWithdrawal(String sidoCode, boolean isDeleted, Pageable pageable);
+    public Page<StoreEntity> findAllByStoreContainsAndWithdrawal(String storeName, boolean isDeleted, Pageable pageable);
+
+    Page<StoreEntity> findAllByStoreContainsAndWithdrawalAndSigunguCodeStartsWith(String storeName, boolean isDeleted, String siCode, Pageable pageable);
+
+    Page<StoreEntity> findAllByStoreContainsAndWithdrawalAndSigunguCodeEquals(String storeName, boolean isDeleted, String sidoCode, Pageable pageable);
 
     @Modifying
     @Transactional
