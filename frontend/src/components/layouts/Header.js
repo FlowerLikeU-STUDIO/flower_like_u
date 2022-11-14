@@ -36,7 +36,7 @@ const Header = () => {
     //* scrollY 값에 따라서 setHeaderStatus 값을 바꾸는 함수
     const handleColor = () => {
       setScrollY(window.pageYOffset);
-      console.log(window.pageYOffset);
+      // console.log(window.pageYOffset);
       scrollY > headerHeight ? setHeaderStatus(true) : setHeaderStatus(false);
     };
 
@@ -109,9 +109,9 @@ const Header = () => {
             <Link href="/auth/login">
               <a className={styles.header_anchor}>로그인</a>
             </Link>
-            <Link href="/auth/signup">
+            {/* <Link href="/auth/signup">
               <a className={styles.header_anchor}>회원가입</a>
-            </Link>
+            </Link> */}
           </div>
         )}
       </div>

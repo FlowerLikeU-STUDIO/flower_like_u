@@ -7,6 +7,9 @@ const Custom = () => {
   // 모달창 노출 여부 state
   const [modalOpen, setModalOpen] = useState(false);
 
+  // 모달창 종류 state
+  const [modalId, setModalId] = useState(0);
+
   // 모달창 노출
   const showModal = () => {
     setModalOpen(!modalOpen);
@@ -34,10 +37,27 @@ const Custom = () => {
               내 커스텀 사용하기
             </Button>
           </div>
-          <Button size="custom_large" color="white" onClick={showModal}>
+          <Button
+            size="custom_large"
+            color="mainPrimary"
+            onClick={() => {
+              showModal();
+              setModalId(2);
+            }}
+          >
+            &nbsp; &nbsp;&nbsp;너닮꽃 꽃다발 레시피&nbsp;&nbsp;&nbsp;
+          </Button>
+          <Button
+            size="custom_large"
+            color="white"
+            onClick={() => {
+              showModal();
+              setModalId(3);
+            }}
+          >
             커스텀하는 방법 알아보기
           </Button>
-          {modalOpen && <CustomModal setModalOpen={setModalOpen} id={3} />}
+          {modalOpen && <CustomModal setModalOpen={setModalOpen} id={modalId} />}
         </div>
       </section>
     </main>
