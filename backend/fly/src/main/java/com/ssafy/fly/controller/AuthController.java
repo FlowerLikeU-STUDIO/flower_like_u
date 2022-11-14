@@ -2,6 +2,7 @@ package com.ssafy.fly.controller;
 
 import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.common.util.JwtTokenProvider;
+import com.ssafy.fly.common.util.RandomNicknameMaker;
 import com.ssafy.fly.common.util.ResultMessageSet;
 import com.ssafy.fly.dto.request.LoginReq;
 import com.ssafy.fly.service.AuthService;

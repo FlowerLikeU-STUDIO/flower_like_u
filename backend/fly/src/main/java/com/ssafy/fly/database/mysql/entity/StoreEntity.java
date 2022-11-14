@@ -3,6 +3,7 @@ package com.ssafy.fly.database.mysql.entity;
 import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.database.mysql.enumtype.UserType;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Formula;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -70,8 +71,15 @@ public class StoreEntity extends BaseEntity implements CustomUserDetail {
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDate;
 
-    @Column(name = "withdrawal")
+    @Column(name = "withdrawal", nullable = true)
+    @ColumnDefault("false")
     private boolean withdrawal;
+
+    @Column(name = "latitude", nullable = false)
+    private Double latitude;
+
+    @Column(name = "longitude", nullable = false)
+    private Double longitude;
 
     // store와 review 테이블의 1:N 관계 매핑
     @OneToMany(mappedBy = "storeId")
