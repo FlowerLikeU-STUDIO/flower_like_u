@@ -2,6 +2,7 @@ package com.ssafy.fly.service;
 
 import com.ssafy.fly.common.util.DecimalFormatter;
 import com.ssafy.fly.common.util.FlyMailSender;
+import com.ssafy.fly.common.util.RandomNicknameMaker;
 import com.ssafy.fly.common.util.RandomStringGenerator;
 import com.ssafy.fly.common.util.ValidationChecker;
 import com.ssafy.fly.database.mysql.entity.ConsumerEntity;
@@ -119,7 +120,7 @@ public class UserServiceImpl implements UserService {
                     .userId(registerReq.getUserId())
                     .password(passwordEncoder.encode(registerReq.getPassword()))
                     .name(registerReq.getName())
-                    .nickname("랜덤닉네임")
+                    .nickname(RandomNicknameMaker.getNickname())
                     .email(registerReq.getEmail())
                     .regDate(new Date())
                     .withdrawal(false)
@@ -152,6 +153,8 @@ public class UserServiceImpl implements UserService {
                     .sigunguCode(registerReq.getAddress().getSigunguCode())
                     .regDate(new Date())
                     .withdrawal(false)
+                    .latitude(registerReq.getAddress().getLatitude())
+                    .longitude(registerReq.getAddress().getLongitude())
                     .build();
             storeRepository.save(newMember);
         }
@@ -619,6 +622,8 @@ public class UserServiceImpl implements UserService {
                         .profile(curEntity.getProfile())
                         .rating(decimalFormatter.roundToTwoDecimalPlaces(curEntity.getRating() == null ? 0 : curEntity.getRating()))
                         .address(String.format("%s %s", curEntity.getStreet(), curEntity.getDetailAddr()).trim())
+                        .latitude(curEntity.getLatitude())
+                        .longitude(curEntity.getLongitude())
                         .build();
                 resultList.add(storeInfo);
             }

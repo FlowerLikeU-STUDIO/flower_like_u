@@ -40,6 +40,11 @@ public class FlowerMap {
 
     private static Map<String,FlowerVo[]> map = new HashMap<>();
 
+    public static final String[] idxToColor = {"","F6F4E3","FCE3E3","F6B5C0","F3C46A","F6F4E3","F6B5C0","F15168","F3C46A","F6F4E3","F6B5C0",
+                                                "CFB4EF","BDDFF3","F6F4E3","F6B5C0","F15168","F6F4E3","F15168","F6B5C0","F3C46A","CFB4EF",
+                                                "F3C46A","F6B5C0","F15168","CFB4EF","BDDFF3","F6F4E3","F3C46A","F6B5C0","CFB4EF","F6F4E3",
+                                                "FCE3E3","F3C46A","BDDFF3","F6F4E3","F6B5C0","FCE3E3","F3C46A","F15168","F3C46A","F6F4E3"};
+
     public static Map<String,FlowerVo[]> ofMap() {
         if (map.isEmpty()) {
             map.put("FCE3E3",FCE3E3);

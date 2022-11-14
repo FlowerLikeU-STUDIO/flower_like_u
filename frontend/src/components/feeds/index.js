@@ -84,7 +84,7 @@ const Feed = ({ storeId }) => {
     <>
       {isOpen ? (
         <>
-          <Modal children={targetFeed !== "" ? <FeedReservation feedId={targetFeed} /> : <></>} />
+          <Modal children={targetFeed !== "" ? <FeedReservation feedId={targetFeed} storeId={storeId} /> : <></>} />
         </>
       ) : (
         <></>

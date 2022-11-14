@@ -9,4 +9,5 @@ import org.bson.types.ObjectId;
 public class RoomPutReqDto {
     private String id;
     private String latestMessage;
+    private String uuid;
 }
