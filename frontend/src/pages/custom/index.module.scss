@@ -17,22 +17,23 @@
 
 .button_letter_wrapper {
   @include flexDiv(column);
-  padding-top: 6rem;
+  padding-top: 5rem;
   gap: 1rem;
 }
 
 .button_wrapper {
   @include flexDiv(column, flex-start);
-  width: 80%;
-  gap: 1.5rem;
+  width: 90%;
+  margin-top: 1rem;
+  gap: 1.2rem;
 }
 
 .custom_title {
   @include font(3rem, 700);
-  width: 80%;
+  width: 90%;
 }
 
 .custom_description {
   @include font(1.2rem, 400, $mainParagraph, 150%);
-  width: 80%;
+  width: 90%;
 }
