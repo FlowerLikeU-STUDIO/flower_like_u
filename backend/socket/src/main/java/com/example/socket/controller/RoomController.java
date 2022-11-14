@@ -43,7 +43,7 @@ public class RoomController {
             consumerId = roomPostReqDto.getOpponent();
             storeId = Long.parseLong(jwtUserInfo.getSub());
         }
-        String address = roomService.create(storeId,consumerId);
+        String address = roomService.create(storeId,consumerId).getId();
         return new BaseResponseDto<>("success", new RoomOnlyAddressResDto(address));
     }
 
@@ -69,10 +69,10 @@ public class RoomController {
                     optRoom.get().getId(),
                     optRoom.get().getConsumerId(),
                     optRoom.get().getStoreId(),
-                    user.getImgSrc(),user.getName()));
+                    user.getImgSrc(),user.getName(),optRoom.get().getLatestMessage(),optRoom.get().getStoreNotReadCnt(),optRoom.get().getConsumerNotReadCnt(),optRoom.get().getUuid()));
         } else {
-            String address = roomService.create(storeId,consumerId);
-            return new BaseResponseDto<>("success", new RoomNoLatestMessageResDto(address,consumerId,storeId,user.getImgSrc(),user.getName()));
+            Room room = roomService.create(storeId,consumerId);
+            return new BaseResponseDto<>("success", new RoomNoLatestMessageResDto(room.getId(),consumerId,storeId,user.getImgSrc(),user.getName(), room.getLatestMessage(),room.getStoreNotReadCnt(),room.getConsumerNotReadCnt(),room.getUuid()));
         }
     }
 
@@ -84,7 +84,7 @@ public class RoomController {
             userType = "store";
         else
             userType = "consumer";
-        roomService.updateAdd(roomPutReqDto.getId(),roomPutReqDto.getLatestMessage(),userType);
+        roomService.updateAdd(roomPutReqDto.getId(),roomPutReqDto.getLatestMessage(),userType, roomPutReqDto.getUuid());
         return new OnlyMessageResponseDto("success");
     }
 

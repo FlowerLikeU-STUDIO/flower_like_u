@@ -18,4 +18,8 @@ public class RoomNoLatestMessageResDto {
     private Long storeId;
     private String imgSrc;
     private String name;
+    private String latestMessage;
+    private int storeNotReadCnt;
+    private int consumerNotReadCnt;
+    private String uuid;
 }

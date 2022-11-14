@@ -12,11 +12,11 @@ import java.util.Optional;
 public interface RoomService {
     public List<RoomNoLatestMessageResDto> getList(String userType, Long id);
 
-    public String create(Long storeId, Long consumerId);
+    public Room create(Long storeId, Long consumerId);
 
     public Optional<Room> getOptRoom(Long storeId, Long consumerId);
 
-    public void updateAdd(String id, String latestMessage, String userType);
+    public void updateAdd(String id, String latestMessage, String userType, String uuid);
 
     public void resetCnt(RoomCntPutReqDto roomCntPutReqDto);
 }

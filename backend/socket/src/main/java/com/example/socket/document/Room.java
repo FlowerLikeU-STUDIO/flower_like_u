@@ -20,11 +20,14 @@ public class Room {
     private int storeNotReadCnt;
     private int consumerNotReadCnt;
 
+    private String uuid;
+
     public Room(Long storeId, Long consumerId) {
         this.storeId = storeId;
         this.consumerId = consumerId;
         this.storeNotReadCnt = 0;
         this.consumerNotReadCnt = 0;
         this.latestMessage = "";
+        this.uuid = "";
     }
 }
