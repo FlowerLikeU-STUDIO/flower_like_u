@@ -19,12 +19,12 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
     @Query("SELECT b " +
             "FROM BookEntity as b " +
-            "WHERE b.consumerId = :consumer And b.state = 'WAITED' Or b.state = 'INPROGRESS'")
+            "WHERE b.consumerId = :consumer And (b.state = 'WAITED' Or b.state = 'INPROGRESS')")
     public Page<BookEntity> getConsumerOrderList(ConsumerEntity consumer, Pageable pageable);
 
     @Query("SELECT b " +
             "FROM BookEntity as b " +
-            "WHERE b.consumerId = :consumer And b.state = 'RECIPT' Or b.state = 'DONE'")
+            "WHERE b.consumerId = :consumer And (b.state = 'RECIPT' Or b.state = 'DONE')")
     public Page<BookEntity> getConsumerDoneList(ConsumerEntity consumer, Pageable pageable);
 
     @Query("SELECT b " +
@@ -39,7 +39,7 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
     @Query("SELECT b " +
             "FROM BookEntity as b " +
-            "WHERE b.storeId = :store And b.state = 'RECIPT' Or b.state = 'DONE'")
+            "WHERE b.storeId = :store And (b.state = 'RECIPT' Or b.state = 'DONE')")
     public Page<BookEntity> getStoreDoneList(StoreEntity store, Pageable pageable);
 
     @Modifying
