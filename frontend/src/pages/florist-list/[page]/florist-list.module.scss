@@ -1,11 +1,31 @@
-.layout {
+.florist_background {
   @include defaultLayout;
+  background: linear-gradient(
+      to top,
+      rgba(255, 255, 255, 0.6) 10%,
+      rgba(255, 255, 255, 0.7) 25%,
+      rgba(255, 255, 255, 0.8) 40%,
+      rgba(255, 255, 255, 0.9) 50%,
+      rgba(255, 255, 255, 1) 75%,
+      rgba(255, 255, 255, 1) 100%
+    ),
+    url("/custom/custom_background.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.layout {
   width: 90%;
   margin: 5rem auto;
 }
 
+.custom_background {
+  @include defaultLayout;
+}
+
 .top__div {
-  @include flexDiv(column, start, start);
+  @include flexDiv(column, flex-start, flex-start);
   gap: 1rem;
 }
 
@@ -77,13 +97,9 @@
 // 플로리스트 카드
 .florist__wrapper {
   max-width: 17.5rem;
-  max-height: 20rem;
+  height: 20rem;
   width: 100%;
-  height: 100%;
-  // width: 17.5rem;
-  // height: 20rem;
-  // max-width: 100%;
-  // max-height: 100%;
+  max-height: 100%;
   box-sizing: border-box;
   cursor: pointer;
   border-radius: 1rem;
@@ -108,6 +124,11 @@
 
 .store__name {
   @include font(1.3rem, bold, $mainParagraph);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .store__adderss {
@@ -202,4 +223,35 @@
   right: 20px;
   border: 8px solid;
   border-color: $mainPrimary transparent transparent transparent;
+}
+
+.main__div {
+  @include flexDiv;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn {
+  border: 0.3rem solid $primary400p;
+  border-radius: 50%;
+  padding: 0.3rem;
+  @include font(1rem, bold, $mainButton);
+
+  &:hover {
+    cursor: pointer;
+    color: $primary300;
+    background-color: $primary400p;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    background-color: $primary400p;
+  }
+
+  &:disabled {
+    cursor: revert;
+    transform: revert;
+    color: $white;
+    background-color: $primary400p;
+  }
 }

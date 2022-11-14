@@ -1,14 +1,27 @@
-import Link from "next/link";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/router";
 import useSWR from "swr";
+import Link from "next/link";
 import storage from "../../lib/utils/storage";
 import UserHeaderItem from "./UserHeaderItem";
 import styles from "./Header.module.scss";
 import classNames from "classnames/bind";
-import { useState, useEffect, useRef } from "react";
 
 const Header = () => {
   const cx = classNames.bind(styles);
   const { data: isLogin } = useSWR("logIn", storage);
+
+  const [menuToggle, setMenuToggle] = useState(false);
+
+  // * 플로리스트 목록에서 네브바 클릭시 페이지 새로고침
+  const router = useRouter();
+
+  const clickFlorist = () => {
+    setMenuToggle(false);
+    if (router.query.page) {
+      window.location.reload();
+    }
+  };
 
   //* 헤더 opacity 조정을 위한 State
   const [scrollY, setScrollY] = useState(0);
@@ -40,8 +53,6 @@ const Header = () => {
     }, []);
   }
 
-  const [menuToggle, setMenuToggle] = useState(false);
-
   // 헤더 메뉴 외부 클릭시 끄기 처리
   // 헤더 메뉴 창을 useRef로 취득
   const headerRef = useRef(null);
@@ -66,50 +77,26 @@ const Header = () => {
 
   return (
     <header
-      className={
-        !headerStatus
-          ? cx("header_wrapper", "opacity")
-          : cx("header_wrapper", "nonopacity")
-      }
+      className={!headerStatus ? cx("header_wrapper", "opacity") : cx("header_wrapper", "nonopacity")}
       id="header"
     >
-      <button
-        className={styles.hamburger}
-        onClick={() =>
-          menuToggle ? setMenuToggle(false) : setMenuToggle(true)
-        }
-      >
+      <button className={styles.hamburger} onClick={() => (menuToggle ? setMenuToggle(false) : setMenuToggle(true))}>
         <div className="material-icons">menu</div>
       </button>
-      <div
-        className={
-          !menuToggle
-            ? cx("menu_link_wrapper", "none")
-            : cx("menu_link_wrapper", "flex")
-        }
-        ref={headerRef}
-      >
+      <div className={!menuToggle ? cx("menu_link_wrapper", "none") : cx("menu_link_wrapper", "flex")} ref={headerRef}>
         <Link href="/">
-          <a
-            className={styles.header_title}
-            onClick={() => setMenuToggle(false)}
-          >
+          <a className={styles.header_title} onClick={() => setMenuToggle(false)}>
             너를 닮은 꽃
           </a>
         </Link>
-        <Link href="/florist">
-          <a
-            className={styles.header_anchor}
-            onClick={() => setMenuToggle(false)}
-          >
+        <Link href="/florist-list/1/reg">
+          <a className={styles.header_anchor} onClick={clickFlorist}>
             플로리스트
           </a>
         </Link>
+
         <Link href="/custom">
-          <a
-            className={styles.header_anchor}
-            onClick={() => setMenuToggle(false)}
-          >
+          <a className={styles.header_anchor} onClick={() => setMenuToggle(false)}>
             꽃다발커스텀
           </a>
         </Link>
