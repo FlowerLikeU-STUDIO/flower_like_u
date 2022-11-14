@@ -1,15 +1,15 @@
 import styles from "./save.module.scss";
 import classNames from "classnames/bind";
-import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+// 컨텐츠
 import { packageContent } from "@/components/custom/step/StepContents";
 import CustomPlace from "@/components/custom/step/customplace/CustomPlace";
-import {
-  wrapper,
-  ribbon,
-  flower,
-} from "@/components/custom/step/menu/MenuContents";
+import { wrapper, ribbon, flower } from "@/components/custom/step/menu/MenuContents";
+// 사진 저장, 카카오톡 공유하기
 import { saveAs } from "file-saver";
-import { useDispatch } from "react-redux";
+import useKakao from "@/hooks/useKakao";
+// redux
+import { useSelector, useDispatch } from "react-redux";
 import {
   selectPackage,
   selectSize,
@@ -17,8 +17,10 @@ import {
   selectWrapperColor,
   selectRibbonColor,
 } from "@/store/reducers/custom";
-import { useRouter } from "next/router";
-import useKakao from "@/hooks/useKakao";
+// 주문하기 modal
+import Modal from "@/components/modal";
+import { modalOpen } from "@/store/reducers/modal";
+import CustomOrder from "@/components/modal/contents/CustomOrder";
 
 const CustomSave = () => {
   const cx = classNames.bind(styles);
@@ -98,78 +100,90 @@ const CustomSave = () => {
     });
   }
 
+  //* 주문하기 모달
+  const isOpen = useSelector((state) => state.modal.isOpen);
+  const onHandleOpen = () => {
+    dispatch(modalOpen());
+  };
+
   return (
-    <main className={styles.save_background}>
-      <section className={styles.card__wrapper} id="capture">
-        <div className={styles.flower__img} id="kakao_image">
-          <div
-            className={cx("custom_place", packageKind)}
-            style={{
-              backgroundColor: packageColor,
-            }}
-          >
+    <>
+      {isOpen ? (
+        <>
+          <Modal children={<CustomOrder orderStep={"florist"} />} />
+        </>
+      ) : (
+        <></>
+      )}
+      <main className={styles.save_background}>
+        <section className={styles.card__wrapper} id="capture">
+          <div className={styles.flower__img} id="kakao_image">
             <div
-              className={styles.ribbon_cover}
+              className={cx("custom_place", packageKind)}
               style={{
-                backgroundImage: `url('/custom/ribbon/${ribbonOption}.png')`,
+                backgroundColor: packageColor,
               }}
             >
-              <CustomPlace />
+              <div
+                className={styles.ribbon_cover}
+                style={{
+                  backgroundImage: `url('/custom/ribbon/${ribbonOption}.png')`,
+                }}
+              >
+                <CustomPlace />
+              </div>
             </div>
           </div>
-        </div>
-        <article className={styles.flower_contents_wrapper}>
-          <div className={styles.contents_subwrapper}>
-            <h1 className={styles.card_title}>
-              {bunchList[customOption.size]}송이{" "}
-              {packageContent.title[customOption.package]}
-            </h1>
-            {customOption.package === 0 ? (
-              <p className={styles.sub_title}>
-                {wrapper[customOption.wrapper_color].name} |{" "}
-                {ribbon[ribbonOption].name}
-              </p>
-            ) : customOption.package === 2 ? (
-              <p className={styles.sub_title}>
-                {wrapper[customOption.wrapper_color].name}
-              </p>
-            ) : (
-              <></>
-            )}
-            <p className={styles.line}></p>
-            <div className={styles.description_wrapper}>
-              {Object.entries(flowerInfo).map(([key, value]) => (
-                <>
-                  <span className={styles.description}>
-                    {flower[Number(key)].title}&nbsp;&nbsp;
-                    {value}송이
-                  </span>
-                </>
-              ))}
+          <article className={styles.flower_contents_wrapper}>
+            <div className={styles.contents_subwrapper}>
+              <h1 className={styles.card_title}>
+                {bunchList[customOption.size]}송이 {packageContent.title[customOption.package]}
+              </h1>
+              {customOption.package === 0 ? (
+                <p className={styles.sub_title}>
+                  {wrapper[customOption.wrapper_color].name} | {ribbon[ribbonOption].name}
+                </p>
+              ) : customOption.package === 2 ? (
+                <p className={styles.sub_title}>{wrapper[customOption.wrapper_color].name}</p>
+              ) : (
+                <></>
+              )}
+              <p className={styles.line}></p>
+              <div className={styles.description_wrapper}>
+                {Object.entries(flowerInfo).map(([key, value]) => (
+                  <>
+                    <span className={styles.description}>
+                      {flower[Number(key)].title}&nbsp;&nbsp;
+                      {value}송이
+                    </span>
+                  </>
+                ))}
+              </div>
             </div>
-          </div>
-          <div className={styles.btn__group}>
-            <button className={styles.btn} onClick={() => onDownloadButton()}>
-              사진으로 저장하기
-            </button>
-            {/* <button className={styles.btn}>주문하러 가기</button>
-            <button className={styles.btn}>내 디자인 보러가기</button> */}
-            <button className={styles.btn} onClick={() => onShareKakao()}>
-              카카오톡 공유하기
-            </button>
-            <button
-              className={styles.btn}
-              onClick={() => {
-                router.push("/");
-                timer();
-              }}
-            >
-              초기화하고 메인으로 돌아가기
-            </button>
-          </div>
-        </article>
-      </section>
-    </main>
+            <div className={styles.btn__group}>
+              <button className={styles.btn} onClick={() => onDownloadButton()}>
+                사진으로 저장하기
+              </button>
+              <button className={styles.btn} onClick={() => onShareKakao()}>
+                카카오톡 공유하기
+              </button>
+              <button className={styles.btn} onClick={() => onHandleOpen()}>
+                주문하러 가기
+              </button>
+              <button
+                className={styles.btn}
+                onClick={() => {
+                  router.push("/");
+                  timer();
+                }}
+              >
+                초기화하고 메인으로 돌아가기
+              </button>
+            </div>
+          </article>
+        </section>
+      </main>
+    </>
   );
 };
 

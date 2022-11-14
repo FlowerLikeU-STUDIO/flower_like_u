@@ -29,5 +29,7 @@ public class StoreInfoRes {
     @SuperBuilder
     public static class ForList extends StoreInfoRes {
         private Long storeId;
+        private Double latitude;
+        private Double longitude;
     }
 }
