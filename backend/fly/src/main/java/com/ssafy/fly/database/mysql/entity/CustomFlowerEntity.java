@@ -16,7 +16,6 @@ import java.util.List;
 @Builder
 @ToString(exclude = {"books"})
 public class CustomFlowerEntity extends BaseEntity {
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "consumer_id")
     @JsonIgnore

@@ -1,15 +1,14 @@
 package com.ssafy.fly.service;
 
+import com.ssafy.fly.common.util.DecimalFormatter;
 import com.ssafy.fly.common.util.FlyMailSender;
 import com.ssafy.fly.common.util.RandomStringGenerator;
 import com.ssafy.fly.common.util.ValidationChecker;
 import com.ssafy.fly.database.mysql.entity.ConsumerEntity;
+import com.ssafy.fly.database.mysql.entity.RegionEntity;
 import com.ssafy.fly.database.mysql.entity.StoreEntity;
 import com.ssafy.fly.database.mysql.enumtype.UserType;
-import com.ssafy.fly.database.mysql.repository.ConsumerRepository;
-import com.ssafy.fly.database.mysql.repository.FeedRepository;
-import com.ssafy.fly.database.mysql.repository.ReviewRepository;
-import com.ssafy.fly.database.mysql.repository.StoreRepository;
+import com.ssafy.fly.database.mysql.repository.*;
 import com.ssafy.fly.dto.request.*;
 import com.ssafy.fly.dto.response.MailRes;
 import com.ssafy.fly.dto.response.StoreInfoRes;
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,32 +32,32 @@ public class UserServiceImpl implements UserService {
     private final ConsumerRepository consumerRepository;
     private final StoreRepository storeRepository;
     private final FeedRepository feedRepository;
-    private final ReviewRepository reviewRepository;
+    private final RegionRepository regionRepository;
     private final ValidationChecker validationChecker;
     private final RandomStringGenerator randomStringGenerator;
     private final FlyMailSender flyMailSender;
     private final PasswordEncoder passwordEncoder;
-    private final ReviewService reviewService;
+    private final DecimalFormatter decimalFormatter;
 
     @Autowired
     public UserServiceImpl(ConsumerRepository consumerRepository,
                            StoreRepository storeRepository,
                            FeedRepository feedRepository,
-                           ReviewRepository reviewRepository,
+                           RegionRepository regionRepository,
                            ValidationChecker validationChecker,
                            RandomStringGenerator randomStringGenerator,
                            FlyMailSender flyMailSender,
                            PasswordEncoder passwordEncoder,
-                           ReviewService reviewService) {
+                           DecimalFormatter decimalFormatter) {
         this.consumerRepository = consumerRepository;
         this.storeRepository = storeRepository;
         this.feedRepository = feedRepository;
-        this.reviewRepository = reviewRepository;
+        this.regionRepository = regionRepository;
         this.validationChecker = validationChecker;
         this.randomStringGenerator = randomStringGenerator;
         this.flyMailSender = flyMailSender;
         this.passwordEncoder = passwordEncoder;
-        this.reviewService = reviewService;
+        this.decimalFormatter = decimalFormatter;
     }
 
     // 1. 아이디 중복 검사
@@ -518,8 +518,8 @@ public class UserServiceImpl implements UserService {
                     .license(store.getLicense())
                     .profile(store.getProfile())
                     .holidays(holidays)
-                    .feedNum(0)
-                    .rating(4.35)
+                    .feedNum(store.getTotalFeed())
+                    .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating()))
                     .introduction(store.getBio())
                     .address(UserInfoRes.Address.builder()
                             .zipCode(store.getZipCode())
@@ -559,11 +559,10 @@ public class UserServiceImpl implements UserService {
                 .storeName(store.getStore())
                 .address(String.format("%s %s", store.getStreet(), store.getDetailAddr()))
                 .profile(store.getProfile())
-                .feedNum(feedRepository.findAllByStoreIdAndRemoval(store, false).size())
+                .feedNum(store.getTotalFeed())
                 .introduction(store.getBio())
-                .rating(reviewService.getRating(store.getId()))
+                .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating()))
                 .build();
-        System.out.println(reviewService.getRating(store.getId()));
 
         result.put("result", true);
         result.put("storeInfo", storeInfo);
@@ -573,12 +572,42 @@ public class UserServiceImpl implements UserService {
 
     // 13. 판매자 목록 조회
     @Override
-    public Map<String, Object> findStoreList(int pageNo, int size, String sido, String sigungu, String storeName) {
+    public Map<String, Object> findStoreList(int pageNo, int size, String sort, String sido, String sigungu, String storeName) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
 
-        Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size);
-        Page<StoreEntity> searchList = storeRepository.findAll(pageable);
+        String sortKey = "";
+        if("reg".equals(sort)) sortKey = "id";
+        else if("order".equals(sort)) sortKey = "totalOrder";
+        else if("rating".equals(sort)) sortKey = "rating";
+        else {
+            message = "입력 가능한 정렬 기준이 아닙니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
+        Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size, Sort.by(sortKey).descending());
+
+        Page<StoreEntity> searchList = null;
+        if("전체".equals(sido) && "전체".equals(sigungu)) {
+            searchList = storeRepository.findAllByStoreContainsAndWithdrawal(storeName, false, pageable);
+        } else if(!"전체".equals(sido) && "전체".equals(sigungu)) {
+            String sidoCode = regionRepository.findAllBySido(sido).get(0).getSidoCode();
+            searchList = storeRepository.findAllByStoreContainsAndWithdrawalAndSigunguCodeStartsWith(storeName, false, sidoCode, pageable);
+        } else if(!"전체".equals(sido) && !"전체".equals(sigungu)) {
+            RegionEntity searchRegion = regionRepository.findBySidoAndSigungu(sido, sigungu);
+            String fullCode = searchRegion.getSidoCode() + searchRegion.getSigunguCode();
+            searchList = storeRepository.findAllByStoreContainsAndWithdrawalAndSigunguCodeEquals(storeName, false, fullCode, pageable);
+        } else {
+            message = "잘못된 파라미터 입력입니다.";
+            System.out.println(message);
+            result.put("result", false);
+            result.put("message", message);
+            return result;
+        }
+
         Map<String, Object> info = new HashMap<>();
 
         if(!searchList.isEmpty()) {
@@ -588,7 +617,7 @@ public class UserServiceImpl implements UserService {
                         .storeId(curEntity.getId())
                         .storeName(curEntity.getStore())
                         .profile(curEntity.getProfile())
-                        .rating(reviewService.getRating(curEntity.getId()))
+                        .rating(decimalFormatter.roundToTwoDecimalPlaces(curEntity.getRating() == null ? 0 : curEntity.getRating()))
                         .address(String.format("%s %s", curEntity.getStreet(), curEntity.getDetailAddr()).trim())
                         .build();
                 resultList.add(storeInfo);

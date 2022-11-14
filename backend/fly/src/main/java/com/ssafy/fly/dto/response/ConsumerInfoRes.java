@@ -17,5 +17,4 @@ public class ConsumerInfoRes {
     private String email;
     private String address;
     private String profile;
-    private Date regDate;
 }

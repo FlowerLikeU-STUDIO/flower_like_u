@@ -3,6 +3,7 @@ package com.ssafy.fly.database.mysql.entity;
 import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.database.mysql.enumtype.UserType;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -85,6 +86,18 @@ public class StoreEntity extends BaseEntity implements CustomUserDetail {
     @OneToMany(mappedBy = "storeId")
     @Builder.Default
     private List<FeedEntity> feeds = new ArrayList<>();
+
+    /** 피드 수 */
+    @Formula("(SELECT count(*) FROM feed f WHERE f.store_id = id And f.removal = false)")
+    private int totalFeed;
+
+    /** 별점 평균 */
+    @Formula("(SELECT avg(r.rating) FROM review r WHERE r.store_id = id)")
+    private Double rating;
+
+    /** 누적 주문량 */
+    @Formula("(SELECT count(*) FROM book b WHERE b.store_id = id)")
+    private int totalOrder;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

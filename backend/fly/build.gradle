@@ -9,6 +9,10 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 configurations {
+    /* Log4j2 사용을 위해 logback 종속성 제거 */
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
     compileOnly {
         extendsFrom annotationProcessor
     }
@@ -31,6 +35,7 @@ dependencies {
     /* Spring Validation */ implementation 'org.springframework.boot:spring-boot-starter-validation'
     /* MongoDB           */ implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     /* Spring Security   */ implementation 'org.springframework.boot:spring-boot-starter-security'
+    /* Log4j2            */ implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 
     /* JWT */
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'

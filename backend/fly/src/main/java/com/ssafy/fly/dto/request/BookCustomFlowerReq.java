@@ -10,6 +10,6 @@ import java.util.Date;
 public class BookCustomFlowerReq {
     private Long storeId;
     private String flowerId;
-    private Date dueDate;
     private String request;
+    private Date dueDate;
 }

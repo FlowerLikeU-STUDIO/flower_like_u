@@ -34,7 +34,7 @@ const MenuBox = (props) => {
               key={`${tab[index].name}_${tab[index].color}`}
               img={`/custom/flower/${tab[index].color}_${tab[index].name}.png`}
               title={tab[index].title}
-              language={tab[index].language}
+              description={tab[index].description}
               index={index}
             />
           ))}
