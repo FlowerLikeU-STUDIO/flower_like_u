@@ -523,7 +523,7 @@ public class UserServiceImpl implements UserService {
                     .profile(store.getProfile())
                     .holidays(holidays)
                     .feedNum(store.getTotalFeed())
-                    .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating()))
+                    .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating() == null ? 0 : store.getRating()))
                     .introduction(store.getBio())
                     .address(UserInfoRes.Address.builder()
                             .zipCode(store.getZipCode())
