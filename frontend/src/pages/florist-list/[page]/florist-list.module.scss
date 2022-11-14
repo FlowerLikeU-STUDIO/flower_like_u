@@ -1,0 +1,257 @@
+.florist_background {
+  @include defaultLayout;
+  background: linear-gradient(
+      to top,
+      rgba(255, 255, 255, 0.6) 10%,
+      rgba(255, 255, 255, 0.7) 25%,
+      rgba(255, 255, 255, 0.8) 40%,
+      rgba(255, 255, 255, 0.9) 50%,
+      rgba(255, 255, 255, 1) 75%,
+      rgba(255, 255, 255, 1) 100%
+    ),
+    url("/custom/custom_background.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.layout {
+  width: 90%;
+  margin: 5rem auto;
+}
+
+.custom_background {
+  @include defaultLayout;
+}
+
+.top__div {
+  @include flexDiv(column, flex-start, flex-start);
+  gap: 1rem;
+}
+
+.sort__btn__item {
+  font-size: 1rem;
+  background-color: $white200;
+  color: $gray250;
+  border-radius: 2.5rem;
+  padding: 0.3rem 1rem;
+  &.activate {
+    color: white;
+    background-color: $mainPrimary;
+  }
+  & + & {
+    margin-left: 0.4rem;
+  }
+}
+
+.search__wrapper {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  @include flexDiv(row, flex-start, flex-end);
+}
+
+.search_field {
+  @include flexDiv;
+  width: 20rem;
+  height: 2.3rem;
+}
+
+.search_field .search__input {
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+  padding-left: 20px;
+  padding-right: 38px;
+  color: #6f768d;
+}
+
+.search_field .material_icons {
+  font-size: 22px;
+  font-weight: bold;
+  color: $primary600p;
+  cursor: pointer;
+}
+
+.search__input {
+  background-color: $white100;
+  box-shadow: $shadow400;
+  color: $mainButton;
+  outline: none;
+  padding: 0.5rem;
+  border-radius: 1rem;
+}
+
+.florist_list__wrapper {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr); //fr 비율 1:1:1
+  grid-template-columns: repeat(4, 1fr);
+  margin: auto;
+  gap: 1rem 3rem;
+  @media screen and (max-width: 62.5rem) {
+    grid-template-rows: repeat(4, 1fr); //fr 비율 1:1:1
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+// 플로리스트 카드
+.florist__wrapper {
+  max-width: 17.5rem;
+  height: 20rem;
+  width: 100%;
+  max-height: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  border-radius: 1rem;
+  background-color: $ivory300;
+  color: $gray;
+  font-size: 1rem;
+  @include flexDiv(column, flex-start, flex-start);
+}
+
+.store__img {
+  width: 100%;
+  max-width: 17.5em;
+  height: 100%;
+  min-height: 11.25rem;
+}
+
+.store__info {
+  padding: 1rem;
+  @include flexDiv(column, flex-start, flex-start);
+  gap: 0.5rem;
+}
+
+.store__name {
+  @include font(1.3rem, bold, $mainParagraph);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.store__adderss {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.store__star {
+  @include flexDiv(row, center, flex-start);
+  gap: 0.4rem;
+}
+
+.starrating span {
+  color: $red400;
+}
+
+// ! 시도, 시군구 토글관련
+@mixin scoll {
+  &::-webkit-scrollbar {
+    width: 1rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $mainPrimary;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: $white200;
+  }
+}
+
+.wrapper .search_box .dropdown {
+  width: 150px;
+  color: $gray250;
+  position: relative;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.wrapper .search_box .dropdown .default_option {
+  text-transform: uppercase;
+  padding: 13px 15px;
+  font-size: 14px;
+}
+
+.wrapper .search_box .dropdown ul {
+  position: absolute;
+  background: #fff;
+  width: 10rem;
+  border-radius: 5px;
+  padding: 20px;
+  display: none;
+  box-shadow: 8px 8px 6px -10px $mainPrimary;
+  max-height: 200px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.wrapper .search_box .dropdown ul.active {
+  display: block;
+  @include scoll;
+}
+
+// 시군구 active
+.wrapper .search_box .dropdown ul.sigungu__active {
+  display: block;
+  @include scoll;
+}
+
+.wrapper .search_box .dropdown ul button {
+  color: $gray;
+  padding-bottom: 1rem;
+  width: 100%;
+  text-align: start;
+}
+
+.wrapper .search_box .dropdown ul button:last-child {
+  padding-bottom: 0;
+}
+
+.wrapper .search_box .dropdown ul button:hover {
+  color: $primary600p;
+  font-weight: bold;
+}
+
+.wrapper .search_box .dropdown:before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  border: 8px solid;
+  border-color: $mainPrimary transparent transparent transparent;
+}
+
+.main__div {
+  @include flexDiv;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn {
+  border: 0.3rem solid $primary400p;
+  border-radius: 50%;
+  padding: 0.3rem;
+  @include font(1rem, bold, $mainButton);
+
+  &:hover {
+    cursor: pointer;
+    color: $primary300;
+    background-color: $primary400p;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    background-color: $primary400p;
+  }
+
+  &:disabled {
+    cursor: revert;
+    transform: revert;
+    color: $white;
+    background-color: $primary400p;
+  }
+}
