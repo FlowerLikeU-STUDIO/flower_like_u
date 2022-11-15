@@ -12,4 +12,9 @@ public class RegionVo {
     private String name;
     private Double latitude;
     private Double longitude;
+    private String store;
+    private String bio;
+    private String profile;
+    private Double rating;
+    private String holidays;
 }

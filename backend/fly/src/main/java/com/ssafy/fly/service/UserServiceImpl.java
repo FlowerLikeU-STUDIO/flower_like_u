@@ -5,6 +5,7 @@ import com.ssafy.fly.common.util.FlyMailSender;
 import com.ssafy.fly.common.util.RandomNicknameMaker;
 import com.ssafy.fly.common.util.RandomStringGenerator;
 import com.ssafy.fly.common.util.ValidationChecker;
+import com.ssafy.fly.common.vo.RegionVo;
 import com.ssafy.fly.common.vo.KakaoUserInfo;
 import com.ssafy.fly.database.mysql.entity.ConsumerEntity;
 import com.ssafy.fly.database.mysql.entity.RegionEntity;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service("userService")
 @Transactional
@@ -253,6 +255,7 @@ public class UserServiceImpl implements UserService {
 
     // 6. 회원 정보 수정
     @Override
+    @Transactional
     public Map<String, Object> updateUserInfo(ChangeInfoReq changeInfoReq, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
@@ -284,13 +287,16 @@ public class UserServiceImpl implements UserService {
                 result.put("message", message);
             }
         } else if (store != null) {
-            String storeName = changeInfoReq.getStore();
-            String zipCode = changeInfoReq.getAddress().getZipCode();
-            String street = changeInfoReq.getAddress().getStreet();
-            String details = changeInfoReq.getAddress().getDetails();
-            String sigunguCode = changeInfoReq.getAddress().getSigunguCode();
-            String holidays = changeInfoReq.getHolidays().toString().replaceAll("[\\[\\]\\ ]", "");
-            if (storeRepository.updateStoreInfo(userId, storeName, zipCode, street, details, sigunguCode, holidays) > 0) {
+            store.setStore(changeInfoReq.getStore());
+            store.setZipCode(changeInfoReq.getAddress().getZipCode());
+            store.setStreet(changeInfoReq.getAddress().getStreet());
+            store.setDetailAddr(changeInfoReq.getAddress().getDetails());
+            store.setSigunguCode(changeInfoReq.getAddress().getSigunguCode());
+            store.setHolidays(changeInfoReq.getHolidays().toString().replaceAll("[\\[\\]\\ ]", ""));
+            store.setLatitude(changeInfoReq.getAddress().getLatitude());
+            store.setLongitude(changeInfoReq.getAddress().getLongitude());
+            storeRepository.save(store);
+            if (true) {
                 result.put("result", true);
             } else {
                 message = "서버 문제로 요청 작업을 완료하지 못하였습니다.";
@@ -639,6 +645,19 @@ public class UserServiceImpl implements UserService {
         }
 
         return result;
+    }
+
+    public List<RegionVo> findStoreList(String region1, String region2) {
+        return storeRepository.findAll().stream().filter(store -> {
+            String[] s = store.getStreet().split(" ");
+            if (region1.equals("전체") && region2.equals("전체")) return true;
+            else if (region2.equals("전체")) return s[0].equals(region1);
+            return s[0].equals(region1) && s[1].equals(region2);
+        }).map(store -> {
+            return new RegionVo(store.getStreet(),
+                    store.getName(), store.getLatitude(), store.getLongitude(),
+                    store.getStore(), store.getBio(), store.getProfile(), store.getRating(), store.getHolidays());
+        }).collect(Collectors.toList());
     }
 
     // 14. 카카오 간편 로그인 회원 등록

@@ -23,5 +23,7 @@ public class ChangeInfoReq {
         private String street;
         private String details;
         private String sigunguCode;
+        private Double latitude;
+        private Double longitude;
     }
 }
