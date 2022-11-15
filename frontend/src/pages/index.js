@@ -21,7 +21,7 @@ const Home = () => {
       <MainTop />
       <HowUse />
       <PopularFlorist />
-      <FlowerLikeUs />
+      {/* <FlowerLikeUs /> */}
     </main>
   );
 };
