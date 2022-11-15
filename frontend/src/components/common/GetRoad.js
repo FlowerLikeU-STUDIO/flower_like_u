@@ -10,6 +10,8 @@ const GetRoadAdr = ({ adr, setAdr }) => {
       oncomplete: function (data) {
         var roadAddr = data.roadAddress; // 도로명 주소 변수
         var extraRoadAddr = ""; // 참고 항목 변수
+        // var isLatitude = ""; //위도
+        // var isLogitude = ""; //경도
 
         if (data.bname !== "" && /[동|로|가]$/g.test(data.bname)) {
           extraRoadAddr += data.bname;
@@ -25,8 +27,45 @@ const GetRoadAdr = ({ adr, setAdr }) => {
         document.getElementById("sample4_roadAddress").value = roadAddr;
         // *상세주소 추가로직
         // document.getElementById("sample4_detailAddress").value = extraRoadAddr;
-        // !저장 로직
-        setAdr({ zipCode: data.zonecode, street: roadAddr, details: roadDetail, sigunguCode: data.sigunguCode });
+
+        // *카카오 지도 관련
+        var geocoder = new kakao.maps.services.Geocoder();
+        const addressSearch = (address) => {
+          return new Promise((resolve, reject) => {
+            geocoder.addressSearch(address, function (result, status) {
+              if (status === kakao.maps.services.Status.OK) {
+                resolve(result);
+              } else {
+                reject(status);
+              }
+            });
+          });
+        };
+
+        (async () => {
+          try {
+            const result = await addressSearch(roadAddr);
+            setAdr({
+              zipCode: data.zonecode,
+              street: roadAddr,
+              details: roadDetail,
+              sigunguCode: data.sigunguCode,
+              latitude: result[0].y,
+              longitude: result[0].x,
+            });
+            return;
+          } catch (e) {
+            setAdr({
+              zipCode: data.zonecode,
+              street: roadAddr,
+              details: roadDetail,
+              sigunguCode: data.sigunguCode,
+              latitude: "",
+              longitude: "",
+            });
+            return;
+          }
+        })();
       },
     }).open();
   }
