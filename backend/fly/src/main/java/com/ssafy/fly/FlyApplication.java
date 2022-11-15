@@ -15,6 +15,5 @@ public class FlyApplication {
                 + "classpath:/application-env.yml");
         SpringApplication springApplication = springApplicationBuilder.build();
         springApplication.run(args);
-//        SpringApplication.run(FlyApplication.class, args);
     }
 }

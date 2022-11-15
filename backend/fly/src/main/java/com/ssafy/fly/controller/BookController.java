@@ -36,7 +36,7 @@ public class BookController {
     @PostMapping("/custom")
     public ResponseEntity<Map<String, Object>> bookCustomizedFlower(@RequestBody BookCustomFlowerReq bookCustomFlowerReq,
                                                                     Principal principal) {
-        logger.info("[POST] - /book/custom " + bookCustomFlowerReq);
+        logger.info("[POST] - /book/custom - {}", bookCustomFlowerReq);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = bookService.registCustomFlowerBookInfo(bookCustomFlowerReq, principal);
@@ -55,7 +55,7 @@ public class BookController {
     @PostMapping("/feed")
     public ResponseEntity<Map<String, Object>> bookFeedFlower(@RequestBody BookFeedFlowerReq bookFeedFlower,
                                                               Principal principal) {
-        logger.info("[POST] - /book/feed " + bookFeedFlower);
+        logger.info("[POST] - /book/feed - {}", bookFeedFlower);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = bookService.registFeedFlowerBookInfo(bookFeedFlower, principal);
@@ -74,7 +74,7 @@ public class BookController {
     @PutMapping("/{bookId}")
     public ResponseEntity<Map<String, Object>> updateBookState(@PathVariable Long bookId,
                                                                Principal principal) {
-        logger.info("[PUT] - /book/{bookId} " + bookId);
+        logger.info("[PUT] - /book/{bookId} - {}", bookId);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = bookService.updateBookState(bookId, principal);
@@ -95,7 +95,7 @@ public class BookController {
                                                                @RequestParam(value = "size", required = false, defaultValue = "10") int size,
                                                                @RequestParam(value = "filter", required = false, defaultValue = "") String filter,
                                                                Principal principal) {
-        logger.info("[GET] - /book " + principal.getName());
+        logger.info("[GET] - /book?page={}&size={}&filter={}", pageNo, size, filter);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = bookService.getBookInfoList(pageNo, size, filter, principal);
@@ -115,7 +115,7 @@ public class BookController {
     @GetMapping("/detail/{bookId}")
     public ResponseEntity<Map<String, Object>> getDetailReservationInfo(@PathVariable Long bookId,
                                                                         Principal principal) {
-        logger.info("[GET] - /book/detail/{bookId} " + bookId);
+        logger.info("[GET] - /book/detail/{bookId} - {}", bookId);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = bookService.getDetailBookInfo(bookId, principal);
@@ -135,7 +135,7 @@ public class BookController {
     @DeleteMapping("/{bookId}")
     public ResponseEntity<Map<String, Object>> cancelReservation(@PathVariable Long bookId,
                                                                  Principal principal) {
-        logger.info("[DELETE] - /book/{bookId} " + bookId);
+        logger.info("[DELETE] - /book/{bookId} - {}", bookId);
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = bookService.deleteBookInfo(bookId, principal);
 

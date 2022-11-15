@@ -10,6 +10,8 @@ const GetRoadAdr = ({ adr, setAdr }) => {
       oncomplete: function (data) {
         var roadAddr = data.roadAddress; // 도로명 주소 변수
         var extraRoadAddr = ""; // 참고 항목 변수
+        // var isLatitude = ""; //위도
+        // var isLogitude = ""; //경도
 
         if (data.bname !== "" && /[동|로|가]$/g.test(data.bname)) {
           extraRoadAddr += data.bname;
@@ -25,8 +27,45 @@ const GetRoadAdr = ({ adr, setAdr }) => {
         document.getElementById("sample4_roadAddress").value = roadAddr;
         // *상세주소 추가로직
         // document.getElementById("sample4_detailAddress").value = extraRoadAddr;
-        // !저장 로직
-        setAdr({ zipCode: data.zonecode, street: roadAddr, details: roadDetail, sigunguCode: data.sigunguCode });
+
+        // *카카오 지도 관련
+        var geocoder = new kakao.maps.services.Geocoder();
+        const addressSearch = (address) => {
+          return new Promise((resolve, reject) => {
+            geocoder.addressSearch(address, function (result, status) {
+              if (status === kakao.maps.services.Status.OK) {
+                resolve(result);
+              } else {
+                reject(status);
+              }
+            });
+          });
+        };
+
+        (async () => {
+          try {
+            const result = await addressSearch(roadAddr);
+            setAdr({
+              zipCode: data.zonecode,
+              street: roadAddr,
+              details: roadDetail,
+              sigunguCode: data.sigunguCode,
+              latitude: result[0].y,
+              longitude: result[0].x,
+            });
+            return;
+          } catch (e) {
+            setAdr({
+              zipCode: data.zonecode,
+              street: roadAddr,
+              details: roadDetail,
+              sigunguCode: data.sigunguCode,
+              latitude: "",
+              longitude: "",
+            });
+            return;
+          }
+        })();
       },
     }).open();
   }
@@ -45,7 +84,7 @@ const GetRoadAdr = ({ adr, setAdr }) => {
   return (
     <div className={styles.road__flex}>
       <div className={styles.post__flex}>
-        <input type="text" id="sample4_postcode" placeholder="우편번호" disabled />
+        <input type="text" id="sample4_postcode" placeholder="우편번호" disabled className={styles.postcode} />
         <input type="button" onClick={sample4_execDaumPostcode} className={styles.post__btn} value="우편번호 찾기" />
       </div>
       <textarea id="sample4_roadAddress" className={styles.address__detail} placeholder="도로명주소" disabled />

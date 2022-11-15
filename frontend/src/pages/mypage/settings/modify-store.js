@@ -15,10 +15,17 @@ const ModifyAuth = () => {
   // 상점명
   const [newStoreName, setNewStoreName] = useState("");
   // 주소 입력
-  const [addr, setAddr] = useState({ zipCode: "", street: "", details: "", sigunguCode: "" });
+  const [addr, setAddr] = useState({
+    zipCode: "",
+    street: "",
+    details: "",
+    sigunguCode: "",
+    latitude: "",
+    longitude: "",
+  });
   // 휴무일
   const restDay = ["일", "월", "화", "수", "목", "금", "토"];
-  const [submitRestDay, setSubmitDay] = useState([false, false, false, false, false, false, false]);
+  const [submitHolidays, setHolidays] = useState([false, false, false, false, false, false, false]);
 
   const inputStoreName = (e) => {
     const inputV = e.target.value;
@@ -32,9 +39,9 @@ const ModifyAuth = () => {
 
   const setRestDay = (e) => {
     e.preventDefault();
-    let copyOfSubmitRestDay = [...submitRestDay];
+    let copyOfSubmitRestDay = [...submitHolidays];
     copyOfSubmitRestDay[e.target.value] = !copyOfSubmitRestDay[e.target.value];
-    setSubmitDay(copyOfSubmitRestDay);
+    setHolidays(copyOfSubmitRestDay);
   };
 
   const dataSubmit = async (e) => {
@@ -54,10 +61,8 @@ const ModifyAuth = () => {
       const newData = {
         store: newStoreName,
         address: addr,
-        holidays: submitRestDay,
+        holidays: submitHolidays,
       };
-      console.log(newData);
-
       const res = await client.put("user", newData).then((res) => res.data);
       console.log(res);
       if (res.result === "success") {
@@ -74,10 +79,9 @@ const ModifyAuth = () => {
   };
 
   useEffect(() => {
-    console.log(user);
     if (user) {
       setNewStoreName(newStoreName || user.storeName || "");
-      setSubmitDay(user.holidays || [false, false, false, false, false, false, false]);
+      setHolidays(user.holidays || [false, false, false, false, false, false, false]);
     }
   }, [user]);
 
@@ -115,7 +119,7 @@ const ModifyAuth = () => {
               {restDay.map((rest, idx) => (
                 <button
                   key={idx}
-                  className={!submitRestDay[idx] ? styles.rest__btn : styles.is_rest__btn}
+                  className={!submitHolidays[idx] ? styles.rest__btn : styles.is_rest__btn}
                   disabled={!isModify}
                   onClick={setRestDay}
                   value={idx}

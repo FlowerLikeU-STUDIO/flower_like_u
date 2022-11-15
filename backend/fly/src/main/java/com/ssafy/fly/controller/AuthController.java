@@ -1,9 +1,6 @@
 package com.ssafy.fly.controller;
 
-import com.ssafy.fly.common.util.CustomUserDetail;
-import com.ssafy.fly.common.util.JwtTokenProvider;
-import com.ssafy.fly.common.util.KakaoAuthentication;
-import com.ssafy.fly.common.util.ResultMessageSet;
+import com.ssafy.fly.common.util.*;
 import com.ssafy.fly.common.vo.KakaoUserInfo;
 import com.ssafy.fly.dto.request.LoginReq;
 import com.ssafy.fly.service.AuthService;
@@ -14,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,7 +51,7 @@ public class AuthController {
     /** 1. 이메일 인증(인증 코드 발송) */
     @PostMapping("/email")
     public ResponseEntity<Map<String, Object>> emailAuthentication(@RequestBody Map<String, Object> emailAuthReq) {
-        logger.info("[GET] - /auth/email " + emailAuthReq.get("email"));
+        logger.info("[GET] - /auth/email - {}", emailAuthReq.get("email"));
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = authService.authenticateByEmail(emailAuthReq.get("email").toString());
@@ -74,7 +70,7 @@ public class AuthController {
     /** 2. 일반 로그인 */
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginReq loginReq) {
-        logger.info("[POST] - /auth/login " + loginReq);
+        logger.info("[POST] - /auth/login - {}", loginReq);
 
         Map<String, Object> result = new HashMap<>();
         CustomUserDetail customUserDetail = customUserDetailService.loadUserByUsername(loginReq.getUserId());
@@ -93,10 +89,7 @@ public class AuthController {
     public ResponseEntity<Map<String, Object>> kakaoLogin(@RequestParam(name = "code", required = false) String code,
                                                           @RequestParam(name = "error", required = false) String error,
                                                           @RequestParam(name = "error_description", required = false) String errorDescription) {
-        logger.info("[POST] - /auth/kakao");
-        logger.info("[CODE] " + code);
-        logger.info("[ERROR] " + error);
-        logger.info("[ERR_DESCRIPTION] " + errorDescription);
+        logger.info("[POST] - /auth/kakao - {}", code);
 
         Map<String, Object> response = new HashMap<>();
 
