@@ -36,7 +36,7 @@ public class FeedController {
     @PostMapping()
     public ResponseEntity<Map<String, Object>> createNewFeed(@RequestBody @Valid RegisterFeedReq registerFeedReq,
                                                              Principal principal) {
-        logger.info("[POST] /feed " + registerFeedReq);
+        logger.info("[POST] /feed - {}", registerFeedReq);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = feedService.saveNewFeed(registerFeedReq, principal);
@@ -56,27 +56,36 @@ public class FeedController {
     public ResponseEntity<Map<String, Object>> getFeedList(@PathVariable(required = false) Long storeId,
                                                            @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
                                                            @RequestParam(value = "size", required = false, defaultValue = "9") int size) {
-        logger.info("[GET] /feed/{storeId}  " + storeId);
+        logger.info("[GET] /feed/{storeId} - {}", storeId);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = feedService.getFeedList(storeId, pageNo, size);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
-            response.put("feedInfo", result.get("info"));
+            response.put("content", result.get("content"));
+            response.put("pageable", result.get("pageable"));
+            response.put("sort", result.get("sort"));
+            response.put("first", result.get("first"));
+            response.put("last", result.get("last"));
+            response.put("empty", result.get("empty"));
+            response.put("totalPages", result.get("totalPages"));
+            response.put("pageSize", result.get("pageSize"));
+            response.put("totalElements", result.get("totalElements"));
+            response.put("curPage", result.get("curPage"));
+            response.put("number", result.get("number"));
         } else {
-//            response.put("result", resultMessageSet.FAIL);
-//            response.put("message", result.get("message"));
-            return null;
+            response.put("result", resultMessageSet.FAIL);
+            response.put("message", result.get("message"));
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /** 3. 피드 상세 조회*/
+    /** 3. 피드 상세 조회 */
     @GetMapping("/detail/{feedId}")
     public ResponseEntity<Map<String, Object>> getFeedDetailInfo(@PathVariable Long feedId) {
-        logger.info("[GET] /feed/{feedId} " + feedId);
+        logger.info("[GET] /feed/detail/{feedId} - {}", feedId);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = feedService.getFeedDetailInfo(feedId);
@@ -114,7 +123,7 @@ public class FeedController {
     @DeleteMapping("/{feedId}")
     public ResponseEntity<Map<String, Object>> deleteFeedInfo(@PathVariable Long feedId,
                                                               Principal principal) {
-        logger.info("[DELETE] /feed " + feedId);
+        logger.info("[DELETE] /feed/{feedId} - {}" + feedId);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = feedService.deleteFeedInfo(feedId, principal);

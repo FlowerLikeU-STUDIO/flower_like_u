@@ -99,10 +99,9 @@ public class FeedServiceImpl implements FeedService {
 
         Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size, Sort.by("id").descending());
         Page<FeedEntity> searchList = feedRepository.findByStoreIdAndRemoval(store, false, pageable);
-        Map<String, Object> info = new HashMap<>();
 
+        List<FeedRes.FeedListElement> resultList = new ArrayList<>();
         if(!searchList.isEmpty()) {
-            List<FeedRes.FeedListElement> resultList = new ArrayList<>();
             for(FeedEntity curEntity : searchList) {
                 FeedRes.FeedListElement feedInfo = FeedRes.FeedListElement.builder()
                         .feedId(curEntity.getId())
@@ -113,18 +112,21 @@ public class FeedServiceImpl implements FeedService {
                         .build();
                 resultList.add(feedInfo);
             }
-            info.put("maxPage", searchList.getTotalPages());
-            info.put("list", resultList);
-            result.put("result", true);
-            result.put("info", info);
-            return result;
-        } else {
-            message = "존재하지 않는 페이지입니다.";
-            result.put("result", false);
-            result.put("message", message);
-            result.put("response", null);
-            return result;
         }
+
+        result.put("content", resultList);
+        result.put("pageable", searchList.getPageable());
+        result.put("sort", searchList.getSort());
+        result.put("first", searchList.isFirst());
+        result.put("last", searchList.isLast());
+        result.put("empty", searchList.isEmpty());
+        result.put("totalPages", searchList.getTotalPages());
+        result.put("pageSize", searchList.getPageable().getPageSize());
+        result.put("totalElements", searchList.getTotalElements());
+        result.put("curPage", searchList.getPageable().getPageNumber());
+        result.put("number", searchList.getNumber());
+        result.put("result", true);
+        return result;
     }
 
     // 3. 피드 상세 조회
