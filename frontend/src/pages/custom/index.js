@@ -25,7 +25,9 @@ const Custom = () => {
 
   // 내 커스텀 사용하기
   const useMyDesign = () => {
-    isLogin ? router.push("/mypage/design/") : FailAlert("로그인한 유저만 사용할 수 있어요!");
+    isLogin
+      ? router.push("/mypage/design/")
+      : FailAlert("로그인한 유저만 사용할 수 있어요!");
   };
 
   return (
@@ -42,27 +44,31 @@ const Custom = () => {
         </h1>
         <div className={styles.button_wrapper}>
           <div>
-            <Button size="custom_small" link="/custom/step" color="mainPrimary">
-              커스텀 시작하기
+            <Button
+              size="custom_small"
+              color="mainPrimary"
+              onClick={() => {
+                showModal();
+                setModalId(2);
+              }}
+            >
+              너닮꽃 꽃다발 레시피
             </Button>
             {/* 내 커스텀 리스트가 보이는 모달 창 띄우기 */}
-            <Button size="custom_small" color="mainPrimary" onClick={() => useMyDesign()}>
+            <Button
+              size="custom_small"
+              color="mainPrimary"
+              onClick={() => useMyDesign()}
+            >
               내 커스텀 사용하기
             </Button>
           </div>
-          <Button
-            size="custom_large"
-            color="mainPrimary"
-            onClick={() => {
-              showModal();
-              setModalId(2);
-            }}
-          >
-            &nbsp; &nbsp;&nbsp;너닮꽃 꽃다발 레시피&nbsp;&nbsp;&nbsp;
+          <Button size="custom_large" color="white" link="/custom/step">
+            &nbsp; &nbsp;&nbsp;커스텀 시작하기&nbsp;&nbsp;&nbsp;
           </Button>
           <Button
             size="custom_large"
-            color="white"
+            color="mainPrimary"
             onClick={() => {
               showModal();
               setModalId(3);
@@ -70,7 +76,9 @@ const Custom = () => {
           >
             커스텀하는 방법 알아보기
           </Button>
-          {modalOpen && <CustomModal setModalOpen={setModalOpen} id={modalId} />}
+          {modalOpen && (
+            <CustomModal setModalOpen={setModalOpen} id={modalId} />
+          )}
         </div>
       </section>
     </main>
