@@ -2,7 +2,7 @@ import styles from "./index.module.scss";
 import MainTop from "@/components/main/MainTop";
 import classNames from "classnames/bind";
 import HowUse from "@/components/main/HowUse";
-import PopularFlorist from "@/components/main/PopularFlorist";
+import TopRatingFlorist from "@/components/main/TopRatingFlorist";
 import FlowerLikeUs from "@/components/main/FlowerLikeUs";
 
 const Home = () => {
@@ -20,8 +20,8 @@ const Home = () => {
       <div className={cx("circle", "fifth")} />
       <MainTop />
       <HowUse />
-      <PopularFlorist />
-      <FlowerLikeUs />
+      <TopRatingFlorist />
+      {/* <FlowerLikeUs /> */}
     </main>
   );
 };

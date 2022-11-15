@@ -34,7 +34,13 @@ const FloristList = (props) => {
   const [mxPage, setMxPage] = useState(props.maxPage);
   const [pageIndex, setPageIndex] = useState(1);
   const [numLst, setNumLst] = useState([1]); // [1, 2, 3, 4, 5]
-  const { data, maxPage, mutate } = floristList({ pageIndex, selectSido, selectSigungu, inputText, currentSort });
+  const { data, maxPage, mutate } = floristList({
+    pageIndex,
+    selectSido,
+    selectSigungu,
+    inputText,
+    currentSort,
+  });
 
   const curSortChange = async (e) => {
     setCurrentSort(e);
@@ -222,7 +228,9 @@ const FloristList = (props) => {
               value={inputText || ""}
               onChange={inputChange}
             />
-            <span className={cx("material-icons", "material_icons")}>search</span>
+            <span className={cx("material-icons", "material_icons")}>
+              search
+            </span>
           </div>
         </div>
         {/* bottom */}
@@ -235,7 +243,7 @@ const FloristList = (props) => {
                 onClick={() => router.push(`/florist/${florist.storeId}`)}
               >
                 <div className={styles.store__img}>
-                  <FlowerImg src={florist.profile} />
+                  <FlowerImg src={florist.profile} florist={"florist"} />
                 </div>
                 <div className={styles.store__info}>
                   <p className={styles.store__name}>{florist.storeName}</p>
@@ -299,7 +307,9 @@ export async function getStaticProps({ params }) {
   const page = params.page;
   const sort = params.sort;
 
-  const response = await axios.get(`${BASE_URL}user/stores?page=${page}&size=#&sd=2&sgg=&sn=&sort=${sort}`);
+  const response = await axios.get(
+    `${BASE_URL}user/stores?page=${page}&size=#&sd=2&sgg=&sn=&sort=${sort}`
+  );
 
   if (!response) {
     return { notFound: true };

@@ -11,16 +11,29 @@
 
 .us_wrapper {
   @include flexDiv();
-  gap: 4rem;
+  gap: 1rem;
 }
 
 .us_card {
   @include flexDiv(column);
   height: 12rem;
-  width: 10rem;
-  gap: 1rem;
-  background-color: $white100;
-  border-radius: 1rem;
-  box-shadow: $shadow500;
-  padding: 2rem;
+  width: 12rem;
+  padding: 1rem 2rem 0rem 2rem;
+  border-radius: 0.4rem;
+  box-shadow: $shadow600;
+  transition: all 0.5s linear;
+  &:hover {
+    box-shadow: inset 0px 4px 200px rgba(162, 218, 255, 0.3);
+    transform: scale(1.05);
+    & > span {
+      color: $mainParagraph;
+      transform: translateY(-130%);
+    }
+  }
+}
+
+.title {
+  transition: all 0.5s linear;
+  color: $transparent;
+  text-align: center;
 }
