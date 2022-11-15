@@ -15,7 +15,14 @@ const ModifyAuth = () => {
   // 상점명
   const [newStoreName, setNewStoreName] = useState("");
   // 주소 입력
-  const [addr, setAddr] = useState({ zipCode: "", street: "", details: "", sigunguCode: "" });
+  const [addr, setAddr] = useState({
+    zipCode: "",
+    street: "",
+    details: "",
+    sigunguCode: "",
+    latitude: "",
+    longitude: "",
+  });
   // 휴무일
   const restDay = ["일", "월", "화", "수", "목", "금", "토"];
   const [submitRestDay, setSubmitDay] = useState([false, false, false, false, false, false, false]);
@@ -56,8 +63,6 @@ const ModifyAuth = () => {
         address: addr,
         holidays: submitRestDay,
       };
-      console.log(newData);
-
       const res = await client.put("user", newData).then((res) => res.data);
       console.log(res);
       if (res.result === "success") {
@@ -74,7 +79,6 @@ const ModifyAuth = () => {
   };
 
   useEffect(() => {
-    console.log(user);
     if (user) {
       setNewStoreName(newStoreName || user.storeName || "");
       setSubmitDay(user.holidays || [false, false, false, false, false, false, false]);
