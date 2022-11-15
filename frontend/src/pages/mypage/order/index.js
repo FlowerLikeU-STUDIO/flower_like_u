@@ -39,21 +39,23 @@ const CustomerOrderList = () => {
   return (
     <MyWrapper>
       <MyHeader />
-      <div className={styles.main__div}>
+      <section className={styles.main__div}>
         {data &&
           data.map((res, idx) => (
-            <div key={idx}>
+            <article key={idx}>
               <MyListItem
                 bookId={res.bookId}
                 image={res.image}
                 storeName={res.storeName}
                 request={res.request}
+                bookDate={res.bookDate}
                 dueDate={res.dueDate}
+                type={res.type}
               />
-            </div>
+            </article>
           ))}
         <PageNation setPageIndex={setPageIndex} selectNumLst={selectNumLst} pageIndex={pageIndex} maxPage={maxPage} />
-      </div>
+      </section>
     </MyWrapper>
   );
 };
