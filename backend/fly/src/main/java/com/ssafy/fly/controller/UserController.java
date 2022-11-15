@@ -17,7 +17,6 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 //@CrossOrigin(origins = "*")
 @RestController
@@ -39,7 +38,7 @@ public class UserController {
     /** 1. 아이디 중복 검사 */
     @GetMapping("/chkId/{inputId}")
     public ResponseEntity<Map<String, Object>> checkDuplicatedID(@PathVariable String inputId) {
-        logger.info("[POST] - /user/chkId " + inputId);
+        logger.info("[POST] - /user/chkId - {}", inputId);
 
         Map<String, Object> response = new HashMap<>();
 
@@ -55,7 +54,7 @@ public class UserController {
     /** 2. 회원 정보 등록 */
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> registerMember(@RequestBody RegisterReq registerReq) {
-        logger.info("[POST] - /user/register " + registerReq);
+        logger.info("[POST] - /user/register - {}", registerReq);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.saveMember(registerReq);
@@ -73,7 +72,7 @@ public class UserController {
     /** 3. 아이디 찾기 */
     @PostMapping("/findId")
     public ResponseEntity<Map<String, Object>> findID(@RequestBody FindIdReq findIdReq) {
-        logger.info("[POST] - /user/findId " + findIdReq);
+        logger.info("[POST] - /user/findId - {}", findIdReq);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.findID(findIdReq);
@@ -92,7 +91,7 @@ public class UserController {
     /** 4. 비밀번호 찾기(임시 비밀번호 발급) */
     @PostMapping("/findPassword")
     public ResponseEntity<Map<String, Object>> findPassword(@RequestBody FindPwdReq findPwdReq) {
-        logger.info("[POST] - /user/findPassword " + findPwdReq);
+        logger.info("[POST] - /user/findPassword -{}", findPwdReq);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.issueTemporaryPassword(findPwdReq);
@@ -110,7 +109,7 @@ public class UserController {
     /** 5. 닉네임 중복 검사 */
     @GetMapping("/chkNickname/{nickname}")
     public ResponseEntity<Map<String, Object>> checkDuplicatedNickname(@PathVariable String nickname) {
-        logger.info("[GET] - /user/chkNickname " + nickname);
+        logger.info("[GET] - /user/chkNickname - {}", nickname);
 
         Map<String, Object> response = new HashMap<>();
 
@@ -127,7 +126,7 @@ public class UserController {
     @PutMapping()
     public ResponseEntity<Map<String, Object>> changeInfo(@RequestBody ChangeInfoReq changeInfoReq,
                                                           Principal principal) {
-        logger.info("[PUT] - /user " + changeInfoReq);
+        logger.info("[PUT] - /user - {}", changeInfoReq);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.updateUserInfo(changeInfoReq, principal);
@@ -146,7 +145,7 @@ public class UserController {
     @PutMapping("/introduction")
     public ResponseEntity<Map<String, Object>> changeStoreIntroduction(@RequestBody Map<String, Object> changeIntroductionReq,
                                                                        Principal principal) {
-        logger.info("[PUT] - /user/introduction " + changeIntroductionReq);
+        logger.info("[PUT] - /user/introduction - {}", changeIntroductionReq);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.updateIntroduction(changeIntroductionReq.get("introduction").toString(), principal);
@@ -165,7 +164,7 @@ public class UserController {
     @PutMapping("/changePassword")
     public ResponseEntity<Map<String, Object>> changePassword(@RequestBody ChangePwdReq changePwdReq,
                                                               Principal principal) {
-        logger.info("[PUT] - /user/changePassword " + changePwdReq);
+        logger.info("[PUT] - /user/changePassword - {}", changePwdReq);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.updatePassword(changePwdReq, principal);
@@ -184,7 +183,7 @@ public class UserController {
     @PutMapping("/changeImg")
     public ResponseEntity<Map<String, Object>> updateMemberProfileImage(@RequestBody Map<String, Object> changeProfileReq,
                                                                         Principal principal) {
-        logger.info("[PUT] - /user/changeImg " + changeProfileReq);
+        logger.info("[PUT] - /user/changeImg - {}", changeProfileReq.get("image").toString().substring(0, 30));
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.updateProfileImage(changeProfileReq.get("image").toString(), principal);
@@ -203,7 +202,7 @@ public class UserController {
     @DeleteMapping()
     public ResponseEntity<Map<String, Object>> withdrawFromMember(@RequestBody Map<String, Object> withdrawReq,
                                                                   Principal principal) {
-        logger.info("[DELETE] - /user " + withdrawReq);
+        logger.info("[DELETE] - /user - {}", withdrawReq);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.deleteUser(withdrawReq.get("password").toString(), principal);
@@ -240,7 +239,7 @@ public class UserController {
     /** 12. 꽃가게 프로필 정보 조회 */
     @GetMapping("/store/{storeId}")
     public ResponseEntity<Map<String, Object>> getStoreInfo(@PathVariable Long storeId) {
-        logger.info("[GET] - /user/store " + storeId);
+        logger.info("[GET] - /user/store/{storeId} - {}", storeId);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.findStoreInfo(storeId);
@@ -264,8 +263,7 @@ public class UserController {
                                                             @RequestParam(value = "sd", required = false, defaultValue = "전체") String sido,
                                                             @RequestParam(value = "sgg", required = false, defaultValue = "전체") String sigungu,
                                                             @RequestParam(value = "sn", required = false, defaultValue = "") String storeName) {
-        logger.info("[GET] - /user/store ");
-        logger.info(String.format("[Page=%d] [Size=%d] [Sort=%s] [SI-DO=%s] [SI-GUN-GU=%s] [STORENAME=%s]", pageNo, size, sort, sido, sigungu, storeName));
+        logger.info("[GET] - /user/stores&page={}&size={}&sort={}&sd={}&sgg={}&sn={}", pageNo, size, sort, sido, sigungu, storeName);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.findStoreList(pageNo, size, sort, sido, sigungu, storeName);
@@ -282,9 +280,11 @@ public class UserController {
     }
 
     /* 판매자 목록 조회 지도용 */
-
     @GetMapping("/stores/region")
-    public ResponseEntity<Map<String,Object>> getListMap(@RequestParam(value = "sd", required = false, defaultValue = "전체") String region1, @RequestParam(value = "sgg", required = false, defaultValue = "전체") String region2) {
+    public ResponseEntity<Map<String,Object>> getListMap(@RequestParam(value = "sd", required = false, defaultValue = "전체") String region1,
+                                                         @RequestParam(value = "sgg", required = false, defaultValue = "전체") String region2) {
+        logger.info("[GET] - /user/stores/region&sd={}&sgg={}", region1, region2);
+
         Map<String,Object> response = new HashMap<>();
         List<RegionVo> regionVoList = userService.findStoreList(region1,region2);
         Double avgLongitude;

@@ -38,7 +38,7 @@ public class ReviewController {
     @PostMapping()
     public ResponseEntity<Map<String, Object>> create(@RequestBody ReviewPostReqDto reviewPostReqDto,
                                                       Principal principal) {
-        logger.info("[POST] - /review " + reviewPostReqDto);
+        logger.info("[POST] - /review - {}", reviewPostReqDto);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = reviewService.create(reviewPostReqDto, principal);
@@ -58,7 +58,7 @@ public class ReviewController {
     public ResponseEntity<Map<String, Object>> getList(@PathVariable(required = false) Long storeId,
                                                        @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
                                                        @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
-        logger.info("[GET] - /review/{storeId} " + storeId);
+        logger.info("[GET] - /review/{storeId} - {}", storeId);
 
         Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size, Sort.by("id").descending());
 
@@ -80,7 +80,7 @@ public class ReviewController {
     @GetMapping("/detail/{reviewId}")
     public ResponseEntity<Map<String, Object>> getReviewInfo(@PathVariable Long reviewId,
                                                              Principal principal) {
-        logger.info("[GET] - /review/{reviewId} " + reviewId);
+        logger.info("[GET] - /review/detail/{reviewId} - {}", reviewId);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = reviewService.getReviewInfo(reviewId, principal);
