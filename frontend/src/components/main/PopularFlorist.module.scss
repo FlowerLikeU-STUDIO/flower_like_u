@@ -1,5 +1,6 @@
 .popular_wrapper {
-  @include flexDiv(column);
+  @include flexDiv(column, center, flex-start);
+  min-height: 110vh;
   gap: 3rem;
 }
 
@@ -8,41 +9,57 @@
   padding: 10rem 0rem 3rem 0rem;
 }
 
-.florist_wrapper {
+.florist_card_wrapper {
   @include flexDiv(row);
   gap: 4rem;
 }
 
-.florist_card {
-  @include flexDiv(column, center, space-between);
-  width: 16rem;
-  height: 14rem;
-  background-color: rgba(255, 255, 255, 0.6);
-  border-radius: 0.5rem;
-  padding: 0rem 0rem 1rem 0rem;
-  box-shadow: $shadow500;
-  transition: all 0.5s linear;
-  &:hover {
-    transform: scale(1.02);
-    background-color: rgba(255, 255, 255, 1);
-  }
+.florist__wrapper {
+  max-width: 17.5rem;
+  height: 20rem;
+  width: 100%;
+  max-height: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  border-radius: 1rem;
+  background-color: $ivory300;
+  color: $gray;
+  font-size: 1rem;
+  @include flexDiv(column, flex-start, flex-start);
 }
 
-.card_img {
-  width: 16rem;
-  height: 8rem;
-  background-color: $white;
-  border-radius: 0.5rem 0.5rem 0rem 0rem;
+.store__img {
+  width: 100%;
+  max-width: 17.5em;
+  height: 11.25rem;
+  border-radius: 1rem;
+  @include flexDiv();
 }
 
-.florist_name {
-  @include font(1.1rem, 600);
-  width: 80%;
-  padding-top: 1rem;
+.store__info {
+  padding: 1rem;
+  @include flexDiv(column, flex-start, flex-start);
+  gap: 0.5rem;
 }
 
-.florist_address {
-  @include font(0.9rem, 500, $mainParagraph);
-  width: 80%;
-  padding-bottom: 1rem;
+.store__name {
+  @include font(1.3rem, bold, $mainParagraph);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.store__adderss {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.store__star {
+  @include flexDiv(row, center, flex-start);
+  gap: 0.4rem;
 }
