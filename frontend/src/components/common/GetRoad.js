@@ -84,7 +84,7 @@ const GetRoadAdr = ({ adr, setAdr }) => {
   return (
     <div className={styles.road__flex}>
       <div className={styles.post__flex}>
-        <input type="text" id="sample4_postcode" placeholder="우편번호" disabled />
+        <input type="text" id="sample4_postcode" placeholder="우편번호" disabled className={styles.postcode} />
         <input type="button" onClick={sample4_execDaumPostcode} className={styles.post__btn} value="우편번호 찾기" />
       </div>
       <textarea id="sample4_roadAddress" className={styles.address__detail} placeholder="도로명주소" disabled />
