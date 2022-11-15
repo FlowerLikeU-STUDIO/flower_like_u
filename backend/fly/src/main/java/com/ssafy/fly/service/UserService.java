@@ -1,9 +1,8 @@
 package com.ssafy.fly.service;
 
 import com.ssafy.fly.common.vo.RegionVo;
-import com.ssafy.fly.database.mysql.entity.StoreEntity;
+import com.ssafy.fly.common.vo.KakaoUserInfo;
 import com.ssafy.fly.dto.request.*;
-
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -24,4 +23,5 @@ public interface UserService {
     public Map<String, Object> findStoreList(int pageNo, int size, String sort, String sido, String sigungu, String storeName);
 
     public List<RegionVo> findStoreList(String region1, String region2);
+    public void saveKakaoMember(KakaoUserInfo kakaoUserInfo);
 }

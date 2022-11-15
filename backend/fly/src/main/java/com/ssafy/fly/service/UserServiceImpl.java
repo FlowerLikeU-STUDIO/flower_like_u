@@ -6,6 +6,7 @@ import com.ssafy.fly.common.util.RandomNicknameMaker;
 import com.ssafy.fly.common.util.RandomStringGenerator;
 import com.ssafy.fly.common.util.ValidationChecker;
 import com.ssafy.fly.common.vo.RegionVo;
+import com.ssafy.fly.common.vo.KakaoUserInfo;
 import com.ssafy.fly.database.mysql.entity.ConsumerEntity;
 import com.ssafy.fly.database.mysql.entity.RegionEntity;
 import com.ssafy.fly.database.mysql.entity.StoreEntity;
@@ -528,7 +529,7 @@ public class UserServiceImpl implements UserService {
                     .profile(store.getProfile())
                     .holidays(holidays)
                     .feedNum(store.getTotalFeed())
-                    .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating()))
+                    .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating() == null ? 0 : store.getRating()))
                     .introduction(store.getBio())
                     .address(UserInfoRes.Address.builder()
                             .zipCode(store.getZipCode())
@@ -570,7 +571,7 @@ public class UserServiceImpl implements UserService {
                 .profile(store.getProfile())
                 .feedNum(store.getTotalFeed())
                 .introduction(store.getBio())
-                .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating()))
+                .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating() == null ? 0 : store.getRating()))
                 .build();
 
         result.put("result", true);
@@ -655,7 +656,23 @@ public class UserServiceImpl implements UserService {
         }).map(store -> {
             return new RegionVo(store.getStreet(),
                     store.getName(), store.getLatitude(), store.getLongitude(),
-                    store.getStore(),store.getBio(), store.getProfile(), store.getRating(), store.getHolidays());
+                    store.getStore(), store.getBio(), store.getProfile(), store.getRating(), store.getHolidays());
         }).collect(Collectors.toList());
+    }
+
+    // 14. 카카오 간편 로그인 회원 등록
+    @Override
+    public void saveKakaoMember(KakaoUserInfo kakaoUserInfo) {
+        ConsumerEntity newMember = ConsumerEntity.builder()
+                .type(UserType.CONSUMER)
+                .userId(kakaoUserInfo.getEmail())
+                .password("")
+                .name(kakaoUserInfo.getNickname())
+                .nickname(kakaoUserInfo.getNickname())
+                .email(kakaoUserInfo.getEmail())
+                .regDate(new Date())
+                .withdrawal(false)
+                .build();
+        consumerRepository.save(newMember);
     }
 }

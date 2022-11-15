@@ -37,6 +37,12 @@ public class CustomUserDetailService implements UserDetailsService {
         throw new IllegalArgumentException("해당 사용자가 없습니다");
     }
 
+    public CustomUserDetail loadKakaoUserByEmail(String email) {
+        Optional<ConsumerEntity> optConsumer = consumerRepository.findByUserId(email);
+        if (optConsumer.isPresent()) return optConsumer.get();
+        else return null;
+    }
+
     public UserDetails loadUserByUsername(JwtUserInfo jwtUserInfo) throws UsernameNotFoundException {
         if (jwtUserInfo.getRole().equals("CONSUMER")) {
             Optional<ConsumerEntity> optConsumer = consumerRepository.findById(Long.parseLong(jwtUserInfo.getSub()));

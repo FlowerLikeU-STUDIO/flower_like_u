@@ -2,16 +2,19 @@ package com.ssafy.fly.controller;
 
 import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.common.util.JwtTokenProvider;
-import com.ssafy.fly.common.util.RandomNicknameMaker;
+import com.ssafy.fly.common.util.KakaoAuthentication;
 import com.ssafy.fly.common.util.ResultMessageSet;
+import com.ssafy.fly.common.vo.KakaoUserInfo;
 import com.ssafy.fly.dto.request.LoginReq;
 import com.ssafy.fly.service.AuthService;
 import com.ssafy.fly.service.CustomUserDetailService;
+import com.ssafy.fly.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,18 +32,24 @@ public class AuthController {
     private final CustomUserDetailService customUserDetailService;
     private final PasswordEncoder passwordEncoder;
     private final ResultMessageSet resultMessageSet;
+    private final KakaoAuthentication kakaoAuthentication;
+    private final UserService userService;
 
     @Autowired
     public AuthController(AuthService authService,
                           JwtTokenProvider jwtTokenProvider,
                           CustomUserDetailService customUserDetailService,
                           PasswordEncoder passwordEncoder,
-                          ResultMessageSet resultMessageSet) {
+                          ResultMessageSet resultMessageSet,
+                          KakaoAuthentication kakaoAuthentication,
+                          UserService userService) {
         this.authService = authService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.customUserDetailService = customUserDetailService;
         this.passwordEncoder = passwordEncoder;
         this.resultMessageSet = resultMessageSet;
+        this.kakaoAuthentication = kakaoAuthentication;
+        this.userService = userService;
     }
 
     /** 1. 이메일 인증(인증 코드 발송) */
@@ -81,12 +90,40 @@ public class AuthController {
     }
 
     @GetMapping("/kakao")
-    public ResponseEntity<Map<String, Object>> kakaoLogin(@RequestParam String code) {
+    public ResponseEntity<Map<String, Object>> kakaoLogin(@RequestParam(name = "code", required = false) String code,
+                                                          @RequestParam(name = "error", required = false) String error,
+                                                          @RequestParam(name = "error_description", required = false) String errorDescription) {
         logger.info("[POST] - /auth/kakao");
         logger.info("[CODE] " + code);
+        logger.info("[ERROR] " + error);
+        logger.info("[ERR_DESCRIPTION] " + errorDescription);
 
         Map<String, Object> response = new HashMap<>();
+
+        String accessToken = kakaoAuthentication.getAccessToken(code);
+        if(accessToken == null) {
+            response.put("result", resultMessageSet.FAIL);
+            response.put("message", "카카오 로그인 인증에 실패하였습니다.");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        KakaoUserInfo userInfo = kakaoAuthentication.getUserInfo(accessToken);
+        if(userInfo == null) {
+            response.put("result", resultMessageSet.FAIL);
+            response.put("message", "카카오 로그인 인증에 실패하였습니다.");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        CustomUserDetail customUserDetail = customUserDetailService.loadKakaoUserByEmail(userInfo.getEmail());
+        if(customUserDetail == null) { // 회원 등록
+            userService.saveKakaoMember(userInfo);
+            customUserDetail = customUserDetailService.loadKakaoUserByEmail(userInfo.getEmail());
+        }
+
+        List<String> lst = new ArrayList<>();
+        lst.add(customUserDetail.getUserType());
         response.put("result", resultMessageSet.SUCCESS);
+        response.put("accessToken", jwtTokenProvider.createToken(customUserDetail.getUserPk(), lst));
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

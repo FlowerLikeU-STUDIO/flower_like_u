@@ -5,6 +5,14 @@ const useRes = () => {
   const resList = ({ pageIndex }) => {
     const { data, error, mutate } = useSWR(pageIndex ? `book/?page=${pageIndex}&size=4&filter=order` : null, Fetcher);
     const loading = !data && !error;
+    console.log(data);
+
+    if (data && data.result === "fail") {
+      return {
+        data: null,
+        maxPage: 1,
+      };
+    }
 
     return {
       loading,
@@ -17,6 +25,14 @@ const useRes = () => {
   const orderList = ({ pageIndex }) => {
     const { data, error, mutate } = useSWR(pageIndex ? `book/?page=${pageIndex}&size=4&filter=done` : null, Fetcher);
     const loading = !data && !error;
+
+    if (data && data.result === "fail") {
+      return {
+        data: null,
+        maxPage: 1,
+      };
+    }
+
     return {
       loading,
       data: data ? data.doneInfo.list : data,
@@ -25,10 +41,18 @@ const useRes = () => {
     };
   };
 
-  const resDetail = ({ userId }) => {
-    const { data, error, mutate } = useSWR(userId ? `book/detail/${userId}` : null, Fetcher);
+  const resDetail = ({ bookId }) => {
+    const { data, error, mutate } = useSWR(bookId ? `book/detail/${bookId}` : null, Fetcher);
     const loading = !data && !error;
+    if (data) {
+      console.log(data);
+    }
 
+    if (data && data.result === "fail") {
+      return {
+        basics: null,
+      };
+    }
     return {
       loading,
       basics: data ? data.bookInfo.basics : data,
