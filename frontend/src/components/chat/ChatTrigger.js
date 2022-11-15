@@ -1,4 +1,6 @@
+import { toggleDisplay } from "@/store/reducers/chat";
 import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 const ChatTriggerWrapper = styled.div`
@@ -32,11 +34,32 @@ const ChatTriggerWrapper = styled.div`
   }
 `;
 
+const NotReadMark = styled.div`
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 15px;
+  height: 15px;
+  border-radius: 100%;
+  background-color: #ffa7a5;
+  border: 1px solid transparent;
+`;
 const ChatButton = styled.button``;
-const ChatTrigger = ({ onClick, hidden }) => {
+
+const ChatTrigger = () => {
+  const { display } = useSelector((state) => state.chat);
+  const { totalNotReadCount } = useSelector((state) => state.chat);
+  const dispatch = useDispatch();
+  const onHandleDisplay = (value) => {
+    dispatch(toggleDisplay(value));
+  };
   return (
-    <ChatTriggerWrapper hidden={hidden}>
-      <ChatButton onClick={() => onClick(true)} aria-label={"너닮꽃 너닮톡"}>
+    <ChatTriggerWrapper hidden={display}>
+      {totalNotReadCount !== 0 ? <NotReadMark /> : <></>}
+      <ChatButton
+        onClick={() => onHandleDisplay(true)}
+        aria-label={"너닮꽃 너닮톡"}
+      >
         <Image
           src={"/chatting.png"}
           width={"38px"}
