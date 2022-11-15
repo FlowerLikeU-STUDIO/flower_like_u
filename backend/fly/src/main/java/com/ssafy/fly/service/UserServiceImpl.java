@@ -650,8 +650,8 @@ public class UserServiceImpl implements UserService {
     public List<RegionVo> findStoreList(String region1, String region2) {
         return storeRepository.findAll().stream().filter(store -> {
             String[] s = store.getStreet().split(" ");
-            if (region1.equals("전체") && region2.equals("전체")) return true;
-            else if (region2.equals("전체")) return s[0].equals(region1);
+            if ("전체".equals(region1) && "전체".equals(region2)) return true;
+            else if ("전체".equals(region2)) return s[0].equals(region1);
             return s[0].equals(region1) && s[1].equals(region2);
         }).map(store -> {
             return new RegionVo(store.getStreet(),

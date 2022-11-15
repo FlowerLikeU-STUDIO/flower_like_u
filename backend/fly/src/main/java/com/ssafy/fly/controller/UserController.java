@@ -1,5 +1,6 @@
 package com.ssafy.fly.controller;
 
+import com.ssafy.fly.common.util.RegionMap;
 import com.ssafy.fly.common.util.ResultMessageSet;
 import com.ssafy.fly.common.vo.RegionVo;
 import com.ssafy.fly.dto.request.*;
@@ -286,8 +287,22 @@ public class UserController {
     public ResponseEntity<Map<String,Object>> getListMap(@RequestParam(value = "sd", required = false, defaultValue = "전체") String region1, @RequestParam(value = "sgg", required = false, defaultValue = "전체") String region2) {
         Map<String,Object> response = new HashMap<>();
         List<RegionVo> regionVoList = userService.findStoreList(region1,region2);
-        Double avgLongitude = regionVoList.stream().mapToDouble(RegionVo::getLongitude).sum() / regionVoList.size();
-        Double avgLatitude = regionVoList.stream().mapToDouble(RegionVo::getLatitude).sum() / regionVoList.size();
+        Double avgLongitude;
+        Double avgLatitude;
+        if (regionVoList.size() == 0) {
+            if ("전체".equals(region2)) {
+                for (Object o :RegionMap.ofMap().keySet()) System.out.println(o.toString());
+                System.out.println(RegionMap.ofMap().get(region1).toString());
+                avgLatitude = (Double)RegionMap.ofMap().get(region1)[0];
+                avgLongitude = (Double)RegionMap.ofMap().get(region1)[1];
+            } else {
+                avgLatitude = (Double)RegionMap.ofMap().get(region1 + " " + region2)[0];
+                avgLongitude = (Double)RegionMap.ofMap().get(region1 + " " + region2)[1];
+            }
+        } else {
+            avgLongitude = regionVoList.stream().mapToDouble(RegionVo::getLongitude).sum() / regionVoList.size();
+            avgLatitude = regionVoList.stream().mapToDouble(RegionVo::getLatitude).sum() / regionVoList.size();
+        }
         RegionWrprRes<RegionVo> regionWrprRes = new RegionWrprRes<>();
         regionWrprRes.setResponseList(regionVoList);
         regionWrprRes.setAvgLongitude(avgLongitude);
