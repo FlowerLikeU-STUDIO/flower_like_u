@@ -27,7 +27,6 @@ const CustomSave = () => {
   const dispatch = useDispatch();
   const customOption = useSelector((state) => state.custom);
   const router = useRouter();
-  const { kakaoShare } = useKakao();
 
   //* 유저가 선택한 패키지 종류
   const packageKind = packageContent.engtitle[customOption.package];
@@ -46,7 +45,7 @@ const CustomSave = () => {
   //* 송이 종류
   const bunchList = ["1", "3", "5", "7", "9"];
 
-  //* 사진 저장 버튼
+  //* 사진 저장
   const onDownloadButton = () => {
     const capture = document.querySelector("#capture");
     html2canvas(capture).then((canvas) => {
@@ -55,6 +54,7 @@ const CustomSave = () => {
   };
 
   //* 카카오톡 공유하기
+  const { kakaoShare } = useKakao();
   function dataURLtoFile(dataurl, filename) {
     var arr = dataurl.split(","),
       mime = arr[0].match(/:(.*?);/)[1],
