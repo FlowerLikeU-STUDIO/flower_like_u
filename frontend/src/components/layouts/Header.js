@@ -89,15 +89,19 @@ const Header = () => {
             너를 닮은 꽃
           </a>
         </Link>
+        <Link href="/custom">
+          <a className={styles.header_anchor} onClick={() => setMenuToggle(false)}>
+            꽃다발커스텀
+          </a>
+        </Link>
         <Link href="/florist-list/1/reg">
           <a className={styles.header_anchor} onClick={clickFlorist}>
             플로리스트
           </a>
         </Link>
-
-        <Link href="/custom">
+        <Link href="/florist-list/map">
           <a className={styles.header_anchor} onClick={() => setMenuToggle(false)}>
-            꽃다발커스텀
+            내 주변 꽃가게
           </a>
         </Link>
       </div>
