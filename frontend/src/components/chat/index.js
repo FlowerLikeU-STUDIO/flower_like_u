@@ -49,9 +49,13 @@ const Chat = () => {
     };
     // STOMP 서버에 연결
     chatClient.current = new StompJs.Client({
-      brokerURL: "wss://k7b2091.p.ssafy.io:8080/socket/ws/websocket",
+      brokerURL: "wss://k7b2091.p.ssafy.io/socket/ws/websocket",
+      // brokerURL: "wss://flowerlikeu.com/socket/ws/websocket",
+      // brokerURL: "wss://flowerlikeu.com/socket/ws/websocket",
+
       reconnectDelay: 5000,
       onConnect: () => {
+        console.log("연결됐어~");
         testFunc();
       },
     });
