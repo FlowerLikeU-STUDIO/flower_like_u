@@ -65,8 +65,9 @@ public class FeedController {
             response.put("result", resultMessageSet.SUCCESS);
             response.put("feedInfo", result.get("info"));
         } else {
-            response.put("result", resultMessageSet.FAIL);
-            response.put("message", result.get("message"));
+//            response.put("result", resultMessageSet.FAIL);
+//            response.put("message", result.get("message"));
+            return null;
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);

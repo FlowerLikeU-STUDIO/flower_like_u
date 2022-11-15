@@ -122,6 +122,7 @@ public class FeedServiceImpl implements FeedService {
             message = "존재하지 않는 페이지입니다.";
             result.put("result", false);
             result.put("message", message);
+            result.put("response", null);
             return result;
         }
     }
