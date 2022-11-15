@@ -5,6 +5,8 @@ import com.ssafy.fly.common.util.FlyMailSender;
 import com.ssafy.fly.common.util.RandomNicknameMaker;
 import com.ssafy.fly.common.util.RandomStringGenerator;
 import com.ssafy.fly.common.util.ValidationChecker;
+import com.ssafy.fly.common.vo.RegionVo;
+import com.ssafy.fly.common.vo.KakaoUserInfo;
 import com.ssafy.fly.database.mysql.entity.ConsumerEntity;
 import com.ssafy.fly.database.mysql.entity.RegionEntity;
 import com.ssafy.fly.database.mysql.entity.StoreEntity;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service("userService")
 @Transactional
@@ -252,6 +255,7 @@ public class UserServiceImpl implements UserService {
 
     // 6. 회원 정보 수정
     @Override
+    @Transactional
     public Map<String, Object> updateUserInfo(ChangeInfoReq changeInfoReq, Principal principal) {
         Map<String, Object> result = new HashMap<>();
         String message = "";
@@ -283,13 +287,16 @@ public class UserServiceImpl implements UserService {
                 result.put("message", message);
             }
         } else if (store != null) {
-            String storeName = changeInfoReq.getStore();
-            String zipCode = changeInfoReq.getAddress().getZipCode();
-            String street = changeInfoReq.getAddress().getStreet();
-            String details = changeInfoReq.getAddress().getDetails();
-            String sigunguCode = changeInfoReq.getAddress().getSigunguCode();
-            String holidays = changeInfoReq.getHolidays().toString().replaceAll("[\\[\\]\\ ]", "");
-            if (storeRepository.updateStoreInfo(userId, storeName, zipCode, street, details, sigunguCode, holidays) > 0) {
+            store.setStore(changeInfoReq.getStore());
+            store.setZipCode(changeInfoReq.getAddress().getZipCode());
+            store.setStreet(changeInfoReq.getAddress().getStreet());
+            store.setDetailAddr(changeInfoReq.getAddress().getDetails());
+            store.setSigunguCode(changeInfoReq.getAddress().getSigunguCode());
+            store.setHolidays(changeInfoReq.getHolidays().toString().replaceAll("[\\[\\]\\ ]", ""));
+            store.setLatitude(changeInfoReq.getAddress().getLatitude());
+            store.setLongitude(changeInfoReq.getAddress().getLongitude());
+            storeRepository.save(store);
+            if (true) {
                 result.put("result", true);
             } else {
                 message = "서버 문제로 요청 작업을 완료하지 못하였습니다.";
@@ -522,7 +529,7 @@ public class UserServiceImpl implements UserService {
                     .profile(store.getProfile())
                     .holidays(holidays)
                     .feedNum(store.getTotalFeed())
-                    .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating()))
+                    .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating() == null ? 0 : store.getRating()))
                     .introduction(store.getBio())
                     .address(UserInfoRes.Address.builder()
                             .zipCode(store.getZipCode())
@@ -564,7 +571,7 @@ public class UserServiceImpl implements UserService {
                 .profile(store.getProfile())
                 .feedNum(store.getTotalFeed())
                 .introduction(store.getBio())
-                .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating()))
+                .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating() == null ? 0 : store.getRating()))
                 .build();
 
         result.put("result", true);
@@ -638,5 +645,40 @@ public class UserServiceImpl implements UserService {
         }
 
         return result;
+    }
+
+    public List<RegionVo> findStoreList(String region1, String region2) {
+        return storeRepository.findAll().stream().filter(store -> {
+            String[] s = store.getStreet().split(" ");
+            if ("전체".equals(region1) && "전체".equals(region2)) return true;
+            else if ("전체".equals(region2)) return s[0].equals(region1);
+            return s[0].equals(region1) && s[1].equals(region2);
+        }).map(store -> {
+            String[] holidayTmp = store.getHolidays().split(",");
+            List<Boolean> holidays = new ArrayList<>();
+            for (String s : holidayTmp) {
+                if ("false".equals(s)) holidays.add(false);
+                else holidays.add(true);
+            }
+            return new RegionVo(store.getStreet(),
+                    store.getName(), store.getLatitude(), store.getLongitude(),
+                    store.getStore(), store.getBio(), store.getProfile(), store.getRating(), holidays);
+        }).collect(Collectors.toList());
+    }
+
+    // 14. 카카오 간편 로그인 회원 등록
+    @Override
+    public void saveKakaoMember(KakaoUserInfo kakaoUserInfo) {
+        ConsumerEntity newMember = ConsumerEntity.builder()
+                .type(UserType.CONSUMER)
+                .userId(kakaoUserInfo.getEmail())
+                .password("")
+                .name(kakaoUserInfo.getNickname())
+                .nickname(kakaoUserInfo.getNickname())
+                .email(kakaoUserInfo.getEmail())
+                .regDate(new Date())
+                .withdrawal(false)
+                .build();
+        consumerRepository.save(newMember);
     }
 }

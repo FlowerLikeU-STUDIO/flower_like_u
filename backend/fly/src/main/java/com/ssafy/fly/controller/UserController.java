@@ -1,7 +1,10 @@
 package com.ssafy.fly.controller;
 
+import com.ssafy.fly.common.util.RegionMap;
 import com.ssafy.fly.common.util.ResultMessageSet;
+import com.ssafy.fly.common.vo.RegionVo;
 import com.ssafy.fly.dto.request.*;
+import com.ssafy.fly.dto.response.RegionWrprRes;
 import com.ssafy.fly.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -279,22 +282,33 @@ public class UserController {
     }
 
     /* 판매자 목록 조회 지도용 */
-    /*
+
     @GetMapping("/stores/region")
-    public ResponseEntity<RegionWrprRes<RegionVo>> getListR(@RequestParam("sd") String region1, @RequestParam("sgg") String region2) {
-        List<RegionVo> RegionVoList = daejeonRepository.findAll().stream().filter(daejeon -> {
-            String[] s = daejeon.getAddress().split(" ");
-            return s[0].equals(region1) && s[1].equals(region2);
-        }).map((daejeon) -> {
-            return new RegionVo(daejeon.getAddress(),
-                    daejeon.getName(), daejeon.getLatitude(), daejeon.getLongitude());
-        }).collect(Collectors.toList());
-        Double avgLongitude = RegionVoList.stream().mapToDouble(RegionVo::getLongitude).sum() / RegionVoList.size();
-        Double avgLatitude = RegionVoList.stream().mapToDouble(RegionVo::getLatitude).sum() / RegionVoList.size();
-        WrprDto<RegionVo> wrprDto = new WrprDto<>();
-        wrprDto.setResponseList(RegionVoList);
-        wrprDto.setAvgLongitude(avgLongitude);
-        wrprDto.setAvgLatitude(avgLatitude);
-        return wrprDto;
-    }*/
+    public ResponseEntity<Map<String,Object>> getListMap(@RequestParam(value = "sd", required = false, defaultValue = "전체") String region1, @RequestParam(value = "sgg", required = false, defaultValue = "전체") String region2) {
+        Map<String,Object> response = new HashMap<>();
+        List<RegionVo> regionVoList = userService.findStoreList(region1,region2);
+        double avgLongitude;
+        double avgLatitude;
+        /*if (regionVoList.size() == 0) {
+            if ("전체".equals(region2)) {
+                //for (Object o :RegionMap.ofMap().keySet()) System.out.println(o.toString());
+                System.out.println("wow");
+                System.out.println(RegionMap.ofMap().get(region1).toString());
+                System.out.println("wow");
+                avgLatitude = (Double)RegionMap.ofMap().get(region1)[0];
+                avgLongitude = (Double)RegionMap.ofMap().get(region1)[1];
+            } else {
+                avgLatitude = (Double)RegionMap.ofMap().get(region1 + " " + region2)[0];
+                avgLongitude = (Double)RegionMap.ofMap().get(region1 + " " + region2)[1];
+            }*/
+        avgLongitude = regionVoList.stream().mapToDouble(RegionVo::getLongitude).sum() / regionVoList.size();
+        avgLatitude = regionVoList.stream().mapToDouble(RegionVo::getLatitude).sum() / regionVoList.size();
+        RegionWrprRes<RegionVo> regionWrprRes = new RegionWrprRes<>();
+        regionWrprRes.setResponseList(regionVoList);
+        regionWrprRes.setAvgLongitude(avgLongitude);
+        regionWrprRes.setAvgLatitude(avgLatitude);
+        response.put("result",resultMessageSet.SUCCESS);
+        response.put("regionList", regionWrprRes);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

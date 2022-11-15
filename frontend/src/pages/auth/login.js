@@ -23,10 +23,8 @@ const LoginContent = styled.div`
   min-width: 720px;
   min-height: 520px;
   height: 520px;
-  box-shadow: 0px 100px 80px rgba(0, 0, 0, 0.07),
-    0px 41.78px 33.4px rgba(0, 0, 0, 0.053),
-    0px 22.34px 17.87px rgba(0, 0, 0, 0.0417),
-    0px 12.52px 10.02px rgba(0, 0, 0, 0.035),
+  box-shadow: 0px 100px 80px rgba(0, 0, 0, 0.07), 0px 41.78px 33.4px rgba(0, 0, 0, 0.053),
+    0px 22.34px 17.87px rgba(0, 0, 0, 0.0417), 0px 12.52px 10.02px rgba(0, 0, 0, 0.035),
     0px 6.65px 5.32px rgba(0, 0, 0, 0.03), 0px 2.21px 2.77px rgba(0, 0, 0, 0.03);
   @media screen and (max-width: 556px) {
     flex-direction: column;
@@ -117,20 +115,9 @@ const Login = () => {
           <Image src="/auth/happyBtte.jpeg" width={180} height={230} />
         </LoginContentLeft>
         <LoginContentRight>
-          <Input
-            text={"아이디"}
-            value={loginInfo.userId}
-            onChange={onChange}
-            name={"userId"}
-          />
+          <Input text={"아이디"} value={loginInfo.userId} onChange={onChange} name={"userId"} />
 
-          <Input
-            text={"비밀번호"}
-            value={loginInfo.password}
-            onChange={onChange}
-            name={"password"}
-            type={"password"}
-          />
+          <Input text={"비밀번호"} value={loginInfo.password} onChange={onChange} name={"password"} type={"password"} />
 
           <LoginButton
             onClick={onHandleSubmit}
@@ -149,7 +136,7 @@ const Login = () => {
               height={40}
             />
           </SocialButton> */}
-          <div>계정이 없으신가요?</div>
+          {/* <div>계정이 없으신가요?</div> */}
         </LoginContentRight>
       </LoginContent>
     </LoginWrapper>

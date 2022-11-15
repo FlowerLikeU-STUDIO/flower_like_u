@@ -1,38 +1,47 @@
 .main__div {
-  display: flex;
-  flex-direction: row;
+  @include flexDiv(row, center, space-between);
+  padding: 1.5rem 2rem 1.5rem 2rem;
   gap: 1rem;
-  max-width: 62.5rem;
+  width: 64rem;
+  height: 12.5rem;
   margin: 1rem auto;
   @include respond-to("tablet-portrait-only") {
     flex-direction: column;
   }
-  cursor: pointer;
-}
-
-.line {
-  width: 100%;
-  border-bottom: solid 0.125rem $white350;
-  margin: auto;
+  border-bottom: 0.1rem solid $white300;
+  box-shadow: $shadow400;
+  border-radius: 0.1rem;
+  @media screen and (max-width: 1080px) {
+    width: 46rem;
+  }
+  @media screen and (max-width: 768px) {
+    @include flexDiv(column);
+    width: 26rem;
+  }
 }
 
 .sub__div {
   display: flex;
   flex-direction: column;
   max-width: 50rem;
-  width: 100%;
+  width: 68%;
   gap: 0.5rem;
+  padding: 2rem 1rem 2rem 1rem;
 }
 
 .title__p {
-  @include font(1.5rem, 500, $mainParagraph);
+  @include font(1.5rem, 500, $mainParagraph, 1.8rem);
   @include respond-to("tablet-portrait-only") {
     @include font(1.25rem, 500, $mainParagraph);
   }
 }
 
 .sub__p {
-  @include font(1.125rem, normal, $mainParagraph, 1.5rem);
+  @include font(1.2rem, normal, $mainParagraph, 1.5rem);
+}
+
+.card_description {
+  @include font(1rem, normal, $gray300, 1.5rem);
 }
 
 .res__cancel {
@@ -41,4 +50,39 @@
   max-width: fit-content;
   background-color: $primary900;
   @include font(1rem, 500, $white100);
+}
+
+@mixin button-color($color, $font_color: $mainButton) {
+  background: $color;
+  color: $font_color;
+  &:hover {
+    background: lighten($color, 10%);
+  }
+  &:active {
+    background: darken($color, 10%);
+  }
+}
+
+.button_wrapper {
+  @include flexDiv(column, flex-end, flex-end);
+  height: 95%;
+}
+
+.button {
+  @include font(1rem, 500, $gray250);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  font-size: 1rem;
+  background: $white;
+  border: 0.01rem solid $white350;
+  &:hover {
+    background: lighten($red400, 5%);
+    color: $white100;
+  }
+  &:active {
+    background: darken($red400, 10%);
+  }
 }
