@@ -49,7 +49,9 @@ const CustomerReservation = () => {
                 image={res.image}
                 storeName={res.storeName}
                 request={res.request}
+                bookDate={res.bookDate}
                 dueDate={res.dueDate}
+                type={res.type}
               />
             </div>
           ))}

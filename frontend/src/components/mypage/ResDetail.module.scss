@@ -1,14 +1,14 @@
 .card__wrapper {
   width: 100%;
   height: 100%;
-  box-shadow: $shadow600;
   margin-top: 1rem;
 }
 
 .main__wrapper {
-  max-width: 62.5rem;
+  box-shadow: $shadow600;
+  max-width: 64rem;
   margin: 1rem auto;
-  padding: 1rem 1rem;
+  padding: 2rem;
 }
 
 .main__div__wrapper {
@@ -32,6 +32,7 @@
   max-width: 50rem;
   width: 100%;
   gap: 0.5rem;
+  padding: 1rem;
 }
 
 .btn__wrapper {
