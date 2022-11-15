@@ -19,6 +19,7 @@ import java.util.Base64;
 import java.util.List;
 
 @RestController
+@RequestMapping("/socket")
 public class MessageController {
 
     private final MessageService messageService;
