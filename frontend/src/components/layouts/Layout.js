@@ -1,4 +1,4 @@
-import Chat from "../chat/Chat";
+import Chat from "../chat";
 import Header from "./Header";
 import styles from "./Layout.module.scss";
 

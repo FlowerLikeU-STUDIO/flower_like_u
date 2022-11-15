@@ -26,6 +26,11 @@ const ChatInput = ({ sendMessage, sendImage }) => {
   };
 
   const onSubmit = (e) => {
+    if (e.currentTarget.name === "sendButton" && chatInput.length !== 0) {
+      sendMessage(chatInput);
+      setChatInput("");
+      return;
+    }
     if (e.target.value.length !== 0 && e.key === "Enter") {
       sendMessage(e.target.value);
       setChatInput("");
@@ -42,14 +47,13 @@ const ChatInput = ({ sendMessage, sendImage }) => {
         onChange={onChangeInput}
       />
       {chatInput.length === 0 ? (
-        <input type={"file"} accept="image/*" onChange={sendImage} />
+        <label>
+          <i className="fa-solid fa-paperclip"></i>
+          <input type={"file"} accept="image/*" onChange={sendImage} hidden />
+        </label>
       ) : (
-        <button
-          onClick={() => {
-            console.log("adsf");
-          }}
-        >
-          제출
+        <button type="button" onClick={onSubmit} name="sendButton">
+          <i className="fa-sharp fa-solid fa-paper-plane-top"></i>
         </button>
       )}
     </ChatInputWrapper>
