@@ -654,9 +654,15 @@ public class UserServiceImpl implements UserService {
             else if ("전체".equals(region2)) return s[0].equals(region1);
             return s[0].equals(region1) && s[1].equals(region2);
         }).map(store -> {
+            String[] holidayTmp = store.getHolidays().split(",");
+            List<Boolean> holidays = new ArrayList<>();
+            for (String s : holidayTmp) {
+                if ("false".equals(s)) holidays.add(false);
+                else holidays.add(true);
+            }
             return new RegionVo(store.getStreet(),
                     store.getName(), store.getLatitude(), store.getLongitude(),
-                    store.getStore(), store.getBio(), store.getProfile(), store.getRating(), store.getHolidays());
+                    store.getStore(), store.getBio(), store.getProfile(), store.getRating(), holidays);
         }).collect(Collectors.toList());
     }
 

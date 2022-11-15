@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,5 +18,5 @@ public class RegionVo {
     private String bio;
     private String profile;
     private Double rating;
-    private String holidays;
+    private List<Boolean> holidays;
 }
