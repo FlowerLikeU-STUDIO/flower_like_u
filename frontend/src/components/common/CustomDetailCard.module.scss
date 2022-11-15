@@ -1,21 +1,25 @@
 .card__wrapper {
+  @include flexDiv(row, center, space-around);
   max-width: 62.5rem;
   width: 100%;
   box-shadow: $shadow600;
   margin: 1rem auto;
-  padding: 1rem 1rem;
-  @include flexDiv(row, center, space-around);
-  gap: 1rem;
+  padding: 2rem 2rem;
+  background-color: $white;
+  border-radius: 0.25rem;
+  border: 1px solid $primary500;
+  margin-top: 2rem;
 }
 
 .flower__img {
-  width: 35%;
+  @include flexDiv;
+  width: 50%;
 }
 
 .main__div__wrapper {
-  // position: relative;
   width: 50%;
   @include flexDiv(column, center, stretch);
+  gap: 2rem;
 }
 
 .sub__div__wrapper {
@@ -25,12 +29,11 @@
 }
 
 .main__p {
-  color: $primary900;
+  @include font(1.5rem, 600, $primary900, 220%);
 }
 
 .sub__p {
-  @include font(1rem, normal, $mainParagraph);
-  margin-top: 0.5rem;
+  @include font(1rem, 500, $mainParagraph, 120%);
 }
 
 .line {
@@ -41,22 +44,23 @@
 }
 
 .description {
-  @include font(1rem, normal, $mainParagraph, 1.5rem);
-  margin-bottom: 1rem;
+  @include font(0.95rem, 400, $mainParagraph, 1.5rem);
 }
 
 .btn__group {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  // grid-template-rows: repeat(2, 1fr);
   gap: 1rem;
+  .btn:nth-child(3) {
+    grid-column: 1/3;
+  }
 }
 
 .btn {
-  font-size: 1rem;
+  font-size: 0.95rem;
   border-radius: 0.3rem;
   border: 1px solid $mainPrimary;
-  padding: 0.5rem 0.8rem;
+  padding: 0.5rem 1rem;
   width: 100%;
   background-color: white;
   color: $mainPrimary;
