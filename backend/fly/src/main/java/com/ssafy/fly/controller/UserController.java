@@ -1,7 +1,7 @@
 package com.ssafy.fly.controller;
 
-import com.ssafy.fly.common.util.RegionMap;
-import com.ssafy.fly.common.util.ResultMessageSet;
+import com.ssafy.fly.common.util.*;
+import com.ssafy.fly.common.vo.JwtUserInfo;
 import com.ssafy.fly.common.vo.RegionVo;
 import com.ssafy.fly.dto.request.*;
 import com.ssafy.fly.dto.response.RegionWrprRes;
@@ -11,6 +11,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -219,8 +221,23 @@ public class UserController {
 
     /** 11. 회원 정보 조회 */
     @GetMapping()
-    public ResponseEntity<Map<String, Object>> getUserInfo(Principal principal) {
+    public ResponseEntity<Map<String, Object>> getUserInfo(Principal principal,
+                                                           Authentication authentication,
+                                                           JwtTokenProvider jwtTokenProvider,
+                                                           @RequestHeader(value = "Authorization") String jwt) {
         logger.info("[GET] - /user");
+
+        System.out.println("JWT-TOKEN-CONVERTER");
+        System.out.println("Token : " + jwt);
+        JwtUserInfo jwtUserInfo = JwtConverter.getUserPk(jwt);
+        System.out.println("PK: " + Long.parseLong(jwtUserInfo.getSub()));
+
+        System.out.println("AUTHENTICATION");
+        CustomUserDetail user = (CustomUserDetail) authentication.getPrincipal();
+        Long userPk2 = user.getUserPk();
+        System.out.println("PK: " + userPk2);
+        System.out.println("UTYPE: " + user.getUserType());
+
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.findUserInfo(principal);
