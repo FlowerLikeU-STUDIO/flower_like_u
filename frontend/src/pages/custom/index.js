@@ -2,8 +2,16 @@ import styles from "./index.module.scss";
 import Button from "@/components/common/Button";
 import CustomModal from "@/components/custom/common/CustomModal";
 import { useState } from "react";
+import { useRouter } from "next/router";
+import FailAlert from "@/lib/FailAlert";
+// 로그인 여부
+import useSWR from "swr";
+import storage from "@/lib/utils/storage";
 
 const Custom = () => {
+  const router = useRouter();
+  const { data: isLogin } = useSWR("logIn", storage);
+
   // 모달창 노출 여부 state
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -13,6 +21,11 @@ const Custom = () => {
   // 모달창 노출
   const showModal = () => {
     setModalOpen(!modalOpen);
+  };
+
+  // 내 커스텀 사용하기
+  const useMyDesign = () => {
+    isLogin ? router.push("/mypage/design/") : FailAlert("로그인한 유저만 사용할 수 있어요!");
   };
 
   return (
@@ -33,7 +46,7 @@ const Custom = () => {
               커스텀 시작하기
             </Button>
             {/* 내 커스텀 리스트가 보이는 모달 창 띄우기 */}
-            <Button size="custom_small" color="mainPrimary">
+            <Button size="custom_small" color="mainPrimary" onClick={() => useMyDesign()}>
               내 커스텀 사용하기
             </Button>
           </div>
