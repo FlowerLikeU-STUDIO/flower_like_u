@@ -11,6 +11,6 @@ module.exports = {
   // 이미지 최적화
   images: {
     domains: ["media.istockphoto.com"],
-    formats: ["image/avif", "image/webp"],
+    // formats: ["image/avif", "image/webp"],
   },
 };
