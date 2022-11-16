@@ -130,3 +130,48 @@ export const RecipeContents = [
     flowers: [11, 11, 11],
   },
 ];
+
+export const ColorRecipeContents = [
+  {
+    title: "흰색을 좋아하는 사람에게",
+    flower: [0, 4, 8, 12, 15, 25, 29, 33, 39],
+    wrapper: 0,
+    ribbon: 0,
+  },
+  {
+    title: "밝은 분홍색을 좋아하는 사람에게",
+    flower: [1, 30, 35],
+    wrapper: 2,
+    ribbon: 1,
+  },
+  {
+    title: "분홍색을 좋아하는 사람에게",
+    flower: [2, 5, 9, 13, 17, 21, 27, 34],
+    wrapper: 1,
+    ribbon: 2,
+  },
+  {
+    title: "노란색을 좋아하는 사람에게",
+    flower: [3, 7, 18, 20, 26, 31, 36, 38],
+    wrapper: 4,
+    ribbon: 4,
+  },
+  {
+    title: "빨간색을 좋아하는 사람에게",
+    flower: [6, 14, 16, 22, 37],
+    wrapper: 3,
+    ribbon: 1,
+  },
+  {
+    title: "보라색을 좋아하는 사람에게",
+    flower: [10, 19, 23, 28],
+    wrapper: 4,
+    ribbon: 3,
+  },
+  {
+    title: "푸른색을 좋아하는 사람에게",
+    flower: [11, 24, 32],
+    wrapper: 1,
+    ribbon: 4,
+  },
+];

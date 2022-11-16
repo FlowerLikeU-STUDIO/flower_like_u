@@ -661,7 +661,7 @@ public class UserServiceImpl implements UserService {
                 else holidays.add(true);
             }
             return new RegionVo(store.getStreet(),
-                    store.getName(), store.getLatitude(), store.getLongitude(),
+                    store.getId(), store.getLatitude(), store.getLongitude(),
                     store.getStore(), store.getBio(), store.getProfile(), store.getRating(), holidays);
         }).collect(Collectors.toList());
     }

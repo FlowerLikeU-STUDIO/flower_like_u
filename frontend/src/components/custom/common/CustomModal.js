@@ -2,6 +2,7 @@ import styles from "./CustomModal.module.scss";
 import LanguageContents from "../step/recommend/flower_language/LanguageContents";
 import SituationContents from "../step/recommend/situation/SituationContents";
 import HowCustomize from "../HowCustomize";
+import ColorContents from "../step/recommend/color/ColorContents";
 import { useRef, useEffect } from "react";
 
 const CustomModal = ({ setModalOpen, id }) => {
@@ -41,8 +42,10 @@ const CustomModal = ({ setModalOpen, id }) => {
         <LanguageContents setModalOpen={setModalOpen} />
       ) : id === 2 ? (
         <SituationContents setModalOpen={setModalOpen} />
-      ) : (
+      ) : id === 3 ? (
         <HowCustomize />
+      ) : (
+        <ColorContents setModalOpen={setModalOpen} />
       )}
     </section>
   );
