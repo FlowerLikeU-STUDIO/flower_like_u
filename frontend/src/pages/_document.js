@@ -1,9 +1,25 @@
 import { Html, Head, Main, NextScript } from "next/document";
+import { GA_TRACKING_ID } from "@/lib/gtag";
 
 export default function Document() {
   return (
     <Html lang="ko">
       <Head>
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-1KXP98TD3P"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', '${GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+          }}
+        />
         {/* ICON */}
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined" />
         {/* FONT */}
@@ -33,6 +49,21 @@ export default function Document() {
       <body>
         <Main />
         <NextScript />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            (function(w, d, a){
+              w.__beusablerumclient__ = {
+                  load : function(src){
+                      var b = d.createElement("script");
+                      b.src = src; b.async=true; b.type = "text/javascript";
+                      d.getElementsByTagName("head")[0].appendChild(b);
+                  }
+              };w.__beusablerumclient__.load(a + "?url=" + encodeURIComponent(d.URL));
+          })(window, document, "//rum.beusable.net/load/b221116e143950u488");
+          `,
+          }}
+        />
       </body>
     </Html>
   );
