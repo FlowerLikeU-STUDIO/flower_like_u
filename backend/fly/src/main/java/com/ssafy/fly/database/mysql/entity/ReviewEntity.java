@@ -41,6 +41,6 @@ public class ReviewEntity extends BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDate;
 
-    @Formula("(SELECT date_format(r.date, '%Y-%m-%d') FROM review r where r.id = id)")
+    @Formula("(SELECT date_format(r.date, '%Y-%m-%d') FROM review r WHERE r.id = id)")
     private String dateOnly;
 }

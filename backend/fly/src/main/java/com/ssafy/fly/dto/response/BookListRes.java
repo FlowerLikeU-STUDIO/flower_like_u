@@ -13,8 +13,8 @@ public class BookListRes {
     private String type;
     private String image;
     private String request;
-    private Date bookDate;
-    private Date dueDate;
+    private String bookDate;
+    private String dueDate;
     private String state;
     private Long reviewId;
 
