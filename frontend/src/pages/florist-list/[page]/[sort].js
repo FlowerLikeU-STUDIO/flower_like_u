@@ -240,7 +240,7 @@ const FloristList = (props) => {
               <div
                 key={florist.storeId}
                 className={styles.florist__wrapper}
-                onClick={() => router.push(`/florist/${florist.storeId}`)}
+                onClick={() => router.push(`/florist/${florist.storeId}/feed`)}
               >
                 <div className={styles.store__img}>
                   <FlowerImg src={florist.profile} florist={"florist"} />

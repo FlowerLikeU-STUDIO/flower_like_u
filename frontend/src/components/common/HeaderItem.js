@@ -2,7 +2,6 @@ import styles from "./HeaderItem.module.scss";
 import ProfileImage from "@/components/common/ProfileImage";
 import Contents from "./Contents";
 import Link from "next/link";
-import React from "react";
 
 const HeaderItem = ({ ...props }) => {
   // console.log(props.isMyPage); // mypage에선 props.isMyPage=true
@@ -18,11 +17,13 @@ const HeaderItem = ({ ...props }) => {
             ) : (
               <span className={styles.userName}>{props.nickname || props.name}</span>
             )}
-            <Link href="/mypage/settings">
-              <a className={styles.settings}>
-                <span className="material-icons-outlined">settings</span>
-              </a>
-            </Link>
+            {props.isMyPage && (
+              <Link href="/mypage/settings">
+                <a className={styles.settings}>
+                  <span className="material-icons-outlined">settings</span>
+                </a>
+              </Link>
+            )}
           </div>
           {props.type === "store" && (
             <div className={styles.profile_seller}>

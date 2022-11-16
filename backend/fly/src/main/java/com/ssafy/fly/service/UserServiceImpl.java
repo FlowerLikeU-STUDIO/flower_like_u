@@ -508,16 +508,6 @@ public class UserServiceImpl implements UserService {
             result.put("result", true);
             result.put("userInfo", userInfo);
         } else if (store != null) {
-            List<Boolean> holidays = new ArrayList<>();
-            if (store.getHolidays() != null) {
-                StringTokenizer st = new StringTokenizer(store.getHolidays(), ",");
-                while (st.hasMoreTokens()) {
-                    String weekday = st.nextToken();
-                    if ("true".equals(weekday)) holidays.add(true);
-                    else holidays.add(false);
-                }
-            }
-
             UserInfoRes.ForStore userInfo = UserInfoRes.ForStore.builder()
                     .type(store.getType().toString().toLowerCase())
                     .userPk(store.getId())
@@ -527,7 +517,7 @@ public class UserServiceImpl implements UserService {
                     .storeName(store.getStore())
                     .license(store.getLicense())
                     .profile(store.getProfile())
-                    .holidays(holidays)
+                    .holidays(store.getBooleanHolidays())
                     .feedNum(store.getTotalFeed())
                     .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating() == null ? 0 : store.getRating()))
                     .introduction(store.getBio())
@@ -569,6 +559,7 @@ public class UserServiceImpl implements UserService {
                 .storeName(store.getStore())
                 .address(String.format("%s %s", store.getStreet(), store.getDetailAddr()))
                 .profile(store.getProfile())
+                .holidays(store.getBooleanHolidays())
                 .feedNum(store.getTotalFeed())
                 .introduction(store.getBio())
                 .rating(decimalFormatter.roundToTwoDecimalPlaces(store.getRating() == null ? 0 : store.getRating()))
@@ -627,6 +618,7 @@ public class UserServiceImpl implements UserService {
                         .storeId(curEntity.getId())
                         .storeName(curEntity.getStore())
                         .profile(curEntity.getProfile())
+                        .holidays(curEntity.getBooleanHolidays())
                         .rating(decimalFormatter.roundToTwoDecimalPlaces(curEntity.getRating() == null ? 0 : curEntity.getRating()))
                         .address(String.format("%s %s", curEntity.getStreet(), curEntity.getDetailAddr()).trim())
                         .latitude(curEntity.getLatitude())
@@ -661,7 +653,7 @@ public class UserServiceImpl implements UserService {
                 else holidays.add(true);
             }
             return new RegionVo(store.getStreet(),
-                    store.getName(), store.getLatitude(), store.getLongitude(),
+                    store.getId(), store.getLatitude(), store.getLongitude(),
                     store.getStore(), store.getBio(), store.getProfile(), store.getRating(), holidays);
         }).collect(Collectors.toList());
     }

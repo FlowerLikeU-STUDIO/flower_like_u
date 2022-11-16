@@ -51,7 +51,7 @@ public class ReviewServiceImpl implements ReviewService {
             result.put("message", message);
             return result;
         }
-
+        
         Page<ReviewEntity> searchList = reviewRepository.findByStoreId(store, pageable);
 
         List<ReviewInfoRes> resultList = new ArrayList<>();
@@ -59,8 +59,10 @@ public class ReviewServiceImpl implements ReviewService {
             ReviewInfoRes reviewInfo = ReviewInfoRes.builder()
                     .reviewId(curEntity.getId())
                     .writer(curEntity.getConsumerId().getName())
+                    .writerProfile(curEntity.getConsumerId().getProfile())
                     .content(curEntity.getContent())
                     .rating(curEntity.getRating())
+                    .regDate(curEntity.getDateOnly())
                     .build();
             resultList.add(reviewInfo);
         }

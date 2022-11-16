@@ -1,8 +1,6 @@
 import styles from "./MyListItem.module.scss";
 import ProfileImage from "@/components/common/ProfileImage";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import Button from "../common/Button";
 
 const MyListItem = (props) => {
   const router = useRouter();
@@ -21,8 +19,6 @@ const MyListItem = (props) => {
     let hour = date.getHours();
     let minute = date.getMinutes();
     let second = date.getSeconds();
-    // console.log(dueDate, "::");
-    // console.log(date.getFullYear() + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second);
     return date.getFullYear() + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
   }
   dateFormat(dueDate);
@@ -31,8 +27,6 @@ const MyListItem = (props) => {
     feed: "플로리스트 피드",
     custom: "커스텀 꽃다발",
   };
-
-  console.log(props.bookDate);
 
   return (
     <>

@@ -9,10 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "store")
@@ -106,6 +103,20 @@ public class StoreEntity extends BaseEntity implements CustomUserDetail {
     /** 누적 주문량 */
     @Formula("(SELECT count(*) FROM book b WHERE b.store_id = id)")
     private int totalOrder;
+
+    public List<Boolean> getBooleanHolidays() {
+        List<Boolean> holidays = new ArrayList<>();
+
+        if (this.holidays != null) {
+            StringTokenizer st = new StringTokenizer(this.holidays, ",");
+            while (st.hasMoreTokens()) {
+                String weekday = st.nextToken();
+                if ("true".equals(weekday)) holidays.add(true);
+                else holidays.add(false);
+            }
+        }
+        return holidays;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
