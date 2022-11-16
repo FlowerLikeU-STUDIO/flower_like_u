@@ -37,6 +37,7 @@ dependencies {
     /* MongoDB           */ implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     /* Spring Security   */ implementation 'org.springframework.boot:spring-boot-starter-security'
     /* Log4j2            */ implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+    /* AOP               */ implementation 'org.springframework.boot:spring-boot-starter-aop'
 
     /* JWT */
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
