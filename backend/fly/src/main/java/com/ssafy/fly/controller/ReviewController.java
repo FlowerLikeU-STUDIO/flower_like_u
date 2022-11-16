@@ -67,8 +67,17 @@ public class ReviewController {
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
-            response.put("reviewList", result.get("reviewList"));
-            response.put("maxPage", result.get("maxPage"));
+            response.put("content", result.get("content"));
+            response.put("pageable", result.get("pageable"));
+            response.put("sort", result.get("sort"));
+            response.put("first", result.get("first"));
+            response.put("last", result.get("last"));
+            response.put("empty", result.get("empty"));
+            response.put("totalPages", result.get("totalPages"));
+            response.put("pageSize", result.get("pageSize"));
+            response.put("totalElements", result.get("totalElements"));
+            response.put("curPage", result.get("curPage"));
+            response.put("number", result.get("number"));
         } else {
             response.put("result", resultMessageSet.FAIL);
             response.put("message", result.get("message"));
