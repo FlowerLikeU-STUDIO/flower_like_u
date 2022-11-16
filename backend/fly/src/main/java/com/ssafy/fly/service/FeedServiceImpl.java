@@ -89,7 +89,7 @@ public class FeedServiceImpl implements FeedService {
 
         StoreEntity store = storeRepository.findById(storeId).orElse(null);
 
-        if(store == null) {
+        if (store == null) {
             message = "존재하지 않는 판매자 아이디입니다.";
             System.out.println(message);
             result.put("result", false);
@@ -101,17 +101,15 @@ public class FeedServiceImpl implements FeedService {
         Page<FeedEntity> searchList = feedRepository.findByStoreIdAndRemoval(store, false, pageable);
 
         List<FeedRes.FeedListElement> resultList = new ArrayList<>();
-        if(!searchList.isEmpty()) {
-            for(FeedEntity curEntity : searchList) {
-                FeedRes.FeedListElement feedInfo = FeedRes.FeedListElement.builder()
-                        .feedId(curEntity.getId())
-                        .name(curEntity.getName())
-                        .image(curEntity.getImages().size() > 0 ? curEntity.getImages().get(0).getImage() : null)
-                        .price(curEntity.getPrice())
-                        .content(curEntity.getContent())
-                        .build();
-                resultList.add(feedInfo);
-            }
+        for (FeedEntity curEntity : searchList) {
+            FeedRes.FeedListElement feedInfo = FeedRes.FeedListElement.builder()
+                    .feedId(curEntity.getId())
+                    .name(curEntity.getName())
+                    .image(curEntity.getImages().size() > 0 ? curEntity.getImages().get(0).getImage() : null)
+                    .price(curEntity.getPrice())
+                    .content(curEntity.getContent())
+                    .build();
+            resultList.add(feedInfo);
         }
 
         result.put("content", resultList);
@@ -136,7 +134,7 @@ public class FeedServiceImpl implements FeedService {
         String message = "";
 
         FeedEntity feed = feedRepository.findByIdAndRemoval(feedId, false);
-        if(feed == null) {
+        if (feed == null) {
             message = "존재하지 않는 피드 아이디(Long Type) 입니다.";
             System.out.println(message);
             result.put("result", false);
@@ -145,7 +143,7 @@ public class FeedServiceImpl implements FeedService {
         }
 
         List<String> feedImages = new ArrayList<>();
-        for(FeedImageEntity imageEntity : feed.getImages()) {
+        for (FeedImageEntity imageEntity : feed.getImages()) {
             feedImages.add(imageEntity.getImage());
         }
 
@@ -176,7 +174,7 @@ public class FeedServiceImpl implements FeedService {
         String message = "";
 
         FeedEntity feed = feedRepository.findByIdAndRemoval(feedId, false);
-        if(feed == null) {
+        if (feed == null) {
             message = "존재하지 않는 피드 아이디(Long Type) 입니다.";
             System.out.println(message);
             result.put("result", false);
@@ -185,7 +183,7 @@ public class FeedServiceImpl implements FeedService {
         }
 
         StoreEntity store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-        if(store == null) {
+        if (store == null) {
             message = "존재하지 않는 계정 입니다.";
             System.out.println(message);
             result.put("result", false);
@@ -193,7 +191,7 @@ public class FeedServiceImpl implements FeedService {
             return result;
         }
 
-        if(!feed.getStoreId().getUserId().equals(principal.getName())) {
+        if (!feed.getStoreId().getUserId().equals(principal.getName())) {
             message = "삭제 권한이 없는 계정입니다.";
             System.out.println(message);
             result.put("result", false);
@@ -201,7 +199,7 @@ public class FeedServiceImpl implements FeedService {
             return result;
         }
 
-        if(feedRepository.feedRemove(feedId) > 0) {
+        if (feedRepository.feedRemove(feedId) > 0) {
             result.put("result", true);
         } else {
             message = "서버 문제로 데이터 삭제에 실패하였습니다.";

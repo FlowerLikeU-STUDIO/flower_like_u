@@ -54,26 +54,29 @@ public class ReviewServiceImpl implements ReviewService {
 
         Page<ReviewEntity> searchList = reviewRepository.findByStoreId(store, pageable);
 
-        if (searchList.getContent().size() > 0) {
-            List<ReviewInfoRes> resultList = new ArrayList<>();
-            for (ReviewEntity curEntity : searchList) {
-                ReviewInfoRes reviewInfo = ReviewInfoRes.builder()
-                        .reviewId(curEntity.getId())
-                        .writer(curEntity.getConsumerId().getName())
-                        .content(curEntity.getContent())
-                        .rating(curEntity.getRating())
-                        .build();
-                resultList.add(reviewInfo);
-            }
-            result.put("maxPage", searchList.getTotalPages());
-            result.put("reviewList", resultList);
-            result.put("result", true);
-        } else {
-            message = "존재하지 않는 페이지입니다.";
-            result.put("result", false);
-            result.put("message", message);
+        List<ReviewInfoRes> resultList = new ArrayList<>();
+        for (ReviewEntity curEntity : searchList) {
+            ReviewInfoRes reviewInfo = ReviewInfoRes.builder()
+                    .reviewId(curEntity.getId())
+                    .writer(curEntity.getConsumerId().getName())
+                    .content(curEntity.getContent())
+                    .rating(curEntity.getRating())
+                    .build();
+            resultList.add(reviewInfo);
         }
 
+        result.put("content", resultList);
+        result.put("pageable", searchList.getPageable());
+        result.put("sort", searchList.getSort());
+        result.put("first", searchList.isFirst());
+        result.put("last", searchList.isLast());
+        result.put("empty", searchList.isEmpty());
+        result.put("totalPages", searchList.getTotalPages());
+        result.put("pageSize", searchList.getPageable().getPageSize());
+        result.put("totalElements", searchList.getTotalElements());
+        result.put("curPage", searchList.getPageable().getPageNumber());
+        result.put("number", searchList.getNumber());
+        result.put("result", true);
         return result;
     }
 
@@ -169,7 +172,7 @@ public class ReviewServiceImpl implements ReviewService {
             return result;
         }
 
-        if(!principal.getName().equals(review.getConsumerId().getUserId())){
+        if (!principal.getName().equals(review.getConsumerId().getUserId())) {
             message = "잘못된 접근입니다.";
             System.out.println(message);
             result.put("message", message);
