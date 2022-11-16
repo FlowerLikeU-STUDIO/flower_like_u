@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RegionVo {
     private String address;
-    private String name;
+    private Long storeId;
     private Double latitude;
     private Double longitude;
     private String store;

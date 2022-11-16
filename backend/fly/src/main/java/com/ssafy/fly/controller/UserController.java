@@ -303,6 +303,10 @@ public class UserController {
             }*/
         avgLongitude = regionVoList.stream().mapToDouble(RegionVo::getLongitude).sum() / regionVoList.size();
         avgLatitude = regionVoList.stream().mapToDouble(RegionVo::getLatitude).sum() / regionVoList.size();
+        if (regionVoList.size() == 0) {
+            avgLongitude = -1.0;
+            avgLatitude = -1.0;
+        }
         RegionWrprRes<RegionVo> regionWrprRes = new RegionWrprRes<>();
         regionWrprRes.setResponseList(regionVoList);
         regionWrprRes.setAvgLongitude(avgLongitude);
