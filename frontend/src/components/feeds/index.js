@@ -11,12 +11,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { modalOpen } from "@/store/reducers/modal";
 import FeedRegister from "../modal/contents/FeedRegister";
 import { client } from "@/pages/api/client";
+import Spinner from "../spinner";
 const FeedWrapper = styled.div`
   display: flex;
-  /* justify-content: center; */
   flex-direction: column;
   align-items: center;
-  min-height: calc(100vh - 68px);
 `;
 
 const FeedListWrapper = styled.div`
@@ -53,26 +52,26 @@ const Feed = ({ storeId }) => {
     fetcher
   );
   const isOpen = useSelector((state) => state.modal.isOpen);
-  const lastPage = useMemo(() => {
-    return data ? data[0].data.feedInfo.maxPage : 0;
-  }, [data]);
-
   const dispatch = useDispatch();
   const [targetFeed, setTargetFeed] = useState("");
+
+  const isEmpty = data?.[0]?.data.content.length === 0;
 
   const feedList = useMemo(() => {
     let feedList = [];
     if (data) {
       data.map((item) => {
-        // feedList.push(item.data.feedInfo.list);
-        feedList = feedList.concat(...item.data.feedInfo.list);
+        feedList = feedList.concat(...item.data.content);
       });
       return feedList;
     }
   }, [size, data]);
+
+  const isReachingEnd = isEmpty || (data && data[data.length - 1]?.data.last);
+
   const ref = useIntersect(async (entry, observer) => {
     observer.unobserve(entry.target);
-    if (size < lastPage && !isValidating) {
+    if (!isValidating && !isReachingEnd) {
       setSize(size + 1);
     }
   });
@@ -84,7 +83,15 @@ const Feed = ({ storeId }) => {
     <>
       {isOpen ? (
         <>
-          <Modal children={targetFeed !== "" ? <FeedReservation feedId={targetFeed} storeId={storeId} /> : <></>} />
+          <Modal
+            children={
+              targetFeed !== "" ? (
+                <FeedReservation feedId={targetFeed} storeId={storeId} />
+              ) : (
+                <></>
+              )
+            }
+          />
         </>
       ) : (
         <></>
@@ -97,29 +104,50 @@ const Feed = ({ storeId }) => {
                 <Feed.Item
                   feed={feed}
                   index={index}
-                  key={(Number.MAX_SAFE_INTEGER & feed.feedId).toString(2).padStart(53, 0) + feed.name}
+                  key={
+                    (Number.MAX_SAFE_INTEGER & feed.feedId)
+                      .toString(2)
+                      .padStart(53, 0) + feed.name
+                  }
                   onClick={onHandleOpen}
                 />
               ))}
             </FeedListWrapper>
+            {isValidating && !isReachingEnd ? (
+              <div>
+                <Spinner />
+              </div>
+            ) : (
+              <></>
+            )}
             <Target ref={ref} />
           </>
         ) : (
-          <>Loading</>
+          <div>
+            <Spinner />
+          </div>
         )}
+        <div>{isEmpty ? <>등록된 피드가 없습니다.</> : <></>}</div>
       </FeedWrapper>
     </>
   );
 };
 
 const areEqual = (prevProps, nextProps) => {
-  parseInt(prevProps.feed.feedId) === parseInt(nextProps.feed.feedId) ? true : false;
+  parseInt(prevProps.feed.feedId) === parseInt(nextProps.feed.feedId)
+    ? true
+    : false;
 };
 
 const FeedItem = ({ feed, index, onClick }) => {
   return (
     <FeedItemWrapper key={feed.feedId + feed.title}>
-      <Image src={feed.image} width={300} height={300} onClick={() => onClick(feed)} />
+      <Image
+        src={feed.image}
+        width={300}
+        height={300}
+        onClick={() => onClick(feed)}
+      />
     </FeedItemWrapper>
   );
 };
