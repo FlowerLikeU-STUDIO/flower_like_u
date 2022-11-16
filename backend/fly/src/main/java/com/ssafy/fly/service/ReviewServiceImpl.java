@@ -59,8 +59,10 @@ public class ReviewServiceImpl implements ReviewService {
             ReviewInfoRes reviewInfo = ReviewInfoRes.builder()
                     .reviewId(curEntity.getId())
                     .writer(curEntity.getConsumerId().getName())
+                    .writerProfile(curEntity.getConsumerId().getProfile())
                     .content(curEntity.getContent())
                     .rating(curEntity.getRating())
+                    .regDate(curEntity.getDateOnly())
                     .build();
             resultList.add(reviewInfo);
         }
