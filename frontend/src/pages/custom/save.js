@@ -1,6 +1,7 @@
 import styles from "./save.module.scss";
 import classNames from "classnames/bind";
 import { useRouter } from "next/router";
+import Script from "next/script";
 // 컨텐츠
 import { packageContent } from "@/components/custom/step/StepContents";
 import CustomPlace from "@/components/custom/step/customplace/CustomPlace";
@@ -108,6 +109,8 @@ const CustomSave = () => {
 
   return (
     <>
+      <Script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></Script>
+      <Script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></Script>
       {isOpen ? (
         <>
           <Modal children={<CustomOrder orderStep={"florist"} />} />
