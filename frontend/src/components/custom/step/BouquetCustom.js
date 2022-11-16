@@ -14,6 +14,7 @@ import RandomFlower from "./recommend/RandomFlower";
 import FailAlert from "@/lib/FailAlert";
 import LanguageButton from "./recommend/flower_language/LanguageButton";
 import SituationButton from "./recommend/situation/SituationButton";
+import ColorButton from "./recommend/color/ColorButton";
 import CustomModal from "../common/CustomModal";
 // 로그인 여부
 import useSWR from "swr";
@@ -130,6 +131,7 @@ const BuoquetCustom = () => {
     <>
       <main className={styles.custom_wrapper}>
         <aside className={styles.recommend_wrapper}>
+          <ColorButton />
           <SituationButton />
           <LanguageButton />
           <RandomFlower />
