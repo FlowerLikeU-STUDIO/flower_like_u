@@ -109,7 +109,7 @@ const FloristMap = () => {
         storeInfo.appendChild(document.createTextNode(r.bio));
         // !! storeId 추가할것
         storeInfo.addEventListener("click", () => {
-          router.push(`/florist/${storeId}/feed`);
+          router.push(`/florist/${r.storeId}/feed`);
         });
         info.appendChild(storeInfo);
 
