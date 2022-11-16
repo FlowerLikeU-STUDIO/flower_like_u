@@ -47,9 +47,6 @@ public class JwtTokenProvider {
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = customUserDetailService.loadUserByUsername(JwtConverter.getUserPk(token));
-        System.out.println("########################");
-        System.out.println(userDetails.getUsername() + " " + userDetails.getPassword());
-        System.out.println("########################");
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
@@ -57,6 +54,7 @@ public class JwtTokenProvider {
     public String getUserPk(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
+
     // Request의 Header에서 token 값을 가져옵니다. "Authorization" : "TOKEN값'
     public String resolveToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");

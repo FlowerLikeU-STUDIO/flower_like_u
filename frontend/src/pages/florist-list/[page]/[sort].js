@@ -43,6 +43,7 @@ const FloristList = (props) => {
     inputText,
     currentSort,
   });
+
   const holidayList = ["일", "월", "화", "수", "목", "금", "토"];
 
   const curSortChange = async (e) => {
@@ -244,7 +245,7 @@ const FloristList = (props) => {
                 onClick={() => router.push(`/florist/${florist.storeId}/feed`)}
               >
                 <div className={styles.store__img}>
-                  <FlowerImg src={florist.profile} />
+                  <FlowerImg src={florist.profile} florist={"florist"} />
                 </div>
                 <div className={styles.store__info}>
                   <p className={styles.store__name}>{florist.storeName}</p>

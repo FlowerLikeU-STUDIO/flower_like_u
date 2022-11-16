@@ -30,8 +30,12 @@ public class CustomController {
     private final ResultMessageSet resultMessageSet;
     private final HarmonyService harmonyService;
     private final HarmonyFlowerService harmonyFlowerService;
+
     @Autowired
-    public CustomController(CustomFlowerService customFlowerService, ResultMessageSet resultMessageSet, HarmonyService harmonyService, HarmonyFlowerService harmonyFlowerService) {
+    public CustomController(CustomFlowerService customFlowerService,
+                            ResultMessageSet resultMessageSet,
+                            HarmonyService harmonyService,
+                            HarmonyFlowerService harmonyFlowerService) {
         this.customFlowerService = customFlowerService;
         this.resultMessageSet = resultMessageSet;
         this.harmonyService = harmonyService;
@@ -43,7 +47,7 @@ public class CustomController {
     @PostMapping()
     public ResponseEntity<Map<String, Object>> registFlower(@RequestBody CustomFlowerRegReq customFlowerRegReq,
                                                             Principal principal) {
-        logger.info("[POST] - /custom " + customFlowerRegReq);
+        logger.info("[POST] - /custom - {}", customFlowerRegReq);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = customFlowerService.saveCustomFlower(customFlowerRegReq, principal);
@@ -67,7 +71,7 @@ public class CustomController {
     public ResponseEntity<Map<String, Object>> getCustomFlowerList(@RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
                                                                    @RequestParam(value = "size", required = false, defaultValue = "10") int size,
                                                                    Principal principal) {
-        logger.info("[GET] /custom ");
+        logger.info("[GET] /custom?page={}&size={}", pageNo, size);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = customFlowerService.getCustomFlowerList(pageNo, size, principal);
@@ -88,7 +92,7 @@ public class CustomController {
     @GetMapping("/detail/{flowerId}")
     public ResponseEntity<Map<String, Object>> getCumstomFlowerDetailInfo(@PathVariable String flowerId,
                                                                           Principal principal) {
-        logger.info("[GET] /custom/detail/{flowerId} " + flowerId);
+        logger.info("[GET] /custom/detail/{flowerId} - {}", flowerId);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = customFlowerService.getCustomFlowerDetails(flowerId, principal);
@@ -107,8 +111,8 @@ public class CustomController {
     /** 4. 커스텀 꽃다발 정보 삭제 */
     @DeleteMapping("/{flowerId}")
     public ResponseEntity<Map<String, Object>> removeCumstomFlowerInfo(@PathVariable String flowerId,
-                                                                             Principal principal) {
-        logger.info("[DELETE] /custom/{flowerId} " + flowerId);
+                                                                       Principal principal) {
+        logger.info("[DELETE] /custom/{flowerId} - {}", flowerId);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = customFlowerService.removeCustomFlower(flowerId, principal);
@@ -126,6 +130,8 @@ public class CustomController {
     /** 5. 커스텀 꽃다발 조합 추천 */
     @GetMapping("/recommend/{size}")
     public ResponseEntity<List<FlowerVo>> getRecommend(@PathVariable int size) {
+        logger.info("[GET] /custom/recommend/{size} - {}", size);
+
         Map<String, FlowerVo[]> flowerMap = FlowerMap.ofMap();
         if (size == 0) {
             int idx = (int) Math.floor(Math.random() * 7);
@@ -134,7 +140,7 @@ public class CustomController {
             FlowerVo flowerVo = flowerVos[idxTmp];
             List<FlowerVo> flowerVoLst = new ArrayList<>();
             flowerVoLst.add(flowerVo);
-            return new ResponseEntity<>(flowerVoLst,HttpStatus.OK);
+            return new ResponseEntity<>(flowerVoLst, HttpStatus.OK);
         }
         String[] arr = new String[size];
         Map<Integer, List<Integer>> map = CustomMap.ofMap(size);

@@ -38,7 +38,7 @@ public class ReviewController {
     @PostMapping()
     public ResponseEntity<Map<String, Object>> create(@RequestBody ReviewPostReqDto reviewPostReqDto,
                                                       Principal principal) {
-        logger.info("[POST] - /review " + reviewPostReqDto);
+        logger.info("[POST] - /review - {}", reviewPostReqDto);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = reviewService.create(reviewPostReqDto, principal);
@@ -58,7 +58,7 @@ public class ReviewController {
     public ResponseEntity<Map<String, Object>> getList(@PathVariable(required = false) Long storeId,
                                                        @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
                                                        @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
-        logger.info("[GET] - /review/{storeId} " + storeId);
+        logger.info("[GET] - /review/{storeId} - {}", storeId);
 
         Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size, Sort.by("id").descending());
 
@@ -67,8 +67,17 @@ public class ReviewController {
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
-            response.put("reviewList", result.get("reviewList"));
-            response.put("maxPage", result.get("maxPage"));
+            response.put("content", result.get("content"));
+            response.put("pageable", result.get("pageable"));
+            response.put("sort", result.get("sort"));
+            response.put("first", result.get("first"));
+            response.put("last", result.get("last"));
+            response.put("empty", result.get("empty"));
+            response.put("totalPages", result.get("totalPages"));
+            response.put("pageSize", result.get("pageSize"));
+            response.put("totalElements", result.get("totalElements"));
+            response.put("curPage", result.get("curPage"));
+            response.put("number", result.get("number"));
         } else {
             response.put("result", resultMessageSet.FAIL);
             response.put("message", result.get("message"));
@@ -80,7 +89,7 @@ public class ReviewController {
     @GetMapping("/detail/{reviewId}")
     public ResponseEntity<Map<String, Object>> getReviewInfo(@PathVariable Long reviewId,
                                                              Principal principal) {
-        logger.info("[GET] - /review/{reviewId} " + reviewId);
+        logger.info("[GET] - /review/detail/{reviewId} - {}", reviewId);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = reviewService.getReviewInfo(reviewId, principal);
