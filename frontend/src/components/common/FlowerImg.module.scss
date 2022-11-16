@@ -5,6 +5,7 @@
   overflow: hidden;
   & > span {
     position: unset !important;
+    height: 100% !important;
     & .auto_image {
       object-fit: cover !important;
       position: relative !important;
