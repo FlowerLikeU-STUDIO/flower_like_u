@@ -2,6 +2,7 @@ package com.ssafy.fly.database.mysql.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -39,4 +40,7 @@ public class ReviewEntity extends BaseEntity {
     @Column(name = "date", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDate;
+
+    @Formula("(SELECT date_format(r.date, '%Y-%m-%d') FROM review r where r.id = id)")
+    private String dateOnly;
 }
