@@ -34,7 +34,16 @@ const FloristList = (props) => {
   const [mxPage, setMxPage] = useState(props.maxPage);
   const [pageIndex, setPageIndex] = useState(1);
   const [numLst, setNumLst] = useState([1]); // [1, 2, 3, 4, 5]
-  const { data, maxPage, mutate } = floristList({ pageIndex, selectSido, selectSigungu, inputText, currentSort });
+  const selectSize = 8;
+  const { data, maxPage, mutate } = floristList({
+    pageIndex,
+    selectSize,
+    selectSido,
+    selectSigungu,
+    inputText,
+    currentSort,
+  });
+  const holidayList = ["일", "월", "화", "수", "목", "금", "토"];
 
   const curSortChange = async (e) => {
     setCurrentSort(e);
@@ -239,6 +248,13 @@ const FloristList = (props) => {
                 </div>
                 <div className={styles.store__info}>
                   <p className={styles.store__name}>{florist.storeName}</p>
+                  <p className={styles.store__days}>
+                    {florist.holidays
+                      .map((_, index) => _ && holidayList[index] + "요일")
+                      .filter((el) => (
+                        <span>{el}</span>
+                      ))}
+                  </p>
                   <p className={styles.store__adderss}>{florist.address}</p>
                   <div className={styles.store__star}>
                     <Rating
@@ -260,34 +276,36 @@ const FloristList = (props) => {
           )}
         </div>
         {/* 페이지네이션 */}
-        <div className={styles.main__div}>
-          <button
-            className={styles.btn}
-            onClick={pageIndexChange.bind(pageIndexChange, pageIndex - 1)}
-            disabled={numLst[0] === 1}
-          >
-            &lt;
-          </button>
-          {numLst.map((num, idx) => (
+        {currentData && (
+          <div className={styles.main__div}>
             <button
               className={styles.btn}
-              key={idx}
-              onClick={pageIndexChange.bind(pageIndexChange, num)}
-              disabled={pageIndex === num}
+              onClick={pageIndexChange.bind(pageIndexChange, pageIndex - 1)}
+              disabled={pageIndex === 1}
             >
-              <Link href={`/florist-list/${num}/${currentSort}`}>
-                <a>{num}</a>
-              </Link>
+              &lt;
             </button>
-          ))}
-          <button
-            className={styles.btn}
-            onClick={pageIndexChange.bind(pageIndexChange, pageIndex + 1)}
-            disabled={!maxPage || numLst[numLst.length - 1] === maxPage}
-          >
-            &gt;
-          </button>
-        </div>
+            {numLst.map((num, idx) => (
+              <button
+                className={styles.btn}
+                key={idx}
+                onClick={pageIndexChange.bind(pageIndexChange, num)}
+                disabled={pageIndex === num}
+              >
+                <Link href={`/florist-list/${num}/${currentSort}`}>
+                  <a>{num}</a>
+                </Link>
+              </button>
+            ))}
+            <button
+              className={styles.btn}
+              onClick={pageIndexChange.bind(pageIndexChange, pageIndex + 1)}
+              disabled={!maxPage || numLst[numLst.length - 1] === maxPage}
+            >
+              &gt;
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
