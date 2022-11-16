@@ -284,8 +284,8 @@ public class BookServiceImpl implements BookService {
                             .storeName(curEntity.getStoreId().getStore())
                             .image(image)
                             .request(curEntity.getRequest())
-                            .bookDate(curEntity.getBookDate())
-                            .dueDate(curEntity.getDueDate())
+                            .bookDate(curEntity.getBookDateOnly())
+                            .dueDate(curEntity.getDueDateOnly())
                             .state(curEntity.getState().toString().toLowerCase())
                             .build();
                     resultList.add(bookInfo);
@@ -325,8 +325,8 @@ public class BookServiceImpl implements BookService {
                             .consumerName(curEntity.getConsumerId().getName())
                             .image(image)
                             .request(curEntity.getRequest())
-                            .bookDate(curEntity.getBookDate())
-                            .dueDate(curEntity.getDueDate())
+                            .bookDate(curEntity.getBookDateOnly())
+                            .dueDate(curEntity.getDueDateOnly())
                             .state(curEntity.getState().toString().toLowerCase())
                             .build();
                     resultList.add(bookInfo);
@@ -384,8 +384,8 @@ public class BookServiceImpl implements BookService {
                         .type(book.getType().toString().toLowerCase())
                         .image(book.getCustomId().getImage())
                         .request(book.getRequest())
-                        .bookDate(book.getBookDate())
-                        .dueDate(book.getDueDate())
+                        .bookDate(book.getBookDateOnly())
+                        .dueDate(book.getDueDateOnly())
                         .state(book.getState().toString().toLowerCase())
                         .consumerName(book.getConsumerId().getName())
                         .storeName(book.getStoreId().getStore())
@@ -411,8 +411,8 @@ public class BookServiceImpl implements BookService {
                         .type(book.getType().toString().toLowerCase())
                         .image(book.getFeedId().getImages().size() > 0 ? book.getFeedId().getImages().get(0).getImage() : null)
                         .request(book.getRequest())
-                        .bookDate(book.getBookDate())
-                        .dueDate(book.getDueDate())
+                        .bookDate(book.getBookDateOnly())
+                        .dueDate(book.getDueDateOnly())
                         .state(book.getState().toString().toLowerCase())
                         .consumerName(book.getConsumerId().getName())
                         .storeName(book.getStoreId().getStore())
