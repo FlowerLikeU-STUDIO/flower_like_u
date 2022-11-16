@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 import net.bytebuddy.implementation.bind.annotation.Super;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @ToString(exclude = "profile")
@@ -15,6 +16,7 @@ public class StoreInfoRes {
     private String address;
     private String profile;
     private double rating;
+    private List<Boolean> holidays;
 
     @Data
     @SuperBuilder
