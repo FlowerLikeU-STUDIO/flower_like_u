@@ -51,7 +51,7 @@ const ResDetail = () => {
                 <p className={styles.title__p}>상호명: {basics.storeName}</p>
                 <p className={styles.title__sub__p}>
                   예약 번호: {basics.bookId} <br />
-                  예약 일시: {basics.bookDate.split("T")[0]} (주문일시 : {basics.dueDate.split("T")[0]}) <br />
+                  예약 일시: {basics.bookDate} (주문일시 : {basics.dueDate}) <br />
                   {basics.type === "custom" && <p>요청사항: {basics.request}</p>}
                 </p>
               </div>
