@@ -41,8 +41,6 @@ export default function Document() {
         ></script>
 
         {/* <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script> */}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-        <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
         <script crossorigin src="https://developers.kakao.com/sdk/js/kakao.js"></script>
         <script src="https://kit.fontawesome.com/b65e009655.js"></script>
       </Head>
