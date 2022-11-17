@@ -1,8 +1,9 @@
 import styles from "./CustomFlorist.module.scss";
 import { modalClose } from "@/store/reducers/modal";
 import { useDispatch } from "react-redux";
+import CustomFloristList from "./CustomFloristList";
 
-const CustomFlorist = ({ setStep }) => {
+const CustomFlorist = ({ storeId, setStep, setStoreId }) => {
   const dispatch = useDispatch();
 
   const goReservation = () => {
@@ -21,8 +22,10 @@ const CustomFlorist = ({ setStep }) => {
         </button>
       </div>
       <article className={styles.contents_wrapper}>
-        <h1>커스텀 플로리스트 목록 모달 컨텐츠</h1>
-        <div className={styles.florist_wrapper}>여기에 플로리스트 목록이 들어와요</div>
+        <h1>플로리스트 목록 | 원하는 플로리스트로 예약해보세요</h1>
+        <div className={styles.florist_wrapper}>
+          <CustomFloristList setStoreId={setStoreId} storeId={storeId} />
+        </div>
       </article>
 
       <button onClick={goReservation}>예약으로 넘어가기</button>
