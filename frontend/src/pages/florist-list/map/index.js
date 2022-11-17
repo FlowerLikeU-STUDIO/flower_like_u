@@ -46,6 +46,11 @@ const FloristMap = () => {
     };
   }
 
+  function deleteMap() {
+    let els = document.querySelectorAll("#map > div");
+    for (let el of els) el.remove();
+  }
+
   const dataSubmit = () => {
     // ! datsubmit
     const data = {
@@ -54,6 +59,10 @@ const FloristMap = () => {
     };
     client.get(`user/stores/region/`, { params: data }).then((res) => {
       console.log(res.data);
+      if (document.querySelectorAll("#map > div").length != 0) {
+        deleteMap();
+      }
+
       let container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
       let options = {
         //지도를 생성할 때 필요한 기본 옵션
@@ -106,8 +115,8 @@ const FloristMap = () => {
 
         let storeInfo = document.createElement("div");
         storeInfo.classList.add(`${styles.store_information}`);
-        storeInfo.appendChild(document.createTextNode(r.bio));
-        // !! storeId 추가할것
+        storeInfo.appendChild(document.createTextNode(r.bio || "작성된 소개글이 없습니다."));
+
         storeInfo.addEventListener("click", () => {
           router.push(`/florist/${r.storeId}/feed`);
         });
@@ -130,9 +139,8 @@ const FloristMap = () => {
           }
         });
         const holidayRes = isHoliday.filter((res) => res);
-        storeHoliday.appendChild(document.createTextNode(`휴일: ${holidayRes || ""}`));
+        storeHoliday.appendChild(document.createTextNode(`휴일: ${holidayRes || "미정"}`));
         holidayInfo.appendChild(storeHoliday);
-
         let storeRating = document.createElement("span");
         storeRating.classList.add(`${styles.starrating}`);
         storeRating.appendChild(document.createTextNode("평점 " + (r.rating || 0) + "점"));
