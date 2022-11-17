@@ -203,7 +203,7 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
                       <p className={styles.store__days}>
                         {florist.holidays && "휴무일: "}
                         {florist.holidays
-                          .map((_, index) => _ && holidayList[index] + "요일")
+                          .map((_, index) => _ && holidayList[index] + "요일 ")
                           .filter((el) => (
                             <span>{el}</span>
                           ))}
