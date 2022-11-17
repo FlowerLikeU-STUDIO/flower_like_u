@@ -228,74 +228,74 @@ const FloristList = (props) => {
               value={inputText || ""}
               onChange={inputChange}
             />
-            <span className={cx("material-icons", "material_icons")}>
-              search
-            </span>
+            <span className={cx("material-icons", "material_icons")}>search</span>
           </div>
         </div>
-        {/* bottom */}
-        <div className={styles.florist_list__wrapper}>
-          {currentData ? (
-            currentData.map((florist) => (
-              <div
-                key={florist.storeId}
-                className={styles.florist__wrapper}
-                onClick={() => router.push(`/florist/${florist.storeId}/feed`)}
-              >
-                <div className={styles.store__img}>
-                  <FlowerImg src={florist.profile} florist={"florist"} />
-                </div>
-                <div className={styles.store__info}>
-                  <p className={styles.store__name}>{florist.storeName}</p>
-                  <p className={styles.store__adderss}>{florist.address}</p>
-                  <div className={styles.store__star}>
-                    <Rating
-                      defaultValue={florist.rating}
-                      size="medium"
-                      precision={0.5}
-                      readOnly
-                      className={styles.starrating}
-                    />
-                    <span>{florist.rating}점</span>
+        <main className={styles.florist_list_pagenation_wrapper}>
+          {/* bottom */}
+          <div className={styles.florist_list__wrapper}>
+            {currentData ? (
+              currentData.map((florist) => (
+                <div
+                  key={florist.storeId}
+                  className={styles.florist__wrapper}
+                  onClick={() => router.push(`/florist/${florist.storeId}/feed`)}
+                >
+                  <div className={styles.store__img}>
+                    <FlowerImg src={florist.profile} florist={"florist"} />
+                  </div>
+                  <div className={styles.store__info}>
+                    <p className={styles.store__name}>{florist.storeName}</p>
+                    <p className={styles.store__adderss}>{florist.address}</p>
+                    <div className={styles.store__star}>
+                      <Rating
+                        defaultValue={florist.rating}
+                        size="medium"
+                        precision={0.5}
+                        readOnly
+                        className={styles.starrating}
+                      />
+                      <span>{florist.rating}점</span>
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div>
+                <p>존재하지 않는 결과 입니다.</p>
               </div>
-            ))
-          ) : (
-            <div>
-              <p>존재하지 않는 결과 입니다.</p>
-            </div>
-          )}
-        </div>
-        {/* 페이지네이션 */}
-        <div className={styles.main__div}>
-          <button
-            className={styles.btn}
-            onClick={pageIndexChange.bind(pageIndexChange, pageIndex - 1)}
-            disabled={numLst[0] === 1}
-          >
-            &lt;
-          </button>
-          {numLst.map((num, idx) => (
+            )}
+          </div>
+          {/* 페이지네이션 */}
+          <div className={styles.main__div}>
             <button
               className={styles.btn}
-              key={idx}
-              onClick={pageIndexChange.bind(pageIndexChange, num)}
-              disabled={pageIndex === num}
+              onClick={pageIndexChange.bind(pageIndexChange, pageIndex - 1)}
+              disabled={numLst[0] === 1}
             >
-              <Link href={`/florist-list/${num}/${currentSort}`}>
-                <a>{num}</a>
-              </Link>
+              &lt;
             </button>
-          ))}
-          <button
-            className={styles.btn}
-            onClick={pageIndexChange.bind(pageIndexChange, pageIndex + 1)}
-            disabled={!maxPage || numLst[numLst.length - 1] === maxPage}
-          >
-            &gt;
-          </button>
-        </div>
+            {numLst.map((num, idx) => (
+              <button
+                className={styles.btn}
+                key={idx}
+                onClick={pageIndexChange.bind(pageIndexChange, num)}
+                disabled={pageIndex === num}
+              >
+                <Link href={`/florist-list/${num}/${currentSort}`}>
+                  <a>{num}</a>
+                </Link>
+              </button>
+            ))}
+            <button
+              className={styles.btn}
+              onClick={pageIndexChange.bind(pageIndexChange, pageIndex + 1)}
+              disabled={!maxPage || numLst[numLst.length - 1] === maxPage}
+            >
+              &gt;
+            </button>
+          </div>
+        </main>
       </div>
     </div>
   );
@@ -307,9 +307,7 @@ export async function getStaticProps({ params }) {
   const page = params.page;
   const sort = params.sort;
 
-  const response = await axios.get(
-    `${BASE_URL}user/stores?page=${page}&size=#&sd=2&sgg=&sn=&sort=${sort}`
-  );
+  const response = await axios.get(`${BASE_URL}user/stores?page=${page}&size=#&sd=2&sgg=&sn=&sort=${sort}`);
 
   if (!response) {
     return { notFound: true };
