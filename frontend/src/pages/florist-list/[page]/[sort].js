@@ -10,6 +10,7 @@ import useFlorist from "@/hooks/useFlorist";
 import { BASE_URL } from "@/pages/api/client";
 import axios from "axios";
 import Link from "next/link";
+import Spinner from "@/components/spinner/index";
 
 const FloristList = (props) => {
   const cx = classNames.bind(styles);
@@ -31,16 +32,20 @@ const FloristList = (props) => {
   const [inputText, setInputText] = useState();
   // * data 및 page
   const { floristList } = useFlorist();
-  const [mxPage, setMxPage] = useState(props.maxPage);
+  const [currentMaxPage, setCurrentMaxPage] = useState(props.maxPage);
   const [pageIndex, setPageIndex] = useState(1);
   const [numLst, setNumLst] = useState([1]); // [1, 2, 3, 4, 5]
-  const { data, maxPage, mutate } = floristList({
+  const selectSize = 8;
+  const { data, maxPage, loading, mutate } = floristList({
     pageIndex,
+    selectSize,
     selectSido,
     selectSigungu,
     inputText,
     currentSort,
   });
+
+  const holidayList = ["일", "월", "화", "수", "목", "금", "토"];
 
   const curSortChange = async (e) => {
     setCurrentSort(e);
@@ -49,14 +54,18 @@ const FloristList = (props) => {
     await mutate();
   };
 
-  const sidoSelect = async (e) => {
-    const value = e.target.value;
-    if (!value) return;
+  const setSidoSelect = async (value) => {
     setSelectSido(value);
     setSelectSigungu("전체");
     setSelectedArr(regionMap[value]);
-    router.push(`/florist-list/1/${currentSort}`);
     setPageIndex(1);
+    router.push(`/florist-list/1/${currentSort}`);
+  };
+
+  const sidoSelect = async (e) => {
+    const value = e.target.value;
+    if (!value) return;
+    await setSidoSelect(value);
     if (!data) return;
     mutate();
   };
@@ -104,10 +113,10 @@ const FloristList = (props) => {
       for (let i = mn; i <= mx; i++) {
         tmplst.push(i);
       }
-      if (mx <= mxPage) {
+      if (mx <= currentMaxPage) {
         setNumLst(tmplst.slice(0, 5));
       } else {
-        setNumLst(tmplst.slice(0, mxPage % 5));
+        setNumLst(tmplst.slice(0, currentMaxPage % 5));
       }
     } else if (e < numLst[0] && e % 5 == 0) {
       let copyOfNumLst = [];
@@ -126,15 +135,15 @@ const FloristList = (props) => {
         setNumLst([1, 2, 3, 4, 5]);
       }
     }
-  }, [mxPage, pageIndex]);
+  }, [currentMaxPage, pageIndex]);
 
   useEffect(() => {
     if (!data) {
       setCurrentData(null);
-      setMxPage(1);
+      setCurrentMaxPage(1);
     }
     setCurrentData(data);
-    setMxPage(maxPage);
+    setCurrentMaxPage(maxPage);
   }, [data]);
 
   return (
@@ -231,9 +240,11 @@ const FloristList = (props) => {
             <span className={cx("material-icons", "material_icons")}>search</span>
           </div>
         </div>
+
         <main className={styles.florist_list_pagenation_wrapper}>
           {/* bottom */}
           <div className={styles.florist_list__wrapper}>
+            {!currentData && loading && <Spinner />}
             {currentData ? (
               currentData.map((florist) => (
                 <div
@@ -246,6 +257,13 @@ const FloristList = (props) => {
                   </div>
                   <div className={styles.store__info}>
                     <p className={styles.store__name}>{florist.storeName}</p>
+                    <p className={styles.store__days}>
+                      {florist.holidays
+                        .map((_, index) => _ && holidayList[index] + "요일")
+                        .filter((el) => (
+                          <span>{el}</span>
+                        ))}
+                    </p>
                     <p className={styles.store__adderss}>{florist.address}</p>
                     <div className={styles.store__star}>
                       <Rating
@@ -267,34 +285,36 @@ const FloristList = (props) => {
             )}
           </div>
           {/* 페이지네이션 */}
-          <div className={styles.main__div}>
-            <button
-              className={styles.btn}
-              onClick={pageIndexChange.bind(pageIndexChange, pageIndex - 1)}
-              disabled={numLst[0] === 1}
-            >
-              &lt;
-            </button>
-            {numLst.map((num, idx) => (
+          {currentData && (
+            <div className={styles.main__div}>
               <button
                 className={styles.btn}
-                key={idx}
-                onClick={pageIndexChange.bind(pageIndexChange, num)}
-                disabled={pageIndex === num}
+                onClick={pageIndexChange.bind(pageIndexChange, pageIndex - 1)}
+                disabled={pageIndex === 1}
               >
-                <Link href={`/florist-list/${num}/${currentSort}`}>
-                  <a>{num}</a>
-                </Link>
+                &lt;
               </button>
-            ))}
-            <button
-              className={styles.btn}
-              onClick={pageIndexChange.bind(pageIndexChange, pageIndex + 1)}
-              disabled={!maxPage || numLst[numLst.length - 1] === maxPage}
-            >
-              &gt;
-            </button>
-          </div>
+              {numLst.map((num, idx) => (
+                <button
+                  className={styles.btn}
+                  key={idx}
+                  onClick={pageIndexChange.bind(pageIndexChange, num)}
+                  disabled={pageIndex === num}
+                >
+                  <Link href={`/florist-list/${num}/${currentSort}`}>
+                    <a>{num}</a>
+                  </Link>
+                </button>
+              ))}
+              <button
+                className={styles.btn}
+                onClick={pageIndexChange.bind(pageIndexChange, pageIndex + 1)}
+                disabled={!maxPage || pageIndex === maxPage}
+              >
+                &gt;
+              </button>
+            </div>
+          )}
         </main>
       </div>
     </div>

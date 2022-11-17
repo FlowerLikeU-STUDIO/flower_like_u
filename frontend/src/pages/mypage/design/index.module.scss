@@ -1,3 +1,15 @@
+.not__data {
+  @include flexDiv(column, center, flex-start);
+  width: 100%;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.go_custom {
+  @include font(1rem, bold, $mainPrimary);
+  cursor: pointer;
+}
+
 .img__container {
   display: grid;
   grid-template-rows: repeat(4, 1fr); //fr 비율 1:1:1

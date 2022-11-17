@@ -40,7 +40,7 @@ const CustomerReservation = () => {
   return (
     <MyWrapper>
       <MyHeader />
-      {data && (
+      {data ? (
         <div className={styles.main__div}>
           {data.map((res, idx) => (
             <div key={idx}>
@@ -56,6 +56,10 @@ const CustomerReservation = () => {
             </div>
           ))}
           <PageNation setPageIndex={setPageIndex} selectNumLst={selectNumLst} pageIndex={pageIndex} maxPage={maxPage} />
+        </div>
+      ) : (
+        <div className={styles.not__data}>
+          <p className={styles.go__res}>🌸🌹 꽃집에 예약하면 여기에 표시됩니다. 🌻🌼</p>
         </div>
       )}
     </MyWrapper>
