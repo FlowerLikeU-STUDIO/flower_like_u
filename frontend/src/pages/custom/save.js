@@ -192,9 +192,9 @@ const CustomSave = () => {
               >
                 초기화하고 메인으로 돌아가기
               </button>
-              <button className={cx("btn", "green")} onClick={() => onHandleOpen()}>
+              {/* <button className={cx("btn", "green")} onClick={() => onHandleOpen()}>
                 주문하러 가기
-              </button>
+              </button> */}
             </div>
           </article>
         </section>

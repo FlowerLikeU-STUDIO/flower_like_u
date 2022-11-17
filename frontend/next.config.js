@@ -10,7 +10,7 @@ module.exports = {
   },
   // 이미지 최적화
   images: {
-    domains: ["media.istockphoto.com"],
+    domains: ["media.istockphoto.com", "images.unsplash.com"],
     // formats: ["image/avif", "image/webp"],
   },
 };

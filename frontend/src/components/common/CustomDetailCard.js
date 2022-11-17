@@ -104,9 +104,9 @@ const CustomDetailCard = () => {
               <button className={styles.btn} onClick={() => onDownloadButton()}>
                 사진으로 저장하기
               </button>
-              <button className={cx("btn", "green")} onClick={() => onHandleOpen()}>
+              {/* <button className={cx("btn", "green")} onClick={() => onHandleOpen()}>
                 주문하러 가기
-              </button>
+              </button> */}
             </div>
           </div>
         </>
