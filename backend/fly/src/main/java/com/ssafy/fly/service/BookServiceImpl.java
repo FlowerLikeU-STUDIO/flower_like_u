@@ -76,7 +76,7 @@ public class BookServiceImpl implements BookService {
             return result;
         }
 
-        CustomFlowerEntity flowerBasicInfo = customFlowerRepository.findByDesignIdAndRemoval(flowerId, false);
+        CustomFlowerEntity flowerBasicInfo = customFlowerRepository.findByDesignIdAndRemoval(flowerId, false).orElse(null);
         if (flowerBasicInfo == null) {
             message = "존재하지 않는 커스텀 꽃다발 아이디입니다.";
             System.out.println(message);

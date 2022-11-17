@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/custom")
 public class CustomController {
 
-    private final Logger logger = LogManager.getLogger(CustomController.class);
+    //private final Logger logger = LogManager.getLogger(CustomController.class);
 
     private final CustomFlowerService customFlowerService;
     private final ResultMessageSet resultMessageSet;
@@ -46,11 +47,11 @@ public class CustomController {
     /** 1. 커스텀 꽃다발 정보 등록 */
     @PostMapping()
     public ResponseEntity<Map<String, Object>> registFlower(@RequestBody CustomFlowerRegReq customFlowerRegReq,
-                                                            Principal principal) {
-        logger.info("[POST] - /custom - {}", customFlowerRegReq);
+                                                            Authentication authentication) {
+        //logger.info("[POST] - /custom - {}", customFlowerRegReq);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = customFlowerService.saveCustomFlower(customFlowerRegReq, principal);
+        Map<String, Object> result = customFlowerService.saveCustomFlower(customFlowerRegReq, authentication);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -70,11 +71,11 @@ public class CustomController {
     @GetMapping()
     public ResponseEntity<Map<String, Object>> getCustomFlowerList(@RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
                                                                    @RequestParam(value = "size", required = false, defaultValue = "10") int size,
-                                                                   Principal principal) {
-        logger.info("[GET] /custom?page={}&size={}", pageNo, size);
+                                                                   Authentication authentication) {
+        //logger.info("[GET] /custom?page={}&size={}", pageNo, size);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = customFlowerService.getCustomFlowerList(pageNo, size, principal);
+        Map<String, Object> result = customFlowerService.getCustomFlowerList(pageNo, size, authentication);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -91,11 +92,11 @@ public class CustomController {
     /** 3. 커스텀 꽃다발 상세 정보 조회 */
     @GetMapping("/detail/{flowerId}")
     public ResponseEntity<Map<String, Object>> getCumstomFlowerDetailInfo(@PathVariable String flowerId,
-                                                                          Principal principal) {
-        logger.info("[GET] /custom/detail/{flowerId} - {}", flowerId);
+                                                                          Authentication authentication) {
+        //logger.info("[GET] /custom/detail/{flowerId} - {}", flowerId);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = customFlowerService.getCustomFlowerDetails(flowerId, principal);
+        Map<String, Object> result = customFlowerService.getCustomFlowerDetails(flowerId, authentication);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -111,11 +112,11 @@ public class CustomController {
     /** 4. 커스텀 꽃다발 정보 삭제 */
     @DeleteMapping("/{flowerId}")
     public ResponseEntity<Map<String, Object>> removeCumstomFlowerInfo(@PathVariable String flowerId,
-                                                                       Principal principal) {
-        logger.info("[DELETE] /custom/{flowerId} - {}", flowerId);
+                                                                       Authentication authentication) {
+        //logger.info("[DELETE] /custom/{flowerId} - {}", flowerId);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = customFlowerService.removeCustomFlower(flowerId, principal);
+        Map<String, Object> result = customFlowerService.removeCustomFlower(flowerId, authentication);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -130,7 +131,7 @@ public class CustomController {
     /** 5. 커스텀 꽃다발 조합 추천 */
     @GetMapping("/recommend/{size}")
     public ResponseEntity<List<FlowerVo>> getRecommend(@PathVariable int size) {
-        logger.info("[GET] /custom/recommend/{size} - {}", size);
+        //logger.info("[GET] /custom/recommend/{size} - {}", size);
 
         Map<String, FlowerVo[]> flowerMap = FlowerMap.ofMap();
         if (size == 0) {
