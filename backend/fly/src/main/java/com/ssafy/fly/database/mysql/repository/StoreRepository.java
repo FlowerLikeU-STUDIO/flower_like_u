@@ -13,8 +13,6 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
-    public StoreEntity findFirstByUserId(String inputId);
-
     public Optional<StoreEntity> findByUserId(String userId);
     public StoreEntity findByNameAndEmailAndWithdrawal(String name, String email, boolean isDeleted);
 
@@ -22,7 +20,7 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
 
     public StoreEntity findByUserIdAndWithdrawal(String userId, boolean isDeleted);
 
-    public StoreEntity findByIdAndWithdrawal(Long storeId, boolean isDeleted);
+    public Optional<StoreEntity> findByIdAndWithdrawal(Long id, boolean isDeleted); /** 새로 바꾼 함수(사용한 곳: 4개) */
 
     public Page<StoreEntity> findAllByStoreContainsAndWithdrawal(String storeName, boolean isDeleted, Pageable pageable);
 
@@ -34,30 +32,30 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
     @Transactional
     @Query("UPDATE StoreEntity as s " +
             "SET s.bio = :bio " +
-            "WHERE s.userId = :userId")
-    public int updateIntroduction(@Param("userId") String userId,
+            "WHERE s.id = :id")
+    public int updateIntroduction(@Param("id") Long id,
                                   @Param("bio") String introduction);
 
     @Modifying
     @Transactional
     @Query("UPDATE StoreEntity as s " +
             "SET s.password = :newPassword " +
-            "WHERE s.userId = :userId")
-    public int updatePassword(@Param("userId") String userId,
+            "WHERE s.id = :id")
+    public int updatePassword(@Param("id") Long id,
                               @Param("newPassword") String newPassword);
 
     @Modifying
     @Transactional
     @Query("UPDATE StoreEntity as s " +
             "SET s.profile = :profile " +
-            "WHERE s.userId = :userId")
-    public int updateProfileImage(@Param("userId") String userId,
+            "WHERE s.id = :id")
+    public int updateProfileImage(@Param("id") Long id,
                                   @Param("profile") String image);
 
     @Modifying
     @Transactional
     @Query("UPDATE StoreEntity as s " +
             "SET s.withdrawal = true " +
-            "WHERE s.userId = :userId")
-    public int accountWithdraw(@Param("userId") String userId);
+            "WHERE s.id = :id")
+    public int accountWithdraw(@Param("id") Long id);
 }

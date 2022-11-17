@@ -1,6 +1,7 @@
 import useCalendar from "@/hooks/useCalendar";
 import { useState } from "react";
 import styled from "styled-components";
+import HolidayBadge from "./HolidayBadge";
 
 const CalendarWrapper = styled.div`
   height: 100%;
@@ -8,6 +9,11 @@ const CalendarWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+`;
+
+const CalendarTableWrapper = styled.div`
+  padding-top: 20px;
+  height: 400px;
 `;
 
 const CalendarTable = styled.table`
@@ -18,15 +24,17 @@ const CalendarTable = styled.table`
 `;
 
 const CalendarButton = styled.button`
-  font-size: 20px;
+  font-size: 14px;
   color: #ffa7a5;
 `;
 
 const CalendarTitle = styled.div`
   display: flex;
+  position: relative;
   width: 100%;
   justify-content: space-around;
   align-items: center;
+  padding: 10px 0px;
 `;
 
 const TitleContentWrapper = styled.div`
@@ -50,7 +58,7 @@ const CalendarTh = styled.th`
 const CalendarTr = styled.tr`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  padding: 20px 0px;
+  padding: 10px 0px;
   border-bottom: 1px solid #edf2f7;
   &.day {
     font-size: 12px;
@@ -63,6 +71,11 @@ const CalendarTd = styled.td`
   cursor: pointer;
   &.past {
     cursor: auto;
+    color: gray;
+  }
+  &.holiday {
+    cursor: auto;
+    color: gray;
   }
 `;
 
@@ -79,6 +92,20 @@ const SpanStyle = styled.span`
     background-color: #ffa7af;
     color: white;
     border-radius: 100%;
+  }
+`;
+
+const BadgeWrapper = styled.div`
+  position: absolute;
+  & span {
+    margin-left: 10px;
+    font-size: 14px;
+  }
+  &.title {
+    top: -20px;
+    right: -36px;
+    display: flex;
+    width: 100px;
   }
 `;
 
@@ -99,6 +126,19 @@ const getDayColor = (date) => {
     date.getDay();
   }
 };
+
+const prevButtonCheck = (year, month) => {
+  const curYear = new Date().getFullYear();
+  const curMonth = new Date().getMonth();
+  if (curYear === year && curMonth === month) {
+    return true;
+  }
+  if (curYear < year) {
+    return false;
+  }
+};
+
+const holiday = [false, false, false, true, true, false, false];
 const Calendar = ({ choiceDay, setChoiceDay, setReservationDate }) => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
@@ -125,13 +165,16 @@ const Calendar = ({ choiceDay, setChoiceDay, setReservationDate }) => {
 
   const onChoiceDay = (e) => {
     const choiceDay = e.currentTarget.textContent;
-    if (choiceDay === "" || e.currentTarget.className.includes("past")) {
+    if (
+      choiceDay === "" ||
+      e.currentTarget.className.includes("past") ||
+      e.currentTarget.className.includes("holiday")
+    ) {
       return;
     }
     const choiceDate =
       year + "-" + (month + 1) + "-" + choiceDay.padStart(2, 0);
     setReservationDate(choiceDate);
-    console.log(choiceDate);
     setChoiceDay(choiceDay);
   };
 
@@ -140,71 +183,85 @@ const Calendar = ({ choiceDay, setChoiceDay, setReservationDate }) => {
   ) : (
     <>
       <CalendarWrapper>
-        <CalendarTitle>
-          <TitleContentWrapper className="title_btn">
-            {month === new Date().getMonth() ? (
-              <></>
-            ) : (
-              <CalendarButton type="button" onClick={onPrevMonth}>
-                <i className="fa-regular fa-circle-caret-left"></i>
+        <CalendarTableWrapper>
+          <CalendarTitle>
+            <TitleContentWrapper className="title_btn">
+              {prevButtonCheck(year, month) ? (
+                <></>
+              ) : (
+                <CalendarButton type="button" onClick={onPrevMonth}>
+                  <i className="fa-solid fa-angle-left"></i>
+                </CalendarButton>
+              )}
+            </TitleContentWrapper>
+            <TitleContentWrapper className="title_day">{`${year}.${
+              month + 1 > 12 ? 1 : month + 1
+            }`}</TitleContentWrapper>
+            <TitleContentWrapper className="title_btn">
+              <CalendarButton type="button" onClick={onNextMonth}>
+                <i className="fa-solid fa-chevron-right"></i>
               </CalendarButton>
-            )}
-          </TitleContentWrapper>
-          <TitleContentWrapper className="title_day">{`${year}.${
-            month + 1
-          }`}</TitleContentWrapper>
-          <TitleContentWrapper className="title_btn">
-            <CalendarButton type="button" onClick={onNextMonth}>
-              <i className="fa-regular fa-circle-caret-right"></i>
-            </CalendarButton>
-          </TitleContentWrapper>
-        </CalendarTitle>
-        <div>
-          <CalendarTable>
-            <CalendarThead>
-              <CalendarTr className="day">
-                {dayOfTheWeek.map((item, idx) => (
-                  <CalendarTh
-                    color={idx === 0 || idx === 6 ? dayColor[idx] : "gray"}
-                    key={item + `dayOfWeek_${idx}`}
-                  >
-                    {item}
-                  </CalendarTh>
-                ))}
-              </CalendarTr>
-            </CalendarThead>
-            <tbody>
-              {calendarBody.map((days, idx) => (
-                <CalendarTr key={idx + `weeks_${idx}`}>
-                  {days.map((day, idx) => (
-                    <CalendarTd
-                      className={[
-                        day !== "" && choiceDay === day.getDate()
-                          ? "choiced"
-                          : "",
-                        day === "" || day < new Date() ? "past" : "",
-                      ].join("")}
-                      key={`day_${idx}`}
-                      color={dayColor[getDayColor(day)]}
-                      onClick={onChoiceDay}
+            </TitleContentWrapper>
+            <BadgeWrapper className={"title"}>
+              <HolidayBadge />
+              <span>휴무일</span>
+            </BadgeWrapper>
+          </CalendarTitle>
+          <div>
+            <CalendarTable>
+              <CalendarThead>
+                <CalendarTr className="day">
+                  {dayOfTheWeek.map((item, idx) => (
+                    <CalendarTh
+                      color={idx === 0 || idx === 6 ? dayColor[idx] : "gray"}
+                      key={item + `dayOfWeek_${idx}`}
                     >
-                      <SpanStyle
-                        className={
-                          day !== "" &&
-                          parseInt(day.getDate()) === parseInt(choiceDay)
-                            ? "choice"
-                            : ""
-                        }
-                      >
-                        {day === "" ? "" : day.getDate()}
-                      </SpanStyle>
-                    </CalendarTd>
+                      {item}
+                    </CalendarTh>
                   ))}
                 </CalendarTr>
-              ))}
-            </tbody>
-          </CalendarTable>
-        </div>
+              </CalendarThead>
+              <tbody>
+                {calendarBody.map((days, idx) => (
+                  <CalendarTr key={idx + `weeks_${idx}`}>
+                    {days.map((day, idx) => (
+                      <CalendarTd
+                        className={[
+                          day !== "" && choiceDay === day.getDate()
+                            ? "choiced"
+                            : "",
+                          day === "" || day < new Date() ? "past" : "",
+                          day && holiday[day.getDay()] ? "holiday" : "",
+                        ].join("")}
+                        key={`day_${idx}`}
+                        color={dayColor[getDayColor(day)]}
+                        onClick={onChoiceDay}
+                      >
+                        {day && holiday[day.getDay()] ? (
+                          <BadgeWrapper className="dayBadge">
+                            <HolidayBadge />
+                          </BadgeWrapper>
+                        ) : (
+                          <></>
+                        )}
+                        <SpanStyle
+                          className={
+                            day !== "" &&
+                            parseInt(day.getDate()) === parseInt(choiceDay)
+                              ? "choice"
+                              : ""
+                          }
+                        >
+                          {day === "" ? "" : day.getDate()}
+                        </SpanStyle>
+                      </CalendarTd>
+                    ))}
+                  </CalendarTr>
+                ))}
+              </tbody>
+            </CalendarTable>
+          </div>
+        </CalendarTableWrapper>
       </CalendarWrapper>
     </>
   );

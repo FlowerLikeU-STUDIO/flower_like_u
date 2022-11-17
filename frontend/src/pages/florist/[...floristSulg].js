@@ -67,7 +67,23 @@ const TypeButtonStyle = styled.button`
 `;
 
 const TitleButtonWrapper = styled.div`
-  padding: 10px 20px;
+  padding: 0px 20px 10px 20px;
+`;
+
+const ButtonStyle = styled.button`
+  margin: 10px 0px;
+  border: 3px solid #ffa7a5;
+  width: 140px;
+  font-size: 14px;
+  padding: 8px 12px;
+  margin: 0 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s linear;
+  &:hover {
+    background-color: #ffa7a5;
+    color: #fff;
+  }
 `;
 
 const Profile = ({ profileData, type, storeId }) => {
@@ -82,6 +98,8 @@ const Profile = ({ profileData, type, storeId }) => {
   const openChat = () => {
     dispath(startChatting({ storeId: storeId }));
   };
+
+  const handleCustomResgister = () => {};
   return (
     <>
       <ProfileTitleWrapper>
@@ -90,9 +108,14 @@ const Profile = ({ profileData, type, storeId }) => {
           <TitleButtonWrapper>
             {isLogin && user ? (
               user.type === "consumer" ? (
-                <button type="button" onClick={openChat}>
-                  채팅 보내기
-                </button>
+                <div>
+                  <ButtonStyle type="button" onClick={openChat}>
+                    채팅 보내기
+                  </ButtonStyle>
+                  <ButtonStyle type="button" onClick={handleCustomResgister}>
+                    커스텀 예약
+                  </ButtonStyle>
+                </div>
               ) : (
                 <></>
               )
