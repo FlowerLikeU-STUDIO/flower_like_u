@@ -1,56 +1,65 @@
 package com.ssafy.fly.config;
 
+import com.ssafy.fly.controller.AuthController;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.CodeSignature;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.hibernate.mapping.Join;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Log4j2
 @Configuration
 @Aspect
 public class LogConfig {
+    private final Logger logger = LogManager.getLogger(LogConfig.class);
 
     // com.ssafy.fly.controller 이하 패키지의 모든 클래스 이하 모든 메서드에 적용
     @Pointcut("execution(* com.ssafy.fly.controller..*.*(..))")
     private void pointCut(){}
 
-    // Pointcut에 의해 필터링된 경로로 들어오는 경우 메서드 호출 전에 적용
+    // 메서드 호출 전에 적용
     @Before("pointCut()")
     public void beforeParameterLog(JoinPoint joinPoint) {
-        // 메서드 정보 받아오기
-        Method method = getMethod(joinPoint);
-        log.info("======= method name = {} =======", method.getName());
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        logger.info("=============== REQUEST ===============");
+        logger.info("[CLIENT's TOKEN] {}", request.getHeader("Authorization"));
+        logger.info("  [REQUEST PATH] {} - {}", request.getMethod(), request.getRequestURI());
+        logger.info("[REQUEST PARAMS] {}", this.params(joinPoint));
+    }
 
-        // 파라미터 받아오기
+    // 메서드 리턴 후에 적용
+    @AfterReturning(value = "pointCut()", returning = "response")
+    public void afterReturnLog(JoinPoint joinPoint, Object response) {
+        logger.info("=============== RESPONSE ===============");
+        logger.info("[RESPONSE] {}", response);
+    }
+
+    @AfterThrowing(value = "pointCut()", throwing = "exception")
+    public void afterThrowingLog(JoinPoint joinPoint, Throwable exception) {
+        logger.info("=============== EXCEPTION ===============");
+        logger.error("[ERR MESSAGE] - {}", exception.getMessage());
+    }
+
+    private Map params(JoinPoint joinPoint) {
+        CodeSignature codeSignature = (CodeSignature) joinPoint.getSignature();
+        String[] parameterNames = codeSignature.getParameterNames();
         Object[] args = joinPoint.getArgs();
-        if (args.length <= 0) log.info("no parameter");
-        for (Object arg : args) {
-            log.info("parameter type = {}", arg.getClass().getSimpleName());
-            log.info("parameter value = {}", arg);
+        Map<String, Object> params = new HashMap<>();
+        for (int i = 0; i < parameterNames.length; i++) {
+            params.put(parameterNames[i], args[i]);
         }
-    }
-
-    // Poincut에 의해 필터링된 경로로 들어오는 경우 메서드 리턴 후에 적용
-    @AfterReturning(value = "pointCut()", returning = "returnObj")
-    public void afterReturnLog(JoinPoint joinPoint, Object returnObj) {
-        // 메서드 정보 받아오기
-        Method method = getMethod(joinPoint);
-        log.info("======= method name = {} =======", method.getName());
-
-        log.info("return type = {}", returnObj.getClass().getSimpleName());
-        log.info("return value = {}", returnObj);
-    }
-
-    // JoinPoint로 메서드 정보 가져오기
-    private Method getMethod(JoinPoint joinPoint) {
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        return signature.getMethod();
+        return params;
     }
 }

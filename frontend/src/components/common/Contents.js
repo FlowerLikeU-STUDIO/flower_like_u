@@ -44,7 +44,7 @@ const Contents = ({ rating, introduce, feedsNum }) => {
       </ContentWrapper>
 
       <ContentParagraph margin={"4px 0 0 4px"}>
-        게시물 <ContentSpan>{feedsNum}</ContentSpan>
+        게시물 <ContentSpan>{feedsNum}개</ContentSpan>
       </ContentParagraph>
 
       <ContentWrapper alignItem={"stretch"}>
@@ -59,6 +59,5 @@ export default Contents;
 Contents.defaultProps = {
   rating: 4.5,
   feedsNum: 100,
-  introduce:
-    "안녕하세요. 이번에 덕명동으로 입점한 너닮꽃집이에요.\n대전 삼성화재연수원 근처에 있습니다.\n문의는 채팅을통해 부탁드려요",
+  introduce: "🌻해당 꽃집의 소개가 준비중이에요🌻",
 };

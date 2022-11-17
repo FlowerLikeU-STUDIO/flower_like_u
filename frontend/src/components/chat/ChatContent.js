@@ -76,7 +76,12 @@ const ChatContent = () => {
           )
         }
         right={
-          <button onClick={() => onHandleDisplay(false)}>
+          <button
+            onClick={() => {
+              handleQuitChat();
+              onHandleDisplay(false);
+            }}
+          >
             <i className="fa-solid fa-xmark"></i>
           </button>
         }

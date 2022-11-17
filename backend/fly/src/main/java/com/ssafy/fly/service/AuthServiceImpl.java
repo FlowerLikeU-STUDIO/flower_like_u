@@ -25,7 +25,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Map<String, Object> authenticateByEmail(String email) {
         Map<String, Object> result = new HashMap<>();
-        String message = "";
 
         String inputEmail = email;
         String authCode = randomStringGenerator.generateRandomPassword(8);
