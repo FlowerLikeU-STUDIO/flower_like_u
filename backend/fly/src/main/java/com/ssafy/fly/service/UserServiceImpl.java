@@ -524,11 +524,10 @@ public class UserServiceImpl implements UserService {
                 if ("false".equals(s)) holidays.add(false);
                 else holidays.add(true);
             }
-            return new RegionVo(store.getStreet(),
-                    store.getName(), store.getLatitude(), store.getLongitude(),
+            return new RegionVo(store.getStreet(), store.getId(), store.getLatitude(), store.getLongitude(),
                     store.getStore(), store.getBio(), store.getProfile(),
                     decimalFormatter.roundToTwoDecimalPlaces(store.getRating() == null ? 0 : store.getRating()),
-                    store.getHolidays());
+                    holidays);
         }).collect(Collectors.toList());
     }
 
