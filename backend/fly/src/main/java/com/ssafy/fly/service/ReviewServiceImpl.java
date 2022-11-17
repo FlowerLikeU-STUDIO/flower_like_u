@@ -1,5 +1,7 @@
 package com.ssafy.fly.service;
 
+import com.ssafy.fly.common.exception.CustomException;
+import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.database.mysql.entity.BookEntity;
 import com.ssafy.fly.database.mysql.entity.ConsumerEntity;
 import com.ssafy.fly.database.mysql.entity.ReviewEntity;
@@ -14,11 +16,11 @@ import com.ssafy.fly.dto.response.ReviewInfoRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.*;
-import java.util.function.Supplier;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -41,15 +43,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     public Map<String, Object> getList(Long storeId, Pageable pageable) {
         Map<String, Object> result = new HashMap<>();
-        String message = "";
+        HttpStatus statusCode = HttpStatus.OK;
 
         StoreEntity store = storeRepository.findById(storeId).orElse(null);
         if (store == null) {
-            message = "존재하지 않는 판매자 아이디입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+            throw new CustomException( "존재하지 않는 판매자 아이디입니다.", statusCode);
         }
         
         Page<ReviewEntity> searchList = reviewRepository.findByStoreId(store, pageable);
@@ -82,54 +80,32 @@ public class ReviewServiceImpl implements ReviewService {
         return result;
     }
 
-    public Map<String, Object> create(ReviewPostReqDto reviewPostReqDto, Principal principal) {
+    public Map<String, Object> create(ReviewPostReqDto reviewPostReqDto, Authentication authentication) {
         Map<String, Object> result = new HashMap<>();
-        String message = "";
+        HttpStatus statusCode = HttpStatus.CREATED;
 
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-        if (consumer == null) {
-            message = "잘못된 토큰 정보입니다.";
-            System.out.println(message);
-            result.put("message", message);
-            result.put("result", false);
-            return result;
-        }
+        Long userPk = ((CustomUserDetail) authentication.getPrincipal()).getUserPk();
 
         StoreEntity store = storeRepository.findByIdAndWithdrawal(reviewPostReqDto.getStoreId(), false).orElse(null);
         if (store == null) {
-            message = "존재하지 않는 판매자 ID(Long Type) 입니다.";
-            System.out.println(message);
-            result.put("message", message);
-            result.put("result", false);
-            return result;
+            throw new CustomException("존재하지 않는 판매자 ID(Long Type) 입니다.", statusCode);
         }
 
         BookEntity book = bookRepository.findById(reviewPostReqDto.getBookId()).orElse(null);
         if (book == null) {
-            message = "존재하지 않는 예약 ID(Long Type) 입니다.";
-            System.out.println(message);
-            result.put("message", message);
-            result.put("result", false);
-            return result;
+            throw new CustomException("존재하지 않는 예약 ID(Long Type) 입니다.", statusCode);
         }
 
-        if (!principal.getName().equals(book.getConsumerId().getUserId()) ||
-                book.getStoreId().getId() != store.getId()) {
-            message = "잘못된 접근입니다.";
-            System.out.println(message);
-            result.put("message", message);
-            result.put("result", false);
-            return result;
+        if (!userPk.equals(book.getConsumerId().getId()) ||
+                !store.getId().equals(book.getStoreId().getId())) {
+            throw new CustomException("해당 예약 정보에 접근할 수 없는 계정입니다.", statusCode);
         }
 
         if (!book.getState().equals(BookState.RECIPT)) {
-            message = "후기를 작성할 수 없는 단계입니다.";
-            System.out.println(message);
-            result.put("message", message);
-            result.put("result", false);
-            return result;
+            throw new CustomException("후기를 작성할 수 없는 단계입니다.", statusCode);
         }
 
+        ConsumerEntity consumer = consumerRepository.findByIdAndWithdrawal(userPk, false).orElse(null);
         ReviewEntity reviewEntity = ReviewEntity.builder()
                 .content(reviewPostReqDto.getContent())
                 .rating(reviewPostReqDto.getRating())
@@ -143,43 +119,26 @@ public class ReviewServiceImpl implements ReviewService {
         if (bookRepository.updateBookState(book.getId(), BookState.DONE) > 0) {
             result.put("result", true);
         } else {
-            message = "서버 문제로 요청 작업을 완료하지 못하였습니다.";
-            result.put("message", message);
-            result.put("result", false);
+            throw new CustomException("서버 문제로 요청 작업을 완료하지 못하였습니다.", statusCode);
         }
 
         return result;
     }
 
     @Override
-    public Map<String, Object> getReviewInfo(Long reviewId, Principal principal) {
+    public Map<String, Object> getReviewInfo(Long reviewId, Authentication authentication) {
         Map<String, Object> result = new HashMap<>();
-        String message = "";
+        HttpStatus statusCode = HttpStatus.OK;
 
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-        if (consumer == null) {
-            message = "잘못된 토큰 정보입니다.";
-            System.out.println(message);
-            result.put("message", message);
-            result.put("result", false);
-            return result;
-        }
+        Long userPk = ((CustomUserDetail) authentication.getPrincipal()).getUserPk();
 
         ReviewEntity review = reviewRepository.findById(reviewId).orElse(null);
         if (review == null) {
-            message = "존재하지 않는 리뷰 아이디(Long Type) 입니다.";
-            System.out.println(message);
-            result.put("message", message);
-            result.put("result", false);
-            return result;
+            throw new CustomException("존재하지 않는 리뷰 아이디(Long Type) 입니다.", statusCode);
         }
 
-        if (!principal.getName().equals(review.getConsumerId().getUserId())) {
-            message = "잘못된 접근입니다.";
-            System.out.println(message);
-            result.put("message", message);
-            result.put("result", false);
-            return result;
+        if (!userPk.equals(review.getConsumerId().getId())) {
+            throw new CustomException("잘못된 접근입니다.", statusCode);
         }
 
         ReviewInfoRes reviewInfo = ReviewInfoRes.builder()
@@ -192,17 +151,5 @@ public class ReviewServiceImpl implements ReviewService {
         result.put("result", true);
         result.put("reviewInfo", reviewInfo);
         return result;
-    }
-
-    public Double getRating(Long storeId) {
-        StoreEntity storeEntity = storeRepository.findById(storeId).orElseThrow(new Supplier<IllegalArgumentException>() {
-            @Override
-            public IllegalArgumentException get() {
-                return new IllegalArgumentException("해당 id의 store가 없습니다.");
-            }
-        });
-        List<ReviewEntity> ratingList = reviewRepository.findAllByStoreId(storeEntity);
-        int length = ratingList.size();
-        return length == 0 ? 0 : ratingList.stream().map(ReviewEntity::getRating).reduce(0.0, Double::sum) / length;
     }
 }

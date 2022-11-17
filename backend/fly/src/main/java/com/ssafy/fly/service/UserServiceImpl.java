@@ -140,8 +140,8 @@ public class UserServiceImpl implements UserService {
         String inputEmail = findIdReq.getEmail();
 
         // 구매자와 판매자 테이블에서 (이름, 이메일, 미탈퇴자)로 탐색
-        ConsumerEntity consumer = consumerRepository.findByNameAndEmailAndWithdrawal(inputName, inputEmail, false);
-        StoreEntity store = storeRepository.findByNameAndEmailAndWithdrawal(inputName, inputEmail, false);
+        ConsumerEntity consumer = consumerRepository.findByNameAndEmailAndWithdrawal(inputName, inputEmail, false).orElse(null);
+        StoreEntity store = storeRepository.findByNameAndEmailAndWithdrawal(inputName, inputEmail, false).orElse(null);
 
         // 결과 반환
         if (consumer == null && store == null) {
@@ -168,8 +168,8 @@ public class UserServiceImpl implements UserService {
         String inputEmail = findPwdReq.getEmail();
 
         // 구매자와 판매자 테이블에서 (아이디, 이름, 이메일, 미탈퇴자)로 탐색
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndNameAndEmailAndWithdrawal(inputUserId, inputName, inputEmail, false);
-        StoreEntity store = storeRepository.findByUserIdAndNameAndEmailAndWithdrawal(inputUserId, inputName, inputEmail, false);
+        ConsumerEntity consumer = consumerRepository.findByUserIdAndNameAndEmailAndWithdrawal(inputUserId, inputName, inputEmail, false).orElse(null);
+        StoreEntity store = storeRepository.findByUserIdAndNameAndEmailAndWithdrawal(inputUserId, inputName, inputEmail, false).orElse(null);
 
         if (consumer == null && store == null) {
             throw new CustomException("입력과 일치하는 회원의 정보가 없습니다.", statusCode);
