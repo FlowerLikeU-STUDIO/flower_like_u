@@ -15,9 +15,8 @@ import java.util.List;
 @Entity
 @Table(name = "consumer")
 @Getter
-@Setter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @ToString(exclude = {"customFlowers", "reviews", "books"})
 public class ConsumerEntity extends BaseEntity implements CustomUserDetail {

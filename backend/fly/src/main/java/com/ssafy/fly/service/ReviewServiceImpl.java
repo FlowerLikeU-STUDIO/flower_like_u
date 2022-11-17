@@ -95,7 +95,7 @@ public class ReviewServiceImpl implements ReviewService {
             return result;
         }
 
-        StoreEntity store = storeRepository.findByIdAndWithdrawal(reviewPostReqDto.getStoreId(), false);
+        StoreEntity store = storeRepository.findByIdAndWithdrawal(reviewPostReqDto.getStoreId(), false).orElse(null);
         if (store == null) {
             message = "존재하지 않는 판매자 ID(Long Type) 입니다.";
             System.out.println(message);
