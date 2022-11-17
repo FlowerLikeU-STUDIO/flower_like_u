@@ -36,8 +36,8 @@
   &.vase {
     background-image: url("/custom/vase.png");
   }
-  &.ballon {
-    background-image: url("/custom/ballon.png");
+  &.balloon {
+    background-image: url("/custom/balloon.png");
   }
 }
 
@@ -108,14 +108,19 @@
 .btn__group {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  gap: 0.9rem;
+  .btn:nth-child(5) {
+    grid-column: 1 / span 2;
+    /* 1번 라인에서 3칸 */
+    grid-row: 3 / span 3;
+  }
 }
 
 .btn {
-  font-size: 1rem;
+  font-size: 0.9rem;
   border-radius: 0.3rem;
   border: 1px solid $mainPrimary;
-  padding: 0.5rem 0.8rem;
+  padding: 0.4rem 0.6rem;
   width: 100%;
   background-color: white;
   color: $mainPrimary;
