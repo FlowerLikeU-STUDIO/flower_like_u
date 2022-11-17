@@ -22,7 +22,6 @@ const ModifyPassword = () => {
   // *패스워드 일치여부 확인 후 반영
   const pwdCheck = (e) => {
     const value = e.target.value;
-    console.log(pw1);
     setPw2(value);
     if (pw1 === value) {
       setSameMsg("비밀번호가 일치합니다.");
