@@ -1,10 +1,13 @@
 package com.ssafy.fly.service;
 
+import com.ssafy.fly.common.exception.CustomException;
+import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.database.mysql.entity.*;
 import com.ssafy.fly.database.mongodb.document.CustomFlowerDocument;
 import com.ssafy.fly.database.mongodb.repository.CustomFlowerMongoRepository;
 import com.ssafy.fly.database.mysql.enumtype.BookState;
 import com.ssafy.fly.database.mysql.enumtype.BookType;
+import com.ssafy.fly.database.mysql.enumtype.UserType;
 import com.ssafy.fly.database.mysql.repository.*;
 import com.ssafy.fly.dto.request.BookCustomFlowerReq;
 import com.ssafy.fly.dto.request.BookFeedFlowerReq;
@@ -15,6 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -49,59 +54,36 @@ public class BookServiceImpl implements BookService {
 
     // 1. 꽃다발 예약(커스텀 꽃다발)
     @Override
-    public Map<String, Object> registCustomFlowerBookInfo(BookCustomFlowerReq bookCustomFlowerReq, Principal principal) {
+    public Map<String, Object> registCustomFlowerBookInfo(BookCustomFlowerReq bookCustomFlowerReq, Authentication authentication) {
         Map<String, Object> result = new HashMap<>();
-        String message = "";
+        HttpStatus statusCode = HttpStatus.CREATED;
 
-        String consumerId = principal.getName();
+        Long userPk = ((CustomUserDetail) authentication.getPrincipal()).getUserPk();
+
         Long storeId = bookCustomFlowerReq.getStoreId();
         String flowerId = bookCustomFlowerReq.getFlowerId();
         Date dueDate = bookCustomFlowerReq.getDueDate();
 
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(consumerId, false);
-        if (consumer == null) {
-            message = "잘못된 토큰 정보입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
-        }
-
         StoreEntity store = storeRepository.findByIdAndWithdrawal(storeId, false).orElse(null);
         if (store == null) {
-            message = "존재하지 않는 판매자 계정입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+            throw new CustomException("존재하지 않는 판매자 계정입니다.", statusCode);
         }
 
         CustomFlowerEntity flowerBasicInfo = customFlowerRepository.findByDesignIdAndRemoval(flowerId, false).orElse(null);
         if (flowerBasicInfo == null) {
-            message = "존재하지 않는 커스텀 꽃다발 아이디입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+            throw new CustomException("존재하지 않는 커스텀 꽃다발 아이디입니다.", statusCode);
         }
 
-        if (!flowerBasicInfo.getConsumerId().getUserId().equals(principal.getName())) {
-            message = "접근할 수 없는 커스텀 꽃다발 정보입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+        if (!flowerBasicInfo.getConsumerId().getId().equals(userPk)) {
+            throw new CustomException("접근할 수 없는 커스텀 꽃다발 정보입니다.", statusCode);
         }
 
         CustomFlowerDocument flowerDetails = customFlowerMongoRepository.findById(flowerId).orElse(null);
         if (flowerDetails == null) {
-            message = "존재하지 않는 커스텀 꽃다발 상세 정보입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+            throw new CustomException("존재하지 않는 커스텀 꽃다발 상세 정보입니다.", statusCode);
         }
 
+        ConsumerEntity consumer = consumerRepository.findByIdAndWithdrawal(userPk, false).orElse(null);
         BookEntity bookInfo = BookEntity.builder()
                 .consumerId(consumer)
                 .storeId(store)
@@ -112,7 +94,6 @@ public class BookServiceImpl implements BookService {
                 .state(BookState.WAITED)
                 .type(BookType.CUSTOM)
                 .build();
-
         bookRepository.save(bookInfo);
 
         result.put("result", true);
@@ -121,52 +102,31 @@ public class BookServiceImpl implements BookService {
 
     // 2. 꽃다발 예약(피드)
     @Override
-    public Map<String, Object> registFeedFlowerBookInfo(BookFeedFlowerReq bookFeedFlowerReq, Principal principal) {
+    public Map<String, Object> registFeedFlowerBookInfo(BookFeedFlowerReq bookFeedFlowerReq, Authentication authentication) {
         Map<String, Object> result = new HashMap<>();
-        String message = "";
+        HttpStatus statusCode = HttpStatus.CREATED;
 
-        String consumerId = principal.getName();
+        Long userPk = ((CustomUserDetail) authentication.getPrincipal()).getUserPk();
+
         Long storeId = bookFeedFlowerReq.getStoreId();
         Long feedId = bookFeedFlowerReq.getFeedId();
         Date dueDate = bookFeedFlowerReq.getDueDate();
 
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(consumerId, false);
-        if (consumer == null) {
-            message = "잘못된 토큰 정보입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
-        }
-
         StoreEntity store = storeRepository.findByIdAndWithdrawal(storeId, false).orElse(null);
         if (store == null) {
-            message = "존재하지 않는 판매자 계정입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+            throw new CustomException("존재하지 않는 판매자 계정입니다.", statusCode);
         }
 
         FeedEntity feed = feedRepository.findByIdAndRemoval(feedId, false).orElse(null);
         if (feed == null) {
-            message = "존재하지 않는 피드 아이디입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+            throw new CustomException("존재하지 않는 피드 아이디입니다.", statusCode);
         }
-
-        System.out.printf("[ID LOG] : %d %d\n", storeId, feed.getStoreId().getId());
 
         if (!storeId.equals(feed.getStoreId().getId())) {
-            message = "잘못된 요청입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+            throw new CustomException("피드를 작성한 판매자의 아이디와 요청한 판매자의 아이디가 일치하지 않습니다.", statusCode);
         }
 
+        ConsumerEntity consumer = consumerRepository.findByIdAndWithdrawal(userPk, false).orElse(null);
         BookEntity bookInfo = BookEntity.builder()
                 .consumerId(consumer)
                 .storeId(store)
@@ -177,7 +137,6 @@ public class BookServiceImpl implements BookService {
                 .state(BookState.WAITED)
                 .type(BookType.FEED)
                 .build();
-
         bookRepository.save(bookInfo);
 
         result.put("result", true);
@@ -186,83 +145,60 @@ public class BookServiceImpl implements BookService {
 
     // 3. 예약 상태 변경
     @Override
-    public Map<String, Object> updateBookState(Long bookId, Principal principal) {
+    public Map<String, Object> updateBookState(Long bookId, Authentication authentication) {
         Map<String, Object> result = new HashMap<>();
-        String message = "";
+        HttpStatus statusCode = HttpStatus.CREATED;
+
+        Long userPk = ((CustomUserDetail) authentication.getPrincipal()).getUserPk();
+        String userType = ((CustomUserDetail) authentication.getPrincipal()).getUserType();
 
         BookEntity bookInfo = bookRepository.findById(bookId).orElse(null);
         if (bookInfo == null) {
-            message = "존재하지 않는 예약 아이디(Long Type) 입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
-        }
-
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-        if (consumer == null && store == null) {
-            message = "잘못된 토큰 정보입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+            throw new CustomException("존재하지 않는 예약 아이디(Long Type) 입니다.", statusCode);
         }
 
         BookState newState = null;
         if (BookState.WAITED.equals(bookInfo.getState())
-                && store != null
-                && store.getId() == bookInfo.getStoreId().getId()) newState = BookState.INPROGRESS;
+                && UserType.STORE.toString().equals(userType)
+                && bookInfo.getStoreId().getId().equals(userPk)) newState = BookState.INPROGRESS;
         else if (BookState.INPROGRESS.equals(bookInfo.getState())
-                && consumer != null
-                && consumer.getId() == bookInfo.getConsumerId().getId()) newState = BookState.RECIPT;
+                && UserType.CONSUMER.toString().equals(userType)
+                && bookInfo.getConsumerId().getId().equals(userPk)) newState = BookState.RECIPT;
         else {
-            message = "잘못된 요청이거나, 요청을 더 이상 받을 수 없습니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+            throw new CustomException("잘못된 요청이거나, 요청을 더 이상 받을 수 없습니다.", statusCode);
         }
 
         if (bookRepository.updateBookState(bookId, newState) > 0) {
             result.put("result", true);
         } else {
-            message = "서버 문제로 업데이트에 실패하였습니다.";
-            result.put("result", false);
+            throw new CustomException("서버 문제로 업데이트에 실패하였습니다.", statusCode);
         }
 
-        result.put("message", message);
         return result;
     }
 
     // 4. 예약 목록 조회
     @Override
-    public Map<String, Object> getBookInfoList(int pageNo, int size, String filter, Principal principal) {
+    public Map<String, Object> getBookInfoList(int pageNo, int size, String filter, Authentication authentication) {
         Map<String, Object> result = new HashMap<>();
-        String message = "";
+        HttpStatus statusCode = HttpStatus.OK;
 
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-
-        if (consumer == null && store == null) {
-            message = "잘못된 토큰 정보입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
-        }
+        Long userPk = ((CustomUserDetail) authentication.getPrincipal()).getUserPk();
+        String userType = ((CustomUserDetail) authentication.getPrincipal()).getUserType();
 
         Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size, Sort.by("id").descending());
         Page<BookEntity> searchList = null;
-
         Map<String, Object> info = new HashMap<>();
 
-        if (consumer != null) {
+        if (UserType.CONSUMER.toString().equals(userType)) {
+            ConsumerEntity consumer = consumerRepository.findByIdAndWithdrawal(userPk, false).orElse(null);
             // 필터에 따라 리스트 검색
             if ("order".equals(filter)) {
                 searchList = bookRepository.getConsumerOrderList(consumer, pageable);
             } else if ("done".equals(filter)) {
                 searchList = bookRepository.getConsumerDoneList(consumer, pageable);
+            } else {
+                throw new CustomException("사용할 수 없는 필터입니다.", statusCode);
             }
 
             if (searchList != null && searchList.getContent().size() > 0) {
@@ -292,10 +228,11 @@ public class BookServiceImpl implements BookService {
                 info.put("list", resultList);
                 result.put("result", true);
                 result.put("info", info);
-
-                return result;
+            } else {
+                throw new CustomException("존재하지 않는 페이지입니다.", statusCode);
             }
-        } else if (store != null) {
+        } else if (UserType.STORE.toString().equals(userType)) {
+            StoreEntity store = storeRepository.findByIdAndWithdrawal(userPk, false).orElse(null);
             // 필터에 따라 리스트 검색
             if ("book".equals(filter)) {
                 searchList = bookRepository.getStoreBookList(store, pageable);
@@ -333,43 +270,32 @@ public class BookServiceImpl implements BookService {
                 info.put("list", resultList);
                 result.put("result", true);
                 result.put("info", info);
-
-                return result;
+            } else {
+                throw new CustomException("존재하지 않는 페이지입니다.", statusCode);
             }
+        } else {
+            throw new CustomException("존재하지 않는 페이지입니다.", statusCode);
         }
 
-        message = "잘못된 입력입니다.";
-        System.out.println(message);
-        result.put("result", false);
-        result.put("message", message);
         return result;
     }
 
     // 5. 예약 목록 상세 조회(커스텀, 피드)
     @Override
-    public Map<String, Object> getDetailBookInfo(Long bookId, Principal principal) {
+    public Map<String, Object> getDetailBookInfo(Long bookId, Authentication authentication) {
         Map<String, Object> result = new HashMap<>();
-        String message = "";
+        HttpStatus statusCode = HttpStatus.OK;
+
+        Long userPk = ((CustomUserDetail) authentication.getPrincipal()).getUserPk();
+        String userType = ((CustomUserDetail) authentication.getPrincipal()).getUserType();
 
         BookEntity book = bookRepository.findById(bookId).orElse(null);
         if (book == null) {
-            message = "예약 아이디와 일치하는 정보가 없습니다. 예약 아이디를 확인해주세요.";
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+            throw new CustomException("예약 아이디와 일치하는 정보가 없습니다. 예약 아이디를 확인해주세요.", statusCode);
         }
 
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-        if (consumer == null && store == null) {
-            message = "잘못된 토큰 정보입니다.";
-            result.put("result", false);
-            result.put("message", message);
-            return result;
-        }
-
-        if ((consumer != null && principal.getName().equals(book.getConsumerId().getUserId()))
-                || (store != null && principal.getName().equals(book.getStoreId().getUserId()))) {
+        if ((UserType.CONSUMER.toString().equals(userType) && book.getConsumerId().getId().equals(userPk))
+                || (UserType.STORE.toString().equals(userType) && book.getConsumerId().getId().equals(userPk))) {
 
             Map<String, Object> bookInfo = new HashMap<>();
 
@@ -414,7 +340,7 @@ public class BookServiceImpl implements BookService {
                         .storeName(book.getStoreId().getStore())
                         .consumerId(book.getConsumerId().getUserId())
                         .storeId(book.getStoreId().getId())
-                        .reviewId(book.getReview().getId())
+                        .reviewId(book.getReview() != null ? book.getReview().getId() : null)
                         .build();
                 bookInfo.put("basics", basicInfo);
             }
@@ -422,9 +348,7 @@ public class BookServiceImpl implements BookService {
             result.put("bookInfo", bookInfo);
             result.put("result", true);
         } else {
-            message = "잘못된 접근입니다.";
-            result.put("result", false);
-            result.put("message", message);
+            throw new CustomException("잘못된 토큰 정보입니다.", statusCode);
         }
 
         return result;
@@ -432,40 +356,28 @@ public class BookServiceImpl implements BookService {
 
     // 6. 예약 취소
     @Override
-    public Map<String, Object> deleteBookInfo(Long bookId, Principal principal) {
+    public Map<String, Object> deleteBookInfo(Long bookId, Authentication authentication) {
         Map<String, Object> result = new HashMap<>();
-        String message = "";
+        HttpStatus statusCode = HttpStatus.OK;
 
-        ConsumerEntity consumer = consumerRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-        if (consumer == null) {
-            message = "잘못된 토큰 정보입니다.";
-            result.put("result", false);
-            result.put("message", message);
-            return result;
-        }
+        Long userPk = ((CustomUserDetail) authentication.getPrincipal()).getUserPk();
 
         BookEntity book = bookRepository.findById(bookId).orElse(null);
         if (book == null) {
-            message = "예약 아이디와 일치하는 정보가 없습니다. 예약 아이디를 확인해주세요.";
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+            throw new CustomException("예약 아이디와 일치하는 정보가 없습니다. 예약 아이디를 확인해주세요.", statusCode);
         }
 
-        if (principal.getName().equals(book.getConsumerId().getUserId())) {
+        if (book.getConsumerId().getId().equals(userPk)) {
             if (book.getState().equals(BookState.WAITED)) {
                 bookRepository.deleteById(bookId);
                 result.put("result", true);
             } else {
-                message = "이미 제작이 진행되고 있어 취소할 수 없습니다.";
-                result.put("result", false);
+                throw new CustomException("이미 제작이 진행되고 있어 취소할 수 없습니다.", statusCode);
             }
         } else {
-            message = "접근 권한이 없습니다.";
-            result.put("result", false);
+            throw new CustomException("접근 권한이 없습니다.", statusCode);
         }
 
-        result.put("message", message);
         return result;
     }
 }
