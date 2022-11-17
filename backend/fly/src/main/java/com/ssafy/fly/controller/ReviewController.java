@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -22,7 +23,7 @@ import java.util.Map;
 @RequestMapping("/review")
 public class ReviewController {
 
-    private final Logger logger = LogManager.getLogger(ReviewController.class);
+    //private final Logger logger = LogManager.getLogger(ReviewController.class);
 
     private final ReviewService reviewService;
     private final ResultMessageSet resultMessageSet;
@@ -37,11 +38,11 @@ public class ReviewController {
     /** 1. 리뷰 등록 */
     @PostMapping()
     public ResponseEntity<Map<String, Object>> create(@RequestBody ReviewPostReqDto reviewPostReqDto,
-                                                      Principal principal) {
-        logger.info("[POST] - /review - {}", reviewPostReqDto);
+                                                      Authentication authentication) {
+        //logger.info("[POST] - /review - {}", reviewPostReqDto);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = reviewService.create(reviewPostReqDto, principal);
+        Map<String, Object> result = reviewService.create(reviewPostReqDto, authentication);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);
@@ -58,7 +59,7 @@ public class ReviewController {
     public ResponseEntity<Map<String, Object>> getList(@PathVariable(required = false) Long storeId,
                                                        @RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
                                                        @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
-        logger.info("[GET] - /review/{storeId} - {}", storeId);
+        //logger.info("[GET] - /review/{storeId} - {}", storeId);
 
         Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size, Sort.by("id").descending());
 
@@ -88,11 +89,11 @@ public class ReviewController {
     /** 3. 리뷰 내용 조회 */
     @GetMapping("/detail/{reviewId}")
     public ResponseEntity<Map<String, Object>> getReviewInfo(@PathVariable Long reviewId,
-                                                             Principal principal) {
-        logger.info("[GET] - /review/detail/{reviewId} - {}", reviewId);
+                                                             Authentication authentication) {
+        //logger.info("[GET] - /review/detail/{reviewId} - {}", reviewId);
 
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> result = reviewService.getReviewInfo(reviewId, principal);
+        Map<String, Object> result = reviewService.getReviewInfo(reviewId, authentication);
 
         if ((boolean) result.get("result")) {
             response.put("result", resultMessageSet.SUCCESS);

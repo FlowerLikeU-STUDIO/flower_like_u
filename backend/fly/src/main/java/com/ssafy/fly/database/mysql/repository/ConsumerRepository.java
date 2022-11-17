@@ -17,11 +17,11 @@ import java.util.Optional;
 public interface ConsumerRepository extends JpaRepository<ConsumerEntity, Long> {
     public Optional<ConsumerEntity> findByUserId(String userId);
 
-    public ConsumerEntity findByUserIdAndWithdrawal(String userId, boolean isDeleted);
+    public Optional<ConsumerEntity> findByUserIdAndWithdrawal(String userId, boolean isDeleted);
 
-    public ConsumerEntity findByNameAndEmailAndWithdrawal(String name, String email, boolean isDeleted);
+    public Optional<ConsumerEntity> findByNameAndEmailAndWithdrawal(String name, String email, boolean isDeleted);
 
-    public ConsumerEntity findByUserIdAndNameAndEmailAndWithdrawal(String userId, String name, String email, boolean isDeleted);
+    public Optional<ConsumerEntity> findByUserIdAndNameAndEmailAndWithdrawal(String userId, String name, String email, boolean isDeleted);
 
     public Optional<ConsumerEntity> findByNickname(String nickname);
 

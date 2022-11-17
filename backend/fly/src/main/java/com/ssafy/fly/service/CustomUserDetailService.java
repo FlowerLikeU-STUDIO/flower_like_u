@@ -28,17 +28,17 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public CustomUserDetail loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<ConsumerEntity> optConsumer = consumerRepository.findByUserId(username);
+        Optional<ConsumerEntity> optConsumer = consumerRepository.findByUserIdAndWithdrawal(username, false);
         if (optConsumer.isPresent()) return optConsumer.get();
 
-        Optional<StoreEntity> optStore = storeRepository.findByUserId(username);
+        Optional<StoreEntity> optStore = storeRepository.findByUserIdAndWithdrawal(username, false);
         if (optStore.isPresent()) return optStore.get();
 
         throw new IllegalArgumentException("해당 사용자가 없습니다");
     }
 
     public CustomUserDetail loadKakaoUserByEmail(String email) {
-        Optional<ConsumerEntity> optConsumer = consumerRepository.findByUserId(email);
+        Optional<ConsumerEntity> optConsumer = consumerRepository.findByUserIdAndWithdrawal(email, false);
         if (optConsumer.isPresent()) return optConsumer.get();
         else return null;
     }

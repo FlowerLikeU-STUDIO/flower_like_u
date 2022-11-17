@@ -9,18 +9,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.parameters.P;
 
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<StoreEntity, Long> {
     public Optional<StoreEntity> findByUserId(String userId);
-    public StoreEntity findByNameAndEmailAndWithdrawal(String name, String email, boolean isDeleted);
 
-    public StoreEntity findByUserIdAndNameAndEmailAndWithdrawal(String userId, String name, String email, boolean isDeleted);
+    public Optional<StoreEntity> findByUserIdAndWithdrawal(String userId, boolean isDeleted);
 
-    public StoreEntity findByUserIdAndWithdrawal(String userId, boolean isDeleted);
+    public Optional<StoreEntity> findByNameAndEmailAndWithdrawal(String name, String email, boolean isDeleted);
 
-    public Optional<StoreEntity> findByIdAndWithdrawal(Long id, boolean isDeleted); /** 새로 바꾼 함수(사용한 곳: 4개) */
+    public Optional<StoreEntity> findByUserIdAndNameAndEmailAndWithdrawal(String userId, String name, String email, boolean isDeleted);
+
+    public Optional<StoreEntity> findByIdAndWithdrawal(Long id, boolean isDeleted);
 
     public Page<StoreEntity> findAllByStoreContainsAndWithdrawal(String storeName, boolean isDeleted, Pageable pageable);
 
