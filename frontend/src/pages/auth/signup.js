@@ -67,7 +67,7 @@ const SignUp = () => {
         <section className={styles.signup_wrapper}>
           <main className={styles.signup_contents}>
             <article className={styles.signup_contents_left}>
-              <Image src="/chatflower.png" width={230} height={230} />
+              <Image src="/chatFlower.png" width={230} height={230} />
             </article>
             <article className={styles.signup_contents_right}>
               <form
