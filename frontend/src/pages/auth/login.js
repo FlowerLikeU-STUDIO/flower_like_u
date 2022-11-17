@@ -40,7 +40,7 @@ const Login = () => {
     <section className={styles.login_wrapper}>
       <main className={styles.login_contents}>
         <article className={styles.login_contents_left}>
-          <Image src="/chatflower.png" width={150} height={150} />
+          <Image src="/chatFlower.png" width={150} height={150} />
         </article>
         <article className={styles.login_contents_right}>
           <Input text={"아이디"} value={loginInfo.userId} onChange={onChange} name={"userId"} />
