@@ -1,11 +1,15 @@
 import MyHeader from "@/components/mypage/MyHeader";
 import MyWrapper from "@/components/common/MyWrapper";
+import Feed from "@/components/feeds";
+import useUser from "@/hooks/useUser";
 
 const MyPageFeeds = () => {
+  const { user } = useUser();
+
   return (
     <MyWrapper>
       <MyHeader />
-      <div>MyPageFeeds</div>
+      <Feed storeId={user.userPk} />
     </MyWrapper>
   );
 };
