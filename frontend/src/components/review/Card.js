@@ -84,7 +84,7 @@ const Card = ({
       <CardContentWrapper>
         <ProfileWrapper>
           <Image
-            src={writerProfile ? writerProfile : "/chat/BbuBtte.png"}
+            src={writerProfile ? writerProfile : "/auth/profileDefault.png"}
             layout={"fill"}
             objectFit={"cover"}
           />
