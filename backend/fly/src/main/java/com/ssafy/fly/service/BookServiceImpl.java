@@ -1,6 +1,5 @@
 package com.ssafy.fly.service;
 
-import com.ssafy.fly.common.util.DateConvertor;
 import com.ssafy.fly.database.mysql.entity.*;
 import com.ssafy.fly.database.mongodb.document.CustomFlowerDocument;
 import com.ssafy.fly.database.mongodb.repository.CustomFlowerMongoRepository;
@@ -32,7 +31,6 @@ public class BookServiceImpl implements BookService {
     private final CustomFlowerRepository customFlowerRepository;
     private final CustomFlowerMongoRepository customFlowerMongoRepository;
     private final FeedRepository feedRepository;
-    private final DateConvertor dateConvertor;
 
     @Autowired
     public BookServiceImpl(BookRepository bookRepository,
@@ -40,15 +38,13 @@ public class BookServiceImpl implements BookService {
                            StoreRepository storeRepository,
                            CustomFlowerRepository customFlowerRepository,
                            CustomFlowerMongoRepository customFlowerMongoRepository,
-                           FeedRepository feedRepository,
-                           DateConvertor dateConvertor) {
+                           FeedRepository feedRepository) {
         this.bookRepository = bookRepository;
         this.consumerRepository = consumerRepository;
         this.storeRepository = storeRepository;
         this.customFlowerRepository = customFlowerRepository;
         this.customFlowerMongoRepository = customFlowerMongoRepository;
         this.feedRepository = feedRepository;
-        this.dateConvertor = dateConvertor;
     }
 
     // 1. 꽃다발 예약(커스텀 꽃다발)
@@ -71,7 +67,7 @@ public class BookServiceImpl implements BookService {
             return result;
         }
 
-        StoreEntity store = storeRepository.findByIdAndWithdrawal(storeId, false);
+        StoreEntity store = storeRepository.findByIdAndWithdrawal(storeId, false).orElse(null);
         if (store == null) {
             message = "존재하지 않는 판매자 계정입니다.";
             System.out.println(message);
@@ -143,7 +139,7 @@ public class BookServiceImpl implements BookService {
             return result;
         }
 
-        StoreEntity store = storeRepository.findByIdAndWithdrawal(storeId, false);
+        StoreEntity store = storeRepository.findByIdAndWithdrawal(storeId, false).orElse(null);
         if (store == null) {
             message = "존재하지 않는 판매자 계정입니다.";
             System.out.println(message);
