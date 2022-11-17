@@ -62,6 +62,7 @@ const FeedRegister = () => {
     const { res, status } = await client.post("/feed", data).then((res) => res);
     if (status === 201) {
       SuccessAlert("피드가 등록되었습니다.");
+      router.replace("/mypage/feeds");
     }
   };
   return (
@@ -76,7 +77,6 @@ const FeedRegister = () => {
           onChange={onChange}
         />
       </RegisterWrapper>
-      <CloseButton />
     </FeedRegisterWrapper>
   );
 };
