@@ -20,7 +20,7 @@ const Home = () => {
       <div className={cx("circle", "fifth")} />
       <MainTop />
       <HowUse />
-      <TopRatingFlorist />
+      {/* <TopRatingFlorist /> */}
       {/* <FlowerLikeUs /> */}
     </main>
   );
