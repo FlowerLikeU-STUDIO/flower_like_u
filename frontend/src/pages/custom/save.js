@@ -22,12 +22,17 @@ import {
 import Modal from "@/components/modal";
 import { modalOpen } from "@/store/reducers/modal";
 import CustomOrder from "@/components/modal/contents/CustomOrder";
+// 로그인 여부
+import useSWR from "swr";
+import storage from "@/lib/utils/storage";
+import FailAlert from "@/lib/FailAlert";
 
 const CustomSave = () => {
   const cx = classNames.bind(styles);
   const dispatch = useDispatch();
   const customOption = useSelector((state) => state.custom);
   const router = useRouter();
+  const { data: isLogin } = useSWR("logIn", storage);
 
   //* 유저가 선택한 패키지 종류
   const packageKind = packageContent.engtitle[customOption.package];
@@ -104,7 +109,12 @@ const CustomSave = () => {
   //* 주문하기 모달
   const isOpen = useSelector((state) => state.modal.isOpen);
   const onHandleOpen = () => {
-    dispatch(modalOpen());
+    isLogin ? dispatch(modalOpen()) : FailAlert("로그인한 유저만 주문할 수 있어요!");
+  };
+
+  //* 내 디자인 보러가기
+  const goToMyDesign = () => {
+    isLogin ? router.push("/mypage/design") : FailAlert("로그인이 필요한 기능이에요!");
   };
 
   return (
@@ -170,8 +180,8 @@ const CustomSave = () => {
               <button className={styles.btn} onClick={() => onShareKakao()}>
                 카카오톡 공유하기
               </button>
-              <button className={styles.btn} onClick={() => onHandleOpen()}>
-                주문하러 가기
+              <button className={styles.btn} onClick={() => goToMyDesign()}>
+                내 디자인 보러가기
               </button>
               <button
                 className={styles.btn}
@@ -181,6 +191,9 @@ const CustomSave = () => {
                 }}
               >
                 초기화하고 메인으로 돌아가기
+              </button>
+              <button className={cx("btn", "green")} onClick={() => onHandleOpen()}>
+                주문하러 가기
               </button>
             </div>
           </article>
