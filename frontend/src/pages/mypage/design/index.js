@@ -23,6 +23,7 @@ const CustomerDesign = () => {
   const designList = useMemo(() => {
     let designList = [];
     if (data) {
+      if (data[0].data.result === "fail") return;
       data.map((item) => {
         designList = designList.concat(...item.data.designList);
       });
@@ -44,6 +45,14 @@ const CustomerDesign = () => {
   return (
     <MyWrapper>
       <MyHeader />
+      {data && data[0].data.result === "fail" && (
+        <div className={styles.not__data}>
+          <p></p>
+          <p onClick={() => router.replace("/custom")} className={styles.go_custom}>
+            🌸🌹 등록된 디자인이 없습니다. 나만의 꽃을 디자인해보세요.🌻🌼
+          </p>
+        </div>
+      )}
       <div className={styles.img__container}>
         {designList &&
           designList.map((design) => (

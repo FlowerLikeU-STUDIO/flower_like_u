@@ -30,6 +30,8 @@ export default function Document() {
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/variable/pretendardvariable-dynamic-subset.css"
         />
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        {/* KAKAO */}
+        <script crossorigin src="https://developers.kakao.com/sdk/js/kakao.js"></script>
         {/* KAKAO MAP */}
         <script
           type="text/javascript"
@@ -41,7 +43,6 @@ export default function Document() {
         ></script>
 
         {/* <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script> */}
-        <script crossorigin src="https://developers.kakao.com/sdk/js/kakao.js"></script>
         <script src="https://kit.fontawesome.com/b65e009655.js"></script>
       </Head>
       <body>

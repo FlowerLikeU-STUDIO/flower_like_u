@@ -11,7 +11,7 @@ const MyListItem = (props) => {
   };
 
   const dueDate = props.dueDate;
-  // !! 추후 테스트 해볼것 - 현재 강제로 데이터 넣어 한국시간 적용안되어 비교 불가
+  // !! 추후 테스트 해볼것
   function dateFormat(dueDate) {
     const date = new Date(dueDate);
     let month = date.getMonth() + 1;
@@ -36,10 +36,10 @@ const MyListItem = (props) => {
           <h1 className={styles.title__p}>
             상호명: {props.storeName} <br />
           </h1>
-          <p className={styles.sub__p}>예약한 날: {props.dueDate.split("T")[0].replace(/-/g, ". ")}</p>
+          <p className={styles.sub__p}>예약한 날: {props.dueDate}</p>
           <span className={styles.card_description}>
             {typeList[props.type]} 로 예약하셨어요. <br />
-            {props.bookDate.split("T")[0].replace(/-/g, ". ")} 에 늦지 않게 픽업해 주세요!
+            {props.bookDate} 에 늦지 않게 픽업해 주세요!
           </span>
         </div>
         <div className={styles.button_wrapper}>

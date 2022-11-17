@@ -3,3 +3,14 @@
   width: 100%;
   padding-top: 1rem;
 }
+
+.not__data {
+  @include flexDiv(column, center, flex-start);
+  width: 100%;
+  margin-top: 3rem;
+  gap: 1rem;
+}
+
+.go__res {
+  @include font(1rem, bold, $mainPrimary);
+}
