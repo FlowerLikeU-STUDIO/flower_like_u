@@ -31,7 +31,7 @@ const FloristList = (props) => {
   const [inputText, setInputText] = useState();
   // * data 및 page
   const { floristList } = useFlorist();
-  const [mxPage, setMxPage] = useState(props.maxPage);
+  const [currentMaxPage, setCurrentMaxPage] = useState(props.maxPage);
   const [pageIndex, setPageIndex] = useState(1);
   const [numLst, setNumLst] = useState([1]); // [1, 2, 3, 4, 5]
   const selectSize = 8;
@@ -108,10 +108,10 @@ const FloristList = (props) => {
       for (let i = mn; i <= mx; i++) {
         tmplst.push(i);
       }
-      if (mx <= mxPage) {
+      if (mx <= currentMaxPage) {
         setNumLst(tmplst.slice(0, 5));
       } else {
-        setNumLst(tmplst.slice(0, mxPage % 5));
+        setNumLst(tmplst.slice(0, currentMaxPage % 5));
       }
     } else if (e < numLst[0] && e % 5 == 0) {
       let copyOfNumLst = [];
@@ -130,15 +130,15 @@ const FloristList = (props) => {
         setNumLst([1, 2, 3, 4, 5]);
       }
     }
-  }, [mxPage, pageIndex]);
+  }, [currentMaxPage, pageIndex]);
 
   useEffect(() => {
     if (!data) {
       setCurrentData(null);
-      setMxPage(1);
+      setCurrentMaxPage(1);
     }
     setCurrentData(data);
-    setMxPage(maxPage);
+    setCurrentMaxPage(maxPage);
   }, [data]);
 
   return (
@@ -301,7 +301,7 @@ const FloristList = (props) => {
             <button
               className={styles.btn}
               onClick={pageIndexChange.bind(pageIndexChange, pageIndex + 1)}
-              disabled={!maxPage || numLst[numLst.length - 1] === maxPage}
+              disabled={!maxPage || pageIndex === maxPage}
             >
               &gt;
             </button>

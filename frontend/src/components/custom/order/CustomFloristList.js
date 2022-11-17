@@ -23,7 +23,7 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
 
   // * data 및 page
   const { customFloristList } = useFlorist();
-  const [mxPage, setMxPage] = useState();
+  const [currentMaxPage, setCurrentMaxPage] = useState();
   const [pageIndex, setPageIndex] = useState(1);
   const [numLst, setNumLst] = useState([1]); // [1, 2, 3, 4, 5]
   const selectSize = 20;
@@ -93,10 +93,10 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
       for (let i = mn; i <= mx; i++) {
         tmplst.push(i);
       }
-      if (mx <= mxPage) {
+      if (mx <= currentMaxPage) {
         setNumLst(tmplst.slice(0, 5));
       } else {
-        setNumLst(tmplst.slice(0, mxPage % 5));
+        setNumLst(tmplst.slice(0, currentMaxPage % 5));
       }
     } else if (e < numLst[0] && e % 5 == 0) {
       let copyOfNumLst = [];
@@ -115,13 +115,13 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
         setNumLst([1, 2, 3, 4, 5]);
       }
     }
-  }, [mxPage, pageIndex]);
+  }, [currentMaxPage, pageIndex]);
 
   useEffect(() => {
     if (!data) {
-      setMxPage(1);
+      setCurrentMaxPage(1);
     }
-    setMxPage(maxPage);
+    setCurrentMaxPage(maxPage);
     console.log(data);
   }, [data]);
 
@@ -188,6 +188,7 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
                   <p className={styles.store__name}>{florist.storeName}</p>
                   <p className={styles.store__adderss}>{florist.address}</p>
                   <p className={styles.store__days}>
+                    {florist.holidays && "휴무일: "}
                     {florist.holidays
                       .map((_, index) => _ && holidayList[index] + "요일")
                       .filter((el) => (
@@ -236,7 +237,7 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
             <button
               className={styles.btn}
               onClick={pageIndexChange.bind(pageIndexChange, pageIndex + 1)}
-              disabled={!maxPage || numLst[numLst.length - 1] === maxPage}
+              disabled={!maxPage || pageIndex === maxPage}
             >
               &gt;
             </button>
