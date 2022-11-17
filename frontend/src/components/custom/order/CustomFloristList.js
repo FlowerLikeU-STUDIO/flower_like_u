@@ -44,10 +44,12 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
   const sidoSelect = async (e) => {
     const value = e.target.value;
     if (!value) return;
-    setSelectSido(value);
-    setSelectSigungu("전체");
-    setSelectedArr(regionMap[value]);
-    setPageIndex(1);
+    await (async function () {
+      setSelectSido(value);
+      setSelectSigungu("전체");
+      setSelectedArr(regionMap[value]);
+      setPageIndex(1);
+    })();
     if (!data) return;
     mutate();
   };
@@ -55,8 +57,10 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
   const sigunguSelect = async (e) => {
     const value = e.target.value;
     if (!value) return;
-    setSelectSigungu(value);
-    setPageIndex(1);
+    await (async function () {
+      setSelectSigungu(value);
+      setPageIndex(1);
+    })();
     if (!data) return;
     await mutate();
   };

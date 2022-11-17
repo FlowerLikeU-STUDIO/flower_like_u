@@ -56,11 +56,14 @@ const FloristList = (props) => {
   const sidoSelect = async (e) => {
     const value = e.target.value;
     if (!value) return;
-    setSelectSido(value);
-    setSelectSigungu("전체");
-    setSelectedArr(regionMap[value]);
-    router.push(`/florist-list/1/${currentSort}`);
-    setPageIndex(1);
+    await (async function () {
+      setSelectSido(value);
+      setSelectSigungu("전체");
+      setSelectedArr(regionMap[value]);
+      router.push(`/florist-list/1/${currentSort}`);
+      setPageIndex(1);
+    })();
+
     if (!data) return;
     mutate();
   };
