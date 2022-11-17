@@ -520,7 +520,9 @@ public class UserServiceImpl implements UserService {
         }).map(store -> {
             return new RegionVo(store.getStreet(),
                     store.getName(), store.getLatitude(), store.getLongitude(),
-                    store.getStore(), store.getBio(), store.getProfile(), store.getRating(), store.getHolidays());
+                    store.getStore(), store.getBio(), store.getProfile(),
+                    decimalFormatter.roundToTwoDecimalPlaces(store.getRating() == null ? 0 : store.getRating()),
+                    store.getHolidays());
         }).collect(Collectors.toList());
     }
 
