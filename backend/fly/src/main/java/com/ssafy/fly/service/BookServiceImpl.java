@@ -148,7 +148,7 @@ public class BookServiceImpl implements BookService {
             return result;
         }
 
-        FeedEntity feed = feedRepository.findByIdAndRemoval(feedId, false);
+        FeedEntity feed = feedRepository.findByIdAndRemoval(feedId, false).orElse(null);
         if (feed == null) {
             message = "존재하지 않는 피드 아이디입니다.";
             System.out.println(message);

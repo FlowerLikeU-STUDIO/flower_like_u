@@ -1,8 +1,11 @@
 package com.ssafy.fly.service;
 
+import com.ssafy.fly.common.exception.CustomException;
+import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.database.mysql.entity.FeedEntity;
 import com.ssafy.fly.database.mysql.entity.FeedImageEntity;
 import com.ssafy.fly.database.mysql.entity.StoreEntity;
+import com.ssafy.fly.database.mysql.enumtype.UserType;
 import com.ssafy.fly.database.mysql.repository.FeedImageRepository;
 import com.ssafy.fly.database.mysql.repository.FeedRepository;
 import com.ssafy.fly.database.mysql.repository.StoreRepository;
@@ -13,10 +16,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,43 +45,41 @@ public class FeedServiceImpl implements FeedService {
 
     // 1. 피드 등록
     @Override
-    public Map<String, Object> saveNewFeed(RegisterFeedReq registerFeedReq, Principal principal) {
+    public Map<String, Object> saveNewFeed(RegisterFeedReq registerFeedReq, Authentication authentication) {
         Map<String, Object> result = new HashMap<>();
-        String message = "";
+        HttpStatus statusCode = HttpStatus.CREATED;
 
-        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
+        Long userPk = ((CustomUserDetail) authentication.getPrincipal()).getUserPk();
+        String userType = ((CustomUserDetail) authentication.getPrincipal()).getUserType();
 
-        if (store == null) {
-            message = "잘못된 토큰 정보입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
-        } else {
-            // 피드 정보 저장
-            FeedEntity feedEntity = FeedEntity.builder()
-                    .storeId(store)
-                    .name(registerFeedReq.getName())
-                    .price(registerFeedReq.getPrice())
-                    .content(registerFeedReq.getContent())
-                    .removal(false)
-                    .build();
-            FeedEntity feedId = feedRepository.save(feedEntity);
-
-            // 피드 이미지 저장
-            List<FeedImageEntity> images = new ArrayList<>();
-            for (String image : registerFeedReq.getImage()) {
-                FeedImageEntity imageEntity = FeedImageEntity.builder()
-                        .feedId(feedId)
-                        .image(image)
-                        .build();
-                images.add(imageEntity);
-            }
-            feedImageRepository.saveAll(images);
-
-            result.put("result", true);
+        if(!UserType.STORE.toString().equals(userType)) {
+            throw new CustomException("판매자만 이용 가능한 서비스입니다.", statusCode);
         }
 
+        StoreEntity store = storeRepository.findByIdAndWithdrawal(userPk, false).orElse(null);
+
+        // 피드 정보 저장
+        FeedEntity feedEntity = FeedEntity.builder()
+                .storeId(store)
+                .name(registerFeedReq.getName())
+                .price(registerFeedReq.getPrice())
+                .content(registerFeedReq.getContent())
+                .removal(false)
+                .build();
+        FeedEntity feedId = feedRepository.save(feedEntity);
+
+        // 피드 이미지 저장
+        List<FeedImageEntity> images = new ArrayList<>();
+        for (String image : registerFeedReq.getImage()) {
+            FeedImageEntity imageEntity = FeedImageEntity.builder()
+                    .feedId(feedId)
+                    .image(image)
+                    .build();
+            images.add(imageEntity);
+        }
+        feedImageRepository.saveAll(images);
+
+        result.put("result", true);
         return result;
     }
 
@@ -85,16 +87,12 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public Map<String, Object> getFeedList(Long storeId, int pageNo, int size) {
         Map<String, Object> result = new HashMap<>();
-        String message = "";
+        HttpStatus statusCode = HttpStatus.OK;
 
         StoreEntity store = storeRepository.findById(storeId).orElse(null);
 
         if (store == null) {
-            message = "존재하지 않는 판매자 아이디입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+            throw new CustomException("존재하지 않는 판매자 아이디입니다.", statusCode);
         }
 
         Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size, Sort.by("id").descending());
@@ -131,15 +129,11 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public Map<String, Object> getFeedDetailInfo(Long feedId) {
         Map<String, Object> result = new HashMap<>();
-        String message = "";
+        HttpStatus statusCode = HttpStatus.OK;
 
-        FeedEntity feed = feedRepository.findByIdAndRemoval(feedId, false);
+        FeedEntity feed = feedRepository.findByIdAndRemoval(feedId, false).orElse(null);
         if (feed == null) {
-            message = "존재하지 않는 피드 아이디(Long Type) 입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+            throw new CustomException("존재하지 않는 피드 아이디(Long Type) 입니다.", statusCode);
         }
 
         List<String> feedImages = new ArrayList<>();
@@ -163,49 +157,38 @@ public class FeedServiceImpl implements FeedService {
 
     // 4. 피드 수정
     @Override
-    public Map<String, Object> updateFeedInfo(Principal principal) {
+    public Map<String, Object> updateFeedInfo(Authentication authentication) {
         return null;
     }
 
     // 5. 피드 삭제
     @Override
-    public Map<String, Object> deleteFeedInfo(Long feedId, Principal principal) {
+    public Map<String, Object> deleteFeedInfo(Long feedId, Authentication authentication) {
         Map<String, Object> result = new HashMap<>();
-        String message = "";
+        HttpStatus statusCode = HttpStatus.CREATED;
 
-        FeedEntity feed = feedRepository.findByIdAndRemoval(feedId, false);
+        Long userPk = ((CustomUserDetail) authentication.getPrincipal()).getUserPk();
+        String userType = ((CustomUserDetail) authentication.getPrincipal()).getUserType();
+
+        if(!UserType.STORE.toString().equals(userType)) {
+            throw new CustomException("판매자만 이용 가능한 서비스입니다.", statusCode);
+        }
+
+        FeedEntity feed = feedRepository.findByIdAndRemoval(feedId, false).orElse(null);
         if (feed == null) {
-            message = "존재하지 않는 피드 아이디(Long Type) 입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+            throw new CustomException("존재하지 않는 피드 아이디(Long Type) 입니다.", statusCode);
         }
 
-        StoreEntity store = storeRepository.findByUserIdAndWithdrawal(principal.getName(), false);
-        if (store == null) {
-            message = "존재하지 않는 계정 입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
-        }
-
-        if (!feed.getStoreId().getUserId().equals(principal.getName())) {
-            message = "삭제 권한이 없는 계정입니다.";
-            System.out.println(message);
-            result.put("result", false);
-            result.put("message", message);
-            return result;
+        if (!feed.getStoreId().getId().equals(userPk)) {
+            throw new CustomException("삭제 권한이 없는 계정입니다.", statusCode);
         }
 
         if (feedRepository.feedRemove(feedId) > 0) {
             result.put("result", true);
         } else {
-            message = "서버 문제로 데이터 삭제에 실패하였습니다.";
-            result.put("result", false);
+            throw new CustomException("서버 문제로 데이터 삭제에 실패하였습니다.", statusCode);
         }
-        result.put("message", message);
+
         return result;
     }
 }
