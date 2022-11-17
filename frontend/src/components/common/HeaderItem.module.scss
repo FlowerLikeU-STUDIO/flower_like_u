@@ -29,6 +29,16 @@
   cursor: pointer;
 }
 
+.store__mypage {
+  @include flexDiv(row, center, space-between);
+}
+
+.feed {
+  border: 0.125rem solid $red400;
+  border-radius: 0.125rem;
+  padding: 0.125rem;
+}
+
 .profile_seller {
   display: flex;
   flex-direction: column;
