@@ -13,7 +13,7 @@ const HolidayBadge = () => {
   return (
     <BadgeImageWrapper>
       <Image
-        src={"/calendar/HolidayBadge.png"}
+        src={"/calendar/holidayBadge.png"}
         layout={"fill"}
         objectFit={"contain"}
       />
