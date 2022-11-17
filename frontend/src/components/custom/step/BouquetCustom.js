@@ -96,8 +96,6 @@ const BuoquetCustom = () => {
       flowers: flowers_data,
     };
 
-    console.log(packageContent.engtitle[customOption.package]);
-
     const res = await client.post("custom", data).then((res) => res.data);
     if (res.result === "success") {
       mutate();
