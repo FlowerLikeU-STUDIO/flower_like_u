@@ -12,11 +12,13 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FeedRepository extends JpaRepository<FeedEntity, Long> {
     public Page<FeedEntity> findByStoreIdAndRemoval(StoreEntity storeId, boolean isRemoved, Pageable pageable);
-    public FeedEntity findByIdAndRemoval(Long feedId, boolean isRemoved);
+
+    public Optional<FeedEntity> findByIdAndRemoval(Long feedId, boolean isRemoved);
 
     public List<FeedEntity> findAllByStoreIdAndRemoval(StoreEntity store, boolean isRemoved);
 
