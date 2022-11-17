@@ -6,6 +6,7 @@ import FlowerImg from "@/components/common/FlowerImg";
 import { Rating } from "@mui/material";
 import useFlorist from "@/hooks/useFlorist";
 import Spinner from "@/components/spinner/index";
+import { isEmpty } from "lodash";
 
 const CustomFloristList = ({ storeId, setStoreId }) => {
   const cx = classNames.bind(styles);
@@ -131,7 +132,6 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
       setCurrentMaxPage(1);
     }
     setCurrentMaxPage(maxPage);
-    console.log(data);
   }, [data]);
 
   return (
@@ -202,6 +202,7 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
                       <p className={styles.store__adderss}>{florist.address}</p>
                       <p className={styles.store__days}>
                         {florist.holidays && "휴무일: "}
+                        {isEmpty(florist.holidays.filter((res) => res === true)) && <span>미정</span>}
                         {florist.holidays
                           .map((_, index) => _ && holidayList[index] + "요일 ")
                           .filter((el) => (

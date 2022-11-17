@@ -11,6 +11,7 @@ import { BASE_URL } from "@/pages/api/client";
 import axios from "axios";
 import Link from "next/link";
 import Spinner from "@/components/spinner/index";
+import { isEmpty } from "lodash";
 
 const FloristList = (props) => {
   const cx = classNames.bind(styles);
@@ -258,8 +259,10 @@ const FloristList = (props) => {
                   <div className={styles.store__info}>
                     <p className={styles.store__name}>{florist.storeName}</p>
                     <p className={styles.store__days}>
+                      {florist.holidays && "휴무일: "}
+                      {isEmpty(florist.holidays.filter((res) => res === true)) && <span>미정</span>}
                       {florist.holidays
-                        .map((_, index) => _ && holidayList[index] + "요일")
+                        .map((_, index) => _ && holidayList[index] + "요일 ")
                         .filter((el) => (
                           <span>{el}</span>
                         ))}
