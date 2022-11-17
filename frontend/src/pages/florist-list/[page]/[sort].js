@@ -10,6 +10,7 @@ import useFlorist from "@/hooks/useFlorist";
 import { BASE_URL } from "@/pages/api/client";
 import axios from "axios";
 import Link from "next/link";
+import Spinner from "@/components/spinner/index";
 
 const FloristList = (props) => {
   const cx = classNames.bind(styles);
@@ -35,7 +36,7 @@ const FloristList = (props) => {
   const [pageIndex, setPageIndex] = useState(1);
   const [numLst, setNumLst] = useState([1]); // [1, 2, 3, 4, 5]
   const selectSize = 8;
-  const { data, maxPage, mutate } = floristList({
+  const { data, maxPage, loading, mutate } = floristList({
     pageIndex,
     selectSize,
     selectSido,
@@ -53,17 +54,18 @@ const FloristList = (props) => {
     await mutate();
   };
 
+  const setSidoSelect = async (value) => {
+    setSelectSido(value);
+    setSelectSigungu("전체");
+    setSelectedArr(regionMap[value]);
+    setPageIndex(1);
+    router.push(`/florist-list/1/${currentSort}`);
+  };
+
   const sidoSelect = async (e) => {
     const value = e.target.value;
     if (!value) return;
-    await (async function () {
-      setSelectSido(value);
-      setSelectSigungu("전체");
-      setSelectedArr(regionMap[value]);
-      router.push(`/florist-list/1/${currentSort}`);
-      setPageIndex(1);
-    })();
-
+    await setSidoSelect(value);
     if (!data) return;
     mutate();
   };
@@ -240,6 +242,7 @@ const FloristList = (props) => {
         </div>
         {/* bottom */}
         <div className={styles.florist_list__wrapper}>
+          {!currentData && loading && <Spinner />}
           {currentData ? (
             currentData.map((florist) => (
               <div
