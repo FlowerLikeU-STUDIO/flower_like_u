@@ -27,6 +27,14 @@
   background-color: $primary300p;
 }
 
+.postcode {
+  width: 100%;
+  border: none;
+  resize: none;
+  font-family: "Pretendard Variable";
+  @include font(1rem, 500, $mainParagraph, 1.5rem);
+}
+
 .address__detail {
   width: 100%;
   max-width: 20rem;

@@ -1,6 +1,6 @@
 import styles from "./SituationContents.module.scss";
 import FlowerImg from "@/components/common/FlowerImg";
-import { RecipeContents } from "./RecipeContents";
+import { RecipeContents } from "../RecipeContents";
 import { flower } from "../../menu/MenuContents";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";

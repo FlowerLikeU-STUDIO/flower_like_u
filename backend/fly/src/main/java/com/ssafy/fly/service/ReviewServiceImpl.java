@@ -51,7 +51,7 @@ public class ReviewServiceImpl implements ReviewService {
             result.put("message", message);
             return result;
         }
-
+        
         Page<ReviewEntity> searchList = reviewRepository.findByStoreId(store, pageable);
 
         List<ReviewInfoRes> resultList = new ArrayList<>();

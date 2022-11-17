@@ -1,14 +1,14 @@
 .card__wrapper {
   width: 100%;
   height: 100%;
-  box-shadow: $shadow600;
   margin-top: 1rem;
 }
 
 .main__wrapper {
-  max-width: 62.5rem;
+  box-shadow: $shadow600;
+  max-width: 64rem;
   margin: 1rem auto;
-  padding: 1rem 1rem;
+  padding: 2rem;
 }
 
 .main__div__wrapper {
@@ -31,18 +31,32 @@
   flex-direction: column;
   max-width: 50rem;
   width: 100%;
-  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.sub__div__wrapper {
+  @include flexDiv(column, center, center);
+  width: 100%;
+}
+
+.main__p {
+  @include font(1.5rem, 600, $primary900, 220%);
+}
+
+.sub__p {
+  @include font(1rem, 500, $mainParagraph, 120%);
+}
+
+.description {
+  @include font(0.95rem, 400, $mainParagraph, 1.5rem);
 }
 
 .btn__wrapper {
   position: absolute;
   right: 5%;
-  bottom: -10%;
+  bottom: -5%;
   @include flexDiv;
   gap: 0.4rem;
-  @include respond-to("tablet-portrait-only") {
-    bottom: -15%;
-  }
 }
 
 @mixin button-color($bgcolor, $color) {
@@ -53,7 +67,7 @@
 .line {
   width: 100%;
   border-bottom: solid 0.125rem $white350;
-  margin: 3rem auto;
+  margin: 1.5rem auto;
 }
 
 .title__p {
@@ -63,12 +77,12 @@
   }
 }
 
-.sub__p {
+.title__sub__p {
   @include font(1.125rem, normal, $mainParagraph, 1.5rem);
 }
 
 .flower__detail {
-  @include flexDiv("row", "center", "start");
+  @include flexDiv(row, center, start);
   @include respond-to("tablet-portrait-only") {
     flex-direction: column;
   }

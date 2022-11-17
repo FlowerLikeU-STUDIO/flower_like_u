@@ -289,21 +289,25 @@ public class UserController {
 
         Map<String,Object> response = new HashMap<>();
         List<RegionVo> regionVoList = userService.findStoreList(region1,region2);
-        Double avgLongitude;
-        Double avgLatitude;
-        if (regionVoList.size() == 0) {
+        double avgLongitude;
+        double avgLatitude;
+        /*if (regionVoList.size() == 0) {
             if ("전체".equals(region2)) {
-                for (Object o :RegionMap.ofMap().keySet()) System.out.println(o.toString());
+                //for (Object o :RegionMap.ofMap().keySet()) System.out.println(o.toString());
+                System.out.println("wow");
                 System.out.println(RegionMap.ofMap().get(region1).toString());
+                System.out.println("wow");
                 avgLatitude = (Double)RegionMap.ofMap().get(region1)[0];
                 avgLongitude = (Double)RegionMap.ofMap().get(region1)[1];
             } else {
                 avgLatitude = (Double)RegionMap.ofMap().get(region1 + " " + region2)[0];
                 avgLongitude = (Double)RegionMap.ofMap().get(region1 + " " + region2)[1];
-            }
-        } else {
-            avgLongitude = regionVoList.stream().mapToDouble(RegionVo::getLongitude).sum() / regionVoList.size();
-            avgLatitude = regionVoList.stream().mapToDouble(RegionVo::getLatitude).sum() / regionVoList.size();
+            }*/
+        avgLongitude = regionVoList.stream().mapToDouble(RegionVo::getLongitude).sum() / regionVoList.size();
+        avgLatitude = regionVoList.stream().mapToDouble(RegionVo::getLatitude).sum() / regionVoList.size();
+        if (regionVoList.size() == 0) {
+            avgLongitude = -1.0;
+            avgLatitude = -1.0;
         }
         RegionWrprRes<RegionVo> regionWrprRes = new RegionWrprRes<>();
         regionWrprRes.setResponseList(regionVoList);

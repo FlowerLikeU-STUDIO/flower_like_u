@@ -5,7 +5,6 @@ const useRes = () => {
   const resList = ({ pageIndex }) => {
     const { data, error, mutate } = useSWR(pageIndex ? `book/?page=${pageIndex}&size=4&filter=order` : null, Fetcher);
     const loading = !data && !error;
-    console.log(data);
 
     if (data && data.result === "fail") {
       return {
@@ -44,9 +43,6 @@ const useRes = () => {
   const resDetail = ({ bookId }) => {
     const { data, error, mutate } = useSWR(bookId ? `book/detail/${bookId}` : null, Fetcher);
     const loading = !data && !error;
-    if (data) {
-      console.log(data);
-    }
 
     if (data && data.result === "fail") {
       return {

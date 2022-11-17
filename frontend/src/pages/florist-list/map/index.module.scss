@@ -1,0 +1,214 @@
+.florist_background {
+  min-height: 110vh;
+  width: 100%;
+  background: linear-gradient(
+      to top,
+      rgba(255, 255, 255, 0.6) 10%,
+      rgba(255, 255, 255, 0.7) 25%,
+      rgba(255, 255, 255, 0.8) 40%,
+      rgba(255, 255, 255, 0.9) 50%,
+      rgba(255, 255, 255, 1) 75%,
+      rgba(255, 255, 255, 1) 100%
+    ),
+    url("/custom/custom_background.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.layout {
+  width: 90%;
+  margin: 5rem auto;
+}
+
+.search__wrapper {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  @include flexDiv(row, center, flex-end);
+}
+
+.material_icons {
+  font-size: 22px;
+  font-weight: bold;
+  color: $primary600p;
+  cursor: pointer;
+}
+
+// 플로리스트 카드
+.florist__wrapper {
+  // max-width: 100%;
+  height: 20rem;
+  // max-height: 100%;
+  width: 15rem;
+  border-radius: 1rem;
+  background-color: $ivory300;
+  color: $gray;
+  font-size: 1rem;
+  @include flexDiv(column, flex-start, flex-start);
+}
+
+.store__img {
+  width: 100%;
+  // width: 15rem;
+  height: 10rem;
+  // min-height: 10rem;
+  border-radius: 1rem 1rem 0rem 0rem;
+}
+
+.store__info {
+  position: relative;
+  width: 15rem;
+  padding: 1rem;
+  @include flexDiv(column, flex-start, flex-start);
+  gap: 0.5rem;
+  border-radius: 0rem 0rem 1rem 1rem;
+  &:hover {
+    cursor: pointer;
+    color: $gray250;
+    background-color: $ivory400;
+    transform: translateY(2px);
+  }
+}
+
+.close__btn {
+  position: absolute;
+  width: fit-content;
+  top: 0.3rem;
+  right: 0.5rem;
+  background-color: $primary400p;
+  border-radius: 0.3rem;
+  padding: 0.125rem;
+  @include font(1rem, bold, $gray100);
+  border: 0.125rem solid $white200;
+}
+
+.store__name {
+  width: 100%;
+  @include font(1.3rem, bold, $mainParagraph);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.store__adderss {
+  width: 100%;
+  // display: -webkit-box;
+  display: block;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.store_information {
+  width: 100%;
+  // display: -webkit-box;
+  display: block;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.store__holiday {
+  width: 100%;
+  display: block;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.store__star {
+  @include flexDiv(row, center, flex-start);
+  gap: 0.4rem;
+}
+
+// ! 시도, 시군구 토글관련
+@mixin scoll {
+  &::-webkit-scrollbar {
+    width: 1rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $mainPrimary;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: $white200;
+  }
+}
+
+.wrapper .search_box .dropdown {
+  width: 150px;
+  color: $gray250;
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.wrapper .search_box .dropdown .default_option {
+  text-transform: uppercase;
+  padding: 13px 15px;
+  font-size: 14px;
+}
+
+.wrapper .search_box .dropdown ul {
+  position: absolute;
+  background: #fff;
+  width: 10rem;
+  border-radius: 5px;
+  padding: 20px;
+  display: none;
+  box-shadow: 8px 8px 6px -10px $mainPrimary;
+  max-height: 200px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.wrapper .search_box .dropdown ul.active {
+  display: block;
+  @include scoll;
+}
+
+// 시군구 active
+.wrapper .search_box .dropdown ul.sigungu__active {
+  display: block;
+  @include scoll;
+}
+
+.wrapper .search_box .dropdown ul button {
+  color: $gray;
+  padding-bottom: 1rem;
+  width: 100%;
+  text-align: start;
+}
+
+.wrapper .search_box .dropdown ul button:last-child {
+  padding-bottom: 0;
+}
+
+.wrapper .search_box .dropdown ul button:hover {
+  color: $primary600p;
+  font-weight: bold;
+}
+
+.wrapper .search_box .dropdown:before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  border: 8px solid;
+  border-color: $mainPrimary transparent transparent transparent;
+}
+
+.map {
+  width: 100%;
+  height: 43rem;
+  z-index: 0;
+  border: 1rem solid $white100;
+  border-radius: 3rem;
+  box-shadow: $shadow700;
+}

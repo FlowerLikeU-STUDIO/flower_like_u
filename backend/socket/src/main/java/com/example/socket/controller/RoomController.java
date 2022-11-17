@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/socket")
 public class RoomController {
     private final RoomService roomService;
     private final UserService userService;

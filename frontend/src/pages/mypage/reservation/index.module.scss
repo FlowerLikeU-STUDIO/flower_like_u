@@ -1,3 +1,5 @@
 .main__div {
-  margin: 3rem auto 1rem auto;
+  @include flexDiv(column);
+  width: 100%;
+  padding-top: 1rem;
 }

@@ -1,6 +1,7 @@
 import styles from "./save.module.scss";
 import classNames from "classnames/bind";
 import { useRouter } from "next/router";
+import Script from "next/script";
 // 컨텐츠
 import { packageContent } from "@/components/custom/step/StepContents";
 import CustomPlace from "@/components/custom/step/customplace/CustomPlace";
@@ -27,7 +28,6 @@ const CustomSave = () => {
   const dispatch = useDispatch();
   const customOption = useSelector((state) => state.custom);
   const router = useRouter();
-  const { kakaoShare } = useKakao();
 
   //* 유저가 선택한 패키지 종류
   const packageKind = packageContent.engtitle[customOption.package];
@@ -46,7 +46,7 @@ const CustomSave = () => {
   //* 송이 종류
   const bunchList = ["1", "3", "5", "7", "9"];
 
-  //* 사진 저장 버튼
+  //* 사진 저장
   const onDownloadButton = () => {
     const capture = document.querySelector("#capture");
     html2canvas(capture).then((canvas) => {
@@ -55,6 +55,7 @@ const CustomSave = () => {
   };
 
   //* 카카오톡 공유하기
+  const { kakaoShare } = useKakao();
   function dataURLtoFile(dataurl, filename) {
     var arr = dataurl.split(","),
       mime = arr[0].match(/:(.*?);/)[1],
@@ -108,6 +109,8 @@ const CustomSave = () => {
 
   return (
     <>
+      <Script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></Script>
+      <Script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></Script>
       {isOpen ? (
         <>
           <Modal children={<CustomOrder orderStep={"florist"} />} />
