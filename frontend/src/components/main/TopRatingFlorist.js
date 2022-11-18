@@ -23,40 +23,42 @@ const TopRatingFlorist = () => {
   useEffect(() => getTopRating, []);
 
   return (
-    <section className={styles.toprating_wrapper}>
-      <h1 className={styles.popular_title}>인기 플로리스트</h1>
-      <section className={styles.florist_card_wrapper}>
-        {topRating ? (
-          topRating.map((florist) => (
-            <article
-              key={florist.storeId}
-              className={styles.florist__wrapper}
-              onClick={() => router.push(`/florist/${florist.storeId}`)}
-            >
-              <div className={styles.store__img}>
-                <FlowerImg src={florist.profile} florist={"florist"} />
-              </div>
-              <div className={styles.store__info}>
-                <p className={styles.store__name}>{florist.storeName}</p>
-                <p className={styles.store__adderss}>{florist.address}</p>
-                <div className={styles.store__star}>
-                  <Rating
-                    defaultValue={florist.rating}
-                    size="medium"
-                    precision={0.5}
-                    readOnly
-                    className={styles.starrating}
-                  />
-                  <span>{florist.rating}점</span>
+    <>
+      {topRating ? (
+        <section className={styles.toprating_wrapper}>
+          <h1 className={styles.popular_title}>인기 플로리스트</h1>
+          <section className={styles.florist_card_wrapper}>
+            {topRating.map((florist) => (
+              <article
+                key={florist.storeId}
+                className={styles.florist__wrapper}
+                onClick={() => router.push(`/florist/${florist.storeId}`)}
+              >
+                <div className={styles.store__img}>
+                  <FlowerImg src={florist.profile} florist={"florist"} />
                 </div>
-              </div>
-            </article>
-          ))
-        ) : (
-          <></>
-        )}
-      </section>
-    </section>
+                <div className={styles.store__info}>
+                  <p className={styles.store__name}>{florist.storeName}</p>
+                  <p className={styles.store__adderss}>{florist.address}</p>
+                  <div className={styles.store__star}>
+                    <Rating
+                      defaultValue={florist.rating}
+                      size="medium"
+                      precision={0.5}
+                      readOnly
+                      className={styles.starrating}
+                    />
+                    <span>{florist.rating}점</span>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </section>
+        </section>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 
