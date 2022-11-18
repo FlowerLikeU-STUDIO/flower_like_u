@@ -16,6 +16,8 @@ const SituationContents = ({ setModalOpen }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  const packageName = ["꽃다발", "꽃병", "꽃풍선"];
+
   const useRecipe = (pack, size, wrapper, ribbon, flowers) => {
     router.push("/custom/step");
     dispatch(selectPackage(pack));
@@ -36,9 +38,17 @@ const SituationContents = ({ setModalOpen }) => {
               <h1>{recipe.title}</h1>
               <button
                 className={styles.button}
-                onClick={() => useRecipe(recipe.package, recipe.size, recipe.wrapper, recipe.ribbon, recipe.flowers)}
+                onClick={() =>
+                  useRecipe(
+                    recipe.package,
+                    recipe.size,
+                    recipe.wrapper,
+                    recipe.ribbon,
+                    recipe.flowers
+                  )
+                }
               >
-                사용하기
+                {packageName[recipe.package]} 레시피 사용하기
               </button>
             </div>
             <h2>{recipe.description}</h2>
@@ -46,7 +56,9 @@ const SituationContents = ({ setModalOpen }) => {
               {recipe.flower_kind.map((flowerIndex, index) => (
                 <article className={styles.flower_image_wrapper} key={index}>
                   <div className={styles.card_image}>
-                    <FlowerImg src={`/custom/flower/${flower[flowerIndex].color}_${flower[flowerIndex].name}.png`} />
+                    <FlowerImg
+                      src={`/custom/flower/${flower[flowerIndex].color}_${flower[flowerIndex].name}.png`}
+                    />
                   </div>
                   <h3>{flower[flowerIndex].title}</h3>
                   <p>{flower[flowerIndex].language}</p>
