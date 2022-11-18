@@ -63,7 +63,7 @@ const Custom = () => {
           사람에게, 세상에게 당신의 마음을 전해주세요.
         </h1>
         <div className={styles.button_wrapper}>
-          <div>
+          <div className={styles.button_inner_wrapper}>
             <Button
               size="custom_small"
               color="mainPrimary"
@@ -74,7 +74,6 @@ const Custom = () => {
             >
               너닮꽃 꽃다발 레시피
             </Button>
-            {/* 내 커스텀 리스트가 보이는 모달 창 띄우기 */}
             <Button
               size="custom_small"
               color="mainPrimary"

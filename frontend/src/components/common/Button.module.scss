@@ -64,6 +64,12 @@
     & + & {
       margin-left: 1.5rem;
     }
+    @media screen and (max-width: 768px) {
+      width: 18rem;
+      & + & {
+        margin-left: 0rem;
+      }
+    }
   }
 
   &.custom_large {
@@ -72,6 +78,9 @@
     box-shadow: $shadow500;
     transition: 0.2s linear;
     border: solid $mainPrimary 1px;
+    @media screen and (max-width: 768px) {
+      width: 18rem;
+    }
   }
 
   // 색상 관리

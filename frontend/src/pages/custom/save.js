@@ -192,7 +192,10 @@ const CustomSave = () => {
               <button className={styles.btn} onClick={() => onShareKakao()}>
                 카카오톡 공유하기
               </button>
-              <button className={styles.btn} onClick={() => goToMyDesign()}>
+              <button
+                className={cx("btn", "green")}
+                onClick={() => goToMyDesign()}
+              >
                 내 디자인 보러가기
               </button>
               <button
