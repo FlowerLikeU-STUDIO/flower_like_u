@@ -37,9 +37,7 @@
 
 // 플로리스트 카드
 .florist__wrapper {
-  // max-width: 100%;
   height: 20rem;
-  // max-height: 100%;
   width: 15rem;
   border-radius: 1rem;
   background-color: $ivory300;
@@ -50,9 +48,7 @@
 
 .store__img {
   width: 100%;
-  // width: 15rem;
   height: 10rem;
-  // min-height: 10rem;
   border-radius: 1rem 1rem 0rem 0rem;
 }
 
@@ -67,7 +63,6 @@
     cursor: pointer;
     color: $gray250;
     background-color: $ivory400;
-    transform: translateY(2px);
   }
 }
 
@@ -76,7 +71,7 @@
   width: fit-content;
   top: 0.3rem;
   right: 0.5rem;
-  background-color: $primary400p;
+  background-color: $ivory300;
   border-radius: 0.3rem;
   padding: 0.125rem;
   @include font(1rem, bold, $gray100);
