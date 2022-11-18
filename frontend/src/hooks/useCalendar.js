@@ -1,5 +1,5 @@
 const DAY_OF_THE_WEEK_KOR = ["일", "월", "화", "수", "목", "금", "토"];
-const DAY_OF_THE_WEEK_ENG = ["SUN", "MON", "THU", "WED", "THU", "FRI", "SAT"];
+const DAY_OF_THE_WEEK_ENG = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const EMPTY_WEEK = Array.from({ length: 7 }, () => "");
 const DAY_OF_THE_WEEK_MODE = {
   KOR: DAY_OF_THE_WEEK_KOR,
