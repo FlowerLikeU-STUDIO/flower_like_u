@@ -76,7 +76,6 @@ const FloristList = (props) => {
   const pageIndexChange = async (e) => {
     router.push(`/florist-list/${e}/${currentSort}/${selectSido}/${selectSigungu}`, undefined, { shallow: true });
     if (!data) return;
-    console.log("pageChange");
     if (e > numLst[numLst.length - 1]) {
       const mn = (Math.floor(e - 1) / 5) * 5 + 1;
       const mx = (Math.floor(e - 1) / 5) * 5 + 5;
@@ -320,7 +319,6 @@ const FloristList = (props) => {
 export default FloristList;
 
 export async function getStaticProps({ params }) {
-  console.log(params, "::::::::");
   const page = Number(params.floristlistslug[0]);
   const sort = params.floristlistslug[1];
   const sd = params.floristlistslug[2];
@@ -342,7 +340,6 @@ export async function getStaticProps({ params }) {
   if (!response.data) {
     return { notFound: true };
   }
-  console.log(response);
   if (response.data.result === "fail") {
     return {
       props: {
@@ -352,7 +349,6 @@ export async function getStaticProps({ params }) {
     };
   }
   const data = response.data.storeInfo;
-  console.log(data);
 
   return {
     props: {
