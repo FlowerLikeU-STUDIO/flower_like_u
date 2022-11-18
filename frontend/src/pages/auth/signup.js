@@ -38,6 +38,7 @@ const SignUp = () => {
 
   const onEmailHandler = (event) => {
     setEmail(event.target.value);
+    setCheckedEmail(false);
   };
   const onAuthHandler = (event) => {
     setCode(event.target.value);
