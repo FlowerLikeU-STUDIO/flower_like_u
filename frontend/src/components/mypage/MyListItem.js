@@ -36,10 +36,10 @@ const MyListItem = (props) => {
           <h1 className={styles.title__p}>
             상호명: {props.storeName} <br />
           </h1>
-          <p className={styles.sub__p}>예약한 날: {props.bookDate}</p>
+          <p className={styles.sub__p}>주문한 날: {props.bookDate}</p>
           <span className={styles.card_description}>
             {typeList[props.type]} 로 예약하셨어요. <br />
-            {props.dueDate} 에 늦지 않게 픽업해 주세요!
+            <span className={styles.pickup_date}>{props.dueDate}</span> 에 늦지 않게 픽업해 주세요!
           </span>
         </div>
         <div className={styles.button_wrapper}>

@@ -42,6 +42,10 @@
   @include font(1rem, normal, $gray300, 1.5rem);
 }
 
+.pickup_date {
+  color: $red400;
+}
+
 .res__cancel {
   margin-right: -4rem;
   width: 7.5rem;
