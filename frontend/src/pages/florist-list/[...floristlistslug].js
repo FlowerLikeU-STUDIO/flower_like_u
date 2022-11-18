@@ -10,34 +10,40 @@ import useFlorist from "@/hooks/useFlorist";
 import { BASE_URL } from "@/pages/api/client";
 import axios from "axios";
 import Link from "next/link";
-import Spinner from "@/components/spinner/index";
 import { isEmpty } from "lodash";
 
 const FloristList = (props) => {
   const cx = classNames.bind(styles);
   const router = useRouter();
-  const currentRoute = router.query.sort;
-  // @ 현재 데이터
+  // const currentRoute = router.query.floristlistslug;
+  // console.log(currentRoute);
+  // @ 현재 데이터 props
   const [currentData, setCurrentData] = useState(props.floristData);
+  const [currentMaxPage, setCurrentMaxPage] = useState(props.maxPage);
+  // *현재 페이지
+  const [pageIndex, setPageIndex] = useState(1);
+  // const pageIndex = Number(currentRoute[0]) || 1;
   // *최신순 필터
-  const [currentSort, setCurrentSort] = useState(currentRoute);
+  const [currentSort, setCurrentSort] = useState("reg");
+  // const currentSort = currentRoute[1] || "reg";
   // *dropdown
   const [sidoActive, setSidoActive] = useState(false);
   const [sigunguActive, setSigunguActive] = useState(false);
   // *전체 선택시
   const [selectSido, setSelectSido] = useState("전체");
+  // const selectSido = currentRoute[2] || "전체";
   // *선택된 배열
   const [selectSigungu, setSelectSigungu] = useState("전체");
+  // const selectSigungu = currentRoute[3] || "전체";
   const [selectedArr, setSelectedArr] = useState(regionMap["전체"]);
+  // const selectedArr = regionMap[selectSido];
   // *search Input
   const [inputText, setInputText] = useState();
   // * data 및 page
   const { floristList } = useFlorist();
-  const [currentMaxPage, setCurrentMaxPage] = useState(props.maxPage);
-  const [pageIndex, setPageIndex] = useState(1);
   const [numLst, setNumLst] = useState([1]); // [1, 2, 3, 4, 5]
   const selectSize = 8;
-  const { data, maxPage, loading, mutate } = floristList({
+  const { data, maxPage, loading } = floristList({
     pageIndex,
     selectSize,
     selectSido,
@@ -48,48 +54,17 @@ const FloristList = (props) => {
 
   const holidayList = ["일", "월", "화", "수", "목", "금", "토"];
 
-  const curSortChange = async (e) => {
-    setCurrentSort(e);
-    setPageIndex(1);
-    if (!data) return;
-    await mutate();
-  };
-
-  const setSidoSelect = async (value) => {
-    setSelectSido(value);
-    setSelectSigungu("전체");
-    setSelectedArr(regionMap[value]);
-    setPageIndex(1);
-    router.push(`/florist-list/1/${currentSort}`);
-  };
-
-  const sidoSelect = async (e) => {
-    const value = e.target.value;
-    if (!value) return;
-    await setSidoSelect(value);
-    if (!data) return;
-    mutate();
-  };
-
-  const sigunguSelect = async (e) => {
-    const value = e.target.value;
-    if (!value) return;
-    setSelectSigungu(value);
-    router.push(`/florist-list/1/${currentSort}`);
-    setPageIndex(1);
-    if (!data) return;
-    await mutate();
-  };
-
   const inputChange = async (e) => {
     if (e.target.value.length > 30) {
       setInputText(inputText.slice(0, 30));
       return;
     }
     setInputText(e.target.value);
-    setPageIndex(1);
+    // nextJs에서 routing이 일어나면 getStaticProps...를 야기함
+    // 이를 실행시키지 않기 위해 shallowRouting으로 url을 업데이트함 -> 불필요한 서버연산을 최소화
+    // 주의할 점: 한 페이지 내에서 실행해야함.
+    router.push(`/florist-list/1/${currentSort}/${selectSido}/${selectSigungu}`, undefined, { shallow: true });
     if (!data) return;
-    await mutate();
   };
 
   // * dropdownHandler
@@ -102,11 +77,8 @@ const FloristList = (props) => {
   };
 
   const pageIndexChange = async (e) => {
-    setPageIndex(e);
+    router.push(`/florist-list/${e}/${currentSort}/${selectSido}/${selectSigungu}`, undefined, { shallow: true });
     if (!data) return;
-    await mutate();
-    console.log("현재 클릭", e);
-    console.log("현재 클릭", numLst);
     if (e > numLst[numLst.length - 1]) {
       const mn = (Math.floor(e - 1) / 5) * 5 + 1;
       const mx = (Math.floor(e - 1) / 5) * 5 + 5;
@@ -128,7 +100,37 @@ const FloristList = (props) => {
     }
   };
 
+  const updateRoute = async (currentRoute) => {
+    setPageIndex(Number(currentRoute[0]) || 1);
+    setCurrentSort(currentRoute[1] || "reg");
+    setSelectSido(currentRoute[2] || "전체");
+    setSelectSigungu(currentRoute[3] || "전체");
+    setSelectedArr(regionMap[currentRoute[3]]);
+  };
+
   useEffect(() => {
+    if (isEmpty(router.query.floristlistslug)) return;
+    const currentRoute = router.query.floristlistslug;
+    const fun = async (currentRoute) => {
+      await updateRoute(currentRoute);
+    };
+    fun(currentRoute);
+  }, [router.query.floristlistslug]);
+
+  useEffect(() => {
+    if (isEmpty(router.query.floristlistslug)) return;
+    if (loading) return;
+    if (!data) {
+      setCurrentData(null);
+      setCurrentMaxPage(null);
+    }
+    setCurrentData(data);
+    setCurrentMaxPage(maxPage);
+  }, [data]);
+
+  useEffect(() => {
+    if (isEmpty(router.query.floristlistslug)) return;
+    if (!maxPage) return;
     if (maxPage < 6) {
       setNumLst([1, 2, 3, 4, 5].slice(0, maxPage));
     } else {
@@ -136,15 +138,7 @@ const FloristList = (props) => {
         setNumLst([1, 2, 3, 4, 5]);
       }
     }
-  }, [currentMaxPage, pageIndex]);
-
-  useEffect(() => {
-    if (!data) {
-      setCurrentData(null);
-      setCurrentMaxPage(1);
-    }
-    setCurrentData(data);
-    setCurrentMaxPage(maxPage);
+    // }, [currentMaxPage, pageIndex]);
   }, [data]);
 
   return (
@@ -169,9 +163,8 @@ const FloristList = (props) => {
               className={cx("sort__btn__item", {
                 ["activate"]: currentSort === "reg",
               })}
-              onClick={curSortChange.bind(curSortChange, "reg")}
             >
-              <Link href={`/florist-list/1/reg`}>
+              <Link href={`/florist-list/1/reg/${selectSido}/${selectSigungu}`}>
                 <a>최신순</a>
               </Link>
             </button>
@@ -180,9 +173,8 @@ const FloristList = (props) => {
               className={cx("sort__btn__item", {
                 ["activate"]: currentSort === "rating",
               })}
-              onClick={curSortChange.bind(curSortChange, "rating")}
             >
-              <Link href={`/florist-list/1/rating`}>
+              <Link href={`/florist-list/1/rating/${selectSido}/${selectSigungu}`}>
                 <a>별점순</a>
               </Link>
             </button>
@@ -190,9 +182,8 @@ const FloristList = (props) => {
               className={cx("sort__btn__item", {
                 ["activate"]: currentSort === "order",
               })}
-              onClick={curSortChange.bind(curSortChange, "order")}
             >
-              <Link href={`/florist-list/1/order`}>
+              <Link href={`/florist-list/1/order/${selectSido}/${selectSigungu}`}>
                 <a>주문량 많은순</a>
               </Link>
             </button>
@@ -206,9 +197,11 @@ const FloristList = (props) => {
                 <div className={styles.default_option}>{selectSido}</div>
                 <ul className={sidoActive ? styles.active : ""}>
                   {regionKey.map((sido, idx) => (
-                    <button value={sido} key={idx} onClick={sidoSelect}>
-                      {sido}
-                    </button>
+                    <Link href={`/florist-list/1/${currentSort}/${sido}/전체`}>
+                      <a value={sido} key={sido + idx}>
+                        {sido}
+                      </a>
+                    </Link>
                   ))}
                 </ul>
               </div>
@@ -221,9 +214,11 @@ const FloristList = (props) => {
                 <div className={styles.default_option}>{selectSigungu}</div>
                 <ul className={sigunguActive ? styles.sigungu__active : ""}>
                   {selectedArr.map((sigungu, idx) => (
-                    <button value={sigungu} key={idx} onClick={sigunguSelect}>
-                      {sigungu}
-                    </button>
+                    <Link href={`/florist-list/1/${currentSort}/${selectSido}/${sigungu}`}>
+                      <a value={sigungu} key={sigungu + idx}>
+                        {sigungu}
+                      </a>
+                    </Link>
                   ))}
                 </ul>
               </div>
@@ -245,7 +240,7 @@ const FloristList = (props) => {
         <main className={styles.florist_list_pagenation_wrapper}>
           {/* bottom */}
           <div className={styles.florist_list__wrapper}>
-            {!currentData && loading && <Spinner />}
+            {/* {!currentData && loading && <Spinner />} */}
             {currentData ? (
               currentData.map((florist) => (
                 <div
@@ -298,21 +293,21 @@ const FloristList = (props) => {
                 &lt;
               </button>
               {numLst.map((num, idx) => (
+                // <Link href={`/florist-list/${num}/${currentSort}/${selectSido}/${selectSigungu}`}>
                 <button
                   className={styles.btn}
-                  key={idx}
+                  key={"페이지네이션" + idx}
                   onClick={pageIndexChange.bind(pageIndexChange, num)}
                   disabled={pageIndex === num}
                 >
-                  <Link href={`/florist-list/${num}/${currentSort}`}>
-                    <a>{num}</a>
-                  </Link>
+                  {num}
                 </button>
+                // </Link>
               ))}
               <button
                 className={styles.btn}
                 onClick={pageIndexChange.bind(pageIndexChange, pageIndex + 1)}
-                disabled={!maxPage || pageIndex === maxPage}
+                disabled={!maxPage || pageIndex === currentMaxPage}
               >
                 &gt;
               </button>
@@ -327,31 +322,55 @@ const FloristList = (props) => {
 export default FloristList;
 
 export async function getStaticProps({ params }) {
-  const page = params.page;
-  const sort = params.sort;
+  const page = Number(params.floristlistslug[0]);
+  const sort = params.floristlistslug[1];
+  const sd = params.floristlistslug[2];
+  const sgg = params.floristlistslug[3];
+  const size = 8;
+  // const sd = "";
+  // const sgg = "";
+  const sn = "";
 
-  const response = await axios.get(`${BASE_URL}user/stores?page=${page}&size=#&sd=2&sgg=&sn=&sort=${sort}`);
+  const response = await axios.get(
+    `${BASE_URL}user/stores?page=${page}&size=${size}&sd=${sd}&sgg=${sgg}&sn${sn}=&sort=${sort}`
+    // `${BASE_URL}user/stores?page=${page}&size=${size}&sd=${sd}&sgg=${sgg}&sn${sn}=&sort=${sort}`
+  );
+  // const response = await axios.get(`${BASE_URL}user/stores?page=${page}&size=#&sd=2&sgg=&sn=&sort=${sort}`);
 
   if (!response) {
     return { notFound: true };
   }
+  if (!response.data) {
+    return { notFound: true };
+  }
+  if (response.data.result === "fail") {
+    return {
+      props: {
+        floristData: null,
+        maxPage: null,
+      },
+    };
+  }
   const data = response.data.storeInfo;
+
   return {
     props: {
       floristData: data.list,
       maxPage: data.maxPage,
     },
+    //html생성 후 10초동안 사용자에게 같은 html 제공
+    //10초 후 GET요청 들어올 시, 기존 html응답과 동시에 새로운 html regenerate -> 이후 GET요청부턴 갱신된 html 응답
     revalidate: 10, // seconds
   };
 }
 
 export async function getStaticPaths() {
   return {
-    fallback: true,
+    fallback: true, // 일부 페이지만 사전 렌더링
     paths: [
-      { params: { page: "1", sort: "reg" } },
-      { params: { page: "1", sort: "rating" } },
-      { params: { page: "1", sort: "order" } },
+      { params: { floristlistslug: ["1", "reg", "전체", "전체"] } },
+      { params: { floristlistslug: ["1", "order", "전체", "전체"] } },
+      { params: { floristlistslug: ["1", "rating", "전체", "전체"] } },
     ],
   };
 }

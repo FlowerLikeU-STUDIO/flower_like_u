@@ -216,18 +216,19 @@
   @include scoll;
 }
 
-.wrapper .search_box .dropdown ul button {
+.wrapper .search_box .dropdown ul a {
+  display: block;
   color: $gray;
   padding-bottom: 1rem;
   width: 100%;
   text-align: start;
 }
 
-.wrapper .search_box .dropdown ul button:last-child {
+.wrapper .search_box .dropdown ul a:last-child {
   padding-bottom: 0;
 }
 
-.wrapper .search_box .dropdown ul button:hover {
+.wrapper .search_box .dropdown ul a:hover {
   color: $primary600p;
   font-weight: bold;
 }

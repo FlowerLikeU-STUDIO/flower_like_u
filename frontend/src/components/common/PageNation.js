@@ -3,7 +3,7 @@ import styles from "./PageNation.module.scss";
 const PageNation = ({ setPageIndex, selectNumLst, pageIndex, maxPage }) => {
   return (
     <div className={styles.main__div}>
-      <button className={styles.btn} onClick={() => setPageIndex(pageIndex - 1)} disabled={selectNumLst[0] === 1}>
+      <button className={styles.btn} onClick={() => setPageIndex(pageIndex - 1)} disabled={pageIndex === 1}>
         &lt;
       </button>
 
@@ -13,11 +13,7 @@ const PageNation = ({ setPageIndex, selectNumLst, pageIndex, maxPage }) => {
         </button>
       ))}
 
-      <button
-        className={styles.btn}
-        onClick={() => setPageIndex(pageIndex + 1)}
-        disabled={selectNumLst[selectNumLst.length - 1] === maxPage}
-      >
+      <button className={styles.btn} onClick={() => setPageIndex(pageIndex + 1)} disabled={pageIndex === maxPage}>
         &gt;
       </button>
     </div>

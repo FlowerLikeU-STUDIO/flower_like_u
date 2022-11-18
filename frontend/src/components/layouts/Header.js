@@ -94,7 +94,7 @@ const Header = () => {
             꽃다발커스텀
           </a>
         </Link>
-        <Link href="/florist-list/1/reg">
+        <Link href="/florist-list/1/reg/전체/전체">
           <a className={styles.header_anchor} onClick={clickFlorist}>
             플로리스트
           </a>
