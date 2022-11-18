@@ -20,7 +20,9 @@ const CustomDetailCard = () => {
   //* 커스텀 꽃다발 데이터 가져오기
   const { designDetail } = useDesign();
   const [path, setPath] = useState(router.query.did);
-  const { basics, details } = designDetail({ flowerId: path || router.query.did });
+  const { basics, details } = designDetail({
+    flowerId: path || router.query.did,
+  });
   useEffect(() => {
     if (router.query.did) {
       setPath(router.query.did);
@@ -67,14 +69,17 @@ const CustomDetailCard = () => {
   const onHandleOpen = () => {
     dispatch(modalOpen());
   };
+  console.log(path);
 
   return (
     <div className={styles.card__wrapper} id="capture">
       {basics && (
         <>
-          {isOpen ? (
+          {isOpen && path ? (
             <>
-              <Modal children={<CustomOrder orderStep={"florist"} />} />
+              <Modal
+                children={<CustomOrder orderStep={"florist"} flowerId={path} />}
+              />
             </>
           ) : (
             <></>
@@ -104,9 +109,12 @@ const CustomDetailCard = () => {
               <button className={styles.btn} onClick={() => onDownloadButton()}>
                 사진으로 저장하기
               </button>
-              {/* <button className={cx("btn", "green")} onClick={() => onHandleOpen()}>
+              <button
+                className={cx("btn", "green")}
+                onClick={() => onHandleOpen()}
+              >
                 주문하러 가기
-              </button> */}
+              </button>
             </div>
           </div>
         </>
