@@ -63,6 +63,7 @@ const FeedReservation = ({ feedId, storeId }) => {
             <Reservation
               onClick={changeType}
               sendReservation={sendReservation}
+              storeId={storeId}
             />
           )}
           <CloseButton />

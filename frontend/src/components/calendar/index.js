@@ -1,5 +1,6 @@
 import useCalendar from "@/hooks/useCalendar";
-import { useState } from "react";
+import { client } from "@/pages/api/client";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import HolidayBadge from "./HolidayBadge";
 
@@ -138,11 +139,30 @@ const prevButtonCheck = (year, month) => {
   }
 };
 
-const holiday = [false, false, false, true, true, false, false];
-const Calendar = ({ choiceDay, setChoiceDay, setReservationDate }) => {
+const Calendar = ({ choiceDay, setChoiceDay, setReservationDate, storeId }) => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
   const [dayOfTheWeek, calendarBody] = useCalendar("ENG", year, month);
+  const [holiday, setHoliday] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
+
+  const fetchHoliday = async () => {
+    const { holidays } = await client
+      .get(`user/store/${storeId}`)
+      .then((res) => res.data.storeInfo);
+    setHoliday([...holidays]);
+  };
+
+  useEffect(() => {
+    fetchHoliday();
+  }, []);
 
   const onPrevMonth = () => {
     if (month - 1 === 0) {

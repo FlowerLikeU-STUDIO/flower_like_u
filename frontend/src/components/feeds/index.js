@@ -79,6 +79,7 @@ const Feed = ({ storeId }) => {
     setTargetFeed(feed.feedId);
     dispatch(modalOpen());
   };
+
   return (
     <>
       {isOpen ? (
