@@ -21,8 +21,8 @@
 }
 
 .main_title {
-  @include font(3rem, 400, $primary900);
-  margin: 3.5rem;
+  @include font(2rem, 400, $primary700);
+  margin: 5rem 3.5rem 2.5rem 3.5rem;
 }
 
 .main_content {
@@ -61,6 +61,15 @@
   transition: all 0.5s linear;
   &:hover {
     transform: scale(1.02);
+  }
+  @media screen and (max-width: 1350px) {
+    @include flexDiv(column);
+    height: 16rem;
+    width: 14rem;
+    padding: 1rem;
+  }
+  @media screen and (max-width: 768px) {
+    display: none;
   }
 }
 

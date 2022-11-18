@@ -61,14 +61,19 @@ const BuoquetCustom = () => {
     if (customOption.package === 2 && customOption.wrapper_color === null) {
       FailAlert("포장지 색을 골라주세요!");
       return;
-    } else if (customOption.package === 0 && customOption.ribbon_color === null) {
+    } else if (
+      customOption.package === 0 &&
+      customOption.ribbon_color === null
+    ) {
       FailAlert("리본 색을 골라주세요!");
       return;
     }
 
     //* 사이즈 정보
     let sizeList = [];
-    customOption.package === 0 ? (sizeList = ["XS", "S", "M", "L", "XL"]) : (sizeList = ["S", "M", "L"]);
+    customOption.package === 0
+      ? (sizeList = ["XS", "S", "M", "L", "XL"])
+      : (sizeList = ["S", "M", "L"]);
 
     //* 꽃 정보
     const flowers = customOption.flowers;
@@ -112,7 +117,10 @@ const BuoquetCustom = () => {
     if (customOption.package === 2 && customOption.wrapper_color === null) {
       FailAlert("포장지 색을 골라주세요!");
       return;
-    } else if (customOption.package === 0 && customOption.ribbon_color === null) {
+    } else if (
+      customOption.package === 0 &&
+      customOption.ribbon_color === null
+    ) {
       FailAlert("리본 색을 골라주세요!");
       return;
     }
@@ -144,21 +152,28 @@ const BuoquetCustom = () => {
           }}
           id="capture"
         >
-          <div
-            className={styles.ribbon_cover}
-            style={{
-              backgroundImage: `url('/custom/ribbon/${ribbonOption}.png')`,
-            }}
-          >
+          {ribbonOption !== null ? (
+            <div
+              className={styles.ribbon_cover}
+              style={{
+                backgroundImage: `url('/custom/ribbon/${ribbonOption}.png')`,
+              }}
+            >
+              <CustomPlace />
+            </div>
+          ) : (
             <CustomPlace />
-          </div>
+          )}
         </div>
         <div className={styles.custom_info_wrapper}>
           <div className={styles.info_sub_wrapper}>
             <p className={styles.custom_info_size}>
-              {SizeContent[customOption.package].title[customOption.size]} 사이즈
+              {SizeContent[customOption.package].title[customOption.size]}{" "}
+              사이즈
             </p>
-            <p className={styles.custom_info_package}>{SizeContent[customOption.package].kotitle} 커스텀</p>
+            <p className={styles.custom_info_package}>
+              {SizeContent[customOption.package].kotitle} 커스텀
+            </p>
           </div>
           <div className={styles.info_sub_wrapper}>
             <button className={styles.go_save_page} onClick={showModal}>
@@ -167,7 +182,9 @@ const BuoquetCustom = () => {
             {modalOpen && <CustomModal setModalOpen={setModalOpen} id={3} />}
             <button
               className={styles.go_save_page}
-              onClick={isLogin ? () => onSaveCustomInfo() : () => notUserSaveCustom()}
+              onClick={
+                isLogin ? () => onSaveCustomInfo() : () => notUserSaveCustom()
+              }
             >
               완성했어요!
             </button>

@@ -98,7 +98,7 @@
 .button {
   @include button-color($primary500);
   @include font(0.9rem, 500, $gray200);
-  width: 6rem;
+  width: 10rem;
   border-radius: 0.2rem;
   cursor: pointer;
   text-align: center;

@@ -8,6 +8,9 @@
 .step_wrapper {
   @include flexDiv(row, center, space-between);
   width: 35rem;
+  @media screen and (max-width: 768px) {
+    width: 20rem;
+  }
 }
 
 .number_title_wrapper {
@@ -16,6 +19,9 @@
   cursor: pointer;
   & > p {
     @include font(0.8rem, 400, $gray);
+    @media screen and (max-width: 768px) {
+      @include font(0.6rem, 400, $gray);
+    }
   }
   & > div {
     @include flexDiv;
@@ -30,6 +36,9 @@
   &.active {
     & > p {
       @include font(1rem, 500, $mainParagraph);
+      @media screen and (max-width: 768px) {
+        @include font(0.8rem, 500, $mainParagraph);
+      }
     }
     & > div {
       background-color: $primary500;
@@ -42,4 +51,7 @@
   border: 0.5px solid $primary300p;
   margin-bottom: 1.5rem;
   opacity: 0.5;
+  @media screen and (max-width: 768px) {
+    width: 10%;
+  }
 }

@@ -1,6 +1,6 @@
 .toprating_wrapper {
   @include flexDiv(column, center, flex-start);
-  min-height: 110vh;
+  min-height: 100vh;
   gap: 3rem;
 }
 
@@ -12,6 +12,15 @@
 .florist_card_wrapper {
   @include flexDiv(row);
   gap: 4rem;
+  @media screen and (max-width: 1350px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 4rem;
+  }
+  @media screen and (max-width: 768px) {
+    @include flexDiv(column);
+    gap: 2rem;
+  }
 }
 
 .florist__wrapper {
@@ -20,12 +29,17 @@
   width: 100%;
   max-height: 100%;
   box-sizing: border-box;
+  box-shadow: $shadow500;
   cursor: pointer;
   border-radius: 1rem;
   background-color: $ivory300;
   color: $gray;
   font-size: 1rem;
+  transition: all 0.5s linear;
   @include flexDiv(column, flex-start, flex-start);
+  &:hover {
+    transform: scale(1.02);
+  }
 }
 
 .store__img {

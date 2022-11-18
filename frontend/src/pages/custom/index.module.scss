@@ -28,12 +28,26 @@
   gap: 1.2rem;
 }
 
+.button_inner_wrapper {
+  @include flexDiv();
+  @media screen and (max-width: 768px) {
+    @include flexDiv(column);
+    gap: 1rem;
+  }
+}
+
 .custom_title {
   @include font(3rem, 700);
   width: 90%;
+  @media screen and (max-width: 768px) {
+    @include font(2rem, 700);
+  }
 }
 
 .custom_description {
   @include font(1.2rem, 400, $mainParagraph, 150%);
   width: 90%;
+  @media screen and (max-width: 768px) {
+    @include font(1rem, 400, $mainParagraph, 150%);
+  }
 }

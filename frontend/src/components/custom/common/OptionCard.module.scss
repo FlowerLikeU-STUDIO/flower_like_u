@@ -29,6 +29,23 @@
   }
 }
 
+.img_wrapper {
+  width: 11rem;
+  height: 11rem;
+  @media screen and (max-width: 768px) {
+    width: 6rem;
+    height: 6rem;
+  }
+}
+
+.contents_wrapper {
+  @include flexDiv(column);
+  width: 100%;
+  @media screen and (max-width: 768px) {
+    width: 50%;
+  }
+}
+
 .custom_div {
   @include flexDiv(column, center, center);
   box-shadow: $shadow600;
@@ -40,27 +57,52 @@
   white-space: pre-line;
   text-align: center;
   height: 20rem;
+  @media screen and (max-width: 768px) {
+    @include flexDiv(row);
+  }
   &.small {
     @include hoverButton();
     width: 11.25rem;
-    & > p {
-      @include font(1.5rem);
+    @media screen and (max-width: 768px) {
+      height: 8rem;
     }
-    & > span {
-      @include font;
-      color: $gray;
-      word-break: keep-all;
+    & > div {
+      & > h1 {
+        @include font(1.5rem);
+        @media screen and (max-width: 768px) {
+          @include font(1rem);
+        }
+      }
+      & > span {
+        @include font;
+        color: $gray;
+        word-break: keep-all;
+        @media screen and (max-width: 768px) {
+          @include font(0.8rem);
+        }
+      }
     }
   }
   &.medium {
     @include hoverButton();
     width: 15rem;
-    & > p {
-      @include font(1.5rem);
+    @media screen and (max-width: 768px) {
+      height: 8rem;
     }
-    & > span {
-      @include font;
-      word-break: keep-all;
+    & > div {
+      & > h1 {
+        @include font(1.5rem);
+        @media screen and (max-width: 768px) {
+          @include font(1rem);
+        }
+      }
+      & > span {
+        @include font;
+        word-break: keep-all;
+        @media screen and (max-width: 768px) {
+          @include font(0.8rem);
+        }
+      }
     }
   }
 }
