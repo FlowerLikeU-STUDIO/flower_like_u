@@ -17,7 +17,14 @@ const ModifyAuth = () => {
   // 닉네임 중복체크
   const [isNickname, setIsNickname] = useState(true);
   // 주소 입력
-  const [addr, setAddr] = useState({ zipCode: "", street: "", details: "", sigunguCode: "" });
+  const [addr, setAddr] = useState({
+    zipCode: "",
+    street: "",
+    details: "",
+    sigunguCode: "",
+    latitude: "",
+    longitude: "",
+  });
 
   const inputNickname = (e) => {
     const inputV = e.target.value;

@@ -98,6 +98,8 @@ const FloristMap = () => {
         let content = document.createElement("div");
         content.classList.add(`${styles.florist__wrapper}`);
 
+        content.addEventListener("mouseleave", makeOutListener(overlay));
+
         let img = document.createElement("img");
         img.src = r.profile || "/auth/flowerNone.png";
         img.alt = "너닮꽃 꽃집 이미지";
@@ -107,6 +109,9 @@ const FloristMap = () => {
         let info = document.createElement("div");
         info.classList.add(`${styles.store__info}`);
         content.appendChild(info);
+        info.addEventListener("click", () => {
+          router.push(`/florist/${r.storeId}/feed`);
+        });
 
         let storeName = document.createElement("span");
         storeName.classList.add(`${styles.store__name}`);
@@ -117,9 +122,6 @@ const FloristMap = () => {
         storeInfo.classList.add(`${styles.store_information}`);
         storeInfo.appendChild(document.createTextNode(r.bio || "작성된 소개글이 없습니다."));
 
-        storeInfo.addEventListener("click", () => {
-          router.push(`/florist/${r.storeId}/feed`);
-        });
         info.appendChild(storeInfo);
 
         let storeAddress = document.createElement("span");
@@ -156,8 +158,8 @@ const FloristMap = () => {
 
         overlay.setContent(content);
 
-        kakao.maps.event.addListener(marker, "mouseover", makeOverListener(map, overlay));
-        kakao.maps.event.addListener(marker, "mouseout", makeOutListener(overlay));
+        kakao.maps.event.addListener(marker, "click", makeOverListener(map, overlay));
+        // kakao.maps.event.addListener(marker, "mouseout", makeOutListener(overlay));
       });
     });
   };
