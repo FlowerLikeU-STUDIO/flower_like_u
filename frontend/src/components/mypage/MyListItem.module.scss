@@ -5,13 +5,11 @@
   width: 64rem;
   height: 12.5rem;
   margin: 1rem auto;
-  @include respond-to("tablet-portrait-only") {
-    flex-direction: column;
-  }
   border-bottom: 0.1rem solid $white300;
   box-shadow: $shadow400;
   border-radius: 0.1rem;
   @media screen and (max-width: 1080px) {
+    height: 100%;
     width: 46rem;
   }
   @media screen and (max-width: 768px) {
