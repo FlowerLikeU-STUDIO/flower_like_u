@@ -60,6 +60,9 @@ const FloristList = (props) => {
       return;
     }
     setInputText(e.target.value);
+    // nextJs에서 routing이 일어나면 getStaticProps...를 야기함
+    // 이를 실행시키지 않기 위해 shallowRouting으로 url을 업데이트함 -> 불필요한 서버연산을 최소화
+    // 주의할 점: 한 페이지 내에서 실행해야함.
     router.push(`/florist-list/1/${currentSort}/${selectSido}/${selectSigungu}`, undefined, { shallow: true });
     if (!data) return;
   };
