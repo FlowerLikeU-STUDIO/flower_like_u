@@ -26,7 +26,7 @@ const TextAreaStyle = styled.textarea`
   padding: 10px;
 `;
 
-const Reservation = ({ onClick, sendReservation }) => {
+const Reservation = ({ onClick, sendReservation, storeId }) => {
   const [reservationContent, setReservationContent] = useState("");
   const [reservationDate, setReservationDate] = useState("");
   const [choiceDay, setChoiceDay] = useState("");
@@ -50,6 +50,7 @@ const Reservation = ({ onClick, sendReservation }) => {
           setChoiceDay={setChoiceDay}
           choiceDay={choiceDay}
           setReservationDate={setReservationDate}
+          storeId={storeId}
         />
       </ReservationWrapper>
       <ReservationWrapper className="contents">
