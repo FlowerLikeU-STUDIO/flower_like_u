@@ -11,7 +11,7 @@ pipeline {
         // }
         stage('Chat Dockerizing') {
             steps {
-                sh "docker rmi martinflower/fly:fly_socket"
+                // sh "docker rmi martinflower/fly:fly_socket"
                 dir('./backend/socket'){
                     sh "pwd"
                     sh "chmod 777 gradlew"
