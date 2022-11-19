@@ -4,7 +4,6 @@ import com.ssafy.fly.dto.request.ReviewPostReqDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
-import java.security.Principal;
 import java.util.Map;
 
 public interface ReviewService {

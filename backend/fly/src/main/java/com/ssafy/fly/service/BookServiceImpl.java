@@ -23,7 +23,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.security.Principal;
 import java.util.*;
 
 @Service("bookService")
@@ -242,7 +241,7 @@ public class BookServiceImpl implements BookService {
                 searchList = bookRepository.getStoreDoneList(store, pageable);
             }
 
-            if (searchList != null && searchList.getContent().size() > 0) {
+            if (searchList != null && !searchList.getContent().isEmpty()) {
                 List<BookListRes.BookElementForStore> resultList = new ArrayList<>();
                 for (BookEntity curEntity : searchList) {
                     String image = "";
@@ -331,7 +330,7 @@ public class BookServiceImpl implements BookService {
                 BookListRes.BookElementForAll basicInfo = BookListRes.BookElementForAll.builder()
                         .bookId(book.getId())
                         .type(book.getType().toString().toLowerCase())
-                        .image(book.getFeedId().getImages().size() > 0 ? book.getFeedId().getImages().get(0).getImage() : null)
+                        .image(!book.getFeedId().getImages().isEmpty() ? book.getFeedId().getImages().get(0).getImage() : null)
                         .request(book.getRequest())
                         .bookDate(book.getBookDateOnly())
                         .dueDate(book.getDueDateOnly())

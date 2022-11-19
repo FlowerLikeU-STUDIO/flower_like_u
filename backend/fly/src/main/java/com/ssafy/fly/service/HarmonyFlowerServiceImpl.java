@@ -1,16 +1,15 @@
 package com.ssafy.fly.service;
 
 import com.ssafy.fly.database.mysql.entity.HarmonyFlower;
+import com.ssafy.fly.database.mysql.repository.HarmonyFlowerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
-public class HarmonyFlowerServiceImpl implements HarmonyFlowerService{
+public class HarmonyFlowerServiceImpl implements HarmonyFlowerService {
     private final HarmonyFlowerRepository harmonyFlowerRepository;
 
     @Autowired
@@ -23,7 +22,7 @@ public class HarmonyFlowerServiceImpl implements HarmonyFlowerService{
 
         for (int i = 0; i < colorLst.size(); i++) {
             for (int j = i + 1; j < colorLst.size(); j++) {
-                String[] arr = { colorLst.get(i), colorLst.get(j)};
+                String[] arr = {colorLst.get(i), colorLst.get(j)};
                 HarmonyFlower harmonyFlower = new HarmonyFlower();
                 harmonyFlower.setColorOne(arr[0]);
                 harmonyFlower.setColorTwo(arr[1]);

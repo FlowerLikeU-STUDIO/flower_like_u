@@ -3,7 +3,6 @@ package com.ssafy.fly.service;
 import com.ssafy.fly.dto.request.RegisterFeedReq;
 import org.springframework.security.core.Authentication;
 
-import java.security.Principal;
 import java.util.Map;
 
 public interface FeedService {
