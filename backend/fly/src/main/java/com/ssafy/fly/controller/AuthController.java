@@ -68,7 +68,7 @@ public class AuthController {
             return new ResponseEntity<>(result, HttpStatus.OK);
             // 요청 header "Authorization : [토큰]"
         }
-        throw new CustomException("비밀번호가 일치하지 않습니다.", HttpStatus.OK);
+        throw new CustomException("비밀번호가 일치하지 않습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/kakao")
@@ -91,6 +91,6 @@ public class AuthController {
         response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         response.put(ResponseKeySet.ACCESS_TOKEN, jwtTokenProvider.createToken(customUserDetail.getUserPk(), lst));
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
