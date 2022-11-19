@@ -1,12 +1,19 @@
+import Modal from "@/components/modal";
+import { modalOpen } from "@/store/reducers/modal";
 import Image from "next/image";
-import React, { useEffect, useRef } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import ImageOverLay from "./ImageOverLay";
 
 const ChatBubbleWrapper = styled.div`
   padding: 8px 12px;
   display: flex;
   &.mine {
     justify-content: end;
+  }
+
+  & img {
+    cursor: pointer;
   }
 `;
 
@@ -29,21 +36,44 @@ const areEqual = (prevProps, nextProps) => {
 };
 
 const ChatBubble = (props) => {
+  const [overlayImage, setOverlayImage] = useState("");
+  const [overlayState, setOverlayState] = useState(false);
+  const imageOverLay = () => {
+    setOverlayImage(props.imgSrc);
+    setOverlayState(true);
+  };
+
+  const closeOverlay = () => {
+    setOverlayImage("");
+    setOverlayState(false);
+  };
   return (
-    <ChatBubbleWrapper
-      className={props.direction === props.type ? "mine" : ""}
-      key={props.id}
-    >
-      <ChatBubbleStyle
-        className={props.direction === props.type ? "myBubble" : ""}
+    <>
+      {overlayState && overlayImage ? (
+        <ImageOverLay imgSrc={overlayImage} closeOverlay={closeOverlay} />
+      ) : (
+        <></>
+      )}
+      <ChatBubbleWrapper
+        className={props.direction === props.type ? "mine" : ""}
+        key={props.id}
       >
-        {props.imgSrc ? (
-          <Image src={props.imgSrc} width={200} height={200} />
-        ) : (
-          props.content
-        )}
-      </ChatBubbleStyle>
-    </ChatBubbleWrapper>
+        <ChatBubbleStyle
+          className={props.direction === props.type ? "myBubble" : ""}
+        >
+          {props.imgSrc ? (
+            <Image
+              src={props.imgSrc}
+              width={200}
+              height={200}
+              onClick={imageOverLay}
+            />
+          ) : (
+            props.content
+          )}
+        </ChatBubbleStyle>
+      </ChatBubbleWrapper>
+    </>
   );
 };
 
