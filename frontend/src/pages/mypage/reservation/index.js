@@ -7,7 +7,6 @@ import useRes from "@/hooks/useRes";
 import PageNation from "@/components/common/PageNation";
 
 const CustomerReservation = () => {
-  // https://velog.io/@a_in/Next.js-Error-Abort-fetching-for-route
   const { resList } = useRes();
   const [pageIndex, setPageIndex] = useState(1);
   const { data, maxPage, mutate } = resList({ pageIndex });

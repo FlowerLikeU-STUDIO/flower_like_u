@@ -1,22 +1,20 @@
 package com.ssafy.fly.controller;
 
+import com.ssafy.fly.common.message.ResponseKeySet;
 import com.ssafy.fly.common.util.CustomMap;
 import com.ssafy.fly.common.util.FlowerMap;
-import com.ssafy.fly.common.util.ResultMessageSet;
+import com.ssafy.fly.common.message.ResultMessageSet;
 import com.ssafy.fly.common.vo.FlowerVo;
 import com.ssafy.fly.dto.request.CustomFlowerRegReq;
 import com.ssafy.fly.service.CustomFlowerService;
 import com.ssafy.fly.service.HarmonyFlowerService;
 import com.ssafy.fly.service.HarmonyService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,20 +23,15 @@ import java.util.stream.Collectors;
 @RequestMapping("/custom")
 public class CustomController {
 
-    //private final Logger logger = LogManager.getLogger(CustomController.class);
-
     private final CustomFlowerService customFlowerService;
-    private final ResultMessageSet resultMessageSet;
     private final HarmonyService harmonyService;
     private final HarmonyFlowerService harmonyFlowerService;
 
     @Autowired
     public CustomController(CustomFlowerService customFlowerService,
-                            ResultMessageSet resultMessageSet,
                             HarmonyService harmonyService,
                             HarmonyFlowerService harmonyFlowerService) {
         this.customFlowerService = customFlowerService;
-        this.resultMessageSet = resultMessageSet;
         this.harmonyService = harmonyService;
         this.harmonyFlowerService = harmonyFlowerService;
     }
@@ -48,19 +41,17 @@ public class CustomController {
     @PostMapping()
     public ResponseEntity<Map<String, Object>> registFlower(@RequestBody CustomFlowerRegReq customFlowerRegReq,
                                                             Authentication authentication) {
-        //logger.info("[POST] - /custom - {}", customFlowerRegReq);
-
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = customFlowerService.saveCustomFlower(customFlowerRegReq, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", resultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             List<String> colorLst = customFlowerRegReq.getFlowers().stream().map(flower -> {
                 return FlowerMap.idxToColor[flower.intValue()];
             }).collect(Collectors.toList());
             harmonyFlowerService.create(colorLst);
         } else {
-            response.put("result", resultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -72,17 +63,15 @@ public class CustomController {
     public ResponseEntity<Map<String, Object>> getCustomFlowerList(@RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
                                                                    @RequestParam(value = "size", required = false, defaultValue = "10") int size,
                                                                    Authentication authentication) {
-        //logger.info("[GET] /custom?page={}&size={}", pageNo, size);
-
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = customFlowerService.getCustomFlowerList(pageNo, size, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", resultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("designList", result.get("list"));
             response.put("maxPage", result.get("maxPage"));
         } else {
-            response.put("result", resultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -93,16 +82,14 @@ public class CustomController {
     @GetMapping("/detail/{flowerId}")
     public ResponseEntity<Map<String, Object>> getCumstomFlowerDetailInfo(@PathVariable String flowerId,
                                                                           Authentication authentication) {
-        //logger.info("[GET] /custom/detail/{flowerId} - {}", flowerId);
-
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = customFlowerService.getCustomFlowerDetails(flowerId, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", resultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("flowerInfo", result);
         } else {
-            response.put("result", resultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -113,15 +100,13 @@ public class CustomController {
     @DeleteMapping("/{flowerId}")
     public ResponseEntity<Map<String, Object>> removeCumstomFlowerInfo(@PathVariable String flowerId,
                                                                        Authentication authentication) {
-        //logger.info("[DELETE] /custom/{flowerId} - {}", flowerId);
-
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = customFlowerService.removeCustomFlower(flowerId, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", resultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", resultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -131,8 +116,6 @@ public class CustomController {
     /** 5. 커스텀 꽃다발 조합 추천 */
     @GetMapping("/recommend/{size}")
     public ResponseEntity<List<FlowerVo>> getRecommend(@PathVariable int size) {
-        //logger.info("[GET] /custom/recommend/{size} - {}", size);
-
         Map<String, FlowerVo[]> flowerMap = FlowerMap.ofMap();
         if (size == 0) {
             int idx = (int) Math.floor(Math.random() * 7);

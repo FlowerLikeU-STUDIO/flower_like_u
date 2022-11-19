@@ -14,12 +14,14 @@ public class FeedRes {
     private String content;
 
     @Data
+    @EqualsAndHashCode(callSuper=false)
     @SuperBuilder
     public static class FeedListElement extends FeedRes {
         private String image;
     }
 
     @Data
+    @EqualsAndHashCode(callSuper=false)
     @SuperBuilder
     public static class FeedDetailRes extends FeedRes {
         private List<String> image;

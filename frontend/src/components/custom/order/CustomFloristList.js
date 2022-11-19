@@ -5,7 +5,6 @@ import { regionKey, regionMap } from "@/lib/utils/addressList";
 import FlowerImg from "@/components/common/FlowerImg";
 import { Rating } from "@mui/material";
 import useFlorist from "@/hooks/useFlorist";
-import Spinner from "@/components/spinner/index";
 import { isEmpty } from "lodash";
 
 const CustomFloristList = ({ storeId, setStoreId }) => {
@@ -29,7 +28,7 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
   const [pageIndex, setPageIndex] = useState(1);
   const [numLst, setNumLst] = useState([1]); // [1, 2, 3, 4, 5]
   const selectSize = 20;
-  const { data, maxPage, loading, mutate } = customFloristList({
+  const { data, maxPage } = customFloristList({
     pageIndex,
     selectSize,
     selectSido,
@@ -55,7 +54,6 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
     if (!value) return;
     await setSidoSelect(value);
     if (!data) return;
-    mutate();
   };
 
   const setSigunguSelect = async (value) => {
@@ -68,7 +66,6 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
     if (!value) return;
     await setSigunguSelect(value);
     if (!data) return;
-    await mutate();
   };
 
   const inputChange = async (e) => {
@@ -79,7 +76,6 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
     setInputText(e.target.value);
     setPageIndex(1);
     if (!data) return;
-    await mutate();
   };
 
   // * dropdownHandler
@@ -95,7 +91,6 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
     setPageIndex(e);
     scrollToTop();
     if (!data) return;
-    await mutate();
     if (e > numLst[numLst.length - 1]) {
       const mn = (Math.floor(e - 1) / 5) * 5 + 1;
       const mx = (Math.floor(e - 1) / 5) * 5 + 5;
@@ -181,53 +176,47 @@ const CustomFloristList = ({ storeId, setStoreId }) => {
       <div className={styles.layout}>
         {/* bottom */}
         <div className={styles.florist_list__wrapper}>
-          {loading ? (
-            <Spinner />
-          ) : (
-            <>
-              {data ? (
-                data.map((florist) => (
-                  <div
-                    key={florist.storeId}
-                    className={cx("florist__wrapper", {
-                      [styles.florist__wrapper__true]: florist.storeId === storeId,
-                    })}
-                    onClick={() => setStoreId(florist.storeId)}
-                  >
-                    <div className={styles.store__img}>
-                      <FlowerImg src={florist.profile} />
-                    </div>
-                    <div className={styles.store__info}>
-                      <p className={styles.store__name}>{florist.storeName}</p>
-                      <p className={styles.store__adderss}>{florist.address}</p>
-                      <p className={styles.store__days}>
-                        {florist.holidays && "휴무일: "}
-                        {isEmpty(florist.holidays.filter((res) => res === true)) && <span>미정</span>}
-                        {florist.holidays
-                          .map((_, index) => _ && holidayList[index] + "요일 ")
-                          .filter((el) => (
-                            <span>{el}</span>
-                          ))}
-                      </p>
-                      <div className={styles.store__star}>
-                        <Rating
-                          defaultValue={florist.rating}
-                          size="medium"
-                          precision={0.5}
-                          readOnly
-                          className={styles.starrating}
-                        />
-                        <span>{florist.rating}점</span>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div>
-                  <p>존재하지 않는 결과 입니다.</p>
+          {data ? (
+            data.map((florist) => (
+              <div
+                key={florist.storeId}
+                className={cx("florist__wrapper", {
+                  [styles.florist__wrapper__true]: florist.storeId === storeId,
+                })}
+                onClick={() => setStoreId(florist.storeId)}
+              >
+                <div className={styles.store__img}>
+                  <FlowerImg src={florist.profile} />
                 </div>
-              )}
-            </>
+                <div className={styles.store__info}>
+                  <p className={styles.store__name}>{florist.storeName}</p>
+                  <p className={styles.store__adderss}>{florist.address}</p>
+                  <p className={styles.store__days}>
+                    {florist.holidays && "휴무일: "}
+                    {isEmpty(florist.holidays.filter((res) => res === true)) && <span>미정</span>}
+                    {florist.holidays
+                      .map((_, index) => _ && holidayList[index] + "요일 ")
+                      .filter((el) => (
+                        <span>{el}</span>
+                      ))}
+                  </p>
+                  <div className={styles.store__star}>
+                    <Rating
+                      defaultValue={florist.rating}
+                      size="medium"
+                      precision={0.5}
+                      readOnly
+                      className={styles.starrating}
+                    />
+                    <span>{florist.rating}점</span>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div>
+              <p>존재하지 않는 결과 입니다.</p>
+            </div>
           )}
         </div>
 

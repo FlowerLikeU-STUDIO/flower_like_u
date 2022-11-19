@@ -1,13 +1,11 @@
 package com.ssafy.fly.controller;
 
-import com.ssafy.fly.common.util.*;
-import com.ssafy.fly.common.vo.JwtUserInfo;
+import com.ssafy.fly.common.message.ResponseKeySet;
+import com.ssafy.fly.common.message.ResultMessageSet;
 import com.ssafy.fly.common.vo.RegionVo;
 import com.ssafy.fly.dto.request.*;
 import com.ssafy.fly.dto.response.RegionWrprRes;
 import com.ssafy.fly.service.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,29 +22,22 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
-    //private final Logger logger = LogManager.getLogger(UserController.class);
-
     private final UserService userService;
-    private final ResultMessageSet resultMessageSet;
 
     @Autowired
-    public UserController(ResultMessageSet resultMessageSet,
-                          UserService userService) {
-        this.resultMessageSet = resultMessageSet;
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     /** 1. 아이디 중복 검사 */
     @GetMapping("/chkId/{inputId}")
     public ResponseEntity<Map<String, Object>> checkDuplicatedID(@PathVariable String inputId) {
-        //logger.info("[POST] - /user/chkId - {}", inputId);
-
         Map<String, Object> response = new HashMap<>();
 
         if (userService.checkIdDuplication(inputId)) {
-            response.put("result", resultMessageSet.DUPLICATED);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.DUPLICATED);
         } else {
-            response.put("result", resultMessageSet.NONDUPLICATED);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.NONDUPLICATED);
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -56,15 +46,13 @@ public class UserController {
     /** 2. 회원 정보 등록 */
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> registerMember(@RequestBody @Valid RegisterReq registerReq) {
-        //logger.info("[POST] - /user/register - {}", registerReq);
-
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.saveMember(registerReq);
 
         if ((boolean) result.get("result")) {
-            response.put("result", resultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", resultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -74,16 +62,14 @@ public class UserController {
     /** 3. 아이디 찾기 */
     @PostMapping("/findId")
     public ResponseEntity<Map<String, Object>> findID(@RequestBody @Valid FindIdReq findIdReq) {
-        //logger.info("[POST] - /user/findId - {}", findIdReq);
-
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.findID(findIdReq);
 
         if ((boolean) result.get("result")) {
-            response.put("result", resultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("userId", result.get("userId"));
         } else {
-            response.put("result", resultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -93,15 +79,13 @@ public class UserController {
     /** 4. 비밀번호 찾기(임시 비밀번호 발급) */
     @PostMapping("/findPassword")
     public ResponseEntity<Map<String, Object>> findPassword(@RequestBody FindPwdReq findPwdReq) {
-        //logger.info("[POST] - /user/findPassword -{}", findPwdReq);
-
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.issueTemporaryPassword(findPwdReq);
 
         if ((boolean) result.get("result")) {
-            response.put("result", resultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", resultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -111,14 +95,12 @@ public class UserController {
     /** 5. 닉네임 중복 검사 */
     @GetMapping("/chkNickname/{nickname}")
     public ResponseEntity<Map<String, Object>> checkDuplicatedNickname(@PathVariable String nickname) {
-        //logger.info("[GET] - /user/chkNickname - {}", nickname);
-
         Map<String, Object> response = new HashMap<>();
 
         if (userService.checkNicknameDuplication(nickname)) {
-            response.put("result", resultMessageSet.DUPLICATED);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.DUPLICATED);
         } else {
-            response.put("result", resultMessageSet.NONDUPLICATED);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.NONDUPLICATED);
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -128,15 +110,13 @@ public class UserController {
     @PutMapping()
     public ResponseEntity<Map<String, Object>> changeInfo(@RequestBody ChangeInfoReq changeInfoReq,
                                                           Authentication authentication) {
-        //logger.info("[PUT] - /user - {}", changeInfoReq);
-
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.updateUserInfo(changeInfoReq, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", resultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", resultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -147,15 +127,13 @@ public class UserController {
     @PutMapping("/introduction")
     public ResponseEntity<Map<String, Object>> changeStoreIntroduction(@RequestBody Map<String, Object> changeIntroductionReq,
                                                                        Authentication authentication) {
-        //logger.info("[PUT] - /user/introduction - {}", changeIntroductionReq);
-
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.updateIntroduction(changeIntroductionReq.get("introduction").toString(), authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", resultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", resultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -166,15 +144,13 @@ public class UserController {
     @PutMapping("/changePassword")
     public ResponseEntity<Map<String, Object>> changePassword(@RequestBody @Valid ChangePwdReq changePwdReq,
                                                               Authentication authentication) {
-        //logger.info("[PUT] - /user/changePassword - {}", changePwdReq);
-
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.updatePassword(changePwdReq, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", resultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", resultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -185,15 +161,13 @@ public class UserController {
     @PutMapping("/changeImg")
     public ResponseEntity<Map<String, Object>> updateMemberProfileImage(@RequestBody Map<String, Object> changeProfileReq,
                                                                         Authentication authentication) {
-        //logger.info("[PUT] - /user/changeImg - {}", changeProfileReq.get("image").toString().substring(0, 30));
-
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.updateProfileImage(changeProfileReq.get("image").toString(), authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", resultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", resultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -204,15 +178,13 @@ public class UserController {
     @DeleteMapping()
     public ResponseEntity<Map<String, Object>> withdrawFromMember(@RequestBody Map<String, Object> withdrawReq,
                                                                   Authentication authentication) {
-        //logger.info("[DELETE] - /user - {}", withdrawReq);
-
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.deleteUser(withdrawReq.get("password").toString(), authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", resultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", resultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -222,17 +194,15 @@ public class UserController {
     /** 11. 회원 정보 조회 */
     @GetMapping()
     public ResponseEntity<Map<String, Object>> getUserInfo(Authentication authentication) {
-        //logger.info("[GET] - /user");
-
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.findUserInfo(authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", resultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("userInfo", result.get("userInfo"));
         } else {
-            response.put("result", resultMessageSet.FAIL);
-            response.put("result", result.get("message"));
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
+            response.put("message", result.get("message"));
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -241,16 +211,14 @@ public class UserController {
     /** 12. 꽃가게 프로필 정보 조회 */
     @GetMapping("/store/{storeId}")
     public ResponseEntity<Map<String, Object>> getStoreInfo(@PathVariable Long storeId) {
-        //logger.info("[GET] - /user/store/{storeId} - {}", storeId);
-
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.findStoreInfo(storeId);
 
         if ((boolean) result.get("result")) {
-            response.put("result", resultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("storeInfo", result.get("storeInfo"));
         } else {
-            response.put("result", resultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -265,16 +233,14 @@ public class UserController {
                                                             @RequestParam(value = "sd", required = false, defaultValue = "전체") String sido,
                                                             @RequestParam(value = "sgg", required = false, defaultValue = "전체") String sigungu,
                                                             @RequestParam(value = "sn", required = false, defaultValue = "") String storeName) {
-        //logger.info("[GET] - /user/stores&page={}&size={}&sort={}&sd={}&sgg={}&sn={}", pageNo, size, sort, sido, sigungu, storeName);
-
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> result = userService.findStoreList(pageNo, size, sort, sido, sigungu, storeName);
 
         if ((boolean) result.get("result")) {
-            response.put("result", resultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("storeInfo", result.get("info"));
         } else {
-            response.put("result", resultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -285,10 +251,8 @@ public class UserController {
     @GetMapping("/stores/region")
     public ResponseEntity<Map<String,Object>> getListMap(@RequestParam(value = "sd", required = false, defaultValue = "전체") String region1,
                                                          @RequestParam(value = "sgg", required = false, defaultValue = "전체") String region2) {
-        //logger.info("[GET] - /user/stores/region&sd={}&sgg={}", region1, region2);
-
         Map<String,Object> response = new HashMap<>();
-        List<RegionVo> regionVoList = userService.findStoreList(region1,region2);
+        List<RegionVo> regionVoList = userService.findStoreList(region1, region2);
         double avgLongitude;
         double avgLatitude;
         /*if (regionVoList.size() == 0) {
@@ -305,7 +269,7 @@ public class UserController {
             }*/
         avgLongitude = regionVoList.stream().mapToDouble(RegionVo::getLongitude).sum() / regionVoList.size();
         avgLatitude = regionVoList.stream().mapToDouble(RegionVo::getLatitude).sum() / regionVoList.size();
-        if (regionVoList.size() == 0) {
+        if (regionVoList.isEmpty()) {
             avgLongitude = -1.0;
             avgLatitude = -1.0;
         }
@@ -313,7 +277,7 @@ public class UserController {
         regionWrprRes.setResponseList(regionVoList);
         regionWrprRes.setAvgLongitude(avgLongitude);
         regionWrprRes.setAvgLatitude(avgLatitude);
-        response.put("result",resultMessageSet.SUCCESS);
+        response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         response.put("regionList", regionWrprRes);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

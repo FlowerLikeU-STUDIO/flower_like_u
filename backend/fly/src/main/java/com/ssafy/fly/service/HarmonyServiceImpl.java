@@ -17,7 +17,7 @@ public class HarmonyServiceImpl implements HarmonyService {
     public String getColor(String color) {
         Map<String[], Double> scoreMap = new HashMap<>();
         harmonyScoreRepository.findAll().forEach((harmonyScore -> {
-            scoreMap.put(new String[] {harmonyScore.getColorOne(), harmonyScore.getColorTwo()}, harmonyScore.getScore());
+            scoreMap.put(new String[]{harmonyScore.getColorOne(), harmonyScore.getColorTwo()}, harmonyScore.getScore());
         }));
 
         List<Score> candidate = new ArrayList<>();
@@ -26,7 +26,7 @@ public class HarmonyServiceImpl implements HarmonyService {
                 String colorTmp;
                 if (key[0].equals(color)) colorTmp = key[1];
                 else colorTmp = key[0];
-                candidate.add(new Score(colorTmp,scoreMap.get(key)));
+                candidate.add(new Score(colorTmp, scoreMap.get(key)));
             }
         }
         candidate.sort(new Comparator<Score>() {

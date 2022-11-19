@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-// 디바운싱 - 마지막 호출만 적용 (put api)
+// 디바운싱 - 마지막 호출만 적용
 const useDebounce = (value, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
 

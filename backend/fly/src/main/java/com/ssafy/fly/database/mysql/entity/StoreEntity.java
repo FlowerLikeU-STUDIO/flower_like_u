@@ -105,17 +105,15 @@ public class StoreEntity extends BaseEntity implements CustomUserDetail {
     private int totalOrder;
 
     public List<Boolean> getBooleanHolidays() {
-        List<Boolean> holidays = new ArrayList<>();
+        List<Boolean> booleanHolidays = new ArrayList<>();
 
         if (this.holidays != null) {
             StringTokenizer st = new StringTokenizer(this.holidays, ",");
             while (st.hasMoreTokens()) {
-                String weekday = st.nextToken();
-                if ("true".equals(weekday)) holidays.add(true);
-                else holidays.add(false);
+                booleanHolidays.add(Boolean.parseBoolean(st.nextToken()));
             }
         }
-        return holidays;
+        return booleanHolidays;
     }
 
     @Override

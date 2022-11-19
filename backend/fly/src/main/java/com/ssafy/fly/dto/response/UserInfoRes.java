@@ -27,12 +27,14 @@ public class UserInfoRes {
     }
 
     @Data
+    @EqualsAndHashCode(callSuper=false)
     @SuperBuilder
     public static class ForConsumer extends UserInfoRes {
         private String nickname;
     }
 
     @Data
+    @EqualsAndHashCode(callSuper=false)
     @SuperBuilder
     public static class ForStore extends UserInfoRes {
         private String storeName;

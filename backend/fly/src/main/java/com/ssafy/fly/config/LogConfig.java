@@ -1,24 +1,17 @@
 package com.ssafy.fly.config;
 
-import com.ssafy.fly.controller.AuthController;
-import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.CodeSignature;
-import org.aspectj.lang.reflect.MethodSignature;
-import org.hibernate.mapping.Join;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Configuration
 @Aspect
@@ -27,7 +20,7 @@ public class LogConfig {
 
     // com.ssafy.fly.controller 이하 패키지의 모든 클래스 이하 모든 메서드에 적용
     @Pointcut("execution(* com.ssafy.fly.controller..*.*(..))")
-    private void pointCut(){}
+    private void pointCut() {}
 
     // 메서드 호출 전에 적용
     @Before("pointCut()")
@@ -52,7 +45,7 @@ public class LogConfig {
         logger.error("[ERR MESSAGE] - {}", exception.getMessage());
     }
 
-    private Map params(JoinPoint joinPoint) {
+    private Map<String, Object> params(JoinPoint joinPoint) {
         CodeSignature codeSignature = (CodeSignature) joinPoint.getSignature();
         String[] parameterNames = codeSignature.getParameterNames();
         Object[] args = joinPoint.getArgs();

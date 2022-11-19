@@ -3,7 +3,9 @@ import useSWR from "swr";
 
 const useRes = () => {
   const resList = ({ pageIndex }) => {
-    const { data, error, mutate } = useSWR(pageIndex ? `book/?page=${pageIndex}&size=4&filter=order` : null, Fetcher);
+    const { data, error, mutate } = useSWR(pageIndex ? `book/?page=${pageIndex}&size=4&filter=order` : null, Fetcher, {
+      revalidateOnFocus: false,
+    });
     const loading = !data && !error;
 
     if (data && data.result === "fail") {
@@ -22,7 +24,9 @@ const useRes = () => {
   };
 
   const orderList = ({ pageIndex }) => {
-    const { data, error, mutate } = useSWR(pageIndex ? `book/?page=${pageIndex}&size=4&filter=done` : null, Fetcher);
+    const { data, error, mutate } = useSWR(pageIndex ? `book/?page=${pageIndex}&size=4&filter=done` : null, Fetcher, {
+      revalidateOnFocus: false,
+    });
     const loading = !data && !error;
 
     if (data && data.result === "fail") {
@@ -41,7 +45,9 @@ const useRes = () => {
   };
 
   const resDetail = ({ bookId }) => {
-    const { data, error, mutate } = useSWR(bookId ? `book/detail/${bookId}` : null, Fetcher);
+    const { data, error, mutate } = useSWR(bookId ? `book/detail/${bookId}` : null, Fetcher, {
+      revalidateOnFocus: false,
+    });
     const loading = !data && !error;
 
     if (data && data.result === "fail") {

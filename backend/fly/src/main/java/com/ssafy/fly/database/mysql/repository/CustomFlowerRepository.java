@@ -15,7 +15,6 @@ import java.util.Optional;
 
 @Repository
 public interface CustomFlowerRepository extends JpaRepository<CustomFlowerEntity, Long> {
-    // public CustomFlowerEntity findByDesignId(String flowerId);
     public Optional<CustomFlowerEntity> findByDesignIdAndRemoval(String flowerId, boolean isRemoved);
     public Page<CustomFlowerEntity> findAllByConsumerIdAndRemoval(ConsumerEntity consumer, boolean isRemoved, Pageable pageable);
 
@@ -24,5 +23,5 @@ public interface CustomFlowerRepository extends JpaRepository<CustomFlowerEntity
     @Query("UPDATE CustomFlowerEntity as c " +
             "SET c.removal = true " +
             "WHERE c.designId = :flowerId")
-    public int CustomFlowerRemove(@Param("flowerId") String flowerId);
+    public int customFlowerRemove(@Param("flowerId") String flowerId);
 }

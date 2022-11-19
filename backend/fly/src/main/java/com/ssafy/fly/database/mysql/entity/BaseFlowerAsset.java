@@ -26,5 +26,6 @@ public class BaseFlowerAsset extends BaseEntity {
     private String engName;
 
     @OneToMany(mappedBy = "baseId")
+    @Builder.Default
     private List<FlowerAsset> flowers = new ArrayList<>();
 }
