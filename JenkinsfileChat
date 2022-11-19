@@ -2,16 +2,16 @@ pipeline {
     agent any
 
     stages {
-        // stage('Init') {
-        //     steps {
-        //         sh """
-        //             docker stop fly_socket
-        //         """
-        //     }
-        // }
+        stage('Init') {
+            steps {
+                sh """
+                    docker stop fly_socket
+                """
+            }
+        }
         stage('Chat Dockerizing') {
             steps {
-                // sh "docker rmi martinflower/fly:fly_socket"
+                sh "docker rmi martinflower/fly:fly_socket"
                 dir('./backend/socket'){
                     sh "pwd"
                     sh "chmod 777 gradlew"
@@ -29,7 +29,7 @@ pipeline {
         }
         stage('Deploy') {             
             steps {
-                // sh "docker pull martinflower/fly:fly_socket"
+                sh "docker pull martinflower/fly:fly_socket"
                 sh "docker run --rm -d --name fly_socket -p 8080:8080 martinflower/fly:fly_socket"
             }
         }
