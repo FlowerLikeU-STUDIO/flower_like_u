@@ -32,11 +32,13 @@ const useFlorist = () => {
   };
 
   const customFloristList = ({ pageIndex, selectSize, selectSido, selectSigungu, inputText }) => {
-    const { data, mutate, error } = useSWR(
+    const debounceSearch = useDebounce(inputText, 1000);
+    const { data, error } = useSWR(
       pageIndex
-        ? inputText
-          ? `user/stores?page=${pageIndex}&size=${selectSize}&sd=${selectSido}&sgg=${selectSigungu}&sn=${inputText}`
-          : `user/stores?page=${pageIndex}&size=${selectSize}&sd=${selectSido}&sgg=${selectSigungu}`
+        ? () =>
+            debounceSearch
+              ? `user/stores?page=${pageIndex}&size=${selectSize}&sd=${selectSido}&sgg=${selectSigungu}&sn=${debounceSearch}`
+              : `user/stores?page=${pageIndex}&size=${selectSize}&sd=${selectSido}&sgg=${selectSigungu}`
         : null,
       Fetcher,
       { revalidateOnFocus: false }
@@ -53,7 +55,6 @@ const useFlorist = () => {
       loading,
       data: data ? data.storeInfo.list : data,
       maxPage: data ? data.storeInfo.maxPage : data,
-      mutate,
     };
   };
   return {
