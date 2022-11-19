@@ -27,18 +27,32 @@ const TextAreaStyle = styled.textarea`
   margin: 20px;
   padding: 10px;
 `;
-const CustomReservation = ({ setStep, submitData }) => {
+const CustomReservation = ({
+  setStep,
+  submitData,
+  storeId,
+  orderStep,
+  exitCustomResgister,
+}) => {
   const [reqeust, setRequest] = useState("");
   const [reservationDate, setReservationDate] = useState("");
   const [choiceDay, setChoiceDay] = useState("");
   const dispatch = useDispatch();
 
   const closeModal = () => {
-    dispatch(modalClose());
+    if (orderStep === "flower") {
+      exitCustomResgister();
+    } else {
+      dispatch(modalClose());
+    }
   };
 
   const goReservation = () => {
-    setStep("florist");
+    if (orderStep === "flower") {
+      setStep("flower");
+    } else {
+      setStep("florist");
+    }
   };
 
   const submitOrder = () => {
@@ -70,6 +84,7 @@ const CustomReservation = ({ setStep, submitData }) => {
             setChoiceDay={setChoiceDay}
             choiceDay={choiceDay}
             setReservationDate={setReservationDate}
+            storeId={storeId}
           />
           <ReservationWrapper className="contents">
             <div>🌻시간협의는 채팅을 통해 진행해주세요🌻</div>

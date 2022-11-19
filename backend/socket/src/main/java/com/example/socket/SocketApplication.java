@@ -10,7 +10,6 @@ public class SocketApplication {
 	public static void main(String[] args) {
 		SpringApplicationBuilder springApplicationBuilder = new SpringApplicationBuilder(SocketApplication.class);
 		springApplicationBuilder.properties("spring.config.location="
-				+ "classpath:/application.properties, "
 				+ "classpath:/application-database.properties");
 		SpringApplication springApplication = springApplicationBuilder.build();
 		springApplication.run(args);

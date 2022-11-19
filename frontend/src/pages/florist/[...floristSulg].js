@@ -1,16 +1,16 @@
 import HeaderItem from "@/components/common/HeaderItem";
 import Feed from "@/components/feeds";
+import Modal from "@/components/modal";
+import ProfileCustomOrder from "@/components/modal/contents/ProfileCustomOrder";
 import Review from "@/components/review";
 import useUser from "@/hooks/useUser";
 import storage from "@/lib/utils/storage";
 import { startChatting } from "@/store/actions/chat";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import useSWR from "swr";
-import { client } from "../api/client";
-import { socketClient } from "../api/socketClient";
 
 const ProfileTitleWrapper = styled.div`
   display: flex;
@@ -90,6 +90,7 @@ const Profile = ({ profileData, type, storeId }) => {
   const { data: isLogin } = useSWR("logIn", storage);
   const { user } = useUser();
   const [typeState, setType] = useState(type);
+  const [modalState, setModalState] = useState(false);
   const dispath = useDispatch();
   const changeType = (value) => {
     setType(value);
@@ -99,9 +100,28 @@ const Profile = ({ profileData, type, storeId }) => {
     dispath(startChatting({ storeId: storeId }));
   };
 
-  const handleCustomResgister = () => {};
+  const handleCustomResgister = () => {
+    setModalState(true);
+  };
+
+  const exitCustomResgister = () => {
+    setModalState(false);
+  };
   return (
     <>
+      {modalState ? (
+        <Modal
+          children={
+            <ProfileCustomOrder
+              orderStep={"flower"}
+              storeId={storeId}
+              exitCustomResgister={exitCustomResgister}
+            />
+          }
+        />
+      ) : (
+        <></>
+      )}
       <ProfileTitleWrapper>
         <ProfileTitle>
           <HeaderItem isMyPage={false} {...profileData} type={"store"} />

@@ -1,4 +1,4 @@
-import CustomFlorist from "@/components/custom/order/CustomFlorist";
+import CustomDesignChoice from "@/components/custom/order/CustomDesignChoice";
 import CustomReservation from "@/components/custom/order/CustomReservation";
 import SuccessAlert from "@/lib/SuccessAlert";
 import { client } from "@/pages/api/client";
@@ -6,11 +6,10 @@ import { modalClose } from "@/store/reducers/modal";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-const CustomOrder = ({ orderStep, flowerId }) => {
+const ProfileCustomOrder = ({ orderStep, storeId, exitCustomResgister }) => {
   const dispatch = useDispatch();
   const [step, setStep] = useState(orderStep);
-  const [storeId, setStoreId] = useState();
-  // const [flowerId, setFlowerId] = useState();
+  const [flowerId, setFlowerId] = useState();
   const [request, setRequest] = useState();
   const [dueDate, setDueDate] = useState();
 
@@ -38,26 +37,26 @@ const CustomOrder = ({ orderStep, flowerId }) => {
       alert("스토어를 선택해주세요");
       return;
     }
-
     const res = await client.post("book/custom", data).then((res) => res.data);
-    console.log(res);
     if (res.result === "success") {
       SuccessAlert("성공적으로 예약되었습니다.");
-      dispatch(modalClose());
+      exitCustomResgister();
       return;
     }
   };
-
   return (
     <>
-      {step === "florist" ? (
-        <CustomFlorist
-          storeId={storeId}
+      {step === "flower" ? (
+        <CustomDesignChoice
+          flowerId={flowerId}
           setStep={setStep}
-          setStoreId={setStoreId}
+          setFlowerId={setFlowerId}
+          exitCustomResgister={exitCustomResgister}
         />
       ) : (
         <CustomReservation
+          exitCustomResgister={exitCustomResgister}
+          orderStep={orderStep}
           setStep={setStep}
           submitData={submitData}
           storeId={storeId}
@@ -67,4 +66,4 @@ const CustomOrder = ({ orderStep, flowerId }) => {
   );
 };
 
-export default CustomOrder;
+export default ProfileCustomOrder;
