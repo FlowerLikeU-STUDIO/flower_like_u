@@ -1,5 +1,6 @@
 package com.ssafy.fly.controller;
 
+import com.ssafy.fly.common.message.ResponseKeySet;
 import com.ssafy.fly.common.util.CustomMap;
 import com.ssafy.fly.common.util.FlowerMap;
 import com.ssafy.fly.common.message.ResultMessageSet;
@@ -44,13 +45,13 @@ public class CustomController {
         Map<String, Object> result = customFlowerService.saveCustomFlower(customFlowerRegReq, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             List<String> colorLst = customFlowerRegReq.getFlowers().stream().map(flower -> {
                 return FlowerMap.idxToColor[flower.intValue()];
             }).collect(Collectors.toList());
             harmonyFlowerService.create(colorLst);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -66,11 +67,11 @@ public class CustomController {
         Map<String, Object> result = customFlowerService.getCustomFlowerList(pageNo, size, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("designList", result.get("list"));
             response.put("maxPage", result.get("maxPage"));
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -85,10 +86,10 @@ public class CustomController {
         Map<String, Object> result = customFlowerService.getCustomFlowerDetails(flowerId, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("flowerInfo", result);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -103,9 +104,9 @@ public class CustomController {
         Map<String, Object> result = customFlowerService.removeCustomFlower(flowerId, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 

@@ -1,5 +1,6 @@
 package com.ssafy.fly.controller;
 
+import com.ssafy.fly.common.message.ResponseKeySet;
 import com.ssafy.fly.common.message.ResultMessageSet;
 import com.ssafy.fly.dto.request.ReviewPostReqDto;
 import com.ssafy.fly.service.ReviewService;
@@ -35,9 +36,9 @@ public class ReviewController {
         Map<String, Object> result = reviewService.create(reviewPostReqDto, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -55,7 +56,7 @@ public class ReviewController {
         Map<String, Object> result = reviewService.getList(storeId, pageable);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("content", result.get("content"));
             response.put("pageable", result.get("pageable"));
             response.put("sort", result.get("sort"));
@@ -68,7 +69,7 @@ public class ReviewController {
             response.put("curPage", result.get("curPage"));
             response.put("number", result.get("number"));
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -82,10 +83,10 @@ public class ReviewController {
         Map<String, Object> result = reviewService.getReviewInfo(reviewId, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("reviewInfo", result.get("reviewInfo"));
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 

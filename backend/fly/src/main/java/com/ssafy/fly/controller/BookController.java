@@ -1,5 +1,6 @@
 package com.ssafy.fly.controller;
 
+import com.ssafy.fly.common.message.ResponseKeySet;
 import com.ssafy.fly.common.message.ResultMessageSet;
 import com.ssafy.fly.dto.request.BookCustomFlowerReq;
 import com.ssafy.fly.dto.request.BookFeedFlowerReq;
@@ -33,9 +34,9 @@ public class BookController {
         Map<String, Object> result = bookService.registCustomFlowerBookInfo(bookCustomFlowerReq, authentication);
 
         if((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -50,9 +51,9 @@ public class BookController {
         Map<String, Object> result = bookService.registFeedFlowerBookInfo(bookFeedFlower, authentication);
 
         if((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -67,9 +68,9 @@ public class BookController {
         Map<String, Object> result = bookService.updateBookState(bookId, authentication);
 
         if((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -86,10 +87,10 @@ public class BookController {
         Map<String, Object> result = bookService.getBookInfoList(pageNo, size, filter, authentication);
 
         if((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put(filter + "Info", result.get("info"));
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -104,10 +105,10 @@ public class BookController {
         Map<String, Object> result = bookService.getDetailBookInfo(bookId, authentication);
 
         if((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("bookInfo", result.get("bookInfo"));
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -122,9 +123,9 @@ public class BookController {
         Map<String, Object> result = bookService.deleteBookInfo(bookId, authentication);
 
         if((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 

@@ -1,5 +1,6 @@
 package com.ssafy.fly.controller;
 
+import com.ssafy.fly.common.message.ResponseKeySet;
 import com.ssafy.fly.common.message.ResultMessageSet;
 import com.ssafy.fly.common.vo.RegionVo;
 import com.ssafy.fly.dto.request.*;
@@ -34,9 +35,9 @@ public class UserController {
         Map<String, Object> response = new HashMap<>();
 
         if (userService.checkIdDuplication(inputId)) {
-            response.put("result", ResultMessageSet.DUPLICATED);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.DUPLICATED);
         } else {
-            response.put("result", ResultMessageSet.NONDUPLICATED);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.NONDUPLICATED);
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -49,9 +50,9 @@ public class UserController {
         Map<String, Object> result = userService.saveMember(registerReq);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -65,10 +66,10 @@ public class UserController {
         Map<String, Object> result = userService.findID(findIdReq);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("userId", result.get("userId"));
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -82,9 +83,9 @@ public class UserController {
         Map<String, Object> result = userService.issueTemporaryPassword(findPwdReq);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -97,9 +98,9 @@ public class UserController {
         Map<String, Object> response = new HashMap<>();
 
         if (userService.checkNicknameDuplication(nickname)) {
-            response.put("result", ResultMessageSet.DUPLICATED);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.DUPLICATED);
         } else {
-            response.put("result", ResultMessageSet.NONDUPLICATED);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.NONDUPLICATED);
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -113,9 +114,9 @@ public class UserController {
         Map<String, Object> result = userService.updateUserInfo(changeInfoReq, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -130,9 +131,9 @@ public class UserController {
         Map<String, Object> result = userService.updateIntroduction(changeIntroductionReq.get("introduction").toString(), authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -147,9 +148,9 @@ public class UserController {
         Map<String, Object> result = userService.updatePassword(changePwdReq, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -164,9 +165,9 @@ public class UserController {
         Map<String, Object> result = userService.updateProfileImage(changeProfileReq.get("image").toString(), authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -181,9 +182,9 @@ public class UserController {
         Map<String, Object> result = userService.deleteUser(withdrawReq.get("password").toString(), authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -197,11 +198,11 @@ public class UserController {
         Map<String, Object> result = userService.findUserInfo(authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("userInfo", result.get("userInfo"));
         } else {
-            response.put("result", ResultMessageSet.FAIL);
-            response.put("result", result.get("message"));
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
+            response.put("message", result.get("message"));
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -214,10 +215,10 @@ public class UserController {
         Map<String, Object> result = userService.findStoreInfo(storeId);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("storeInfo", result.get("storeInfo"));
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -236,10 +237,10 @@ public class UserController {
         Map<String, Object> result = userService.findStoreList(pageNo, size, sort, sido, sigungu, storeName);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("storeInfo", result.get("info"));
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -276,7 +277,7 @@ public class UserController {
         regionWrprRes.setResponseList(regionVoList);
         regionWrprRes.setAvgLongitude(avgLongitude);
         regionWrprRes.setAvgLatitude(avgLatitude);
-        response.put("result", ResultMessageSet.SUCCESS);
+        response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         response.put("regionList", regionWrprRes);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

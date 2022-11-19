@@ -1,5 +1,6 @@
 package com.ssafy.fly.controller;
 
+import com.ssafy.fly.common.message.ResponseKeySet;
 import com.ssafy.fly.common.message.ResultMessageSet;
 import com.ssafy.fly.dto.request.RegisterFeedReq;
 import com.ssafy.fly.service.FeedService;
@@ -33,9 +34,9 @@ public class FeedController {
         Map<String, Object> result = feedService.saveNewFeed(registerFeedReq, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -51,7 +52,7 @@ public class FeedController {
         Map<String, Object> result = feedService.getFeedList(storeId, pageNo, size);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("content", result.get("content"));
             response.put("pageable", result.get("pageable"));
             response.put("sort", result.get("sort"));
@@ -64,7 +65,7 @@ public class FeedController {
             response.put("curPage", result.get("curPage"));
             response.put("number", result.get("number"));
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
@@ -78,10 +79,10 @@ public class FeedController {
         Map<String, Object> result = feedService.getFeedDetailInfo(feedId);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
             response.put("feedInfo", result.get("feedInfo"));
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -101,9 +102,9 @@ public class FeedController {
         Map<String, Object> result = feedService.deleteFeedInfo(feedId, authentication);
 
         if ((boolean) result.get("result")) {
-            response.put("result", ResultMessageSet.SUCCESS);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.SUCCESS);
         } else {
-            response.put("result", ResultMessageSet.FAIL);
+            response.put(ResponseKeySet.RESULT, ResultMessageSet.FAIL);
             response.put("message", result.get("message"));
         }
 
