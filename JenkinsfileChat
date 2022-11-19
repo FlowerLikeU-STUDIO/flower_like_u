@@ -29,7 +29,7 @@ pipeline {
         }
         stage('Deploy') {             
             steps {
-                sh "docker pull martinflower/fly:fly_socket"
+                // sh "docker pull martinflower/fly:fly_socket"
                 sh "docker run --rm -d --name fly_socket -p 8080:8080 martinflower/fly:fly_socket"
             }
         }
