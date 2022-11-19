@@ -5,7 +5,11 @@ import Script from "next/script";
 // 컨텐츠
 import { packageContent } from "@/components/custom/step/StepContents";
 import CustomPlace from "@/components/custom/step/customplace/CustomPlace";
-import { wrapper, ribbon, flower } from "@/components/custom/step/menu/MenuContents";
+import {
+  wrapper,
+  ribbon,
+  flower,
+} from "@/components/custom/step/menu/MenuContents";
 // 사진 저장, 카카오톡 공유하기
 import { saveAs } from "file-saver";
 import useKakao from "@/hooks/useKakao";
@@ -109,12 +113,16 @@ const CustomSave = () => {
   //* 주문하기 모달
   const isOpen = useSelector((state) => state.modal.isOpen);
   const onHandleOpen = () => {
-    isLogin ? dispatch(modalOpen()) : FailAlert("로그인한 유저만 주문할 수 있어요!");
+    isLogin
+      ? dispatch(modalOpen())
+      : FailAlert("로그인한 유저만 주문할 수 있어요!");
   };
 
   //* 내 디자인 보러가기
   const goToMyDesign = () => {
-    isLogin ? router.push("/mypage/design") : FailAlert("로그인이 필요한 기능이에요!");
+    isLogin
+      ? router.push("/mypage/design")
+      : FailAlert("로그인이 필요한 기능이에요!");
   };
 
   return (
@@ -150,14 +158,18 @@ const CustomSave = () => {
           <article className={styles.flower_contents_wrapper}>
             <div className={styles.contents_subwrapper}>
               <h1 className={styles.card_title}>
-                {bunchList[customOption.size]}송이 {packageContent.title[customOption.package]}
+                {bunchList[customOption.size]}송이{" "}
+                {packageContent.title[customOption.package]}
               </h1>
               {customOption.package === 0 ? (
                 <p className={styles.sub_title}>
-                  {wrapper[customOption.wrapper_color].name} | {ribbon[ribbonOption].name}
+                  {wrapper[customOption.wrapper_color].name} |{" "}
+                  {ribbon[ribbonOption].name}
                 </p>
               ) : customOption.package === 2 ? (
-                <p className={styles.sub_title}>{wrapper[customOption.wrapper_color].name}</p>
+                <p className={styles.sub_title}>
+                  {wrapper[customOption.wrapper_color].name}
+                </p>
               ) : (
                 <></>
               )}
@@ -165,7 +177,7 @@ const CustomSave = () => {
               <div className={styles.description_wrapper}>
                 {Object.entries(flowerInfo).map(([key, value]) => (
                   <>
-                    <span className={styles.description}>
+                    <span className={styles.description} key={key}>
                       {flower[Number(key)].title}&nbsp;&nbsp;
                       {value}송이
                     </span>
@@ -180,7 +192,10 @@ const CustomSave = () => {
               <button className={styles.btn} onClick={() => onShareKakao()}>
                 카카오톡 공유하기
               </button>
-              <button className={styles.btn} onClick={() => goToMyDesign()}>
+              <button
+                className={cx("btn", "green")}
+                onClick={() => goToMyDesign()}
+              >
                 내 디자인 보러가기
               </button>
               <button

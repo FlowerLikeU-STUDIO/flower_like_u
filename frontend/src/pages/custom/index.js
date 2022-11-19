@@ -7,9 +7,19 @@ import FailAlert from "@/lib/FailAlert";
 // 로그인 여부
 import useSWR from "swr";
 import storage from "@/lib/utils/storage";
+// redux
+import { useDispatch } from "react-redux";
+import {
+  selectPackage,
+  selectSize,
+  makeFlowerList,
+  selectWrapperColor,
+  selectRibbonColor,
+} from "@/store/reducers/custom";
 
 const Custom = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { data: isLogin } = useSWR("logIn", storage);
 
   // 모달창 노출 여부 state
@@ -21,6 +31,16 @@ const Custom = () => {
   // 모달창 노출
   const showModal = () => {
     setModalOpen(!modalOpen);
+  };
+
+  //* 모든 값 초기화하고 커스텀 시작 페이지로 보내기
+  const doInitialize = () => {
+    dispatch(selectPackage(null));
+    dispatch(selectSize(null));
+    dispatch(makeFlowerList(null));
+    dispatch(selectWrapperColor(null));
+    dispatch(selectRibbonColor(null));
+    router.push("/custom/step");
   };
 
   // 내 커스텀 사용하기
@@ -43,7 +63,7 @@ const Custom = () => {
           사람에게, 세상에게 당신의 마음을 전해주세요.
         </h1>
         <div className={styles.button_wrapper}>
-          <div>
+          <div className={styles.button_inner_wrapper}>
             <Button
               size="custom_small"
               color="mainPrimary"
@@ -54,7 +74,6 @@ const Custom = () => {
             >
               너닮꽃 꽃다발 레시피
             </Button>
-            {/* 내 커스텀 리스트가 보이는 모달 창 띄우기 */}
             <Button
               size="custom_small"
               color="mainPrimary"
@@ -63,7 +82,11 @@ const Custom = () => {
               내 커스텀 사용하기
             </Button>
           </div>
-          <Button size="custom_large" color="white" link="/custom/step">
+          <Button
+            size="custom_large"
+            color="white"
+            onClick={() => doInitialize()}
+          >
             &nbsp; &nbsp;&nbsp;커스텀 시작하기&nbsp;&nbsp;&nbsp;
           </Button>
           <Button

@@ -114,6 +114,10 @@
     /* 1번 라인에서 3칸 */
     grid-row: 3 / span 3;
   }
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(4, 0.5fr);
+  }
 }
 
 .btn {
@@ -127,6 +131,9 @@
   &.green {
     background-color: $mainPrimary;
     color: white;
+  }
+  @media screen and (max-width: 768px) {
+    @include font(0.8rem, 500, $mainPrimary);
   }
 }
 
