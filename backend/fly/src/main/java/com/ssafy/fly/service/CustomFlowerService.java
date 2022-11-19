@@ -1,10 +1,8 @@
 package com.ssafy.fly.service;
 
 import com.ssafy.fly.dto.request.CustomFlowerRegReq;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
-import java.security.Principal;
 import java.util.Map;
 
 public interface CustomFlowerService {

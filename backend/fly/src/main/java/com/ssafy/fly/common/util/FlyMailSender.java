@@ -14,13 +14,13 @@ public class FlyMailSender {
     private final JavaMailSender mailSender;
 
     @Value("${spring.mail.username}")
-    private String FROM_ADDRESS;
+    private String serviceEmail;
 
     @Async
     public void sendEmail(MailRes mail) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mail.getAddress());
-        message.setFrom(FROM_ADDRESS);
+        message.setFrom(serviceEmail);
         message.setSubject(mail.getTitle());
         message.setText(mail.getMessage());
 

@@ -17,9 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
-import java.security.Principal;
 import java.util.*;
 
 @Service("customFlowerService")
@@ -152,7 +150,7 @@ public class CustomFlowerServiceImpl implements CustomFlowerService {
         Pageable pageable = PageRequest.of((pageNo > 0 ? pageNo - 1 : 0), size, Sort.by("id").descending());
         Page<CustomFlowerEntity> resultList = customFlowerRepository.findAllByConsumerIdAndRemoval(consumer, false, pageable);
 
-        if (resultList.getContent().size() > 0) {
+        if (!resultList.getContent().isEmpty()) {
             result.put("result", true);
             result.put("maxPage", resultList.getTotalPages());
             result.put("list", resultList.getContent());
@@ -213,7 +211,7 @@ public class CustomFlowerServiceImpl implements CustomFlowerService {
             throw new CustomException("삭제 권한이 없는 계정입니다.", statusCode);
         }
 
-        if (customFlowerRepository.CustomFlowerRemove(flowerId) > 0) {
+        if (customFlowerRepository.customFlowerRemove(flowerId) > 0) {
             customFlowerMongoRepository.deleteById(flowerId);
             result.put("result", true);
         } else {

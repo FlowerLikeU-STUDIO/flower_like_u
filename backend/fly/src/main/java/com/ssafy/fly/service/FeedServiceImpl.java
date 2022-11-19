@@ -103,7 +103,7 @@ public class FeedServiceImpl implements FeedService {
             FeedRes.FeedListElement feedInfo = FeedRes.FeedListElement.builder()
                     .feedId(curEntity.getId())
                     .name(curEntity.getName())
-                    .image(curEntity.getImages().size() > 0 ? curEntity.getImages().get(0).getImage() : null)
+                    .image(!curEntity.getImages().isEmpty() ? curEntity.getImages().get(0).getImage() : null)
                     .price(curEntity.getPrice())
                     .content(curEntity.getContent())
                     .build();

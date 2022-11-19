@@ -1,7 +1,6 @@
 package com.ssafy.fly.common.exception;
 
-import com.ssafy.fly.common.util.ResultMessageSet;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ssafy.fly.common.message.ResultMessageSet;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,13 +16,6 @@ import java.util.Map;
 @RestControllerAdvice
 public class ExceptionAdvisor {
 
-    ResultMessageSet resultMessageSet;
-
-    @Autowired
-    ExceptionAdvisor(ResultMessageSet resultMessageSet) {
-        this.resultMessageSet = resultMessageSet;
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> validationError(MethodArgumentNotValidException exception, HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
@@ -35,7 +27,7 @@ public class ExceptionAdvisor {
             String message = String.format("[%s](은)는 %s.\n", fieldError.getField(), fieldError.getDefaultMessage());
             messages.append(message);
         }
-        response.put("result", resultMessageSet.FAIL);
+        response.put("result", ResultMessageSet.FAIL);
         response.put("message", messages.toString());
 
         if("registerReq".equals(objName) || "changePwdReq".equals(objName)) {
@@ -51,7 +43,7 @@ public class ExceptionAdvisor {
     public ResponseEntity<Map<String, Object>> customExceptionHandler(CustomException exception) {
         Map<String, Object> response = new HashMap<>();
 
-        response.put("result", resultMessageSet.FAIL);
+        response.put("result", ResultMessageSet.FAIL);
         response.put("message", exception.getMessage());
 
         return new ResponseEntity<>(response, exception.getStatusCode());

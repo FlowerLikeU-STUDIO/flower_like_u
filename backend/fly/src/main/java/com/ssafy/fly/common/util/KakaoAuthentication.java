@@ -1,5 +1,6 @@
 package com.ssafy.fly.common.util;
 
+import com.ssafy.fly.common.exception.CustomException;
 import com.ssafy.fly.common.vo.KakaoUserInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -19,6 +20,8 @@ public class KakaoAuthentication {
 
     /** 1. 카카오 로그인 동의 시 받은 인가 코드로 accessToken 받기 */
     public String getAccessToken(String authCode) {
+        HttpStatus statusCode = HttpStatus.OK;
+
         String accessToken = null;
         URI reqUrl = URI.create("https://kauth.kakao.com/oauth/token");
         String redirectUrl = "http://localhost:8080/api/auth/kakao";
@@ -40,8 +43,10 @@ public class KakaoAuthentication {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Map> response = restTemplate.postForEntity(reqUrl, request, Map.class);
 
-        if (response.getStatusCodeValue() == HttpStatus.OK.value()) {
+        if (response.getStatusCodeValue() == HttpStatus.OK.value() && response.getBody() != null) {
             accessToken = (String) response.getBody().get("access_token");
+        } else {
+            throw new CustomException("카카오 로그인 인증에 실패하였습니다.", statusCode);
         }
 
         return accessToken;
@@ -49,6 +54,8 @@ public class KakaoAuthentication {
 
     /** 2. accessToken으로 사용자 정보 받기 */
     public KakaoUserInfo getUserInfo(String accessToken) {
+        HttpStatus statusCode = HttpStatus.OK;
+
         URI reqURL = URI.create("https://kapi.kakao.com/v2/user/me");
 
         /** Request Header */
@@ -62,7 +69,7 @@ public class KakaoAuthentication {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Map> response = restTemplate.postForEntity(reqURL, request, Map.class);
 
-        if (response.getStatusCodeValue() == HttpStatus.OK.value()) {
+        if (response.getStatusCodeValue() == HttpStatus.OK.value() && response.getBody() != null) {
             Map<String, Object> resBody = response.getBody();
             Map<String, Object> kakaoAccount = (Map<String, Object>) resBody.get("kakao_account");
             Map<String, String> profile = (Map<String, String>) kakaoAccount.get("profile");
@@ -73,7 +80,7 @@ public class KakaoAuthentication {
                     .imageUrl(profile.get("profile_image_url"))
                     .build();
         } else {
-            return null;
+            throw new CustomException("카카오 로그인 인증에 실패하였습니다.", statusCode);
         }
     }
 }

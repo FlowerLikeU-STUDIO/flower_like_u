@@ -1,10 +1,8 @@
 package com.ssafy.fly.dto.response;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
-
-import java.util.Date;
-
 
 @Data
 @SuperBuilder
@@ -19,12 +17,14 @@ public class BookListRes {
     private Long reviewId;
 
     @Data
+    @EqualsAndHashCode(callSuper=false)
     @SuperBuilder
     public static class BookElementForConsumer extends BookListRes {
         private String storeName;
     }
 
     @Data
+    @EqualsAndHashCode(callSuper=false)
     @SuperBuilder
     public static class BookElementForStore extends BookListRes {
         private String consumerName;
@@ -32,6 +32,7 @@ public class BookListRes {
 
     // 상세 조회용
     @Data
+    @EqualsAndHashCode(callSuper=false)
     @SuperBuilder
     public static class BookElementForAll extends BookListRes {
         private String consumerId;

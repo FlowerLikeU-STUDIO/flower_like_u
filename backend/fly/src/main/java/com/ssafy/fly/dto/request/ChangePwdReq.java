@@ -2,7 +2,6 @@ package com.ssafy.fly.dto.request;
 
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.validation.constraints.Pattern;
 
