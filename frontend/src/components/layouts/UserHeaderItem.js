@@ -13,6 +13,7 @@ import {
   selectWrapperColor,
   selectRibbonColor,
 } from "@/store/reducers/custom";
+import { clearChatList } from "@/store/reducers/chat";
 
 const UserHeaderItem = () => {
   const { user } = useUser();
@@ -28,6 +29,7 @@ const UserHeaderItem = () => {
     dispatch(makeFlowerList(null));
     dispatch(selectWrapperColor(null));
     dispatch(selectRibbonColor(null));
+    dispatch(clearChatList());
     mutate("logIn", null);
     SuccessAlert("로그아웃 되었습니다.");
     router.push("/");

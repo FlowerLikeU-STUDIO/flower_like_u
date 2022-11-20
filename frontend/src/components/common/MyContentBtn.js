@@ -3,10 +3,16 @@ import Button from "@/components/common/Button";
 import { useRouter } from "next/router";
 
 const MyContentBtn = ({ props }) => {
-  const pagePath = { consumer: ["reservation", "order", "design"], store: ["feeds", "reviews", "order-manage"] };
+  const pagePath = {
+    consumer: ["reservation", "order", "design"],
+    store: ["feeds", "order-manage", "reviews"],
+  };
 
   //* 버튼 내용을 한글로 변환
-  const buttonList = { consumer: ["예약 목록", "지난 주문 내역", "내 디자인"], store: ["피드", "주문관리", "후기"] };
+  const buttonList = {
+    consumer: ["예약 목록", "지난 주문 내역", "내 디자인"],
+    store: ["피드", "주문관리", "후기"],
+  };
 
   if (!props) return;
   const path = pagePath[props];

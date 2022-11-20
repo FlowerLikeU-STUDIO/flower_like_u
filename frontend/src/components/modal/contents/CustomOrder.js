@@ -21,9 +21,7 @@ const CustomOrder = ({ orderStep, flowerId }) => {
     request: request,
     dueDate: dueDate, // @예약날짜
   };
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  useEffect(() => {}, [data]);
   // *debugging end
 
   // 예약 데이터 제출
