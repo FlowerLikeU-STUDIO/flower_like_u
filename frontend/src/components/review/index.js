@@ -106,7 +106,6 @@ const areEqual = (prevProps, nextProps) => {
 };
 
 const ReviewItem = ({ review, index }) => {
-  console.log(review);
   return <Card key={index} {...review} />;
 };
 
