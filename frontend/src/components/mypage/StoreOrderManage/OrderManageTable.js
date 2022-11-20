@@ -54,7 +54,6 @@ const Page = ({ status, pageIndex }) => {
     fetcher
   );
 
-  console.log(data);
   const openModal = (bookId) => {
     setModalState(true);
     setTargetOrderId(bookId);

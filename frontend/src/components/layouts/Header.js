@@ -36,7 +36,6 @@ const Header = () => {
     //* scrollY 값에 따라서 setHeaderStatus 값을 바꾸는 함수
     const handleColor = () => {
       setScrollY(window.pageYOffset);
-      // console.log(window.pageYOffset);
       scrollY > headerHeight ? setHeaderStatus(true) : setHeaderStatus(false);
     };
 
@@ -77,20 +76,42 @@ const Header = () => {
 
   return (
     <header
-      className={!headerStatus ? cx("header_wrapper", "opacity") : cx("header_wrapper", "nonopacity")}
+      className={
+        !headerStatus
+          ? cx("header_wrapper", "opacity")
+          : cx("header_wrapper", "nonopacity")
+      }
       id="header"
     >
-      <button className={styles.hamburger} onClick={() => (menuToggle ? setMenuToggle(false) : setMenuToggle(true))}>
+      <button
+        className={styles.hamburger}
+        onClick={() =>
+          menuToggle ? setMenuToggle(false) : setMenuToggle(true)
+        }
+      >
         <div className="material-icons">menu</div>
       </button>
-      <div className={!menuToggle ? cx("menu_link_wrapper", "none") : cx("menu_link_wrapper", "flex")} ref={headerRef}>
+      <div
+        className={
+          !menuToggle
+            ? cx("menu_link_wrapper", "none")
+            : cx("menu_link_wrapper", "flex")
+        }
+        ref={headerRef}
+      >
         <Link href="/">
-          <a className={styles.header_title} onClick={() => setMenuToggle(false)}>
+          <a
+            className={styles.header_title}
+            onClick={() => setMenuToggle(false)}
+          >
             너를 닮은 꽃
           </a>
         </Link>
         <Link href="/custom">
-          <a className={styles.header_anchor} onClick={() => setMenuToggle(false)}>
+          <a
+            className={styles.header_anchor}
+            onClick={() => setMenuToggle(false)}
+          >
             꽃다발커스텀
           </a>
         </Link>
@@ -100,7 +121,10 @@ const Header = () => {
           </a>
         </Link>
         <Link href="/florist-list/map">
-          <a className={styles.header_anchor} onClick={() => setMenuToggle(false)}>
+          <a
+            className={styles.header_anchor}
+            onClick={() => setMenuToggle(false)}
+          >
             내 주변 꽃가게
           </a>
         </Link>

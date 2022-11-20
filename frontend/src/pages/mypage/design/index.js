@@ -10,9 +10,13 @@ import { useRouter } from "next/router";
 
 const CustomerDesign = () => {
   const router = useRouter();
-  const { data, size, setSize, isValidating } = useSWRInfinite((index) => `custom?page=${index + 1}&size=9`, Fetcher, {
-    revalidateOnFocus: false,
-  });
+  const { data, size, setSize, isValidating } = useSWRInfinite(
+    (index) => `custom?page=${index + 1}&size=9`,
+    Fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  );
 
   const lastPage = useMemo(() => {
     return data ? data[0].maxPage : 0;
@@ -45,7 +49,10 @@ const CustomerDesign = () => {
       <MyHeader />
       {data && data[0].result === "fail" && (
         <div className={styles.not__data}>
-          <p onClick={() => router.replace("/custom")} className={styles.go_custom}>
+          <p
+            onClick={() => router.replace("/custom")}
+            className={styles.go_custom}
+          >
             🌸🌹 등록된 디자인이 없습니다. 나만의 꽃을 디자인해보세요.🌻🌼
           </p>
         </div>
@@ -53,7 +60,11 @@ const CustomerDesign = () => {
       <div className={styles.img__container}>
         {designList &&
           designList.map((design) => (
-            <div key={design.designId} className={styles.img__item} onClick={moveDetail.bind(moveDetail, design)}>
+            <div
+              key={design.designId}
+              className={styles.img__item}
+              onClick={moveDetail.bind(moveDetail, design)}
+            >
               <FlowerImg src={design.image} />
             </div>
             // <CustomerDesign.Item design={design} key={design.designId} onClick={moveDetail} />

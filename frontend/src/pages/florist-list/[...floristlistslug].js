@@ -15,8 +15,6 @@ import { isEmpty } from "lodash";
 const FloristList = (props) => {
   const cx = classNames.bind(styles);
   const router = useRouter();
-  // const currentRoute = router.query.floristlistslug;
-  // console.log(currentRoute);
   // @ 현재 데이터 props
   const [currentData, setCurrentData] = useState(props.floristData);
   const [currentMaxPage, setCurrentMaxPage] = useState(props.maxPage);
@@ -63,7 +61,11 @@ const FloristList = (props) => {
     // nextJs에서 routing이 일어나면 getStaticProps...를 야기함
     // 이를 실행시키지 않기 위해 shallowRouting으로 url을 업데이트함 -> 불필요한 서버연산을 최소화
     // 주의할 점: 한 페이지 내에서 실행해야함.
-    router.push(`/florist-list/1/${currentSort}/${selectSido}/${selectSigungu}`, undefined, { shallow: true });
+    router.push(
+      `/florist-list/1/${currentSort}/${selectSido}/${selectSigungu}`,
+      undefined,
+      { shallow: true }
+    );
     if (!data) return;
   };
 
@@ -77,7 +79,11 @@ const FloristList = (props) => {
   };
 
   const pageIndexChange = async (e) => {
-    router.push(`/florist-list/${e}/${currentSort}/${selectSido}/${selectSigungu}`, undefined, { shallow: true });
+    router.push(
+      `/florist-list/${e}/${currentSort}/${selectSido}/${selectSigungu}`,
+      undefined,
+      { shallow: true }
+    );
     if (!data) return;
     if (e > numLst[numLst.length - 1]) {
       const mn = (Math.floor(e - 1) / 5) * 5 + 1;
@@ -174,7 +180,9 @@ const FloristList = (props) => {
                 ["activate"]: currentSort === "rating",
               })}
             >
-              <Link href={`/florist-list/1/rating/${selectSido}/${selectSigungu}`}>
+              <Link
+                href={`/florist-list/1/rating/${selectSido}/${selectSigungu}`}
+              >
                 <a>별점순</a>
               </Link>
             </button>
@@ -183,7 +191,9 @@ const FloristList = (props) => {
                 ["activate"]: currentSort === "order",
               })}
             >
-              <Link href={`/florist-list/1/order/${selectSido}/${selectSigungu}`}>
+              <Link
+                href={`/florist-list/1/order/${selectSido}/${selectSigungu}`}
+              >
                 <a>주문량 많은순</a>
               </Link>
             </button>
@@ -214,7 +224,9 @@ const FloristList = (props) => {
                 <div className={styles.default_option}>{selectSigungu}</div>
                 <ul className={sigunguActive ? styles.sigungu__active : ""}>
                   {selectedArr.map((sigungu, idx) => (
-                    <Link href={`/florist-list/1/${currentSort}/${selectSido}/${sigungu}`}>
+                    <Link
+                      href={`/florist-list/1/${currentSort}/${selectSido}/${sigungu}`}
+                    >
                       <a value={sigungu} key={sigungu + idx}>
                         {sigungu}
                       </a>
@@ -233,7 +245,9 @@ const FloristList = (props) => {
               value={inputText || ""}
               onChange={inputChange}
             />
-            <span className={cx("material-icons", "material_icons")}>search</span>
+            <span className={cx("material-icons", "material_icons")}>
+              search
+            </span>
           </div>
         </div>
 
@@ -246,7 +260,9 @@ const FloristList = (props) => {
                 <div
                   key={florist.storeId}
                   className={styles.florist__wrapper}
-                  onClick={() => router.push(`/florist/${florist.storeId}/feed`)}
+                  onClick={() =>
+                    router.push(`/florist/${florist.storeId}/feed`)
+                  }
                 >
                   <div className={styles.store__img}>
                     <FlowerImg src={florist.profile} florist={"florist"} />
@@ -255,7 +271,9 @@ const FloristList = (props) => {
                     <p className={styles.store__name}>{florist.storeName}</p>
                     <p className={styles.store__days}>
                       {florist.holidays && "휴무일: "}
-                      {isEmpty(florist.holidays.filter((res) => res === true)) && <span>미정</span>}
+                      {isEmpty(
+                        florist.holidays.filter((res) => res === true)
+                      ) && <span>미정</span>}
                       {florist.holidays
                         .map((_, index) => _ && holidayList[index] + "요일 ")
                         .filter((el) => (
