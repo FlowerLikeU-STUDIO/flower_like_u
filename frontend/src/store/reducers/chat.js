@@ -68,7 +68,6 @@ const chatSlice = createSlice({
     },
 
     calcTotalNotReadCount: (state, action) => {
-      console.log("되ㄹ");
       let count = 0;
       state.chatList.forEach((item) => {
         state.senderType === "consumer"

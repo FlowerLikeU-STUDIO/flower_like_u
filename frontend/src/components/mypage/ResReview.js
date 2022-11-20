@@ -57,13 +57,13 @@ const ResReview = ({ mutate, reviewId, bookId, storeId, storeName }) => {
       setComment("");
       dispatch(modalClose());
       alert("후기가 정상적으로 작성되었습니다.");
-    } else {
-      console.log("err");
     }
   };
 
   const hasReview = async () => {
-    const res = await client.get(`review/detail/${reviewId}`).then((res) => res.data);
+    const res = await client
+      .get(`review/detail/${reviewId}`)
+      .then((res) => res.data);
     if (res.result == "success") {
       setIsStar(res.reviewInfo.rating);
       setComment(res.reviewInfo.content);
@@ -83,7 +83,10 @@ const ResReview = ({ mutate, reviewId, bookId, storeId, storeName }) => {
         ) : (
           <span>{storeName}에 대한 리뷰를 작성해주세요🌸</span>
         )}
-        <button className={styles.fixed__close} onClick={() => dispatch(modalClose())}>
+        <button
+          className={styles.fixed__close}
+          onClick={() => dispatch(modalClose())}
+        >
           x
         </button>
         <BasicRating setIsStar={setIsStar} reviewId={reviewId} />

@@ -25,7 +25,15 @@ const ModifyAuth = () => {
   });
   // 휴무일
   const restDay = ["일", "월", "화", "수", "목", "금", "토"];
-  const [submitHolidays, setHolidays] = useState([false, false, false, false, false, false, false]);
+  const [submitHolidays, setHolidays] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
 
   const inputStoreName = (e) => {
     const inputV = e.target.value;
@@ -64,7 +72,6 @@ const ModifyAuth = () => {
         holidays: submitHolidays,
       };
       const res = await client.put("user", newData).then((res) => res.data);
-      console.log(res);
       if (res.result === "success") {
         mutate();
         alert("성공적으로 수정되었습니다.");
@@ -81,7 +88,9 @@ const ModifyAuth = () => {
   useEffect(() => {
     if (user) {
       setNewStoreName(newStoreName || user.storeName || "");
-      setHolidays(user.holidays || [false, false, false, false, false, false, false]);
+      setHolidays(
+        user.holidays || [false, false, false, false, false, false, false]
+      );
     }
   }, [user]);
 
@@ -119,7 +128,11 @@ const ModifyAuth = () => {
               {restDay.map((rest, idx) => (
                 <button
                   key={idx}
-                  className={!submitHolidays[idx] ? styles.rest__btn : styles.is_rest__btn}
+                  className={
+                    !submitHolidays[idx]
+                      ? styles.rest__btn
+                      : styles.is_rest__btn
+                  }
                   disabled={!isModify}
                   onClick={setRestDay}
                   value={idx}

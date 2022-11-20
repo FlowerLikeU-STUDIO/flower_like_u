@@ -58,7 +58,6 @@ const FloristMap = () => {
       sgg: selectSigungu,
     };
     client.get(`user/stores/region/`, { params: data }).then((res) => {
-      console.log(res.data);
       if (document.querySelectorAll("#map > div").length != 0) {
         deleteMap();
       }
@@ -66,13 +65,17 @@ const FloristMap = () => {
       let container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
       let options = {
         //지도를 생성할 때 필요한 기본 옵션
-        center: new kakao.maps.LatLng(res.data.regionList.avgLatitude, res.data.regionList.avgLongitude), //지도의 중심좌표.
+        center: new kakao.maps.LatLng(
+          res.data.regionList.avgLatitude,
+          res.data.regionList.avgLongitude
+        ), //지도의 중심좌표.
         level: 5, //지도의 레벨(확대, 축소 정도)
       };
 
       let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
       // 마커 이미지의 이미지 주소
-      let imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+      let imageSrc =
+        "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
       // DataList
       const positions = res.data.regionList.responseList;
       positions.forEach((r) => {
@@ -120,7 +123,9 @@ const FloristMap = () => {
 
         let storeInfo = document.createElement("div");
         storeInfo.classList.add(`${styles.store_information}`);
-        storeInfo.appendChild(document.createTextNode(r.bio || "작성된 소개글이 없습니다."));
+        storeInfo.appendChild(
+          document.createTextNode(r.bio || "작성된 소개글이 없습니다.")
+        );
 
         info.appendChild(storeInfo);
 
@@ -141,11 +146,15 @@ const FloristMap = () => {
           }
         });
         const holidayRes = isHoliday.filter((res) => res);
-        storeHoliday.appendChild(document.createTextNode(`휴일: ${holidayRes || "미정"}`));
+        storeHoliday.appendChild(
+          document.createTextNode(`휴일: ${holidayRes || "미정"}`)
+        );
         holidayInfo.appendChild(storeHoliday);
         let storeRating = document.createElement("span");
         storeRating.classList.add(`${styles.starrating}`);
-        storeRating.appendChild(document.createTextNode("평점 " + (r.rating || 0) + "점"));
+        storeRating.appendChild(
+          document.createTextNode("평점 " + (r.rating || 0) + "점")
+        );
         info.appendChild(storeRating);
 
         let closeBtn = document.createElement("button");
@@ -158,7 +167,11 @@ const FloristMap = () => {
 
         overlay.setContent(content);
 
-        kakao.maps.event.addListener(marker, "click", makeOverListener(map, overlay));
+        kakao.maps.event.addListener(
+          marker,
+          "click",
+          makeOverListener(map, overlay)
+        );
         // kakao.maps.event.addListener(marker, "mouseout", makeOutListener(overlay));
       });
     });
@@ -219,7 +232,10 @@ const FloristMap = () => {
               </div>
             </div>
           </div>
-          <span className={cx("material-icons", "material_icons")} onClick={dataSubmit}>
+          <span
+            className={cx("material-icons", "material_icons")}
+            onClick={dataSubmit}
+          >
             search
           </span>
         </div>
