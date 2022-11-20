@@ -7,6 +7,10 @@ const CustomFlorist = ({ storeId, setStep, setStoreId }) => {
   const dispatch = useDispatch();
 
   const goReservation = () => {
+    if (!storeId) {
+      alert("가게를 선택해주세요");
+      return;
+    }
     setStep("reservation");
   };
 
