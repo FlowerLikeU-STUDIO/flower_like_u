@@ -57,7 +57,6 @@ const Chat = () => {
 
       reconnectDelay: 5000,
       onConnect: () => {
-        console.log("연결됐어~");
         testFunc();
       },
     });
