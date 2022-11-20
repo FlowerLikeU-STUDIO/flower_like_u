@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "https://k7b209.q.ssafy.io/api/";
+export const BASE_URL = "https://k7b209.q.ssafy.io/api/";
 // const BASE_URL = "http://k7b209.q.ssafy.io:8080/api/";
 export const client = axios.create({
   baseURL: BASE_URL,
@@ -22,12 +22,13 @@ client.interceptors.response.use(
     return response;
   },
   async function (error) {
-    console.log(error, "ERROR");
     if (error.response.status === 401) {
       // refreshToken을 이용하여 accessToken을 재요청하는 로직을 작성하고 토큰을 갱신한다.
       const originalRequest = error.config;
       // 토큰 재요청
-      const response = await client.get("auth/refreshToken").then((response) => response);
+      const response = await client
+        .get("auth/refreshToken")
+        .then((response) => response);
       // 기존의 세션 아이템 삭제
       sessionStorage.removeItem("ACCESS_TOKEN");
       // sessionStorage.removeItem("REFRESH_TOKEN");

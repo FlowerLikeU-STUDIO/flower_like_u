@@ -8,6 +8,8 @@ import lombok.Data;
 public class ReviewInfoRes {
     private Long reviewId;
     private String writer;
+    private String writerProfile;
     private Double rating;
     private String content;
+    private String regDate;
 }

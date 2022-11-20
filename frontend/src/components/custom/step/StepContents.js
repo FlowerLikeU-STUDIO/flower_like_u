@@ -1,7 +1,7 @@
 //* 패키지 종류
 export const packageContent = {
   title: ["꽃다발", "꽃병", "꽃풍선"],
-  engtitle: ["bouquet", "vase", "ballon"],
+  engtitle: ["bouquet", "vase", "balloon"],
   contents: [
     "다양한 소재와 색깔을 \n 고를 수 있어요",
     "소중함을 더 오래 \n 간직해 보세요",
@@ -28,7 +28,7 @@ export const SizeContent = [
   {
     //* 꽃풍선 사이즈 옵션
     kotitle: "꽃풍선",
-    engtitle: "ballon",
+    engtitle: "balloon",
     title: ["S", "M", "L"],
     contents: ["약 1송이", "약 3송이", "약 5송이"],
   },

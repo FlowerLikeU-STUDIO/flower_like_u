@@ -7,7 +7,7 @@
   width: 100%;
   padding: 1.5rem 2rem;
   max-width: 1680px;
-  z-index: 1;
+  z-index: 2;
   box-shadow: $shadow500;
   &.opacity {
     opacity: 1;
@@ -21,6 +21,30 @@
   @include flexDiv;
   gap: 3rem;
   margin: 2rem;
+}
+
+.menu_link_wrapper {
+  @include flexDiv;
+  gap: 3rem;
+  margin: 2rem;
+  @media screen and (max-width: 854px) {
+    position: fixed;
+    flex-direction: column;
+    align-items: flex-start;
+    top: 2.5rem;
+    left: -1.5rem;
+    padding: 2.5rem 2rem 3rem 1.8rem;
+    box-shadow: $shadow400;
+    border-radius: 0.25rem;
+    gap: 2rem;
+    background-color: $white;
+    &.none {
+      display: none;
+    }
+    &.flex {
+      display: flex;
+    }
+  }
 }
 
 .header_title {
@@ -42,5 +66,15 @@
 .logout_button {
   color: #445b0f;
   font-size: 1rem;
-  margin: 10px;
+  margin-left: 2rem;
+}
+
+.hamburger {
+  display: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: $mainPrimary;
+  @media screen and (max-width: 854px) {
+    display: flex;
+  }
 }

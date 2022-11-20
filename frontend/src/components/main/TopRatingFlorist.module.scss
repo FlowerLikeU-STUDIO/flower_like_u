@@ -1,0 +1,79 @@
+.toprating_wrapper {
+  @include flexDiv(column, center, flex-start);
+  min-height: 100vh;
+  gap: 3rem;
+}
+
+.popular_title {
+  @include font(2.25rem, 500, $primary900);
+  padding: 10rem 0rem 3rem 0rem;
+}
+
+.florist_card_wrapper {
+  @include flexDiv(row);
+  gap: 4rem;
+  @media screen and (max-width: 1350px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 4rem;
+  }
+  @media screen and (max-width: 768px) {
+    @include flexDiv(column);
+    gap: 2rem;
+  }
+}
+
+.florist__wrapper {
+  max-width: 17.5rem;
+  height: 20rem;
+  width: 100%;
+  max-height: 100%;
+  box-sizing: border-box;
+  box-shadow: $shadow500;
+  cursor: pointer;
+  border-radius: 1rem;
+  background-color: $ivory300;
+  color: $gray;
+  font-size: 1rem;
+  transition: all 0.5s linear;
+  @include flexDiv(column, flex-start, flex-start);
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+.store__img {
+  width: 100%;
+  max-width: 17.5em;
+  height: 11.25rem;
+  border-radius: 1rem;
+  @include flexDiv();
+}
+
+.store__info {
+  padding: 1rem;
+  @include flexDiv(column, flex-start, flex-start);
+  gap: 0.5rem;
+}
+
+.store__name {
+  @include font(1.3rem, bold, $mainParagraph);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.store__adderss {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.store__star {
+  @include flexDiv(row, center, flex-start);
+  gap: 0.4rem;
+}

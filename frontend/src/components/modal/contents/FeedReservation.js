@@ -15,7 +15,7 @@ const FeedReservationWrapper = styled.div`
   width: 100%;
   height: 100%;
 `;
-const FeedReservation = ({ feedId }) => {
+const FeedReservation = ({ feedId, storeId }) => {
   const [type, setType] = useState("detail");
   const [feed, setFeed] = useState(null);
   const { data: isLogin } = useSWR("logIn", storage);
@@ -34,22 +34,23 @@ const FeedReservation = ({ feedId }) => {
     setType(value);
   };
 
-  const sendReservation = async (day, content) => {
+  const sendReservation = async (date, content) => {
     if (!isLogin) {
       alert("로그인 이후 예약 가능합니다.");
       return;
     }
     const data = {
-      storeId: "",
+      storeId: storeId,
       feedId: feedId,
-      day: day,
-      content: content,
+      dueDate: date,
+      request: content,
     };
-    console.log(feedId);
-    console.log(data);
-    // const res = await axios.post("url", data).then((res) => res.data);
-    alert("예약이 완료되었습니다.");
-    // dispatch(modalClose());
+    const res = await client.post("book/feed", data).then((res) => res);
+    if (res.status === 201) {
+      alert("예약이 완료되었습니다.");
+    }
+
+    dispatch(modalClose());
   };
 
   return (
@@ -62,6 +63,7 @@ const FeedReservation = ({ feedId }) => {
             <Reservation
               onClick={changeType}
               sendReservation={sendReservation}
+              storeId={storeId}
             />
           )}
           <CloseButton />

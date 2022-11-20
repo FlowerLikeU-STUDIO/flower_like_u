@@ -1,42 +1,114 @@
+import { Rating } from "@mui/material";
+import Image from "next/image";
+import React from "react";
 import styled from "styled-components";
 
 const CardWrapper = styled.div`
-  padding: 12px 40px;
-  border: 4px solid #eee;
-  border-left: transparent;
+  padding: 80px 18px 12px 18px;
+  border: transparent;
   box-sizing: border-box;
-  border-radius: 36px;
-  width: 60%;
-  min-width: 500px;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 340px;
+  min-width: 300px;
+  height: 340px;
   margin: 0 auto;
   position: relative;
-  height: 120px;
   display: flex;
   align-items: center;
-  &::before {
-    position: absolute;
-    top: -2px;
-    left: 3px;
-    content: "";
-    width: 30px;
-    height: 103%;
-    border-radius: 36px 0 0 36px;
-    background-color: cornflowerblue;
+  background-color: ${(props) => props.bgColor};
+`;
+
+const CardContentWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  border-radius: 26px;
+  background-color: #fff;
+  padding: 12px 12px;
+`;
+
+const ProfileWrapper = styled.div`
+  position: relative;
+  margin: 0 auto;
+  top: -80px;
+  width: 140px;
+  height: 140px;
+  & img {
+    border-radius: 100%;
   }
 `;
 
-const Card = () => {
+const ReviewContentWrapper = styled.div`
+  position: relative;
+  padding: 4px;
+  top: -70px;
+`;
+
+const TitleRatingWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4px 0px 8px 0px;
+`;
+
+const ContentWrapper = styled.div`
+  & p {
+    word-break: break-all;
+    line-height: 22px;
+  }
+`;
+const CARD_COLOR = [
+  "#DBFFFF",
+  "#E1EBFF",
+  "#DDFFF8",
+  "#BEFFDA",
+  "#D7FFCE",
+  "#D2ECFF",
+  "#E1FAFF",
+  "#FFEDE1",
+  "#e7e3ff",
+];
+const getRandomNumber = () => {
+  return Math.floor(Math.random() * CARD_COLOR.length);
+};
+const Card = ({
+  reviewId,
+  writer,
+  rating,
+  content,
+  regDate,
+  writerProfile,
+}) => {
   return (
-    <CardWrapper>
-      <div>
-        <div>
-          <div>이름 : 단무지</div>
-          <div>4.5</div>
-        </div>
-        <div>꽃다발 이쁘다요</div>
-      </div>
+    <CardWrapper bgColor={CARD_COLOR[getRandomNumber()]}>
+      <CardContentWrapper>
+        <ProfileWrapper>
+          <Image
+            src={writerProfile ? writerProfile : "/auth/profileDefault.png"}
+            layout={"fill"}
+            objectFit={"cover"}
+          />
+        </ProfileWrapper>
+        <ReviewContentWrapper>
+          <TitleRatingWrapper>
+            <div>{writer}님</div>
+            <div>
+              <Rating
+                defaultValue={rating}
+                size="medium"
+                precision={0.5}
+                readOnly
+                // className={styles.starrating}
+              />
+            </div>
+          </TitleRatingWrapper>
+          <ContentWrapper>
+            <p>{content}</p>
+          </ContentWrapper>
+        </ReviewContentWrapper>
+      </CardContentWrapper>
     </CardWrapper>
   );
 };
 
-export default Card;
+export default React.memo(Card);

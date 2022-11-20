@@ -3,14 +3,13 @@ package com.ssafy.fly.database.mysql.entity;
 import com.ssafy.fly.common.util.CustomUserDetail;
 import com.ssafy.fly.database.mysql.enumtype.UserType;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Formula;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "store")
@@ -69,8 +68,15 @@ public class StoreEntity extends BaseEntity implements CustomUserDetail {
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDate;
 
-    @Column(name = "withdrawal")
+    @Column(name = "withdrawal", nullable = true)
+    @ColumnDefault("false")
     private boolean withdrawal;
+
+    @Column(name = "latitude", nullable = false)
+    private Double latitude;
+
+    @Column(name = "longitude", nullable = false)
+    private Double longitude;
 
     // store와 review 테이블의 1:N 관계 매핑
     @OneToMany(mappedBy = "storeId")
@@ -85,6 +91,30 @@ public class StoreEntity extends BaseEntity implements CustomUserDetail {
     @OneToMany(mappedBy = "storeId")
     @Builder.Default
     private List<FeedEntity> feeds = new ArrayList<>();
+
+    /** 피드 수 */
+    @Formula("(SELECT count(*) FROM feed f WHERE f.store_id = id And f.removal = false)")
+    private int totalFeed;
+
+    /** 별점 평균 */
+    @Formula("(SELECT avg(r.rating) FROM review r WHERE r.store_id = id)")
+    private Double rating;
+
+    /** 누적 주문량 */
+    @Formula("(SELECT count(*) FROM book b WHERE b.store_id = id)")
+    private int totalOrder;
+
+    public List<Boolean> getBooleanHolidays() {
+        List<Boolean> booleanHolidays = new ArrayList<>();
+
+        if (this.holidays != null) {
+            StringTokenizer st = new StringTokenizer(this.holidays, ",");
+            while (st.hasMoreTokens()) {
+                booleanHolidays.add(Boolean.parseBoolean(st.nextToken()));
+            }
+        }
+        return booleanHolidays;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

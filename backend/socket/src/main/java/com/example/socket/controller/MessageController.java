@@ -6,6 +6,7 @@ import com.example.socket.domain.JwtUserInfo;
 import com.example.socket.dto.BaseResponseDto;
 import com.example.socket.dto.OnlyMessageResponseDto;
 import com.example.socket.dto.request.MessagePostReqDto;
+import com.example.socket.dto.response.RoomNoLatestMessageResDto;
 import com.example.socket.service.MessageService;
 import com.example.socket.service.RoomService;
 import com.example.socket.utils.JwtConverter;
@@ -18,6 +19,7 @@ import java.util.Base64;
 import java.util.List;
 
 @RestController
+@RequestMapping("/socket")
 public class MessageController {
 
     private final MessageService messageService;
@@ -52,11 +54,11 @@ public class MessageController {
     }
 
     @GetMapping("/chatting/room/list")
-    public BaseResponseDto<List<Room>> getRoomList(@RequestHeader(value = "Authorization") String jwt) {
+    public BaseResponseDto<List<RoomNoLatestMessageResDto>> getRoomList(@RequestHeader(value = "Authorization") String jwt) {
         JwtUserInfo jwtUserInfo = JwtConverter.getUserPk(jwt);
         System.out.println(jwtUserInfo.getSub());
         System.out.println(jwtUserInfo.getRole());
-        List<Room> roomList = roomService.getList(jwtUserInfo.getRole(), Long.parseLong(jwtUserInfo.getSub()));
+        List<RoomNoLatestMessageResDto> roomList = roomService.getList(jwtUserInfo.getRole(), Long.parseLong(jwtUserInfo.getSub()));
         return new BaseResponseDto<>("success", roomList);
     }
 

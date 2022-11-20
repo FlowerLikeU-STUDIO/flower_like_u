@@ -7,7 +7,6 @@ import useRes from "@/hooks/useRes";
 import PageNation from "@/components/common/PageNation";
 
 const CustomerReservation = () => {
-  // https://velog.io/@a_in/Next.js-Error-Abort-fetching-for-route
   const { resList } = useRes();
   const [pageIndex, setPageIndex] = useState(1);
   const { data, maxPage, mutate } = resList({ pageIndex });
@@ -40,7 +39,7 @@ const CustomerReservation = () => {
   return (
     <MyWrapper>
       <MyHeader />
-      {data && (
+      {data ? (
         <div className={styles.main__div}>
           {data.map((res, idx) => (
             <div key={idx}>
@@ -49,11 +48,17 @@ const CustomerReservation = () => {
                 image={res.image}
                 storeName={res.storeName}
                 request={res.request}
+                bookDate={res.bookDate}
                 dueDate={res.dueDate}
+                type={res.type}
               />
             </div>
           ))}
           <PageNation setPageIndex={setPageIndex} selectNumLst={selectNumLst} pageIndex={pageIndex} maxPage={maxPage} />
+        </div>
+      ) : (
+        <div className={styles.not__data}>
+          <p className={styles.go__res}>🌸🌹 꽃집에 예약하면 여기에 표시됩니다. 🌻🌼</p>
         </div>
       )}
     </MyWrapper>

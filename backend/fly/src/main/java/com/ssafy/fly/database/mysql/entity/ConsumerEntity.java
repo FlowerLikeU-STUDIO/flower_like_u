@@ -15,9 +15,8 @@ import java.util.List;
 @Entity
 @Table(name = "consumer")
 @Getter
-@Setter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @ToString(exclude = {"customFlowers", "reviews", "books"})
 public class ConsumerEntity extends BaseEntity implements CustomUserDetail {
@@ -25,7 +24,7 @@ public class ConsumerEntity extends BaseEntity implements CustomUserDetail {
     @Enumerated(EnumType.STRING)
     UserType type;
 
-    @Column(name = "user_id", length = 16, nullable = false)
+    @Column(name = "user_id", length = 50, nullable = false)
     private String userId;
 
     @Column(name = "password", length = 100, nullable = false)
@@ -34,7 +33,7 @@ public class ConsumerEntity extends BaseEntity implements CustomUserDetail {
     @Column(name = "name", length = 30, nullable = false)
     private String name;
 
-    @Column(name = "nickname", length = 10, nullable = false)
+    @Column(name = "nickname", length = 30, nullable = false)
     private String nickname;
 
     @Column(name = "email", length = 50, nullable = false)

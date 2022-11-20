@@ -1,0 +1,117 @@
+.signup_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @include defaultLayout();
+}
+
+.signup_contents {
+  @include flexDiv(row, center, space-between);
+  width: 90%;
+  max-width: 1100px;
+  box-shadow: $shadow600;
+  @media screen and (max-width: 556px) {
+    flex-direction: column;
+  }
+  padding-bottom: 2rem;
+}
+
+.signup_contents_left {
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 200px 0 0 90px;
+  @media screen and (max-width: 556px) {
+    width: 100%;
+    padding: 0px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    height: auto;
+  }
+}
+
+.signup_contents_right {
+  width: 70%;
+  display: flex;
+  padding: 30px 10px 0px 0px;
+  margin-left: 80px;
+  @media screen and (max-width: 556px) {
+    width: 100%;
+    margin-left: 30px;
+    padding: 0px;
+  }
+}
+
+.signup_form {
+  @include flexDiv(column, flex-start);
+  width: 90%;
+  gap: 1rem;
+}
+
+.input_button_wrapper {
+  @include flexDiv(row, center, space-between);
+  width: 90%;
+}
+
+.input_wrapper {
+  @include flexDiv(column, flex-start);
+  gap: 0.3rem;
+  width: 100%;
+}
+
+.button_wrapper {
+  @include flexDiv(column, flex-end, flex-end);
+  height: 100%;
+}
+
+.confirm_button {
+  @include font(0.9rem, 500, $white);
+  width: 10rem;
+  padding: 0.6rem;
+  background-color: $mainPrimary;
+  border-radius: 0.1rem;
+}
+
+.input {
+  @include flexDiv;
+  width: 90%;
+  height: 2rem;
+  padding: 1rem;
+  border-radius: 0.1rem;
+  border-bottom: $white400 1px solid;
+  background-color: $white150;
+}
+
+.signup_button_wrapper {
+  @include flexDiv(row, flex-end, flex-end);
+  width: 90%;
+}
+
+.signup_button {
+  @include flexDiv();
+  @include font(0.9rem, 500, $white);
+  width: 10rem;
+  padding: 0.6rem;
+  border-radius: 0.1rem;
+  background: $mainPrimary;
+  margin-top: 0.5rem;
+  &.false {
+    background: $gray;
+    cursor: default;
+  }
+}
+
+.signup_label {
+  @include font(1rem, 400, $mainParagraph, 150%);
+}
+
+.inform_input_wrapper {
+  @include flexDiv(column, flex-start, flex-start);
+  gap: 0.3rem;
+  width: 100%;
+}
+
+.inform_text {
+  @include font(0.9rem, 400, $gray);
+}

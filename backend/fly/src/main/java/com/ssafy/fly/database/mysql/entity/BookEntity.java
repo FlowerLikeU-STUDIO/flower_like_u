@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.fly.database.mysql.enumtype.BookState;
 import com.ssafy.fly.database.mysql.enumtype.BookType;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "book")
@@ -64,4 +63,10 @@ public class BookEntity extends BaseEntity {
     @OneToOne(mappedBy = "bookId")
     @Builder.Default
     private ReviewEntity review = null;
+
+    @Formula("(SELECT date_format(b.book_date, '%Y-%m-%d') FROM book b WHERE b.id = id)")
+    private String bookDateOnly;
+
+    @Formula("(SELECT date_format(b.due_date, '%Y-%m-%d') FROM book b WHERE b.id = id)")
+    private String dueDateOnly;
 }

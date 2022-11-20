@@ -332,7 +332,7 @@
             document.querySelector('body').append(divTmp)
             //로그인을 다시할 때 마다 이전 stompClient는 끊는다.
             if (stompClient != null) stompClient.disconnect()
-            let socket = new SockJS('http://localhost:8080/ws');
+            let socket = new SockJS('http://localhost:8080/socket/ws');
             stompClient = Stomp.over(socket);
             stompClient.connect({}, async function() {
                 await stompClient.subscribe('/topic/public/' + document.querySelector('#userType').value +

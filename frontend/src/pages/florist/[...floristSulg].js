@@ -1,8 +1,16 @@
 import HeaderItem from "@/components/common/HeaderItem";
 import Feed from "@/components/feeds";
+import Modal from "@/components/modal";
+import ProfileCustomOrder from "@/components/modal/contents/ProfileCustomOrder";
 import Review from "@/components/review";
+import useUser from "@/hooks/useUser";
+import storage from "@/lib/utils/storage";
+import { startChatting } from "@/store/actions/chat";
+import axios from "axios";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import useSWR from "swr";
 
 const ProfileTitleWrapper = styled.div`
   display: flex;
@@ -55,20 +63,86 @@ const TypeButtonStyle = styled.button`
     background-color: #ffa7a5;
     color: #fff;
   }
-  transition: all 0.3s linear;
+  transition: 0.3s linear;
 `;
 
-const Profile = ({ profileData, type }) => {
-  const [typeState, setType] = useState(type);
+const TitleButtonWrapper = styled.div`
+  padding: 0px 20px 10px 20px;
+`;
 
+const ButtonStyle = styled.button`
+  margin: 10px 0px;
+  border: 3px solid #ffa7a5;
+  width: 140px;
+  font-size: 14px;
+  padding: 8px 12px;
+  margin: 0 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s linear;
+  &:hover {
+    background-color: #ffa7a5;
+    color: #fff;
+  }
+`;
+
+const Profile = ({ profileData, type, storeId }) => {
+  const { data: isLogin } = useSWR("logIn", storage);
+  const { user } = useUser();
+  const [typeState, setType] = useState(type);
+  const [modalState, setModalState] = useState(false);
+  const dispath = useDispatch();
   const changeType = (value) => {
     setType(value);
   };
+
+  const openChat = () => {
+    dispath(startChatting({ storeId: storeId }));
+  };
+
+  const handleCustomResgister = () => {
+    setModalState(true);
+  };
+
+  const exitCustomResgister = () => {
+    setModalState(false);
+  };
   return (
     <>
+      {modalState ? (
+        <Modal
+          children={
+            <ProfileCustomOrder
+              orderStep={"flower"}
+              storeId={storeId}
+              exitCustomResgister={exitCustomResgister}
+            />
+          }
+        />
+      ) : (
+        <></>
+      )}
       <ProfileTitleWrapper>
         <ProfileTitle>
-          <HeaderItem isMyPage={false} {...profileData} />
+          <HeaderItem isMyPage={false} {...profileData} type={"store"} />
+          <TitleButtonWrapper>
+            {isLogin && user ? (
+              user.type === "consumer" ? (
+                <div>
+                  <ButtonStyle type="button" onClick={openChat}>
+                    채팅 보내기
+                  </ButtonStyle>
+                  <ButtonStyle type="button" onClick={handleCustomResgister}>
+                    커스텀 예약
+                  </ButtonStyle>
+                </div>
+              ) : (
+                <></>
+              )
+            ) : (
+              <></>
+            )}
+          </TitleButtonWrapper>
         </ProfileTitle>
       </ProfileTitleWrapper>
       <ProfileButtonWrapper>
@@ -94,9 +168,9 @@ const Profile = ({ profileData, type }) => {
         </ButtonWrapper>
       </ProfileButtonWrapper>
       {typeState === "feed" ? (
-        <Feed storeId={profileData.userPk} />
+        <Feed storeId={storeId} />
       ) : (
-        <Review />
+        <Review storeId={storeId} />
       )}
     </>
   );
@@ -105,31 +179,14 @@ const Profile = ({ profileData, type }) => {
 export default Profile;
 
 export async function getServerSideProps({ params }) {
-  // const profileData = await client
-  //   .get(`store/${params.profileSulg[0]}`)
-  //   .then((res) => res.data);
-  const profileData = {
-    type: "store",
-    userPk: 1,
-    userId: "ssafyTest2",
-    name: "최싸피",
-    email: "ssafy123@naver.com",
-    address: {
-      zipCode: "11111",
-      street: "유성구 봉명로",
-      details: "유성빌딩 104호",
-      sigunguCode: "47182",
-    },
-    profile: "/auth/happyBtte.jpeg",
-    storeName: "너닮꽃집",
-    license: "11-111-11111",
-    feedNum: 0,
-    introduce: null,
-    rating: 4.35,
-    holidays: [],
-  };
-  // console.log(profileData);
+  const profileData = await axios(
+    `https://www.flowerlikeu.com/api/user/store/${params.floristSulg[0]}`
+  ).then((res) => res.data.storeInfo);
   return {
-    props: { profileData: profileData, type: params.floristSulg[1] },
+    props: {
+      profileData: profileData,
+      type: params.floristSulg[1],
+      storeId: params.floristSulg[0],
+    },
   };
 }

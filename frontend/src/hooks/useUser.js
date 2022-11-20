@@ -1,11 +1,10 @@
-import { client } from "@/pages/api/client";
+import storage from "@/lib/utils/storage";
+import { Fetcher } from "@/pages/api/client";
 import useSWR from "swr";
 
-// ! FETCH USER DATA
 const useUser = () => {
-  const userFetcher = (url) => client.get(url).then((res) => res.data);
-
-  const { data, mutate, error } = useSWR("user", userFetcher);
+  const { data: isLogin } = useSWR("logIn", storage);
+  const { data, mutate, error } = useSWR(isLogin ? "user" : null, Fetcher, { revalidateOnFocus: false });
   const loading = !data && !error;
   const loggedOut = error && error.status === 403;
   return {

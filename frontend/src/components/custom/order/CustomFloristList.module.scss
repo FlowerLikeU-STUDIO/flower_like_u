@@ -1,0 +1,251 @@
+.default {
+  width: 100%;
+  height: 80%;
+}
+
+.layout {
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
+  }
+  &::-webkit-scrollbar-thumb {
+    height: 17%;
+    background-color: $gray;
+    border-radius: 1rem;
+  }
+}
+
+.search__wrapper {
+  margin-bottom: 1rem;
+  width: 100%;
+  @include flexDiv(row, flex-start, flex-end);
+}
+
+.search_field {
+  @include flexDiv;
+  width: 20rem;
+  height: 2.3rem;
+}
+
+.search_field .search__input {
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+  padding-left: 20px;
+  padding-right: 38px;
+  color: #6f768d;
+}
+
+.search_field .material_icons {
+  font-size: 22px;
+  font-weight: bold;
+  color: $primary600p;
+  cursor: pointer;
+}
+
+.search__input {
+  background-color: $white100;
+  box-shadow: $shadow400;
+  color: $mainButton;
+  outline: none;
+  padding: 0.5rem;
+  border-radius: 1rem;
+}
+
+.florist_list__wrapper {
+  gap: 1rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// 플로리스트 카드
+.florist__wrapper {
+  @include flexDiv;
+  box-sizing: border-box;
+  border-radius: 1rem;
+  overflow: hidden;
+  height: 10rem;
+  width: 90%;
+  background-color: $ivory300;
+  color: $gray;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.florist__wrapper__true {
+  height: 10rem;
+  width: 90%;
+  box-sizing: border-box;
+  cursor: pointer;
+  border-radius: 1rem;
+  background-color: $primary300p;
+  color: $gray;
+  font-size: 1rem;
+  @include flexDiv;
+}
+
+.store__img {
+  width: 20rem;
+  height: 100%;
+  border-radius: 1rem 0rem 1rem 0rem;
+}
+
+.store__info {
+  padding: 1rem;
+  width: 30rem;
+  @include flexDiv(column, flex-start, flex-start);
+  gap: 0.5rem;
+}
+
+.store__name {
+  @include font(1.3rem, bold, $mainParagraph);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.store__adderss {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.store__days {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.store__star {
+  @include flexDiv(row, center, flex-start);
+  gap: 0.4rem;
+}
+
+.starrating span {
+  color: $red400;
+}
+
+// ! 시도, 시군구 토글관련
+@mixin scoll {
+  &::-webkit-scrollbar {
+    width: 1rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $mainPrimary;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: $white200;
+  }
+}
+
+.wrapper .search_box .dropdown {
+  width: 150px;
+  color: $gray250;
+  position: relative;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.wrapper .search_box .dropdown .default_option {
+  text-transform: uppercase;
+  padding: 13px 15px;
+  font-size: 14px;
+}
+
+.wrapper .search_box .dropdown ul {
+  position: absolute;
+  background: #fff;
+  width: 10rem;
+  border-radius: 5px;
+  padding: 20px;
+  display: none;
+  box-shadow: 8px 8px 6px -10px $mainPrimary;
+  max-height: 200px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.wrapper .search_box .dropdown ul.active {
+  display: block;
+  @include scoll;
+}
+
+// 시군구 active
+.wrapper .search_box .dropdown ul.sigungu__active {
+  display: block;
+  @include scoll;
+}
+
+.wrapper .search_box .dropdown ul button {
+  color: $gray;
+  padding-bottom: 1rem;
+  width: 100%;
+  text-align: start;
+}
+
+.wrapper .search_box .dropdown ul button:last-child {
+  padding-bottom: 0;
+}
+
+.wrapper .search_box .dropdown ul button:hover {
+  color: $primary600p;
+  font-weight: bold;
+}
+
+.wrapper .search_box .dropdown:before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  border: 8px solid;
+  border-color: $mainPrimary transparent transparent transparent;
+}
+
+.main__div {
+  @include flexDiv;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn {
+  border: 0.125rem solid $primary400p;
+  border-radius: 50%;
+  width: 1.3rem;
+  height: 1.3rem;
+  padding: 0.7rem;
+  @include flexDiv;
+  @include font(1rem, bold, $mainButton);
+
+  &:hover {
+    cursor: pointer;
+    color: $primary300;
+    background-color: $primary400p;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    background-color: $primary400p;
+  }
+
+  &:disabled {
+    cursor: revert;
+    transform: revert;
+    color: $white;
+    background-color: $primary400p;
+  }
+}

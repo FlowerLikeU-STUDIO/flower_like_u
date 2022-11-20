@@ -1,3 +1,16 @@
 .main__div {
-  margin: 3rem auto 1rem auto;
+  @include flexDiv(column);
+  width: 100%;
+  padding-top: 1rem;
+}
+
+.not__data {
+  @include flexDiv(column, center, flex-start);
+  width: 100%;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.go__florist {
+  @include font(1rem, bold, $mainPrimary);
 }

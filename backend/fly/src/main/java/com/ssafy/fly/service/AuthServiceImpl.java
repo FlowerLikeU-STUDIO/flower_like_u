@@ -23,9 +23,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Map<String, Object> authenticateByEmail(String email) {
+    public String authenticateByEmail(String email) {
         Map<String, Object> result = new HashMap<>();
-        String message = "";
 
         String inputEmail = email;
         String authCode = randomStringGenerator.generateRandomPassword(8);
@@ -37,10 +36,6 @@ public class AuthServiceImpl implements AuthService {
 
         // 추후 MailException 추가
         flyMailSender.sendEmail(mail);
-
-        result.put("result", true);
-        result.put("authCode", authCode);
-
-        return result;
+        return authCode;
     }
 }

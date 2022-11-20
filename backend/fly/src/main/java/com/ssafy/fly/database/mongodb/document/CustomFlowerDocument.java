@@ -43,11 +43,11 @@ public class CustomFlowerDocument {
             }
         }
 
-        List<String> flowers = new ArrayList<>();
+        List<String> countedFlowersList = new ArrayList<>();
         for(Map.Entry<String, Integer> entry : unitCnt.entrySet()) {
-            flowers.add(String.format("%s %d송이", entry.getKey(), entry.getValue()));
+            countedFlowersList.add(String.format("%s %d송이", entry.getKey(), entry.getValue()));
         }
 
-        return flowers;
+        return countedFlowersList;
     }
 }

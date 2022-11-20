@@ -11,17 +11,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Repository
 public interface CustomFlowerRepository extends JpaRepository<CustomFlowerEntity, Long> {
-    // public CustomFlowerEntity findByDesignId(String flowerId);
-    public CustomFlowerEntity findByDesignIdAndRemoval(String flowerId, boolean isRemoved);
-    public Page<CustomFlowerEntity> findAllByConsumerId(ConsumerEntity consumer, Pageable pageable);
+    public Optional<CustomFlowerEntity> findByDesignIdAndRemoval(String flowerId, boolean isRemoved);
+    public Page<CustomFlowerEntity> findAllByConsumerIdAndRemoval(ConsumerEntity consumer, boolean isRemoved, Pageable pageable);
 
     @Modifying
     @Transactional
     @Query("UPDATE CustomFlowerEntity as c " +
             "SET c.removal = true " +
             "WHERE c.designId = :flowerId")
-    public int CustomFlowerRemove(@Param("flowerId") String flowerId);
+    public int customFlowerRemove(@Param("flowerId") String flowerId);
 }

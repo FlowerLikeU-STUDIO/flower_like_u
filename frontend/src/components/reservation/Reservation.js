@@ -26,8 +26,9 @@ const TextAreaStyle = styled.textarea`
   padding: 10px;
 `;
 
-const Reservation = ({ onClick, sendReservation }) => {
+const Reservation = ({ onClick, sendReservation, storeId }) => {
   const [reservationContent, setReservationContent] = useState("");
+  const [reservationDate, setReservationDate] = useState("");
   const [choiceDay, setChoiceDay] = useState("");
 
   const submitReservation = () => {
@@ -39,13 +40,18 @@ const Reservation = ({ onClick, sendReservation }) => {
       alert("요구사항을 입력해주세요.");
       return;
     }
-    sendReservation(choiceDay, reservationContent);
+    sendReservation(reservationDate, reservationContent);
   };
   return (
     <>
       <ReservationWrapper>
         <BackButton onClick={onClick} />
-        <Calendar setChoiceDay={setChoiceDay} choiceDay={choiceDay} />
+        <Calendar
+          setChoiceDay={setChoiceDay}
+          choiceDay={choiceDay}
+          setReservationDate={setReservationDate}
+          storeId={storeId}
+        />
       </ReservationWrapper>
       <ReservationWrapper className="contents">
         <div>🌻시간협의는 채팅을 통해 진행해주세요🌻</div>

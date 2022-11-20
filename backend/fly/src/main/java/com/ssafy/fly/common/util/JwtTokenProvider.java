@@ -3,6 +3,7 @@ package com.ssafy.fly.common.util;
 import com.ssafy.fly.service.CustomUserDetailService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +18,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
-    private String secretKey = "asdfasdfalsdjfaskdflasdkfasjfkjsaclsmdiewjtjasdlkfasdlvasdmlvmasdmvasdlm";
+
+    @Value("${jwt-provider.secret-key}")
+    private String secretKey;
 
     // 토큰 유효시간 5일
     private long tokenValidTime = 5 * 24 * 60 * 60 * 1000L;
@@ -54,6 +57,7 @@ public class JwtTokenProvider {
     public String getUserPk(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
+
     // Request의 Header에서 token 값을 가져옵니다. "Authorization" : "TOKEN값'
     public String resolveToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");

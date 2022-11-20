@@ -2,6 +2,7 @@ package com.example.socket.entity;
 
 import com.example.socket.domain.UserType;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,13 +51,21 @@ public class Store implements UserDetails {
     @Lob
     private String profile;
 
-    @Column(name = "address", length = 200, nullable = false)
-    private String address;
+    @Column(name = "zipcode", length = 5, nullable = false)
+    private String zipCode;
 
-    // 휴일은 나중에 작업
-//    @Column(name = "holidays", nullable = true)
-//    private String holidays;
-//
+    @Column(name = "street", length = 50, nullable = false)
+    private String street;
+
+    @Column(name = "detail_addr", length = 50, nullable = true)
+    private String detailAddr;
+
+    @Column(name = "sigungu_code", length = 5, nullable = false)
+    private String sigunguCode;
+
+    @Column(name = "holidays", nullable = true)
+    private String holidays;
+
     @Column(name = "bio", length = 300, nullable = true)
     private String bio;
 
@@ -64,9 +73,15 @@ public class Store implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private Date regDate;
 
-    @Column(name = "withdrawal")
+    @Column(name = "withdrawal", nullable = true)
+    @ColumnDefault("false")
     private boolean withdrawal;
 
+    @Column(name = "latitude", nullable = false)
+    private Double latitude;
+
+    @Column(name = "longitude", nullable = false)
+    private Double longitude;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

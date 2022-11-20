@@ -1,10 +1,11 @@
 .save_background {
+  @include flexDiv;
   width: 100%;
   min-height: 100vh;
-  padding: 8rem 0rem 0rem;
+  padding: 4rem 0rem 0rem;
 
   @media screen and (min-width: 1350px) {
-    padding: 8rem 0rem 0rem;
+    padding: 4rem 0rem 0rem;
   }
   background: linear-gradient(
       to top,
@@ -19,17 +20,6 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  &.white100 {
-    background: linear-gradient(
-      to top,
-      rgba(255, 255, 255, 0.6) 10%,
-      rgba(255, 255, 255, 0.7) 25%,
-      rgba(255, 255, 255, 0.8) 40%,
-      rgba(255, 255, 255, 0.9) 50%,
-      rgba(255, 255, 255, 1) 75%,
-      rgba(255, 255, 255, 1) 100%
-    );
-  }
 }
 
 .custom_place {
@@ -46,8 +36,8 @@
   &.vase {
     background-image: url("/custom/vase.png");
   }
-  &.ballon {
-    background-image: url("/custom/ballon.png");
+  &.balloon {
+    background-image: url("/custom/balloon.png");
   }
 }
 
@@ -62,60 +52,92 @@
 }
 
 .card__wrapper {
+  @include flexDiv(row, center, space-around);
   max-width: 62.5rem;
   width: 100%;
   box-shadow: $shadow600;
   margin: 1rem auto;
-  padding: 1rem 1rem;
-  @include flexDiv(row, center, space-around);
-  gap: 1rem;
+  padding: 2rem 2rem;
+  background-color: $white;
+  border-radius: 0.25rem;
+  border: 1px solid $primary500;
 }
 
 .flower__img {
-  width: 35%;
+  @include flexDiv;
+  width: 50%;
 }
 
-.main__div__wrapper {
-  // position: relative;
+.flower_contents_wrapper {
   width: 50%;
   @include flexDiv(column, center, stretch);
 }
 
-.sub__div__wrapper {
+.contents_subwrapper {
   @include flexDiv(column, center, center);
   width: 100%;
   margin: 1rem;
 }
 
-.main__p {
-  color: $primary900;
+.card_title {
+  @include font(1.5rem, 600, $primary900, 220%);
 }
 
-.sub__p {
-  @include font(1rem, normal, $mainParagraph);
-  margin-top: 0.5rem;
+.sub_title {
+  @include font(1rem, 500, $mainParagraph, 120%);
 }
 
 .line {
-  width: 80%;
+  width: 60%;
   height: 1px;
   margin: 1rem;
+  opacity: 0.5;
   background-color: $primary400p;
 }
 
+.description_wrapper {
+  @include flexDiv(column);
+  gap: 0.5rem;
+  padding-bottom: 1rem;
+}
+
 .description {
-  @include font(1rem, normal, $mainParagraph, 1.5rem);
-  margin-bottom: 1rem;
+  @include font(0.95rem, 400, $mainParagraph, 1.5rem);
 }
 
 .btn__group {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  // grid-template-rows: repeat(2, 1fr);
-  gap: 1rem;
+  gap: 0.9rem;
+  .btn:nth-child(5) {
+    grid-column: 1 / span 2;
+    /* 1번 라인에서 3칸 */
+    grid-row: 3 / span 3;
+  }
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(4, 0.5fr);
+  }
 }
 
 .btn {
+  font-size: 0.9rem;
+  border-radius: 0.3rem;
+  border: 1px solid $mainPrimary;
+  padding: 0.4rem 0.6rem;
+  width: 100%;
+  background-color: white;
+  color: $mainPrimary;
+  &.green {
+    background-color: $mainPrimary;
+    color: white;
+  }
+  @media screen and (max-width: 768px) {
+    @include font(0.8rem, 500, $mainPrimary);
+  }
+}
+
+.tomain_btn {
   font-size: 1rem;
   border-radius: 0.3rem;
   border: 1px solid $mainPrimary;

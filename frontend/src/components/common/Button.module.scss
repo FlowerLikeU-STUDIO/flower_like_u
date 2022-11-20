@@ -56,20 +56,31 @@
 
   //* 커스텀 페이지에서 사용하는 버튼
   &.custom_small {
-    padding: 0.6rem 2.5rem;
+    padding: 0.6rem;
+    width: 13rem;
     box-shadow: $shadow500;
     transition: 0.2s linear;
     border: solid $mainPrimary 1px;
     & + & {
       margin-left: 1.5rem;
     }
+    @media screen and (max-width: 768px) {
+      width: 18rem;
+      & + & {
+        margin-left: 0rem;
+      }
+    }
   }
 
   &.custom_large {
-    padding: 0.6rem 7.65rem;
+    padding: 0.6rem;
+    width: 27.5rem;
     box-shadow: $shadow500;
     transition: 0.2s linear;
     border: solid $mainPrimary 1px;
+    @media screen and (max-width: 768px) {
+      width: 18rem;
+    }
   }
 
   // 색상 관리

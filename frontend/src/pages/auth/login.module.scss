@@ -1,0 +1,71 @@
+.login_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @include defaultLayout;
+}
+
+.login_contents {
+  display: flex;
+  width: 70%;
+  max-width: 920px;
+  min-width: 720px;
+  min-height: 520px;
+  height: 520px;
+  box-shadow: $shadow600;
+  @media screen and (max-width: 556px) {
+    flex-direction: column;
+    min-width: 500px;
+    min-height: 600px;
+  }
+}
+
+.login_contents_left {
+  width: 40%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  @media screen and (max-width: 556px) {
+    width: 100%;
+    padding: 0px;
+    height: auto;
+    justify-content: flex-start;
+    padding-top: 20px;
+  }
+}
+
+.login_contents_right {
+  width: 70%;
+  display: flex;
+  height: 100%;
+  padding: 30px 10px 0px 0px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  @media screen and (max-width: 556px) {
+    justify-content: flex-start;
+    width: 100%;
+    padding-top: 20px;
+    padding: 0px;
+  }
+}
+
+.login_button {
+  padding: 12px 20px;
+  margin: 20px 0 20px 0;
+  color: $white;
+  background-color: #96c62b;
+  width: 70%;
+  max-width: 500px;
+}
+
+.social_button {
+  position: relative;
+  width: 70%;
+  height: 42px;
+  margin: 20px 0 0 0;
+  background-color: #fee601;
+  max-width: 500px;
+}

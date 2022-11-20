@@ -11,12 +11,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { modalOpen } from "@/store/reducers/modal";
 import FeedRegister from "../modal/contents/FeedRegister";
 import { client } from "@/pages/api/client";
+import Spinner from "../spinner";
 const FeedWrapper = styled.div`
   display: flex;
-  /* justify-content: center; */
   flex-direction: column;
   align-items: center;
-  min-height: calc(100vh - 68px);
 `;
 
 const FeedListWrapper = styled.div`
@@ -53,26 +52,26 @@ const Feed = ({ storeId }) => {
     fetcher
   );
   const isOpen = useSelector((state) => state.modal.isOpen);
-  const lastPage = useMemo(() => {
-    return data ? data[0].data.feedInfo.maxPage : 0;
-  }, [data]);
-
   const dispatch = useDispatch();
   const [targetFeed, setTargetFeed] = useState("");
+
+  const isEmpty = data?.[0]?.data.content.length === 0;
 
   const feedList = useMemo(() => {
     let feedList = [];
     if (data) {
       data.map((item) => {
-        // feedList.push(item.data.feedInfo.list);
-        feedList = feedList.concat(...item.data.feedInfo.list);
+        feedList = feedList.concat(...item.data.content);
       });
       return feedList;
     }
   }, [size, data]);
+
+  const isReachingEnd = isEmpty || (data && data[data.length - 1]?.data.last);
+
   const ref = useIntersect(async (entry, observer) => {
     observer.unobserve(entry.target);
-    if (size < lastPage && !isValidating) {
+    if (!isValidating && !isReachingEnd) {
       setSize(size + 1);
     }
   });
@@ -80,6 +79,7 @@ const Feed = ({ storeId }) => {
     setTargetFeed(feed.feedId);
     dispatch(modalOpen());
   };
+
   return (
     <>
       {isOpen ? (
@@ -87,7 +87,7 @@ const Feed = ({ storeId }) => {
           <Modal
             children={
               targetFeed !== "" ? (
-                <FeedReservation feedId={targetFeed} />
+                <FeedReservation feedId={targetFeed} storeId={storeId} />
               ) : (
                 <></>
               )
@@ -114,11 +114,21 @@ const Feed = ({ storeId }) => {
                 />
               ))}
             </FeedListWrapper>
+            {isValidating && !isReachingEnd ? (
+              <div>
+                <Spinner />
+              </div>
+            ) : (
+              <></>
+            )}
             <Target ref={ref} />
           </>
         ) : (
-          <>Loading</>
+          <div>
+            <Spinner />
+          </div>
         )}
+        <div>{isEmpty ? <>등록된 피드가 없습니다.</> : <></>}</div>
       </FeedWrapper>
     </>
   );

@@ -1,0 +1,108 @@
+.contents_wrapper {
+  @include flexDiv(column);
+  gap: 2rem;
+}
+
+.title {
+  @include font(1.7rem, 500, $primary800);
+}
+
+.card_wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 95%;
+  height: 29rem;
+  gap: 2.5rem;
+  padding: 1.5rem 3rem 3rem 3rem;
+  overflow-y: auto;
+}
+
+.card_wrapper::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.card_wrapper::-webkit-scrollbar-thumb {
+  background-color: $primary400;
+  border-radius: 1rem;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+
+.card_wrapper::-webkit-scrollbar-track {
+  background-color: $primary300p;
+  border-radius: 1rem;
+  box-shadow: inset 0px 0px 5px white;
+}
+
+.card {
+  @include flexDiv(column, flex-start, space-between);
+  width: 100%;
+  height: 17rem;
+  border-radius: 0.25rem;
+  box-shadow: $shadow500;
+  background-color: $white;
+  padding: 1rem 1rem 1.5rem 1rem;
+  gap: 0.8rem;
+
+  & > h2 {
+    @include font(1rem, 500, $gray200, 130%);
+    word-break: keep-all;
+  }
+}
+
+.flower_image_wrapper {
+  @include flexDiv(column);
+  gap: 0.5rem;
+  width: 6.5rem;
+  & > h3 {
+    @include font(0.9rem, 600);
+  }
+  & > p {
+    @include font(0.85rem, 500, $primary600p, 130%);
+    text-align: center;
+    word-break: keep-all;
+  }
+}
+
+.image_wrapper {
+  @include flexDiv(row, flex-start, flex-start);
+  width: 100%;
+  gap: 2.2rem;
+}
+
+.card_image {
+  width: 5rem;
+  height: 5rem;
+  background-color: $white;
+}
+
+.title_button_wrapper {
+  @include flexDiv(row, center, space-between);
+  width: 100%;
+  & > h1 {
+    @include font(1.3rem, 600);
+  }
+}
+
+@mixin button-color($color, $font_color: $mainButton) {
+  background: $color;
+  color: $font_color;
+  &:hover {
+    background: lighten($color, 10%);
+  }
+  &:active {
+    background: darken($color, 10%);
+  }
+}
+
+.button {
+  @include button-color($primary500);
+  @include font(0.9rem, 500, $gray200);
+  width: 10rem;
+  border-radius: 0.2rem;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+  transition: 0.2s linear;
+  padding: 0.5rem 0.8rem 0.5rem 0.8rem;
+}

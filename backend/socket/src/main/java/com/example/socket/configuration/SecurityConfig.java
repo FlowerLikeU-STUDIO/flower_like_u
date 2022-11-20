@@ -28,13 +28,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable();
         http.httpBasic().disable().authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                //.anyRequest().permitAll()
-                .antMatchers("/auth/**").permitAll()
+                .anyRequest().permitAll()
+                /*.antMatchers("/auth/**").permitAll()
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/account/**").permitAll()
                 .antMatchers("/ws/**").permitAll()
                 .antMatchers("/account/**").hasAnyRole("USER")
-                .anyRequest().authenticated()
+                .anyRequest().authenticated()*/
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class); // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
