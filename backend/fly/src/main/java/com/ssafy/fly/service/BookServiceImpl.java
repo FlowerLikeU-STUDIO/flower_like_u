@@ -294,7 +294,7 @@ public class BookServiceImpl implements BookService {
         }
 
         if ((UserType.CONSUMER.toString().equals(userType) && book.getConsumerId().getId().equals(userPk))
-                || (UserType.STORE.toString().equals(userType) && book.getConsumerId().getId().equals(userPk))) {
+                || (UserType.STORE.toString().equals(userType) && book.getStoreId().getId().equals(userPk))) {
 
             Map<String, Object> bookInfo = new HashMap<>();
 
