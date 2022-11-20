@@ -1,6 +1,7 @@
 import styles from "./ColorButton.module.scss";
 import { useState } from "react";
 import CustomModal from "@/components/custom/common/CustomModal";
+import FlowerImg from "@/components/common/FlowerImg";
 
 const ColorButton = () => {
   // 모달창 노출 여부 state
@@ -14,7 +15,7 @@ const ColorButton = () => {
   return (
     <div>
       <button className={styles.recommend_menu} onClick={showModal}>
-        색깔
+        <FlowerImg src={"/custom/icon/rgb.png"} />
       </button>
       {modalOpen && <CustomModal setModalOpen={setModalOpen} id={4} />}
     </div>

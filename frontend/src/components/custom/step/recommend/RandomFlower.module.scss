@@ -1,8 +1,14 @@
 .recommend_menu {
   @include flexDiv;
+  @include font(0.9rem, 500, $primary900);
   width: 3rem;
   height: 3rem;
-  background-color: $ivory500;
+  background-color: $ivory400;
   border-radius: 100rem;
   box-shadow: $shadow600;
+  padding: 0.3rem;
+  transition: all 0.3s linear;
+  &:hover {
+    transform: scale(1.1);
+  }
 }

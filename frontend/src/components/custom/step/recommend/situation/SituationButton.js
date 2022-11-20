@@ -1,6 +1,7 @@
 import styles from "./SituationButton.module.scss";
 import { useState } from "react";
 import CustomModal from "@/components/custom/common/CustomModal";
+import FlowerImg from "@/components/common/FlowerImg";
 
 const SituationButton = () => {
   // 모달창 노출 여부 state
@@ -14,7 +15,7 @@ const SituationButton = () => {
   return (
     <div>
       <button className={styles.recommend_menu} onClick={showModal}>
-        레시피
+        <FlowerImg src={"/custom/icon/rose.png"} />
       </button>
       {modalOpen && <CustomModal setModalOpen={setModalOpen} id={2} />}
     </div>
