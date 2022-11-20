@@ -31,7 +31,7 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
     }).concat(chatMiddleware),
-  devTools: true,
+  devTools: false,
 });
 
 const setUpStore = (context) => store;

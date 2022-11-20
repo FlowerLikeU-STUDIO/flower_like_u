@@ -3,8 +3,10 @@ import ProfileImage from "@/components/common/ProfileImage";
 import Contents from "./Contents";
 import Link from "next/link";
 import React from "react";
+import { useRouter } from "next/router";
 
 const HeaderItem = ({ ...props }) => {
+  const router = useRouter();
   return (
     <div className={styles.header__main}>
       <ProfileImage url={props.profile} size="medium" />
@@ -12,9 +14,13 @@ const HeaderItem = ({ ...props }) => {
         <div className={styles.store__mypage}>
           <div>
             {props.type === "store" ? (
-              <span className={styles.userName}>{props.storeName || props.name}</span>
+              <span className={styles.userName}>
+                {props.storeName || props.name}
+              </span>
             ) : (
-              <span className={styles.userName}>{props.nickname || props.name}</span>
+              <span className={styles.userName}>
+                {props.nickname || props.name}
+              </span>
             )}
             {props.isMyPage && (
               <>
@@ -30,7 +36,7 @@ const HeaderItem = ({ ...props }) => {
             <button
               className={styles.feed}
               onClick={() => {
-                console.log("피드등록 로직");
+                router.push("/mypage/feeds/register");
               }}
             >
               피드 등록하기
@@ -39,7 +45,11 @@ const HeaderItem = ({ ...props }) => {
         </div>
         {props.type === "store" && (
           <div className={styles.profile_seller}>
-            <Contents rating={props.rating} introduce={props.introduce} feedsNum={props.feedNum} />
+            <Contents
+              rating={props.rating}
+              introduce={props.introduce}
+              feedsNum={props.feedNum}
+            />
           </div>
         )}
       </div>

@@ -63,7 +63,6 @@ const DetailWrapper = styled.div`
     height: 100%;
     justify-content: center;
     align-items: center;
-    background-color: black;
   }
   & div.slick-slide > div img {
     max-width: 400px;
