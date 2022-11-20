@@ -38,7 +38,6 @@ public class UserServiceImpl implements UserService {
     private final ConsumerRepository consumerRepository;
     private final StoreRepository storeRepository;
     private final RegionRepository regionRepository;
-    private final ValidationChecker validationChecker;
     private final RandomStringGenerator randomStringGenerator;
     private final FlyMailSender flyMailSender;
     private final PasswordEncoder passwordEncoder;
@@ -48,7 +47,6 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(ConsumerRepository consumerRepository,
                            StoreRepository storeRepository,
                            RegionRepository regionRepository,
-                           ValidationChecker validationChecker,
                            RandomStringGenerator randomStringGenerator,
                            FlyMailSender flyMailSender,
                            PasswordEncoder passwordEncoder,
@@ -56,7 +54,6 @@ public class UserServiceImpl implements UserService {
         this.consumerRepository = consumerRepository;
         this.storeRepository = storeRepository;
         this.regionRepository = regionRepository;
-        this.validationChecker = validationChecker;
         this.randomStringGenerator = randomStringGenerator;
         this.flyMailSender = flyMailSender;
         this.passwordEncoder = passwordEncoder;
@@ -518,12 +515,7 @@ public class UserServiceImpl implements UserService {
             else if ("전체".equals(region2)) return s[0].equals(region1);
             return s[0].equals(region1) && s[1].equals(region2);
         }).map(store -> {
-            String[] holidayTmp = store.getHolidays().split(",");
-            List<Boolean> holidays = new ArrayList<>();
-            for (String s : holidayTmp) {
-                if ("false".equals(s)) holidays.add(false);
-                else holidays.add(true);
-            }
+            List<Boolean> holidays = store.getBooleanHolidays();
             return new RegionVo(store.getStreet(), store.getId(), store.getLatitude(), store.getLongitude(),
                     store.getStore(), store.getBio(), store.getProfile(),
                     decimalFormatter.roundToTwoDecimalPlaces(store.getRating() == null ? 0 : store.getRating()),

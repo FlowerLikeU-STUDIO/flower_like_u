@@ -1,6 +1,5 @@
 package com.ssafy.fly.database.mysql.entity;
 
-import com.ssafy.fly.database.mysql.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.Column;

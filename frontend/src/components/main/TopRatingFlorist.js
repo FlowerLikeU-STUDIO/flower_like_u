@@ -5,22 +5,22 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Rating } from "@mui/material";
 
-const TopRatingFlorist = () => {
+const TopRatingFlorist = ({ topRating }) => {
   const router = useRouter();
 
   //* 인기있는 꽃집 요청 (별점 순)
-  const [topRating, setTopRating] = useState();
+  // const [topRating, setTopRating] = useState();
 
-  const getTopRating = async () => {
-    const res = await client
-      .get(`user/stores?page=1&size=4&sort=rating`)
-      .then((res) => res.data);
-    if (res) {
-      setTopRating(res.storeInfo.list);
-    }
-  };
+  // const getTopRating = async () => {
+  //   const res = await client
+  //     .get(`user/stores?page=1&size=4&sort=rating`)
+  //     .then((res) => res.data);
+  //   if (res) {
+  //     setTopRating(res.storeInfo.list);
+  //   }
+  // };
 
-  useEffect(() => getTopRating, []);
+  // useEffect(() => getTopRating, []);
 
   return (
     <>
