@@ -13,14 +13,14 @@
 
 
 
-## 1. 서비스 소개:cherry_blossom: 
+## 1. 서비스 소개 :cherry_blossom: 
 
 **초개인화, 초맞춤화를 원하는 현 소비 트렌드에 맞춘 개인 맞춤형 커스텀 꽃다발 제작 중계 플랫폼**
 
 - 구매자는 개인 취향 및 개인 만족 커스텀 꽃다발 시안을 제작해 플로리스트에게 의뢰
 - 플로리스트는 개인이 원하는 꽃, 원하는 디자인에 맞게 꽃다발을 제공
 
-**:bulb:주요 기능**
+**:bulb: 주요 기능**
 
 | 기능  | 내용                                                         |
 | :---- | :----------------------------------------------------------- |
@@ -54,13 +54,13 @@
 
 **Back-end**
 
-| <img src="https://profilinator.rishav.dev/skills-assets/java-original-wordmark.svg" alt="Java" width="50px" height="50px" /> | <img src="https://www.seekpng.com/png/full/8-80775_spring-logo-png-transparent-spring-java.png" alt="Spring-Boot" width="50px" height="50px" /> | <img src="https://user-images.githubusercontent.com/46440898/185340935-0d35ed10-a892-48ec-819c-92aa989cb60b.png" alt="SpringSecurity" width="50px" height="50px" /> | <img src="https://media.vlpt.us/images/2012monk/post/86ce779f-a08b-438d-836c-8dbe6e5a8cc0/hibernate_icon_whitebkg.svg" alt="Hibernate" width="50px" height="50px" /> |
-| :--------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|                                                             Java                                                             |                                                                   Spring-Boot                                                                   |                                                                           SpringSecurity                                                                            |                                                                              Hibernate                                                                               |
+| <img src="https://profilinator.rishav.dev/skills-assets/java-original-wordmark.svg" alt="Java" width="50px" height="50px" /> | <img src="https://www.seekpng.com/png/full/8-80775_spring-logo-png-transparent-spring-java.png" alt="Spring-Boot" width="50px" height="50px" /> | <img src="https://user-images.githubusercontent.com/46440898/185340935-0d35ed10-a892-48ec-819c-92aa989cb60b.png" alt="SpringSecurity" width="50px" height="50px" /> | <img src="https://spring.io/images/projects/spring-data-79cc203ed8c54191215a60f9e5dc638f.svg" alt="Spring-Data" width="50px" height="50px" /> | <img src="https://cdn.freebiesupply.com/logos/large/2x/websocket-logo-png-transparent.png" alt="WebSocket" width="50px" height="50px" />
+| :----------------: | :-----------------: | :--------------------: | :--------------------: | :--------------------: |
+|                                                             Java                                                             |                                                                   Spring Boot                                                                   |                                                                           Spring Security                                                                            |                                                                              Spring Data                                                                               | WebSocket |
 
-| <img src="https://res.cloudinary.com/postman/image/upload/t_team_logo/v1629869194/team/2893aede23f01bfcbd2319326bc96a6ed0524eba759745ed6d73405a3a8b67a8" alt="Postman" width="50px" height="50px" /> | <img src="https://cdn.worldvectorlogo.com/logos/socket-io.svg" alt="Socket.io" width="50px" height="50px" /> | <img src="https://profilinator.rishav.dev/skills-assets/mysql-original-wordmark.svg" alt="MySQL" width="50px" height="50px" /> | <img src="https://user-images.githubusercontent.com/46440898/202615256-09ea5b30-755e-41f2-9c66-652fac57c54f.png" alt="MongoDB" width="180px" height="50px" /> |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-|                           Postman                            |                          Socket.io                           |                            MySQL                             |                           MongoDB                            |
+| <img src="https://profilinator.rishav.dev/skills-assets/mysql-original-wordmark.svg" alt="MySQL" width="50px" height="50px" /> | <img src="https://raw.githubusercontent.com/rishavanand/github-profilinator/66d21965acb8d37288d0964c0c7ec19bbc6efd47/static/skills-assets/mongodb-original-wordmark.svg" alt="MongoDB" width="50px" height="50px" /> |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
+|                            MySQL                             |                           MongoDB                            |
 
 **DevOps**
 
@@ -75,12 +75,15 @@
 | Backend                     | Frontend              | CI/CD             | 협업툴     |
 | --------------------------- | --------------------- | ----------------- | ---------- |
 | Java Open-JDK zulu 8.33.0.1 | next 12.3.1           | AWS EC2           | Mattermost |
-| SpringBoot Gradle 2.7.2     | React 18.2            | Ubuntu 20.04 LTS  | Webex      |
-| Spring Data JPA             | Redux 4.2.0           | Docker 20.10.21   | Notion     |
-| Lombok                      | react-redux ^8.0.4    | Jenkins 2.60.3    | GitLab     |
-| MySQL 8.0.29                | swr ^1.3.0            | SonarQube : 8.9.9 | JIRA       |
-|                             | uuid ^9.0.0           |                   |            |
-|                             | @stomp/stompjs ^6.1.2 |                   |            |
+| Spring Boot Gradle 2.7.5    | React 18.2            | Ubuntu 20.04 LTS  | Webex      |
+| Spring Security             | Redux 4.2.0           | Docker 20.10.21   | Notion     |
+| Spring Data JPA             | react-redux ^8.0.4    | Jenkins 2.60.3    | GitLab     |
+| Spring AOP                  | swr ^1.3.0            | SonarQube : 8.9.9 | JIRA       |
+| Log4J2                      | uuid ^9.0.0           |                   |            |
+| Spring Validation           | @stomp/stompjs ^6.1.2 |                   |            |
+| JJWT                        |                       |                   |            |
+| MySQL 5.7                   |                       |                   |            |
+| MongoDB 4.4.17              |                       |                   |            |
 
 **EC2 포트 정리**
 
@@ -107,7 +110,7 @@
 
 ---
 
-## 3.  너닮꽃 STUDIO 소개:sunflower: :rose:
+## 3.  너닮꽃 STUDIO 소개 :sunflower: :rose:
 
 <table>
 <tr>
@@ -153,7 +156,7 @@ Front-end
 Back-end
 </td>
 <td align="start">
-- 서비스의 주요 REST API 구현<br/>
+- 서비스의 주요 REST API 설계 및 구현<br/> &ensp; - 회원/피드/예약/커스텀<br/> - AOP와 Log4J2를 이용한 서버 로깅 시스템<br/> - DBMS(MySQL, MongoDB) 관리 <br/>- SonarQube 정적 분석 및 리팩토링
 </td>
 </tr>
 <tr>
