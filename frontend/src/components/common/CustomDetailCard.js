@@ -28,7 +28,6 @@ const CustomDetailCard = () => {
       setPath(router.query.did);
     }
   }, [path]);
-  useEffect(() => {}, [basics]);
 
   //* 송이 종류
   const bunchList = { XS: 1, S: 3, M: 5, L: 7, XL: 9 };
@@ -69,7 +68,6 @@ const CustomDetailCard = () => {
   const onHandleOpen = () => {
     dispatch(modalOpen());
   };
-  console.log(path);
 
   return (
     <div className={styles.card__wrapper} id="capture">
@@ -77,9 +75,7 @@ const CustomDetailCard = () => {
         <>
           {isOpen && path ? (
             <>
-              <Modal
-                children={<CustomOrder orderStep={"florist"} flowerId={path} />}
-              />
+              <Modal children={<CustomOrder orderStep={"florist"} flowerId={path} />} />
             </>
           ) : (
             <></>
@@ -109,10 +105,7 @@ const CustomDetailCard = () => {
               <button className={styles.btn} onClick={() => onDownloadButton()}>
                 사진으로 저장하기
               </button>
-              <button
-                className={cx("btn", "green")}
-                onClick={() => onHandleOpen()}
-              >
+              <button className={cx("btn", "green")} onClick={() => onHandleOpen()}>
                 주문하러 가기
               </button>
             </div>

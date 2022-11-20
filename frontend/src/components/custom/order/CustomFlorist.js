@@ -7,6 +7,10 @@ const CustomFlorist = ({ storeId, setStep, setStoreId }) => {
   const dispatch = useDispatch();
 
   const goReservation = () => {
+    if (!storeId) {
+      alert("가게를 선택해주세요");
+      return;
+    }
     setStep("reservation");
   };
 
@@ -27,8 +31,9 @@ const CustomFlorist = ({ storeId, setStep, setStoreId }) => {
           <CustomFloristList setStoreId={setStoreId} storeId={storeId} />
         </div>
       </article>
-
-      <button onClick={goReservation}>예약으로 넘어가기</button>
+      <button onClick={goReservation}>
+        <span className="material-icons-outlined">arrow_forward</span>
+      </button>
     </section>
   );
 };

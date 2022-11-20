@@ -105,7 +105,7 @@ const FloristList = (props) => {
     setCurrentSort(currentRoute[1] || "reg");
     setSelectSido(currentRoute[2] || "전체");
     setSelectSigungu(currentRoute[3] || "전체");
-    setSelectedArr(regionMap[currentRoute[3]]);
+    setSelectedArr(regionMap[currentRoute[2]]);
   };
 
   useEffect(() => {

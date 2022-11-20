@@ -40,7 +40,6 @@ const CustomOrder = ({ orderStep, flowerId }) => {
     }
 
     const res = await client.post("book/custom", data).then((res) => res.data);
-    console.log(res);
     if (res.result === "success") {
       SuccessAlert("성공적으로 예약되었습니다.");
       dispatch(modalClose());
