@@ -23,12 +23,10 @@ const CustomFlorist = ({ storeId, setStep, setStoreId }) => {
       </div>
       <article className={styles.contents_wrapper}>
         <h1>플로리스트 목록 | 원하는 플로리스트로 예약해보세요</h1>
-        <div className={styles.florist_wrapper}>
+        <div className={styles.florist_wrapper} onClick={goReservation}>
           <CustomFloristList setStoreId={setStoreId} storeId={storeId} />
         </div>
       </article>
-
-      <button onClick={goReservation}>예약으로 넘어가기</button>
     </section>
   );
 };

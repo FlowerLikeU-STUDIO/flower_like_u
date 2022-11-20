@@ -7,6 +7,7 @@ import {
   selectRibbonColor,
 } from "@/store/reducers/custom";
 import { client } from "@/pages/api/client";
+import FlowerImg from "@/components/common/FlowerImg";
 
 const RandomFlower = () => {
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ const RandomFlower = () => {
 
   return (
     <button className={styles.recommend_menu} onClick={() => getRandom()}>
-      랜덤
+      <FlowerImg src={"/custom/icon/random.png"} />
     </button>
   );
 };

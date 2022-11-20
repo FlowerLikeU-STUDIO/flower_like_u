@@ -22,18 +22,21 @@ const Login = () => {
       FailsAlert("로그인 정보를 정확히 입력해 주세요.");
       return;
     }
-    const { data, status } = await client
-      .post("auth/login", {
-        userId: loginInfo.userId,
-        password: loginInfo.password,
-      })
-      .then((response) => response);
-
-    if (status === 200) {
-      window.sessionStorage.setItem("ACCESS_TOKEN", data.accessToken);
-      SuccessAlert("로그인 되었습니다.");
-      mutate("logIn", true);
-      router.push("/");
+    try {
+      const { data, status } = await client
+        .post("auth/login", {
+          userId: loginInfo.userId,
+          password: loginInfo.password,
+        })
+        .then((response) => response);
+      if (status === 200) {
+        window.sessionStorage.setItem("ACCESS_TOKEN", data.accessToken);
+        SuccessAlert("로그인 되었습니다.");
+        mutate("logIn", true);
+        router.push("/");
+      }
+    } catch (error) {
+      alert("아이디 또는 비밀번호가 잘못되었습니다.");
     }
   };
   return (
@@ -43,9 +46,20 @@ const Login = () => {
           <Image src="/chatFlower.png" width={150} height={150} />
         </article>
         <article className={styles.login_contents_right}>
-          <Input text={"아이디"} value={loginInfo.userId} onChange={onChange} name={"userId"} />
+          <Input
+            text={"아이디"}
+            value={loginInfo.userId}
+            onChange={onChange}
+            name={"userId"}
+          />
 
-          <Input text={"비밀번호"} value={loginInfo.password} onChange={onChange} name={"password"} type={"password"} />
+          <Input
+            text={"비밀번호"}
+            value={loginInfo.password}
+            onChange={onChange}
+            name={"password"}
+            type={"password"}
+          />
 
           <button className={styles.login_button} onClick={onHandleSubmit}>
             로그인

@@ -75,7 +75,7 @@ const CustomReservation = ({
         </button>
       </div>
       <article className={styles.contents_wrapper}>
-        <h1>커스텀 주문 예약 모달 컨텐츠</h1>
+        <h1>커스텀 디자인 주문하기</h1>
         <div
           className={styles.florist_wrapper}
           style={{ display: "flex", justifyContent: "space-between" }}
@@ -101,7 +101,9 @@ const CustomReservation = ({
           </ReservationWrapper>
         </div>
       </article>
-      <button onClick={goReservation}>돌아가기</button>
+      <button onClick={goReservation}>
+        <span className="material-icons-outlined">arrow_back</span>
+      </button>
     </section>
   );
 };
