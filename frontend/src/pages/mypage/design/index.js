@@ -4,28 +4,26 @@ import FlowerImg from "@/components/common/FlowerImg";
 import styles from "./index.module.scss";
 import React, { useMemo } from "react";
 import useSWRInfinite from "swr/infinite";
-import { client } from "@/pages/api/client";
+import { Fetcher } from "@/pages/api/client";
 import useIntersect from "@/hooks/useIntersect";
 import { useRouter } from "next/router";
 
 const CustomerDesign = () => {
   const router = useRouter();
-  const fetcher = (url) =>
-    client.get(url).then((res) => {
-      return res;
-    });
-  const { data, size, setSize, isValidating } = useSWRInfinite((index) => `custom?page=${index + 1}&size=9`, fetcher);
+  const { data, size, setSize, isValidating } = useSWRInfinite((index) => `custom?page=${index + 1}&size=9`, Fetcher, {
+    revalidateOnFocus: false,
+  });
 
   const lastPage = useMemo(() => {
-    return data ? data[0].data.maxPage : 0;
+    return data ? data[0].maxPage : 0;
   }, [data]);
 
   const designList = useMemo(() => {
     let designList = [];
     if (data) {
-      if (data[0].data.result === "fail") return;
+      if (data[0].result === "fail") return;
       data.map((item) => {
-        designList = designList.concat(...item.data.designList);
+        designList = designList.concat(...item.designList);
       });
       return designList;
     }
@@ -45,9 +43,8 @@ const CustomerDesign = () => {
   return (
     <MyWrapper>
       <MyHeader />
-      {data && data[0].data.result === "fail" && (
+      {data && data[0].result === "fail" && (
         <div className={styles.not__data}>
-          <p></p>
           <p onClick={() => router.replace("/custom")} className={styles.go_custom}>
             🌸🌹 등록된 디자인이 없습니다. 나만의 꽃을 디자인해보세요.🌻🌼
           </p>
