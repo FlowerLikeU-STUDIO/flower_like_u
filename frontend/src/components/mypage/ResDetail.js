@@ -23,7 +23,7 @@ const ResDetail = () => {
   const resCancel = async () => {
     if (window.confirm("예약을 취소하시겠습니까?")) {
       const res = await client.delete(`book/${basics.bookId}`);
-      if (res.result === "success") {
+      if (res.data.result === "success") {
         await router.replace("/mypage/reservation");
         alert("예약이 취소되었습니다.");
       } else {
