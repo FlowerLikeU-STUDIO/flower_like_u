@@ -7,6 +7,15 @@
 
 
 
+<<<<<<< HEAD
+=======
+**목차**
+
+[TOC]
+
+
+
+>>>>>>> fe32327cc258cd8c77a1d3fa0784287e17b5d2ff
 ## 1. 서비스 소개 :cherry_blossom: 
 
 **초개인화, 초맞춤화를 원하는 현 소비 트렌드에 맞춘 개인 맞춤형 커스텀 꽃다발 제작 중계 플랫폼**
@@ -46,9 +55,15 @@
 
 **Back-end**
 
+<<<<<<< HEAD
 | <img src="https://profilinator.rishav.dev/skills-assets/java-original-wordmark.svg" alt="Java" width="50px" height="50px" /> | <img src="https://www.seekpng.com/png/full/8-80775_spring-logo-png-transparent-spring-java.png" alt="Spring-Boot" width="50px" height="50px" /> | <img src="https://user-images.githubusercontent.com/46440898/185340935-0d35ed10-a892-48ec-819c-92aa989cb60b.png" alt="SpringSecurity" width="50px" height="50px" /> | <img src="https://spring.io/images/projects/spring-data-79cc203ed8c54191215a60f9e5dc638f.svg" alt="Spring-Data" width="50px" height="50px" /> | <img src="https://cdn.freebiesupply.com/logos/large/2x/websocket-logo-png-transparent.png" alt="WebSocket" width="50px" height="50px" /> |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
 |                             Java                             |                         Spring Boot                          |                       Spring Security                        |                       Spring Data JPA                        |                          WebSocket                           |
+=======
+| <img src="https://profilinator.rishav.dev/skills-assets/java-original-wordmark.svg" alt="Java" width="50px" height="50px" /> | <img src="https://www.seekpng.com/png/full/8-80775_spring-logo-png-transparent-spring-java.png" alt="Spring-Boot" width="50px" height="50px" /> | <img src="https://user-images.githubusercontent.com/46440898/185340935-0d35ed10-a892-48ec-819c-92aa989cb60b.png" alt="SpringSecurity" width="50px" height="50px" /> | <img src="https://spring.io/images/projects/spring-data-79cc203ed8c54191215a60f9e5dc638f.svg" alt="Spring-Data" width="50px" height="50px" /> | <img src="https://cdn.freebiesupply.com/logos/large/2x/websocket-logo-png-transparent.png" alt="WebSocket" width="50px" height="50px" />
+| :----------------: | :-----------------: | :--------------------: | :--------------------: | :--------------------: |
+|                                                             Java                                                             |                                                                   Spring Boot                                                                   |                                                                           Spring Security                                                                            |                                                                              Spring Data                                                                               | WebSocket |
+>>>>>>> fe32327cc258cd8c77a1d3fa0784287e17b5d2ff
 
 | <img src="https://profilinator.rishav.dev/skills-assets/mysql-original-wordmark.svg" alt="MySQL" width="50px" height="50px" /> | <img src="https://raw.githubusercontent.com/rishavanand/github-profilinator/66d21965acb8d37288d0964c0c7ec19bbc6efd47/static/skills-assets/mongodb-original-wordmark.svg" alt="MongoDB" width="50px" height="50px" /> |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
@@ -148,7 +163,11 @@ Front-end
 Back-end
 </td>
 <td align="start">
+<<<<<<< HEAD
 - 서비스의 주요 REST API 설계 및 구현<br/>- 회원/피드/예약/커스텀<br/>- AOP와 Log4J2를 이용한 서버 로깅 시스템<br/> - DBMS(MySQL, MongoDB) 관리 <br/>- SonarQube 정적 분석 및 리팩토링
+=======
+- 서비스의 주요 REST API 설계 및 구현<br/> &ensp; - 회원/피드/예약/커스텀<br/> - AOP와 Log4J2를 이용한 서버 로깅 시스템<br/> - DBMS(MySQL, MongoDB) 관리 <br/>- SonarQube 정적 분석 및 리팩토링
+>>>>>>> fe32327cc258cd8c77a1d3fa0784287e17b5d2ff
 </td>
 </tr>
 <tr>
